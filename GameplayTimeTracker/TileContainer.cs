@@ -12,33 +12,6 @@ public class TileContainer
 {
     private List<Tile> tilesList = new();
 
-
-    public void InitializeContainer(string filePath)
-    {
-        string jsonString = File.ReadAllText(filePath);
-        Console.WriteLine(jsonString);
-
-        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
-
-        foreach (var param in paramsList)
-        {
-            AddTile(new Tile(this, param.gameName, param.totalTime, param.lastPlayedTime));
-        }
-    }
-
-    public void WriteContentToFile(string filePath)
-    {
-        List<Params> paramsList = new List<Params>();
-
-        foreach (var tile in tilesList)
-        {
-            paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime));
-        }
-
-        string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, jsonString);
-    }
-
     public List<Tile> GetTiles()
     {
         return tilesList;

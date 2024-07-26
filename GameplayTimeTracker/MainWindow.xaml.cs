@@ -16,7 +16,9 @@ namespace GameplayTimeTracker
 
         public MainWindow()
         {
-            tileContainer.InitializeContainer(jsonFilePath);
+            JsonHandler handler = new();
+            handler.InitializeContainer(tileContainer, jsonFilePath);
+            // tileContainer.InitializeContainer(jsonFilePath);
             InitializeComponent();
             // Loaded += MainWindow_Loaded;
             Loaded += ShowTilesOnCanvas;
@@ -24,7 +26,8 @@ namespace GameplayTimeTracker
             tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
             // WriteToJson(tileContainer, "data.json");
-            tileContainer.WriteContentToFile(jsonFilePath);
+            // tileContainer.WriteContentToFile(jsonFilePath);
+            handler.WriteContentToFile(tileContainer, jsonFilePath);
         }
 
         public void WriteToJson(TileContainer container, string filePath)
