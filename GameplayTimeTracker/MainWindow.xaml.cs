@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,8 +15,25 @@ namespace GameplayTimeTracker
 
         public MainWindow()
         {
-            InitializeComponent();
-            Loaded += MainWindow_Loaded;
+            tileContainer = ReadFromJson("data.json");
+            // InitializeComponent();
+            // Loaded += MainWindow_Loaded;
+            tileContainer.ListTiles();
+        }
+
+        public TileContainer ReadFromJson(string filePath)
+        {
+            string jsonString = File.ReadAllText(filePath);
+            List<Params> parameters = JsonSerializer.Deserialize<List<Params>>(jsonString);
+
+            TileContainer localContainer = new();
+
+            foreach (var param in parameters)
+            {
+                localContainer.AddTile(new Tile(localContainer, param.gameName, param.totalTime, param.lastPlayedTime));
+            }
+
+            return localContainer;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
