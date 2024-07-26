@@ -30,35 +30,6 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer, jsonFilePath);
         }
 
-        public void WriteToJson(TileContainer container, string filePath)
-        {
-            // File.WriteAllText(filePath, JsonSerializer.Serialize(container.GetParamsOfTiles()));
-            container.GetParamsOfTiles();
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            // tileContainer.AddTile(new Tile(tileContainer, "Game1", 3241, 1233));
-            // tileContainer.AddTile(new Tile(tileContainer, "Game1", 120, 40));
-            // tileContainer.AddTile(new Tile(tileContainer, "Game2", 300, 20));
-            // tileContainer.AddTile(new Tile(tileContainer, "Game3", 50, 25));
-            // tileContainer.AddTile(new Tile(tileContainer, "Game4", 60, 15));
-            // tileContainer.AddTile(new Tile(tileContainer, "Game5", 60, 15));
-            // tileContainer.ListTiles();
-            //
-            // tileContainer.RemoveTileById(2);
-            // tileContainer.ListTiles();
-            //
-            // tileContainer.AddTile(new Tile(tileContainer, "GameX"));
-            //
-            // tileContainer.ListTiles();
-            //
-            // tileContainer.UpdateTileById(1, "Text", "New Value");
-            // tileContainer.ListTiles();
-            // ShowTilesOnCanvas();
-        }
-
-
         private void ShowTilesOnCanvas(object sender, RoutedEventArgs e)
         {
             var tilesList = tileContainer.GetTiles();

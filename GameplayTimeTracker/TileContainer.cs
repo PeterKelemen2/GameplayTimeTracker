@@ -17,22 +17,6 @@ public class TileContainer
         return tilesList;
     }
 
-    public void GetParamsOfTiles()
-    {
-        List<Params> paramsList = new();
-
-        foreach (var tile in tilesList)
-        {
-            // paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime));
-            Console.WriteLine($"{tile.GameName}, {tile.TotalPlaytime}, {tile.LastPlaytime}");
-        }
-    }
-
-    public int GetListCount()
-    {
-        return tilesList.Count;
-    }
-
     public void AddTile(Tile newTile)
     {
         try
@@ -45,7 +29,6 @@ public class TileContainer
             {
                 newTile.Id = tilesList.ElementAt(tilesList.Count - 1).Id + 1;
             }
-
 
             tilesList.Add(newTile);
 
