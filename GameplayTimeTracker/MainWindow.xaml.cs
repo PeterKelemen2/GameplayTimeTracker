@@ -23,6 +23,7 @@ namespace GameplayTimeTracker
             // Loaded += MainWindow_Loaded;
             Loaded += ShowTilesOnCanvas;
 
+            tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233, "C:\\Users\\Peti\\Pictures\\focus.jpg"));
             tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
             // WriteToJson(tileContainer, "data.json");

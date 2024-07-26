@@ -99,6 +99,7 @@ public class Tile : UserControl
     private Button editButton;
     private Button removeButton;
     private Button editSaveButton;
+    private Button changeIconButton;
     private Image image;
     private TextBlock titleTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -190,6 +191,7 @@ public class Tile : UserControl
             editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, 0, 60, 0);
+            changeIconButton.Margin = new Thickness(50, 0, 0, 0);
 
             menuRectangle.MaxHeight = TileHeight;
 
@@ -207,6 +209,7 @@ public class Tile : UserControl
 
             editSaveButton.Height = 40;
             editSaveButton.MaxHeight = 40;
+            changeIconButton.MaxHeight = 30;
 
             wasOpened = true;
         }
@@ -224,6 +227,7 @@ public class Tile : UserControl
                 editPlaytimeBoxM.Visibility = Visibility.Collapsed;
                 editPlaytimeM.Visibility = Visibility.Collapsed;
                 editSaveButton.Visibility = Visibility.Collapsed;
+                changeIconButton.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -236,6 +240,7 @@ public class Tile : UserControl
                 editPlaytimeBoxM.Visibility = Visibility.Visible;
                 editPlaytimeM.Visibility = Visibility.Visible;
                 editSaveButton.Visibility = Visibility.Visible;
+                changeIconButton.Visibility = Visibility.Visible;
             }
         };
 
@@ -251,6 +256,7 @@ public class Tile : UserControl
             editPlaytimeBoxM.Visibility = Visibility.Visible;
             editPlaytimeM.Visibility = Visibility.Visible;
             editSaveButton.Visibility = Visibility.Visible;
+            changeIconButton.Visibility = Visibility.Visible;
         }
 
         // Apply the animations to the menuRectangle
@@ -262,6 +268,7 @@ public class Tile : UserControl
         editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeTitle.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editSaveButton.BeginAnimation(Rectangle.HeightProperty, heightAnimationButton);
+        changeIconButton.BeginAnimation(Rectangle.HeightProperty, heightAnimationButton);
 
         editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
@@ -269,6 +276,7 @@ public class Tile : UserControl
         editPlaytimeBoxH.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeBoxM.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editSaveButton.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        changeIconButton.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
 
         Console.WriteLine(isMenuOpen);
     }
@@ -519,6 +527,17 @@ public class Tile : UserControl
         };
         editSaveButton.Click += SaveEditedData;
 
+        changeIconButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Content = "Change icon",
+            Height = 30,
+            Width = 120,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            MaxHeight = 0
+        };
+
         Grid.SetRow(menuRectangle, 1);
         Grid.SetRow(editNameTitle, 1);
         Grid.SetRow(editNameBox, 1);
@@ -528,6 +547,7 @@ public class Tile : UserControl
         Grid.SetRow(editPlaytimeBoxH, 1);
         Grid.SetRow(editPlaytimeBoxM, 1);
         Grid.SetRow(editSaveButton, 1);
+        Grid.SetRow(changeIconButton, 1);
         grid.Children.Add(menuRectangle);
         grid.Children.Add(editNameTitle);
         grid.Children.Add(editNameBox);
@@ -537,6 +557,7 @@ public class Tile : UserControl
         grid.Children.Add(editPlaytimeBoxH);
         grid.Children.Add(editPlaytimeBoxM);
         grid.Children.Add(editSaveButton);
+        grid.Children.Add(changeIconButton);
 
         // Create the second Rectangle
         container = new Rectangle
