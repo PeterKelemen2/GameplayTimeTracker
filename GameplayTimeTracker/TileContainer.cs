@@ -19,16 +19,24 @@ public class TileContainer
         Console.WriteLine(jsonString);
 
         List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
-        foreach (var param in paramsList)
-        {
-            Console.WriteLine(param.GetInfo());
-        }
 
         foreach (var param in paramsList)
         {
-            // tilesList.Add(new Tile(this, param.gameName, param.totalTime, param.lastPlayedTime));
             AddTile(new Tile(this, param.gameName, param.totalTime, param.lastPlayedTime));
         }
+    }
+
+    public void WriteContentToFile(string filePath)
+    {
+        List<Params> paramsList = new List<Params>();
+
+        foreach (var tile in tilesList)
+        {
+            paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime));
+        }
+
+        string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(filePath, jsonString);
     }
 
     public List<Tile> GetTiles()

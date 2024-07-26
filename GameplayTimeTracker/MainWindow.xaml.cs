@@ -11,17 +11,20 @@ namespace GameplayTimeTracker
     public partial class MainWindow : Window
     {
         private const double Offset = 8;
+        private const string jsonFilePath = "data.json";
         TileContainer tileContainer = new();
 
         public MainWindow()
         {
-            tileContainer.InitializeContainer("data.json");
+            tileContainer.InitializeContainer(jsonFilePath);
             InitializeComponent();
-            Loaded += MainWindow_Loaded;
+            // Loaded += MainWindow_Loaded;
+            Loaded += ShowTilesOnCanvas;
 
-            // tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
+            tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
             // WriteToJson(tileContainer, "data.json");
+            tileContainer.WriteContentToFile(jsonFilePath);
         }
 
         public void WriteToJson(TileContainer container, string filePath)
@@ -49,11 +52,11 @@ namespace GameplayTimeTracker
             //
             // tileContainer.UpdateTileById(1, "Text", "New Value");
             // tileContainer.ListTiles();
-            ShowTilesOnCanvas();
+            // ShowTilesOnCanvas();
         }
 
 
-        private void ShowTilesOnCanvas()
+        private void ShowTilesOnCanvas(object sender, RoutedEventArgs e)
         {
             var tilesList = tileContainer.GetTiles();
             foreach (var tile in tilesList)
