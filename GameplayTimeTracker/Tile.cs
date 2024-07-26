@@ -317,7 +317,20 @@ public class Tile : UserControl
         };
     }
 
-    public void DeleteTile(object sender, RoutedEventArgs e)
+    private void OpenDeleteDialog(object sender, RoutedEventArgs e)
+    {
+        MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {GameName} from the library?",
+            "Delete Confirmation",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            DeleteTile();
+        }
+    }
+
+    public void DeleteTile()
     {
         double animationDuration = 0.2;
 
@@ -589,7 +602,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 50, 0),
         };
-        removeButton.Click += DeleteTile;
+        removeButton.Click += OpenDeleteDialog;
 
 
         Grid.SetRow(container, 0);

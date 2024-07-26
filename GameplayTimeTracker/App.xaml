@@ -81,12 +81,6 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="7">
                             <Grid>
-                                <!-- <TextBlock x:Name="ButtonText" -->
-                                <!--            Text="{TemplateBinding Content}" -->
-                                <!--            HorizontalAlignment="Center" -->
-                                <!--            VerticalAlignment="Center" -->
-                                <!--            Margin="0,-10,0,0" /> -->
-                                <!-- ContentPresenter to show the button content (e.g., text) -->
                                 <ContentPresenter HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
                                                   Margin="0,-3,0,0"
