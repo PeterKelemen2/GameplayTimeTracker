@@ -137,6 +137,7 @@ public class Tile : UserControl
     public double TotalPlaytimePercent { get; set; }
     public double LastPlaytime { get; set; }
     public double LastPlaytimePercent { get; set; }
+    public string IconImagePath { get; set; }
 
     private double CalculateTileWidth()
     {
@@ -381,7 +382,7 @@ public class Tile : UserControl
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
-        double width = 740)
+        string iconImagePath = SampleImagePath, double width = 740)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
@@ -391,6 +392,7 @@ public class Tile : UserControl
         LastPlaytime = lastPlayedTime;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
+        IconImagePath = iconImagePath;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
@@ -595,7 +597,7 @@ public class Tile : UserControl
         // Create the Image and other UI elements, positioning them in the second row as well
         image = new Image
         {
-            Source = new BitmapImage(new Uri(SampleImagePath, UriKind.Relative)),
+            Source = new BitmapImage(new Uri(IconImagePath, UriKind.RelativeOrAbsolute)),
             Stretch = Stretch.UniformToFill,
             Width = TileHeight / 2,
             Height = TileHeight / 2,

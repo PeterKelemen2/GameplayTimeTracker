@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mxXSGlh+UIU/ESgiiaHcUiWudjqJsSv+Ggtrn1LfOfpDQpErplDuXCCzKFVEB3YjYjGbRveEq4NY/4u98EM11Q==",
+  "dgSpecHash": "u+FP6taC2MfQEc6YMUuppf+NuZScS6CnQ0RlC+OFpBLHHCltjgCL870yH13IZNXZU+fC99v2LJQnVPmtZ19EEw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+  "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
