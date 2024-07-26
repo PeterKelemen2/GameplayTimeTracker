@@ -3,6 +3,11 @@
 public class Params
 {
     public string gameName { get; set; }
-    public int totalTime { get; set; }
-    public int lastPlayedTime { get; set; }
+    public double totalTime { get; set; }
+    public double lastPlayedTime { get; set; }
+
+    public string GetInfo()
+    {
+        return $"{gameName}, {totalTime}, {lastPlayedTime}";
+    }
 }

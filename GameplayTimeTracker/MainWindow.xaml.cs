@@ -15,47 +15,40 @@ namespace GameplayTimeTracker
 
         public MainWindow()
         {
-            tileContainer = ReadFromJson("data.json");
-            // InitializeComponent();
-            // Loaded += MainWindow_Loaded;
+            tileContainer.InitializeContainer("data.json");
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
+
+            // tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
+            // WriteToJson(tileContainer, "data.json");
         }
 
-        public TileContainer ReadFromJson(string filePath)
+        public void WriteToJson(TileContainer container, string filePath)
         {
-            string jsonString = File.ReadAllText(filePath);
-            List<Params> parameters = JsonSerializer.Deserialize<List<Params>>(jsonString);
-
-            TileContainer localContainer = new();
-
-            foreach (var param in parameters)
-            {
-                localContainer.AddTile(new Tile(localContainer, param.gameName, param.totalTime, param.lastPlayedTime));
-            }
-
-            return localContainer;
+            // File.WriteAllText(filePath, JsonSerializer.Serialize(container.GetParamsOfTiles()));
+            container.GetParamsOfTiles();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
-            tileContainer.AddTile(new Tile(tileContainer, "Game1", 3241, 1233));
-            tileContainer.AddTile(new Tile(tileContainer, "Game1", 120, 40));
-            tileContainer.AddTile(new Tile(tileContainer, "Game2", 300, 20));
-            tileContainer.AddTile(new Tile(tileContainer, "Game3", 50, 25));
-            tileContainer.AddTile(new Tile(tileContainer, "Game4", 60, 15));
-            tileContainer.AddTile(new Tile(tileContainer, "Game5", 60, 15));
-            tileContainer.ListTiles();
-
-            tileContainer.RemoveTileById(2);
-            tileContainer.ListTiles();
-
-            tileContainer.AddTile(new Tile(tileContainer, "GameX"));
-
-            tileContainer.ListTiles();
-
-            tileContainer.UpdateTileById(1, "Text", "New Value");
-            tileContainer.ListTiles();
+            // tileContainer.AddTile(new Tile(tileContainer, "Game1", 3241, 1233));
+            // tileContainer.AddTile(new Tile(tileContainer, "Game1", 120, 40));
+            // tileContainer.AddTile(new Tile(tileContainer, "Game2", 300, 20));
+            // tileContainer.AddTile(new Tile(tileContainer, "Game3", 50, 25));
+            // tileContainer.AddTile(new Tile(tileContainer, "Game4", 60, 15));
+            // tileContainer.AddTile(new Tile(tileContainer, "Game5", 60, 15));
+            // tileContainer.ListTiles();
+            //
+            // tileContainer.RemoveTileById(2);
+            // tileContainer.ListTiles();
+            //
+            // tileContainer.AddTile(new Tile(tileContainer, "GameX"));
+            //
+            // tileContainer.ListTiles();
+            //
+            // tileContainer.UpdateTileById(1, "Text", "New Value");
+            // tileContainer.ListTiles();
             ShowTilesOnCanvas();
         }
 

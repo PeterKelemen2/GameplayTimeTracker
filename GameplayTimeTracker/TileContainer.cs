@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
 
 namespace GameplayTimeTracker;
 
@@ -11,20 +13,38 @@ public class TileContainer
     private List<Tile> tilesList = new();
 
 
+    public void InitializeContainer(string filePath)
+    {
+        string jsonString = File.ReadAllText(filePath);
+        Console.WriteLine(jsonString);
+
+        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
+        foreach (var param in paramsList)
+        {
+            Console.WriteLine(param.GetInfo());
+        }
+
+        foreach (var param in paramsList)
+        {
+            // tilesList.Add(new Tile(this, param.gameName, param.totalTime, param.lastPlayedTime));
+            AddTile(new Tile(this, param.gameName, param.totalTime, param.lastPlayedTime));
+        }
+    }
+
     public List<Tile> GetTiles()
     {
         return tilesList;
     }
 
-    public double GetTilesTotalHeight()
+    public void GetParamsOfTiles()
     {
-        double sum = 0;
+        List<Params> paramsList = new();
+
         foreach (var tile in tilesList)
         {
-            sum += tile.GetTotalHeight();
+            // paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime));
+            Console.WriteLine($"{tile.GameName}, {tile.TotalPlaytime}, {tile.LastPlaytime}");
         }
-
-        return sum;
     }
 
     public int GetListCount()
