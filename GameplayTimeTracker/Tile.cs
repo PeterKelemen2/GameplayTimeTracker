@@ -327,6 +327,7 @@ public class Tile : UserControl
         if (result == MessageBoxResult.Yes)
         {
             DeleteTile();
+            _tileContainer.ListTiles();
         }
     }
 
@@ -352,6 +353,7 @@ public class Tile : UserControl
         {
             // Remove the tile from the container and the parent after the animation completes
             _tileContainer.RemoveTileById(Id);
+            _tileContainer.UpdatePlaytimeBars();
             if (Parent is Panel panel)
             {
                 panel.Children.Remove(this);
