@@ -47,7 +47,7 @@ namespace GameplayTimeTracker
                 string filePath = openFileDialog.FileName;
                 string fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 4);
-                string iconPath = $"assets/{fileName}.png";
+                string? iconPath = $"assets/{fileName}.png";
 
                 Console.WriteLine(iconPath);
                 PrepIcon(filePath, iconPath);
@@ -66,7 +66,7 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer, jsonFilePath);
         }
 
-        private void PrepIcon(string filePath, string outputImagePath)
+        private void PrepIcon(string filePath, string? outputImagePath)
         {
             var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
             if (icon != null)

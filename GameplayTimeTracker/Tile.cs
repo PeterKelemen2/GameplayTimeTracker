@@ -121,7 +121,7 @@ public class Tile : UserControl
     private double hLast;
     private double mLast;
 
-    private const string SampleImagePath = "/assets/no_photo.png";
+    private const string? SampleImagePath = "/assets/no_photo.png";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
@@ -138,7 +138,7 @@ public class Tile : UserControl
     public double TotalPlaytimePercent { get; set; }
     public double LastPlaytime { get; set; }
     public double LastPlaytimePercent { get; set; }
-    public string IconImagePath { get; set; }
+    public string? IconImagePath { get; set; }
     public string ExePath { get; set; }
 
     private double CalculateTileWidth()
@@ -306,23 +306,6 @@ public class Tile : UserControl
         _tileContainer.ListTiles();
     }
 
-    public void UpdateTotalPlaytimeBar()
-    {
-        TotalPlaytimePercent = Math.Round(TotalPlaytime / _tileContainer.CalculateTotalPlaytime(), 2);
-        totalTimeGradientBar = new GradientBar(
-            width: 150,
-            height: 30,
-            percent: TotalPlaytimePercent,
-            color1: LeftColor,
-            color2: RightColor,
-            bgColor: DarkColor
-        )
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
-        };
-    }
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
@@ -334,6 +317,7 @@ public class Tile : UserControl
         if (result == MessageBoxResult.Yes)
         {
             DeleteTile();
+            _tileContainer.InitSave();
             _tileContainer.ListTiles();
         }
     }
@@ -372,15 +356,6 @@ public class Tile : UserControl
         BeginAnimation(OpacityProperty, opacityAnimation);
     }
 
-    public double GetTotalHeight()
-    {
-        if (isMenuOpen)
-        {
-            return TileHeight + TileHeight - MenuTopMargin;
-        }
-
-        return TileHeight;
-    }
 
     public string GameName
     {
@@ -412,7 +387,7 @@ public class Tile : UserControl
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
-        string iconImagePath = SampleImagePath, string exePath = "", double width = 740)
+        string? iconImagePath = SampleImagePath, string exePath = "", double width = 740)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
@@ -422,7 +397,7 @@ public class Tile : UserControl
         LastPlaytime = lastPlayedTime;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
-        IconImagePath = iconImagePath;
+        IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
