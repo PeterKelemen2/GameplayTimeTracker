@@ -121,7 +121,7 @@ public class Tile : UserControl
     private double hLast;
     private double mLast;
 
-    private const string? SampleImagePath = "/assets/no_photo.png";
+    private const string? SampleImagePath = "assets/no_icon.png";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
@@ -614,17 +614,26 @@ public class Tile : UserControl
         grid.Children.Add(titleTextBlock);
 
         // Create the Image and other UI elements, positioning them in the second row as well
-        image = new Image
+        if (IconImagePath != null)
         {
-            Source = new BitmapImage(new Uri(IconImagePath, UriKind.RelativeOrAbsolute)),
-            Stretch = Stretch.UniformToFill,
-            Width = TileHeight / 2,
-            Height = TileHeight / 2,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
-        };
-        RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+            string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+            image = new Image
+            {
+                Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
+                Stretch = Stretch.UniformToFill,
+                Width = TileHeight / 2,
+                Height = TileHeight / 2,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+            };
+            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+        }
+        else
+        {
+            Console.WriteLine("Icon was null");
+        }
+
 
         // Add all other elements as before, positioning them in the second row
         Grid.SetRow(image, 0);

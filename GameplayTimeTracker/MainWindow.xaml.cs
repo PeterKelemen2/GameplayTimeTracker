@@ -91,13 +91,6 @@ namespace GameplayTimeTracker
                     {
                         iconStream.WriteTo(fileStream);
                     }
-
-                    // // Convert MemoryStream to BitmapImage
-                    // BitmapImage bitmapImage = new BitmapImage();
-                    // bitmapImage.BeginInit();
-                    // bitmapImage.StreamSource = iconStream;
-                    // bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    // bitmapImage.EndInit();
                 }
             }
         }
