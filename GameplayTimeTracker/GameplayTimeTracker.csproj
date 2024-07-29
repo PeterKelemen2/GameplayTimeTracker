@@ -9,9 +9,6 @@
 
     <ItemGroup>
       <None Remove="assets\fallout3.png" />
-      <Content Include="assets\fallout3.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="assets\remove.png" />
       <Content Include="assets\remove.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -25,7 +22,10 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="data.json" />
-      <Content Include="data.json">
+      <None Remove="assets\farcry3.png" />
+      <Content Include="assets\farcry3.png" />
+      <None Remove="assets\no_icon.png" />
+      <Content Include="assets\no_icon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

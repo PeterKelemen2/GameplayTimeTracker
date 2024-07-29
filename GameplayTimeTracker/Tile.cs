@@ -121,7 +121,7 @@ public class Tile : UserControl
     private double hLast;
     private double mLast;
 
-    private const string SampleImagePath = "/assets/fallout3.png";
+    private const string SampleImagePath = "/assets/no_photo.png";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");

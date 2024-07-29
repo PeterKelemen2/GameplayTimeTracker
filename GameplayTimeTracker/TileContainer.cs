@@ -66,7 +66,7 @@ public class TileContainer
                 Console.WriteLine(
                     $"Id: {tile.Id} | Name: {tile.GameName} | Total: {tile.TotalPlaytime} min |" +
                     $" Total%: {tile.TotalPlaytimePercent} | Last: {tile.LastPlaytime} | " +
-                    $"Last%: {tile.LastPlaytimePercent}");
+                    $"Last%: {tile.LastPlaytimePercent} | Icon: {tile.IconImagePath} | Exe: {tile.ExePath}" );
             }
         }
         catch (Exception e)
