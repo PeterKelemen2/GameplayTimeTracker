@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -27,9 +28,9 @@ namespace GameplayTimeTracker
             // Loaded += MainWindow_Loaded;
             Loaded += ShowTilesOnCanvas;
 
-            tileContainer.AddTile(
-                new Tile(tileContainer, "Gameasd", 3241, 1233, "C:\\Users\\Peti\\Pictures\\focus.jpg"));
-            tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
+            // tileContainer.AddTile(
+            //     new Tile(tileContainer, "Gameasd", 3241, 1233, "C:\\Users\\Peti\\Pictures\\focus.jpg"));
+            // tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
@@ -47,22 +48,25 @@ namespace GameplayTimeTracker
                 string fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 4);
                 string iconPath = $"assets/{fileName}.png";
+
                 Console.WriteLine(iconPath);
-                GetIcon(filePath, iconPath);
+                PrepIcon(filePath, iconPath);
+
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Offset, 5, 0, 5);
                 tileContainer.AddTile(newTile);
                 tileContainer.ListTiles();
+
                 MessageBox.Show($"Selected file: {fileName}");
 
                 var tilesList = tileContainer.GetTiles();
-                mainStackPanel.Children.Add(tilesList[tilesList.Count - 1]);
+                mainStackPanel.Children.Add(tilesList.Last());
             }
 
             handler.WriteContentToFile(tileContainer, jsonFilePath);
         }
 
-        private void GetIcon(string filePath, string outputImagePath)
+        private void PrepIcon(string filePath, string outputImagePath)
         {
             var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
             if (icon != null)

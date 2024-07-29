@@ -647,7 +647,7 @@ public class Tile : UserControl
             Height = TileHeight / 2,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin * 2, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+            Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
         };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 
