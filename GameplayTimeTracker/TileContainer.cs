@@ -11,10 +11,17 @@ namespace GameplayTimeTracker;
 public class TileContainer
 {
     private List<Tile> tilesList = new();
+    private JsonHandler handler = new JsonHandler();
+    private const string jsonFilePath = "data.json";
 
     public List<Tile> GetTiles()
     {
         return tilesList;
+    }
+
+    public void InitSave()
+    {
+        handler.WriteContentToFile(this, jsonFilePath);
     }
 
     public void AddTile(Tile newTile)

@@ -139,6 +139,7 @@ public class Tile : UserControl
     public double LastPlaytime { get; set; }
     public double LastPlaytimePercent { get; set; }
     public string IconImagePath { get; set; }
+    public string ExePath { get; set; }
 
     private double CalculateTileWidth()
     {
@@ -284,6 +285,11 @@ public class Tile : UserControl
     public void SaveEditedData(object sender, RoutedEventArgs e)
     {
         titleTextBlock.Text = editNameBox.Text;
+        if (!GameName.Equals(editNameBox.Text))
+        {
+            GameName = editNameBox.Text;
+        }
+
         Console.WriteLine(TotalPlaytime);
         TotalPlaytime =
             CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
@@ -296,6 +302,7 @@ public class Tile : UserControl
         // totalTimeGradientBar.Percent = Math.Round(TotalPlaytime / _tileContainer.CalculateTotalPlaytime(), 2);
         // totalTimeGradientBar.InitializeBar();
         _tileContainer.UpdatePlaytimeBars();
+        _tileContainer.InitSave();
         _tileContainer.ListTiles();
     }
 
@@ -405,7 +412,7 @@ public class Tile : UserControl
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
-        string iconImagePath = SampleImagePath, double width = 740)
+        string iconImagePath = SampleImagePath, string exePath = "", double width = 740)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
@@ -416,6 +423,7 @@ public class Tile : UserControl
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
         IconImagePath = iconImagePath;
+        ExePath = exePath;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();

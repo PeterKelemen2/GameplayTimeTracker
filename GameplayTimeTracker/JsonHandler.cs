@@ -17,7 +17,7 @@ public class JsonHandler
         foreach (var param in paramsList)
         {
             container.AddTile(
-                new Tile(container, param.gameName, param.totalTime, param.lastPlayedTime, param.iconPath));
+                new Tile(container, param.gameName, param.totalTime, param.lastPlayedTime, param.iconPath, param.exePath));
         }
     }
 
@@ -27,7 +27,7 @@ public class JsonHandler
 
         foreach (var tile in container.GetTiles())
         {
-            paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath));
+            paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath, tile.ExePath));
         }
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });

@@ -216,7 +216,13 @@
         <!-- Other content in the bottom 1/4 -->
         <StackPanel Grid.Row="1" Background="LightGreen">
             <!-- Add other UI elements here -->
-            <TextBlock Text="Other content here" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="20,18,0,0" 
+                    Height="30"
+                    Width="140"
+                    Click="AddExecButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>
