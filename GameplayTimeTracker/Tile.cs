@@ -300,6 +300,7 @@ public class Tile : UserControl
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
+        Console.WriteLine("File Saved !!!");
     }
 
 

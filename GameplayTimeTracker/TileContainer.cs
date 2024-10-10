@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -24,7 +25,24 @@ public class TileContainer
         handler.WriteContentToFile(this, jsonFilePath);
     }
 
-    public void AddTile(Tile newTile)
+    public List<String> GetExecutableNames()
+    {
+        List<String> executableNames = new();
+        foreach (Tile tile in tilesList)
+        {
+            if (tile.ExePath is not "")
+            {
+                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(tile.ExePath);
+                executableNames.Add(Path.GetFileName(tile.ExePath));
+                Console.WriteLine(fileInfo.FileDescription);
+                Console.WriteLine(executableNames[executableNames.Count - 1]);
+            }
+        }
+
+        return executableNames;
+    }
+
+    public void AddTile(Tile newTile, bool newlyAdded = false)
     {
         try
         {
@@ -35,6 +53,15 @@ public class TileContainer
             else
             {
                 newTile.Id = tilesList.ElementAt(tilesList.Count - 1).Id + 1;
+            }
+
+            if (newlyAdded)
+            {
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(newTile.ExePath);
+                if (fvi.FileDescription != null)
+                {
+                    newTile.GameName = fvi.FileDescription;
+                }
             }
 
             tilesList.Add(newTile);
@@ -66,7 +93,7 @@ public class TileContainer
                 Console.WriteLine(
                     $"Id: {tile.Id} | Name: {tile.GameName} | Total: {tile.TotalPlaytime} min |" +
                     $" Total%: {tile.TotalPlaytimePercent} | Last: {tile.LastPlaytime} | " +
-                    $"Last%: {tile.LastPlaytimePercent} | Icon: {tile.IconImagePath} | Exe: {tile.ExePath}" );
+                    $"Last%: {tile.LastPlaytimePercent} | Icon: {tile.IconImagePath} | Exe: {tile.ExePath}");
             }
         }
         catch (Exception e)
@@ -97,6 +124,7 @@ public class TileContainer
         {
             String message = isRemoved ? $"Tile with ID {id} removed." : $"Couldn't find Tile with ID {id}";
             Console.WriteLine(message);
+            InitSave();
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace GameplayTimeTracker;
@@ -23,10 +25,10 @@ public class JsonHandler
             foreach (var param in paramsList)
             {
                 container.AddTile(new Tile(
-                    container, 
-                    param.gameName, 
-                    param.totalTime, 
-                    param.lastPlayedTime, 
+                    container,
+                    param.gameName,
+                    param.totalTime,
+                    param.lastPlayedTime,
                     param.iconPath,
                     param.exePath));
             }
@@ -45,5 +47,6 @@ public class JsonHandler
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(filePath, jsonString);
+        Console.WriteLine("---- Wrote content");
     }
 }

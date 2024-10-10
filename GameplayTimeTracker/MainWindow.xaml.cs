@@ -32,6 +32,7 @@ namespace GameplayTimeTracker
             //     new Tile(tileContainer, "Gameasd", 3241, 1233, "C:\\Users\\Peti\\Pictures\\focus.jpg"));
             // tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
+            tileContainer.GetExecutableNames();
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
@@ -47,14 +48,16 @@ namespace GameplayTimeTracker
                 string filePath = openFileDialog.FileName;
                 string fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 4);
-                string? iconPath = $"assets/{fileName}.png";
+
+                string uniqueFileName = Guid.NewGuid().ToString() + ".png";
+                string? iconPath = $"assets/{uniqueFileName}";
 
                 Console.WriteLine(iconPath);
                 PrepIcon(filePath, iconPath);
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Offset, 5, 0, 5);
-                tileContainer.AddTile(newTile);
+                tileContainer.AddTile(newTile, newlyAdded:true);
                 tileContainer.ListTiles();
 
                 MessageBox.Show($"Selected file: {fileName}");
