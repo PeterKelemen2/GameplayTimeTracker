@@ -108,23 +108,9 @@ namespace GameplayTimeTracker
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
         {
-            if (e.VerticalOffset > 0)
-            {
-                OverlayTop.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                OverlayTop.Visibility = Visibility.Collapsed;
-            }
-
-            if (e.VerticalOffset < ScrollViewer.ScrollableHeight)
-            {
-                OverlayBottom.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                OverlayBottom.Visibility = Visibility.Collapsed;
-            }
+            OverlayTop.Visibility = e.VerticalOffset > 0 ? Visibility.Visible : Visibility.Collapsed;
+            OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight ? Visibility.Visible : Visibility.Collapsed;
         }
+
     }
 }
