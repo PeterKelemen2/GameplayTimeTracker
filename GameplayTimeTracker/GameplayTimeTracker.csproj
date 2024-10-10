@@ -24,7 +24,6 @@
       </Content>
       <None Remove="data.json" />
       <None Remove="assets\farcry3.png" />
-      <Content Include="assets\farcry3.png" />
       <None Remove="assets\no_icon.png" />
       <Content Include="assets\no_icon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

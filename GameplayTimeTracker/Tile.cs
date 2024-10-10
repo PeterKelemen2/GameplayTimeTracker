@@ -215,49 +215,75 @@ public class Tile : UserControl
             wasOpened = true;
         }
 
+        var uiElements = new List<UIElement>
+        {
+            menuRectangle,
+            editNameTitle,
+            editNameBox,
+            editPlaytimeTitle,
+            editPlaytimeBoxH,
+            editPlaytimeH,
+            editPlaytimeBoxM,
+            editPlaytimeM,
+            editSaveButton,
+            changeIconButton
+        };
+
         heightAnimation.Completed += (s, a) =>
         {
             if (!isMenuOpen)
             {
-                menuRectangle.Visibility = Visibility.Collapsed;
-                editNameTitle.Visibility = Visibility.Collapsed;
-                editNameBox.Visibility = Visibility.Collapsed;
-                editPlaytimeTitle.Visibility = Visibility.Collapsed;
-                editPlaytimeBoxH.Visibility = Visibility.Collapsed;
-                editPlaytimeH.Visibility = Visibility.Collapsed;
-                editPlaytimeBoxM.Visibility = Visibility.Collapsed;
-                editPlaytimeM.Visibility = Visibility.Collapsed;
-                editSaveButton.Visibility = Visibility.Collapsed;
-                changeIconButton.Visibility = Visibility.Collapsed;
+                foreach (var element in uiElements)
+                {
+                    element.Visibility = Visibility.Collapsed;
+                }
+                // menuRectangle.Visibility = Visibility.Collapsed;
+                // editNameTitle.Visibility = Visibility.Collapsed;
+                // editNameBox.Visibility = Visibility.Collapsed;
+                // editPlaytimeTitle.Visibility = Visibility.Collapsed;
+                // editPlaytimeBoxH.Visibility = Visibility.Collapsed;
+                // editPlaytimeH.Visibility = Visibility.Collapsed;
+                // editPlaytimeBoxM.Visibility = Visibility.Collapsed;
+                // editPlaytimeM.Visibility = Visibility.Collapsed;
+                // editSaveButton.Visibility = Visibility.Collapsed;
+                // changeIconButton.Visibility = Visibility.Collapsed;
             }
             else
             {
-                menuRectangle.Visibility = Visibility.Visible;
-                editNameTitle.Visibility = Visibility.Visible;
-                editNameBox.Visibility = Visibility.Visible;
-                editPlaytimeTitle.Visibility = Visibility.Visible;
-                editPlaytimeBoxH.Visibility = Visibility.Visible;
-                editPlaytimeH.Visibility = Visibility.Visible;
-                editPlaytimeBoxM.Visibility = Visibility.Visible;
-                editPlaytimeM.Visibility = Visibility.Visible;
-                editSaveButton.Visibility = Visibility.Visible;
-                changeIconButton.Visibility = Visibility.Visible;
+                foreach (var element in uiElements)
+                {
+                    element.Visibility = Visibility.Visible;
+                }
+                // menuRectangle.Visibility = Visibility.Visible;
+                // editNameTitle.Visibility = Visibility.Visible;
+                // editNameBox.Visibility = Visibility.Visible;
+                // editPlaytimeTitle.Visibility = Visibility.Visible;
+                // editPlaytimeBoxH.Visibility = Visibility.Visible;
+                // editPlaytimeH.Visibility = Visibility.Visible;
+                // editPlaytimeBoxM.Visibility = Visibility.Visible;
+                // editPlaytimeM.Visibility = Visibility.Visible;
+                // editSaveButton.Visibility = Visibility.Visible;
+                // changeIconButton.Visibility = Visibility.Visible;
             }
         };
 
         // Set the visibility to visible before starting the animation if we are opening the menu
         if (isMenuOpen)
         {
-            menuRectangle.Visibility = Visibility.Visible;
-            editNameTitle.Visibility = Visibility.Visible;
-            editNameBox.Visibility = Visibility.Visible;
-            editPlaytimeTitle.Visibility = Visibility.Visible;
-            editPlaytimeBoxH.Visibility = Visibility.Visible;
-            editPlaytimeH.Visibility = Visibility.Visible;
-            editPlaytimeBoxM.Visibility = Visibility.Visible;
-            editPlaytimeM.Visibility = Visibility.Visible;
-            editSaveButton.Visibility = Visibility.Visible;
-            changeIconButton.Visibility = Visibility.Visible;
+            // menuRectangle.Visibility = Visibility.Visible;
+            // editNameTitle.Visibility = Visibility.Visible;
+            // editNameBox.Visibility = Visibility.Visible;
+            // editPlaytimeTitle.Visibility = Visibility.Visible;
+            // editPlaytimeBoxH.Visibility = Visibility.Visible;
+            // editPlaytimeH.Visibility = Visibility.Visible;
+            // editPlaytimeBoxM.Visibility = Visibility.Visible;
+            // editPlaytimeM.Visibility = Visibility.Visible;
+            // editSaveButton.Visibility = Visibility.Visible;
+            // changeIconButton.Visibility = Visibility.Visible;
+            foreach (var element in uiElements)
+            {
+                element.Visibility = Visibility.Visible;
+            }
         }
 
         // Apply the animations to the menuRectangle
