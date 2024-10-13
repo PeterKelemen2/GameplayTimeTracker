@@ -19,6 +19,7 @@ namespace GameplayTimeTracker
         private const string jsonFilePath = "data.json";
         TileContainer tileContainer = new();
         public JsonHandler handler = new();
+        ProcessTracker tracker = new();
 
         public MainWindow()
         {
@@ -36,6 +37,7 @@ namespace GameplayTimeTracker
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
+            tracker.InitializeProcessTracker(tileContainer);
         }
 
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
@@ -57,7 +59,7 @@ namespace GameplayTimeTracker
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Offset, 5, 0, 5);
-                tileContainer.AddTile(newTile, newlyAdded:true);
+                tileContainer.AddTile(newTile, newlyAdded: true);
                 tileContainer.ListTiles();
 
                 MessageBox.Show($"Selected file: {fileName}");
@@ -112,8 +114,9 @@ namespace GameplayTimeTracker
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
         {
             OverlayTop.Visibility = e.VerticalOffset > 0 ? Visibility.Visible : Visibility.Collapsed;
-            OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight ? Visibility.Visible : Visibility.Collapsed;
+            OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
-
     }
 }

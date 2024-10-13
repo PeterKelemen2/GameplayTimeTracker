@@ -15,6 +15,10 @@ public class TileContainer
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
 
+    public TileContainer()
+    {
+    }
+
     public List<Tile> GetTiles()
     {
         return tilesList;
