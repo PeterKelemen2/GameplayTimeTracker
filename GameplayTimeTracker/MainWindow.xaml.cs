@@ -36,6 +36,8 @@ namespace GameplayTimeTracker
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             tracker.InitializeProcessTracker(tileContainer);
+
+            this.Closing += MainWindow_Closing;
         }
 
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
@@ -120,6 +122,20 @@ namespace GameplayTimeTracker
             OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Add your logic here (e.g., saving data, confirming exit)
+            if (MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButton.YesNo) ==
+                MessageBoxResult.No)
+            {
+                e.Cancel = true; // Cancel the closing event
+            }
+            else
+            {
+                tileContainer.InitSave();
+            }
         }
     }
 }
