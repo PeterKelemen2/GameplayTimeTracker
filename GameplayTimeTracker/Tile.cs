@@ -255,25 +255,12 @@ public class Tile : UserControl
                 element.Visibility = Visibility.Visible;
             }
         }
-
-        // Apply the animations to the menuRectangle
-        menuRectangle.BeginAnimation(Rectangle.HeightProperty, heightAnimation);
-        menuRectangle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-
-        editNameBox.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
-        editPlaytimeBoxH.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
-        editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
-        editPlaytimeTitle.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
-        editSaveButton.BeginAnimation(Rectangle.HeightProperty, heightAnimationButton);
-        changeIconButton.BeginAnimation(Rectangle.HeightProperty, heightAnimationButton);
-
-        editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        editNameBox.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        editPlaytimeBoxH.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        editPlaytimeBoxM.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        editSaveButton.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
-        changeIconButton.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        
+        foreach (var element in uiElements)
+        {
+            element.BeginAnimation(HeightProperty, heightAnimation);
+            element.BeginAnimation(OpacityProperty, opacityAnimation);
+        }
 
         Console.WriteLine(isMenuOpen);
     }
