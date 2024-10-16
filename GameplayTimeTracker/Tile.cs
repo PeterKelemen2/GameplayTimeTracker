@@ -100,6 +100,7 @@ public class Tile : UserControl
     private Button removeButton;
     private Button editSaveButton;
     private Button changeIconButton;
+    private Button launchButton;
     private Image image;
     private TextBlock titleTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -255,7 +256,7 @@ public class Tile : UserControl
                 element.Visibility = Visibility.Visible;
             }
         }
-        
+
         foreach (var element in uiElements)
         {
             element.BeginAnimation(HeightProperty, heightAnimation);
@@ -290,6 +291,10 @@ public class Tile : UserControl
         Console.WriteLine("File Saved !!!");
     }
 
+    private void LaunchExe(object sender, RoutedEventArgs e)
+    {
+        Process.Start(ExePath);
+    }
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
@@ -551,6 +556,8 @@ public class Tile : UserControl
             Fill = new SolidColorBrush(LightColor),
         };
 
+        int topMargin = -40;
+
         editButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
@@ -558,7 +565,7 @@ public class Tile : UserControl
             Width = 40,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, 0, 100, 0),
+            Margin = new Thickness(0, topMargin, 100, 0),
         };
         editButton.Click += ToggleEdit;
 
@@ -569,17 +576,30 @@ public class Tile : UserControl
             Width = 40,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, 0, 50, 0),
+            Margin = new Thickness(0, topMargin, 50, 0),
         };
         removeButton.Click += OpenDeleteDialog;
 
+        launchButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Content = "Launch",
+            Height = 40,
+            Width = 90,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 60, 50, 0),
+        };
+        launchButton.Click += LaunchExe;
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
+        Grid.SetRow(launchButton, 0);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
+        grid.Children.Add(launchButton);
 
         // Create a TextBlock for displaying text
         titleTextBlock = new TextBlock
