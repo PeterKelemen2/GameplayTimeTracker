@@ -43,6 +43,14 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "dependencies": {
+            "IconExtractor": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "IconUtilities": {
+              "target": "Package",
+              "version": "[1.0.2, )"
+            },
             "Microsoft.NETFramework.ReferenceAssemblies": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -51,7 +59,7 @@
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[8.0.10, )"
             }
           },
           "imports": [

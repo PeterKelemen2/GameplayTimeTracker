@@ -15,30 +15,30 @@ using System.Windows.Shapes;
 
 public class GradientBar : UserControl
 {
-    public double Width { get; set; }
-    public double Height { get; set; }
+    public double GWidth { get; set; }
+    public double GHeight { get; set; }
     public double Percent { get; set; }
     public Color Color1 { get; set; }
     public Color Color2 { get; set; }
     public Color BgColor { get; set; }
-    public double Padding { get; set; }
+    public double GPadding { get; set; }
     public double Radius { get; set; }
 
     private Rectangle barBackground;
     private Rectangle barForeground;
 
-    public GradientBar(double width, double height, double percent, Color color1, Color color2, Color bgColor,
-        double padding = 5,
+    public GradientBar(double gWidth, double gHeight, double percent, Color color1, Color color2, Color bgColor,
+        double gPadding = 5,
         double radius = 10)
     {
         // Width = width;
-        Width = width;
-        Height = height;
+        GWidth = gWidth;
+        GHeight = gHeight;
         Percent = percent;
         Color1 = color1;
         Color2 = color2;
         BgColor = bgColor;
-        Padding = padding;
+        GPadding = gPadding;
         Radius = radius;
         InitializeBar();
     }
@@ -55,8 +55,8 @@ public class GradientBar : UserControl
 
         barBackground = new Rectangle
         {
-            Width = Width,
-            Height = Height,
+            Width = GWidth,
+            Height = GHeight,
             RadiusX = Radius,
             RadiusY = Radius,
             Fill = new SolidColorBrush(BgColor)
@@ -64,13 +64,13 @@ public class GradientBar : UserControl
 
         barForeground = new Rectangle
         {
-            Width = (Width - 2 * Padding) * Percent,
-            Height = Height - 2 * Padding,
-            RadiusX = Radius - Padding / 2,
-            RadiusY = Radius - Padding / 2,
+            Width = (GWidth - 2 * GPadding) * Percent,
+            Height = GHeight - 2 * GPadding,
+            RadiusX = Radius - GPadding / 2,
+            RadiusY = Radius - GPadding / 2,
             Fill = gradientBrush,
             HorizontalAlignment = HorizontalAlignment.Left,
-            Margin = new Thickness(Padding, 0, 0, 0)
+            Margin = new Thickness(GPadding, 0, 0, 0)
         };
 
         grid.Children.Add(barBackground);
@@ -86,7 +86,7 @@ public class Tile : UserControl
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 14;
-    private const double Height = 150;
+    private const double THeight = 150;
     private const double BorderRadius = 10;
     private const int MenuTopMargin = -20;
     private const int TextBoxHeight = 25;
@@ -428,7 +428,7 @@ public class Tile : UserControl
     {
         _tileContainer = tileContainer;
         TileWidth = width;
-        TileHeight = Height;
+        TileHeight = THeight;
         CornerRadius = BorderRadius;
         TotalPlaytime = totalTime;
         LastPlaytime = lastPlayedTime;
@@ -714,8 +714,8 @@ public class Tile : UserControl
         };
 
         totalTimeGradientBar = new GradientBar(
-            width: 150,
-            height: 30,
+            gWidth: 150,
+            gHeight: 30,
             percent: TotalPlaytimePercent,
             color1: LeftColor,
             color2: RightColor,
@@ -752,8 +752,8 @@ public class Tile : UserControl
         };
 
         lastTimeGradientBar = new GradientBar(
-            width: 150,
-            height: 30,
+            gWidth: 150,
+            gHeight: 30,
             percent: LastPlaytimePercent,
             color1: LeftColor,
             color2: RightColor,

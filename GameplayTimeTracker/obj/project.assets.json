@@ -2,6 +2,31 @@
   "version": 3,
   "targets": {
     "net7.0-windows7.0": {
+      "IconExtractor/1.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/IconExtractor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/IconExtractor.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "IconUtilities/1.0.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Drawing.Common": "5.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/IconUtilities.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/IconUtilities.dll": {}
+        }
+      },
       "Microsoft.NETFramework.ReferenceAssemblies/1.0.3": {
         "type": "package",
         "dependencies": {
@@ -14,7 +39,7 @@
           "build/Microsoft.NETFramework.ReferenceAssemblies.net461.targets": {}
         }
       },
-      "Microsoft.Win32.SystemEvents/7.0.0": {
+      "Microsoft.Win32.SystemEvents/8.0.0": {
         "type": "package",
         "compile": {
           "lib/net7.0/Microsoft.Win32.SystemEvents.dll": {
@@ -36,34 +61,56 @@
           }
         }
       },
-      "System.Drawing.Common/7.0.0": {
+      "System.Drawing.Common/8.0.10": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Win32.SystemEvents": "7.0.0"
+          "Microsoft.Win32.SystemEvents": "8.0.0"
         },
         "compile": {
           "lib/net7.0/System.Drawing.Common.dll": {
-            "related": ".xml"
+            "related": ".pdb;.xml"
           }
         },
         "runtime": {
           "lib/net7.0/System.Drawing.Common.dll": {
-            "related": ".xml"
+            "related": ".pdb;.xml"
           }
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net7.0/System.Drawing.Common.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
         }
       }
     }
   },
   "libraries": {
+    "IconExtractor/1.0.1": {
+      "sha512": "CdNcIOMZd3vze9bEFuH+ngAn9L3tMhhlTiVHLoh8vS2V/+nlgQLRQ/dhipl1HRRf6qVtXyLB+R/rPRxzHeRGuQ==",
+      "type": "package",
+      "path": "iconextractor/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "iconextractor.1.0.1.nupkg.sha512",
+        "iconextractor.nuspec",
+        "lib/net40/IconExtractor.dll",
+        "lib/net40/IconExtractor.xml",
+        "lib/netstandard2.0/IconExtractor.dll",
+        "lib/netstandard2.0/IconExtractor.xml",
+        "nupkg-icon.png"
+      ]
+    },
+    "IconUtilities/1.0.2": {
+      "sha512": "FV1BEipCUZvNP3iiAFGLjBobtioUC7i752rbxZnILc5CNHPqImok8J7NrOJq2+nUOi3+t8DpZVeJ5sCGBe4WZQ==",
+      "type": "package",
+      "path": "iconutilities/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "iconutilities.1.0.2.nupkg.sha512",
+        "iconutilities.nuspec",
+        "lib/netstandard2.0/IconUtilities.dll"
+      ]
+    },
     "Microsoft.NETFramework.ReferenceAssemblies/1.0.3": {
       "sha512": "vUc9Npcs14QsyOD01tnv/m8sQUnGTGOw1BCmKcv77LBJY7OxhJ+zJF7UD/sCL3lYNFuqmQEVlkfS4Quif6FyYg==",
       "type": "package",
@@ -403,10 +450,10 @@
         "microsoft.netframework.referenceassemblies.net461.nuspec"
       ]
     },
-    "Microsoft.Win32.SystemEvents/7.0.0": {
-      "sha512": "2nXPrhdAyAzir0gLl8Yy8S5Mnm/uBSQQA7jEsILOS1MTyS7DbmV1NgViMtvV1sfCD1ebITpNwb1NIinKeJgUVQ==",
+    "Microsoft.Win32.SystemEvents/8.0.0": {
+      "sha512": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw==",
       "type": "package",
-      "path": "microsoft.win32.systemevents/7.0.0",
+      "path": "microsoft.win32.systemevents/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -423,21 +470,25 @@
         "lib/net6.0/Microsoft.Win32.SystemEvents.xml",
         "lib/net7.0/Microsoft.Win32.SystemEvents.dll",
         "lib/net7.0/Microsoft.Win32.SystemEvents.xml",
+        "lib/net8.0/Microsoft.Win32.SystemEvents.dll",
+        "lib/net8.0/Microsoft.Win32.SystemEvents.xml",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.7.0.0.nupkg.sha512",
+        "microsoft.win32.systemevents.8.0.0.nupkg.sha512",
         "microsoft.win32.systemevents.nuspec",
         "runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll",
         "runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.xml",
         "runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.dll",
         "runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.xml",
+        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll",
+        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.xml",
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Drawing.Common/7.0.0": {
-      "sha512": "KIX+oBU38pxkKPxvLcLfIkOV5Ien8ReN78wro7OF5/erwcmortzeFx+iBswlh2Vz6gVne0khocQudGwaO1Ey6A==",
+    "System.Drawing.Common/8.0.10": {
+      "sha512": "MdajRp3P+FOlThgY6FBjAqnmLiVl5t2yWEC/2AsDMqx1zYbJG3G5TnscFBQ4obqcaGqvN5UnhQHSFaJFG2HftQ==",
       "type": "package",
-      "path": "system.drawing.common/7.0.0",
+      "path": "system.drawing.common/8.0.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -451,22 +502,25 @@
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
         "lib/net462/System.Drawing.Common.dll",
+        "lib/net462/System.Drawing.Common.pdb",
         "lib/net462/System.Drawing.Common.xml",
         "lib/net6.0/System.Drawing.Common.dll",
+        "lib/net6.0/System.Drawing.Common.pdb",
         "lib/net6.0/System.Drawing.Common.xml",
         "lib/net7.0/System.Drawing.Common.dll",
+        "lib/net7.0/System.Drawing.Common.pdb",
         "lib/net7.0/System.Drawing.Common.xml",
+        "lib/net8.0/System.Drawing.Common.dll",
+        "lib/net8.0/System.Drawing.Common.pdb",
+        "lib/net8.0/System.Drawing.Common.xml",
         "lib/netstandard2.0/System.Drawing.Common.dll",
+        "lib/netstandard2.0/System.Drawing.Common.pdb",
         "lib/netstandard2.0/System.Drawing.Common.xml",
         "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "runtimes/win/lib/net6.0/System.Drawing.Common.dll",
-        "runtimes/win/lib/net6.0/System.Drawing.Common.xml",
-        "runtimes/win/lib/net7.0/System.Drawing.Common.dll",
-        "runtimes/win/lib/net7.0/System.Drawing.Common.xml",
-        "system.drawing.common.7.0.0.nupkg.sha512",
+        "system.drawing.common.8.0.10.nupkg.sha512",
         "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -474,8 +528,10 @@
   },
   "projectFileDependencyGroups": {
     "net7.0-windows7.0": [
+      "IconExtractor >= 1.0.1",
+      "IconUtilities >= 1.0.2",
       "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.3",
-      "System.Drawing.Common >= 7.0.0"
+      "System.Drawing.Common >= 8.0.10"
     ]
   },
   "packageFolders": {
@@ -520,6 +576,14 @@
       "net7.0-windows7.0": {
         "targetAlias": "net7.0-windows",
         "dependencies": {
+          "IconExtractor": {
+            "target": "Package",
+            "version": "[1.0.1, )"
+          },
+          "IconUtilities": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
           "Microsoft.NETFramework.ReferenceAssemblies": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
@@ -528,7 +592,7 @@
           },
           "System.Drawing.Common": {
             "target": "Package",
-            "version": "[7.0.0, )"
+            "version": "[8.0.10, )"
           }
         },
         "imports": [
