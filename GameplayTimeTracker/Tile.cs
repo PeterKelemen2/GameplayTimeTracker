@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 
 
 namespace GameplayTimeTracker;
@@ -103,6 +104,8 @@ public class Tile : UserControl
     private Button changeIconButton;
     private Button launchButton;
     private Image image;
+    private Image bgImage;
+    private Grid containerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -129,10 +132,13 @@ public class Tile : UserControl
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
-    Color FontColor = (Color)ColorConverter.ConvertFromString("#C1C9FF");
+    Color FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     Color RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
     Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
+    Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
+    Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
+
 
     public int Id { get; set; }
     public double TileWidth { get; set; }
@@ -454,6 +460,32 @@ public class Tile : UserControl
 
     public void InitializeTile()
     {
+        LinearGradientBrush gradientBrush = new LinearGradientBrush();
+        gradientBrush.StartPoint = new Point(0, 0);
+        gradientBrush.EndPoint = new Point(1, 0);
+        gradientBrush.GradientStops.Add(new GradientStop(TileColor1, 0.0));
+        gradientBrush.GradientStops.Add(new GradientStop(TileColor2, 1.0));
+
+        BlurEffect blurEffect = new BlurEffect
+        {
+            Radius = 10
+        };
+
+        DropShadowEffect dropShadowText = new DropShadowEffect
+        {
+            BlurRadius = 8,
+            ShadowDepth = 0,
+            Color = Colors.Black,
+            Opacity = 1,
+            Direction = 200,
+        };
+        
+        DropShadowEffect dropShadowIcon = new DropShadowEffect
+        {
+            BlurRadius = 10,
+            ShadowDepth = 0
+        };
+
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
         // (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
@@ -612,7 +644,7 @@ public class Tile : UserControl
             Height = TileHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
-            Fill = new SolidColorBrush(LightColor),
+            Fill = gradientBrush,
         };
 
         int topMargin = -40;
@@ -625,6 +657,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, topMargin, 100, 0),
+            Effect = dropShadowIcon
         };
         editButton.Click += ToggleEdit;
 
@@ -636,6 +669,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, topMargin, 50, 0),
+            Effect = dropShadowIcon
         };
         removeButton.Click += OpenDeleteDialog;
 
@@ -648,6 +682,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 60, 50, 0),
+            Effect = dropShadowIcon
         };
         launchButton.Click += LaunchExe;
 
@@ -669,8 +704,11 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin * 2, TextMargin / 2, 0, 0)
+            Margin = new Thickness(TextMargin * 2, TextMargin / 2, 0, 0),
+            Effect = dropShadowText,
         };
+        TextOptions.SetTextRenderingMode(titleTextBlock, TextRenderingMode.ClearType);
+        TextOptions.SetTextFormattingMode(titleTextBlock, TextFormattingMode.Ideal);
 
         runningTextBlock = new TextBlock
         {
@@ -680,7 +718,8 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(RunningColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin * 2, TextMargin / 2 + TitleFontSize + 3, 0, 0)
+            Margin = new Thickness(TextMargin * 2, TextMargin / 2 + TitleFontSize + 3, 0, 0),
+            Effect = dropShadowText,
         };
 
         // Add the TextBlock to the grid
@@ -688,27 +727,59 @@ public class Tile : UserControl
         Grid.SetRow(runningTextBlock, 0);
         grid.Children.Add(titleTextBlock);
         grid.Children.Add(runningTextBlock);
+        Panel.SetZIndex(titleTextBlock, 1);
+        Panel.SetZIndex(runningTextBlock, 1);
 
         if (!isRunning)
         {
             runningTextBlock.Text = "";
         }
 
+
         // Create the Image and other UI elements, positioning them in the second row as well
         if (IconImagePath != null)
         {
+            double imageScale = 1.5;
+            containerGrid = new Grid
+            {
+                Width = TileHeight * imageScale,
+                Height = TileHeight,
+                ClipToBounds = true,
+                Margin = new Thickness(10, 0, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
             string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+            bgImage = new Image
+            {
+                Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
+                Stretch = Stretch.UniformToFill,
+                Width = TileHeight * imageScale,
+                Height = TileHeight * imageScale,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 0),
+                // Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+                Effect = blurEffect,
+                Opacity = 0.7
+            };
+
             image = new Image
             {
                 Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
                 Stretch = Stretch.UniformToFill,
                 Width = TileHeight / 2,
                 Height = TileHeight / 2,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(-10, 30, 0, 0),
+                // Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+                Effect = dropShadowIcon,
             };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+            containerGrid.Children.Add(bgImage);
+            containerGrid.Children.Add(image);
         }
         else
         {
@@ -717,9 +788,11 @@ public class Tile : UserControl
 
 
         // Add all other elements as before, positioning them in the second row
-        Grid.SetRow(image, 0);
-        grid.Children.Add(image);
-
+        // Grid.SetRow(image, 0);
+        // Grid.SetRow(bgImage, 0);
+        Grid.SetRow(containerGrid, 0);
+        // grid.Children.Add(bgImage);
+        grid.Children.Add(containerGrid);
         // Add playtime elements
         totalPlaytimeTitle = new TextBlock
         {
@@ -729,7 +802,9 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
+            Margin =
+                new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0),
+            Effect = dropShadowText,
         };
 
         totalPlaytime = new TextBlock
@@ -740,7 +815,9 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
+            Margin =
+                new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0),
+            Effect = dropShadowText,
         };
 
         totalTimeGradientBar = new GradientBar(
@@ -754,7 +831,9 @@ public class Tile : UserControl
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
+            Margin =
+                new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0),
+            Effect = dropShadowText,
         };
 
         lastPlaytimeTitle = new TextBlock
@@ -766,7 +845,8 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
-                TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
+                TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0),
+            Effect = dropShadowText,
         };
 
         lastPlaytime = new TextBlock
@@ -778,7 +858,8 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
-                TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
+                TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0),
+            Effect = dropShadowText,
         };
 
         lastTimeGradientBar = new GradientBar(
@@ -793,7 +874,8 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
-                TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
+                TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0),
+            Effect = dropShadowText,
         };
 
         Grid.SetRow(totalPlaytimeTitle, 0);
@@ -809,6 +891,7 @@ public class Tile : UserControl
         grid.Children.Add(lastPlaytimeTitle);
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);
+
 
         // Set the Grid as the content of the UserControl
         Content = grid;
