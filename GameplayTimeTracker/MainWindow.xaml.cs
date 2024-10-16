@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -11,7 +12,7 @@ using Toolbelt.Drawing;
 
 namespace GameplayTimeTracker
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         private const double Offset = 8;
         private const string jsonFilePath = "data.json";
@@ -19,17 +20,14 @@ namespace GameplayTimeTracker
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
 
+
         public MainWindow()
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
-            // tileContainer.InitializeContainer(jsonFilePath);
             InitializeComponent();
-            // Loaded += MainWindow_Loaded;
+
             Loaded += ShowTilesOnCanvas;
 
-            // tileContainer.AddTile(
-            //     new Tile(tileContainer, "Gameasd", 3241, 1233, "C:\\Users\\Peti\\Pictures\\focus.jpg"));
-            // tileContainer.AddTile(new Tile(tileContainer, "Gameasd", 3241, 1233));
             tileContainer.ListTiles();
             tileContainer.GetExecutableNames();
             // WriteToJson(tileContainer, "data.json");

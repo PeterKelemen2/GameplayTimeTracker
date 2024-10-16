@@ -437,7 +437,10 @@ public class Tile : UserControl
         CornerRadius = BorderRadius;
         TotalPlaytime = totalTime;
         LastPlaytime = lastPlayedTime;
+        //TODO: Handle new last play
+        // LastPlaytime = 0;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
+        // LastPlaytimePercent = 0;
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
