@@ -121,6 +121,7 @@ public class Tile : UserControl
     private double mTotal;
     private double hLast;
     private double mLast;
+    private double currentPlaytime;
 
     private const string? SampleImagePath = "assets/no_icon.png";
 
@@ -141,6 +142,12 @@ public class Tile : UserControl
     public double LastPlaytimePercent { get; set; }
     public string? IconImagePath { get; set; }
     public string ExePath { get; set; }
+    public double CurrentPlaytime { get; set; }
+    public double HTotal { get; set; }
+    public double HLast { get; set; }
+    public double MTotal { get; set; }
+    public double MLast { get; set; }
+
 
     private double CalculateTileWidth()
     {
@@ -352,6 +359,34 @@ public class Tile : UserControl
         set { SetValue(GameNameProperty, value); }
     }
 
+
+    public void CalculatePlaytimeFromSec(double sec)
+    {
+        if (sec > 4 - 1) // 60-1
+        {
+            mLast++;
+            mTotal++;
+            TotalPlaytime++;
+            LastPlaytime++;
+            if (mTotal > 3) // 60-1
+            {
+                hTotal++;
+                mTotal = 0;
+            }
+
+            if (mLast > 3) // 60-1
+            {
+                hLast++;
+                mLast = 0;
+            }
+
+            CurrentPlaytime = 0;
+        }
+
+        Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
+        Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");
+    }
+
     private (double, double) CalculatePlaytimeFromMinutes(double playtime)
     {
         double h = 0;
@@ -399,8 +434,10 @@ public class Tile : UserControl
     {
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        (double hLast, double mLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
+        // (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        // (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        (hLast, mLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();

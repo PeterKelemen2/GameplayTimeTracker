@@ -19,6 +19,8 @@ public class ProcessTracker
     public void InitializeProcessTracker(TileContainer tileContainer)
     {
         exeNames = tileContainer.GetExecutableNames();
+        _tileContainer = tileContainer;
+        tilesList = tileContainer.GetTiles();
         foreach (var exeName in exeNames)
         {
             Console.WriteLine($"Exe name: {exeName}");
@@ -30,22 +32,28 @@ public class ProcessTracker
     public async Task TrackProcessesAsync()
     {
         Console.WriteLine("Starting process tracking...");
+
         while (true)
         {
             var runningProcesses = Process.GetProcesses();
             Console.WriteLine("=================");
-            foreach (var exeName in exeNames)
+            foreach (var tile in tilesList)
             {
-                var newExeName = System.IO.Path.GetFileNameWithoutExtension(exeName);
+                var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
                 var isRunning =
                     runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
                 if (isRunning)
                 {
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {exeName} is running.");
+                    tile.CurrentPlaytime++;
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
+                    // tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+                    Console.WriteLine($"Running for: {tile.CurrentPlaytime}s");
+                    tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+                    _tileContainer.UpdatePlaytimeBars();
                 }
                 else
                 {
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {exeName} is not running.");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
                 }
             }
 
