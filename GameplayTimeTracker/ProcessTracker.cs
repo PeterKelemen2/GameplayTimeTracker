@@ -46,6 +46,7 @@ public class ProcessTracker
                     runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
                 if (isRunning)
                 {
+                    tile.runningTextBlock.Text = "Running!";
                     tile.CurrentPlaytime++;
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
@@ -54,6 +55,7 @@ public class ProcessTracker
                 else
                 {
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
+                    tile.runningTextBlock.Text = "";
                 }
                 // tile.SmallSave();
             }

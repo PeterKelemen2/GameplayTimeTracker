@@ -92,6 +92,7 @@ public class Tile : UserControl
     private const int TextBoxHeight = 25;
     private bool isMenuOpen = false;
     private bool wasOpened = false;
+    private bool isRunning = false;
 
     private Grid grid;
     private Rectangle menuRectangle;
@@ -103,6 +104,7 @@ public class Tile : UserControl
     private Button launchButton;
     private Image image;
     private TextBlock titleTextBlock;
+    public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
     private TextBlock totalPlaytime;
     private TextBlock lastPlaytimeTitle;
@@ -128,6 +130,7 @@ public class Tile : UserControl
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
     Color FontColor = (Color)ColorConverter.ConvertFromString("#C1C9FF");
+    Color RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
     Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
 
@@ -147,6 +150,7 @@ public class Tile : UserControl
     public double HLast { get; set; }
     public double MTotal { get; set; }
     public double MLast { get; set; }
+    public bool IsRunning { get; set; }
 
 
     private double CalculateTileWidth()
@@ -668,9 +672,27 @@ public class Tile : UserControl
             Margin = new Thickness(TextMargin * 2, TextMargin / 2, 0, 0)
         };
 
+        runningTextBlock = new TextBlock
+        {
+            Text = "Running!",
+            FontWeight = FontWeights.Bold,
+            FontSize = TitleFontSize - 4,
+            Foreground = new SolidColorBrush(RunningColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(TextMargin * 2, TextMargin / 2 + TitleFontSize + 3, 0, 0)
+        };
+
         // Add the TextBlock to the grid
-        Grid.SetRow(titleTextBlock, 0); // Position it in the second row with the container
+        Grid.SetRow(titleTextBlock, 0);
+        Grid.SetRow(runningTextBlock, 0);
         grid.Children.Add(titleTextBlock);
+        grid.Children.Add(runningTextBlock);
+
+        if (!isRunning)
+        {
+            runningTextBlock.Text = "";
+        }
 
         // Create the Image and other UI elements, positioning them in the second row as well
         if (IconImagePath != null)
