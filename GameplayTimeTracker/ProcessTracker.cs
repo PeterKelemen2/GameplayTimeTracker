@@ -49,6 +49,7 @@ public class ProcessTracker
                     tile.CurrentPlaytime++;
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+                    // _tileContainer.InitSave();
                 }
                 else
                 {

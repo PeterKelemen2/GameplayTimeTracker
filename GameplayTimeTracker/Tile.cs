@@ -368,7 +368,7 @@ public class Tile : UserControl
 
     public void CalculatePlaytimeFromSec(double sec)
     {
-        int customHour = 60-1;
+        int customHour = 60 - 1;
         if (sec > customHour) // 60-1
         {
             mLast++;
@@ -385,6 +385,7 @@ public class Tile : UserControl
             {
                 hLast++;
                 mLast = 0;
+                _tileContainer.InitSave();
             }
 
             TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
