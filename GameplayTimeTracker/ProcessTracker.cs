@@ -55,6 +55,7 @@ public class ProcessTracker
                 {
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
                 }
+                // tile.SmallSave();
             }
 
             stopwatch.Stop();

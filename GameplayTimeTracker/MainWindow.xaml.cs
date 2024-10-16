@@ -35,7 +35,7 @@ namespace GameplayTimeTracker
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
-            // tracker.InitializeProcessTracker(tileContainer);
+            tracker.InitializeProcessTracker(tileContainer);
         }
 
         private void AddExecButton_Click(object sender, RoutedEventArgs e)

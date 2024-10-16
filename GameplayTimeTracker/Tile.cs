@@ -290,12 +290,15 @@ public class Tile : UserControl
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBoxH.Text = hTotal.ToString();
         editPlaytimeBoxM.Text = mTotal.ToString();
-        // totalTimeGradientBar.Percent = Math.Round(TotalPlaytime / _tileContainer.CalculateTotalPlaytime(), 2);
-        // totalTimeGradientBar.InitializeBar();
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
         Console.WriteLine("File Saved !!!");
+    }
+
+    public void SmallSave()
+    {
+        _tileContainer.InitSave();
     }
 
     private void LaunchExe(object sender, RoutedEventArgs e)
@@ -394,7 +397,9 @@ public class Tile : UserControl
             CurrentPlaytime = 0;
             UpdatePlaytimeText();
             _tileContainer.UpdatePlaytimeBars();
+            _tileContainer.InitSave();
         }
+
 
         Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
         Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");

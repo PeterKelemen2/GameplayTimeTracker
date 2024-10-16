@@ -27,6 +27,7 @@ public class TileContainer
     public void InitSave()
     {
         handler.WriteContentToFile(this, jsonFilePath);
+        Console.WriteLine(" ==== Saved! ====");
     }
 
     public List<String> GetExecutableNames()
