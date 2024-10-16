@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Toolbelt.Drawing;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace GameplayTimeTracker
 {
@@ -20,7 +23,8 @@ namespace GameplayTimeTracker
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
 
-
+        private System.Windows.Forms.NotifyIcon m_notifyIcon;
+        
         public MainWindow()
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
@@ -36,8 +40,54 @@ namespace GameplayTimeTracker
             tracker.InitializeProcessTracker(tileContainer);
 
             this.Closing += MainWindow_Closing;
+            
+            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
+            m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
+            m_notifyIcon.BalloonTipTitle = "The App";
+            m_notifyIcon.Text = "The App";
+            //TODO: Change this
+            m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
+            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+        }
+        
+        // ==== Tray ====
+        void OnClose(object sender, CancelEventArgs args)
+        {
+            m_notifyIcon.Dispose();
+            m_notifyIcon = null;
         }
 
+        private WindowState m_storedWindowState = WindowState.Normal;
+        void OnStateChanged(object sender, EventArgs args)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                if(m_notifyIcon != null)
+                    m_notifyIcon.ShowBalloonTip(2000);
+            }
+            else
+                m_storedWindowState = WindowState;
+        }
+        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args) {
+            if (m_notifyIcon != null)
+                m_notifyIcon.Visible = !IsVisible;
+        }
+
+        void m_notifyIcon_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = m_storedWindowState;
+        }
+
+        void ShowTrayIcon(bool show)
+        {
+            if (m_notifyIcon != null)
+                m_notifyIcon.Visible = show;
+        }
+        
+        // ==== Tray ====
+        
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();

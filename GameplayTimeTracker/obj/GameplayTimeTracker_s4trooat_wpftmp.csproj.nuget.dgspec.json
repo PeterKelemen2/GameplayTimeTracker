@@ -43,10 +43,6 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "dependencies": {
-            "IconExtractor": {
-              "target": "Package",
-              "version": "[1.0.1, )"
-            },
             "IconUtilities": {
               "target": "Package",
               "version": "[1.0.2, )"
@@ -57,25 +53,9 @@
               "target": "Package",
               "version": "[1.0.3, )"
             },
-            "NotifyIcon": {
-              "target": "Package",
-              "version": "[1.23.10209.11223, )"
-            },
-            "NotifyIcon.Base": {
-              "target": "Package",
-              "version": "[1.23.10209.11223, )"
-            },
-            "NotifyIcon.Windows": {
-              "target": "Package",
-              "version": "[1.23.10209.11223, )"
-            },
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[8.0.10, )"
-            },
-            "System.Windows.Forms": {
-              "target": "Package",
-              "version": "[4.0.0, )"
             }
           },
           "imports": [
@@ -111,7 +91,7 @@
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             },
-            "Microsoft.WindowsDesktop.App": {
+            "Microsoft.WindowsDesktop.App.WPF": {
               "privateAssets": "none"
             }
           },
