@@ -115,7 +115,7 @@ public class Tile : UserControl
     private TextBlock editPlaytimeH;
     private TextBlock editPlaytimeM;
     public GradientBar totalTimeGradientBar;
-    private GradientBar lastTimeGradientBar;
+    public GradientBar lastTimeGradientBar;
 
     private double hTotal;
     private double mTotal;
@@ -360,27 +360,39 @@ public class Tile : UserControl
     }
 
 
+    private void UpdatePlaytimeText()
+    {
+        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+        lastPlaytime.Text = $"{hLast}h {mLast}m";
+    }
+
     public void CalculatePlaytimeFromSec(double sec)
     {
-        if (sec > 4 - 1) // 60-1
+        int customHour = 60-1;
+        if (sec > customHour) // 60-1
         {
             mLast++;
             mTotal++;
-            TotalPlaytime++;
+
             LastPlaytime++;
-            if (mTotal > 3) // 60-1
+            if (mTotal > customHour) // 60-1
             {
                 hTotal++;
                 mTotal = 0;
             }
 
-            if (mLast > 3) // 60-1
+            if (mLast > customHour) // 60-1
             {
                 hLast++;
                 mLast = 0;
             }
 
+            TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
+            LastPlaytime = CalculatePlaytimeFromHnM(hLast, mLast);
+            LastPlaytimePercent = LastPlaytime / TotalPlaytime;
             CurrentPlaytime = 0;
+            UpdatePlaytimeText();
+            _tileContainer.UpdatePlaytimeBars();
         }
 
         Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
@@ -424,10 +436,7 @@ public class Tile : UserControl
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
 
-        Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
-        stopwatch.Stop();
-        // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
     public void InitializeTile()

@@ -25,7 +25,6 @@ public class ProcessTracker
         {
             Console.WriteLine($"Exe name: {exeName}");
         }
-
         TrackProcessesAsync();
     }
 
@@ -33,8 +32,11 @@ public class ProcessTracker
     {
         Console.WriteLine("Starting process tracking...");
 
+        Stopwatch stopwatch = new Stopwatch();
         while (true)
         {
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
             var runningProcesses = Process.GetProcesses();
             Console.WriteLine("=================");
             foreach (var tile in tilesList)
@@ -46,10 +48,7 @@ public class ProcessTracker
                 {
                     tile.CurrentPlaytime++;
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
-                    // tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
-                    Console.WriteLine($"Running for: {tile.CurrentPlaytime}s");
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
-                    _tileContainer.UpdatePlaytimeBars();
                 }
                 else
                 {
@@ -57,7 +56,8 @@ public class ProcessTracker
                 }
             }
 
-            await Task.Delay(1000);
+            stopwatch.Stop();
+            await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
         }
     }
 }

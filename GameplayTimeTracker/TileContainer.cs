@@ -176,11 +176,14 @@ public class TileContainer
         foreach (var tile in tilesList)
         {
             tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime / globalTotalPlaytime, 2);
+            Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
+            tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
         }
 
         foreach (var tile in tilesList)
         {
             tile.totalTimeGradientBar.InitializeBar();
+            tile.lastTimeGradientBar.InitializeBar();
         }
     }
 }
