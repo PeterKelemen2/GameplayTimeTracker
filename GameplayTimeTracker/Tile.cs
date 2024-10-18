@@ -105,7 +105,7 @@ public class Tile : UserControl
     private Button changeIconButton;
     private Button launchButton;
     private Image image;
-    private Image bgImage;
+    public Image bgImage;
     private Grid containerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
@@ -122,8 +122,8 @@ public class Tile : UserControl
     private TextBlock editPlaytimeM;
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
-    private BitmapSource bgImageGray;
-    private BitmapSource bgImageColor;
+    public BitmapSource bgImageGray;
+    public BitmapSource bgImageColor;
     private string absoluteIconPath;
 
     private double hTotal;

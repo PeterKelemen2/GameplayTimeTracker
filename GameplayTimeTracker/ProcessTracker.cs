@@ -61,15 +61,20 @@ public class ProcessTracker
                     tile.CurrentPlaytime++;
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+                    tile.bgImage.Source = tile.bgImageColor;
                 }
                 else
                 {
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
                     tile.runningTextBlock.Text = "";
                     tile.wasRunning = false;
+                    tile.bgImage.Source = tile.bgImageGray;
                 }
+                // tile.ToggleBgImageColor();
+                // tile.bgImage.Source = tile.bgImageColor;
+                
             }
-            _tileContainer.UpdateBgImages();
+            // _tileContainer.UpdateBgImages();
             stopwatch.Stop();
             // await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
             await Task.Delay(1000);
