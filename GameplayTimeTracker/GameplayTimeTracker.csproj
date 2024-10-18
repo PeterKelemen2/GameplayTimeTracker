@@ -33,9 +33,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="Effects\SaturationEffect.ps" />
-      <Content Include="Effects\SaturationEffect.ps">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>

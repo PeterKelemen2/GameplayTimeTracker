@@ -933,17 +933,9 @@ public class Tile : UserControl
         Content = grid;
     }
 
-    public void ToggleBgImageColor()
+    public void ToggleBgImageColor(bool runningBool)
     {
-        if (isRunning)
-        {
-            bgImage.Source = bgImageColor;
-        }
-        else
-        {
-            bgImage.Source = bgImageGray;
-        }
-        // bgImage.Source = isRunning ? bgImageGray : bgImageColor;
+        bgImage.Source = runningBool ? bgImageColor : bgImageGray;
     }
     
     public static BitmapSource ConvertToGrayscale(BitmapSource source)
