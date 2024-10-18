@@ -714,8 +714,11 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 60, 50, 0),
-            Effect = dropShadowIcon
+            Effect = dropShadowIcon,
+            
         };
+        launchButton.Background = new SolidColorBrush(Colors.LightGreen);
+
         launchButton.Click += LaunchExe;
 
         Grid.SetRow(container, 0);
