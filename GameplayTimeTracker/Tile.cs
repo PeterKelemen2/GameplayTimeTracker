@@ -94,6 +94,7 @@ public class Tile : UserControl
     private bool isMenuOpen = false;
     private bool wasOpened = false;
     private bool isRunning = false;
+    public bool wasRunning = false;
 
     private Grid grid;
     private Rectangle menuRectangle;
@@ -157,6 +158,7 @@ public class Tile : UserControl
     public double MTotal { get; set; }
     public double MLast { get; set; }
     public bool IsRunning { get; set; }
+    public bool WasRunning { get; set; }
 
 
     private double CalculateTileWidth()
@@ -373,13 +375,13 @@ public class Tile : UserControl
     }
 
 
-    private void UpdatePlaytimeText()
+    public void UpdatePlaytimeText()
     {
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         lastPlaytime.Text = $"{hLast}h {mLast}m";
     }
 
-    public void CalculatePlaytimeFromSec(double sec)
+    public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
     {
         int customHour = 60 - 1;
         if (sec > customHour) // 60-1
@@ -409,12 +411,35 @@ public class Tile : UserControl
             _tileContainer.UpdatePlaytimeBars();
             _tileContainer.InitSave();
         }
-
+        
+        // if (resetCurrent)
+        // {
+        //     mLast = 0;
+        //     hLast = 0;
+        //     CurrentPlaytime = 0;
+        //     LastPlaytime = 0;
+        //     LastPlaytimePercent = 0;
+        //     UpdatePlaytimeText();
+        //     _tileContainer.UpdatePlaytimeBars();
+        //     _tileContainer.InitSave();
+        // }
 
         Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
         Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");
     }
 
+    public void ResetLastPlaytime()
+    {
+        mLast = 0;
+        hLast = 0;
+        CurrentPlaytime = 0;
+        LastPlaytime = 0;
+        LastPlaytimePercent = 0;
+        UpdatePlaytimeText();
+        _tileContainer.UpdatePlaytimeBars();
+        _tileContainer.InitSave();
+    }
+    
     private (double, double) CalculatePlaytimeFromMinutes(double playtime)
     {
         double h = 0;
@@ -479,7 +504,7 @@ public class Tile : UserControl
             Opacity = 1,
             Direction = 200,
         };
-        
+
         DropShadowEffect dropShadowIcon = new DropShadowEffect
         {
             BlurRadius = 10,

@@ -25,6 +25,7 @@ public class ProcessTracker
         {
             Console.WriteLine($"Exe name: {exeName}");
         }
+
         TrackProcessesAsync();
     }
 
@@ -46,22 +47,31 @@ public class ProcessTracker
                     runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
                 if (isRunning)
                 {
+                    if (tile.wasRunning == false)
+                    {
+                        tile.wasRunning = true;
+                        tile.ResetLastPlaytime();
+                        tile.UpdatePlaytimeText();
+                        _tileContainer.UpdatePlaytimeBars();
+                        _tileContainer.InitSave();
+                        Console.WriteLine($"Setting new last playtime for {newExeName}");
+                    }
                     tile.runningTextBlock.Text = "Running!";
                     tile.CurrentPlaytime++;
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
-                    // _tileContainer.InitSave();
                 }
                 else
                 {
                     Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
                     tile.runningTextBlock.Text = "";
+                    tile.wasRunning = false;
                 }
-                // tile.SmallSave();
             }
 
             stopwatch.Stop();
-            await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
+            // await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
+            await Task.Delay(1000);
         }
     }
 }
