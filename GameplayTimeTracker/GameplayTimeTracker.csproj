@@ -29,6 +29,13 @@
       <Content Include="assets\no_icon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Update="Effects\SaturationEffect.fx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Effects\SaturationEffect.ps" />
+      <Content Include="Effects\SaturationEffect.ps">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

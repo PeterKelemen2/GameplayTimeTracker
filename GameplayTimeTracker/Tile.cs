@@ -93,7 +93,7 @@ public class Tile : UserControl
     private const int TextBoxHeight = 25;
     private bool isMenuOpen = false;
     private bool wasOpened = false;
-    private bool isRunning = false;
+    public bool isRunning = false;
     public bool wasRunning = false;
 
     private Grid grid;
@@ -122,6 +122,9 @@ public class Tile : UserControl
     private TextBlock editPlaytimeM;
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
+    private BitmapSource bgImageGray;
+    private BitmapSource bgImageColor;
+    private string absoluteIconPath;
 
     private double hTotal;
     private double mTotal;
@@ -479,7 +482,11 @@ public class Tile : UserControl
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
-
+        
+        absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+        bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+        bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
+        
         InitializeTile();
     }
 
@@ -775,10 +782,14 @@ public class Tile : UserControl
                 VerticalAlignment = VerticalAlignment.Center,
             };
 
-            string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+            // string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+            // var bgSourceGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+            // var bgSourceColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
+            
             bgImage = new Image
             {
-                Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
+                Source = bgImageColor,
+                // Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
                 Stretch = Stretch.UniformToFill,
                 Width = TileHeight * imageScale,
                 Height = TileHeight * imageScale,
@@ -789,7 +800,6 @@ public class Tile : UserControl
                 Effect = blurEffect,
                 Opacity = 0.7
             };
-
             image = new Image
             {
                 Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
@@ -802,6 +812,7 @@ public class Tile : UserControl
                 // Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
                 Effect = dropShadowIcon,
             };
+            // ToggleBgImageColor();
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
             containerGrid.Children.Add(bgImage);
             containerGrid.Children.Add(image);
@@ -920,5 +931,43 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
+    }
+
+    public void ToggleBgImageColor()
+    {
+        if (isRunning)
+        {
+            bgImage.Source = bgImageColor;
+        }
+        else
+        {
+            bgImage.Source = bgImageGray;
+        }
+        // bgImage.Source = isRunning ? bgImageGray : bgImageColor;
+    }
+    
+    public static BitmapSource ConvertToGrayscale(BitmapSource source)
+    {
+        var stride = (source.PixelWidth * source.Format.BitsPerPixel + 7) / 8;
+        var pixels = new byte[stride * source.PixelWidth];
+
+        source.CopyPixels(pixels, stride, 0);
+
+        for (int i = 0; i < pixels.Length; i += 4)
+        {
+            // this works for PixelFormats.Bgra32
+            var blue = pixels[i];
+            var green = pixels[i + 1];
+            var red = pixels[i + 2];
+            var gray = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
+            pixels[i] = gray;
+            pixels[i + 1] = gray;
+            pixels[i + 2] = gray;
+        }
+
+        return BitmapSource.Create(
+            source.PixelWidth, source.PixelHeight,
+            source.DpiX, source.DpiY,
+            source.Format, null, pixels, stride);
     }
 }

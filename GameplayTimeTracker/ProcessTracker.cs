@@ -55,6 +55,7 @@ public class ProcessTracker
                         _tileContainer.UpdatePlaytimeBars();
                         _tileContainer.InitSave();
                         Console.WriteLine($"Setting new last playtime for {newExeName}");
+                        // tile.ToggleBgImageColor();
                     }
                     tile.runningTextBlock.Text = "Running!";
                     tile.CurrentPlaytime++;
@@ -68,7 +69,7 @@ public class ProcessTracker
                     tile.wasRunning = false;
                 }
             }
-
+            _tileContainer.UpdateBgImages();
             stopwatch.Stop();
             // await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
             await Task.Delay(1000);

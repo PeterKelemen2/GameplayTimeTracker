@@ -187,4 +187,12 @@ public class TileContainer
             tile.lastTimeGradientBar.InitializeBar();
         }
     }
+
+    public void UpdateBgImages()
+    {
+        foreach (var tile in tilesList)
+        {
+            tile.ToggleBgImageColor();
+        }
+    }
 }

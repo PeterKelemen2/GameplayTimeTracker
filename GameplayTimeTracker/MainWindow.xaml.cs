@@ -38,7 +38,9 @@ namespace GameplayTimeTracker
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             tracker.InitializeProcessTracker(tileContainer);
-
+            
+            // tileContainer.UpdateBgImages();
+            
             this.Closing += MainWindow_Closing;
             
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
