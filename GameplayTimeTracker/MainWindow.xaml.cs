@@ -20,6 +20,7 @@ namespace GameplayTimeTracker
         private const double Offset = 8;
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
+        private const string? AppIcon = "assets/MyAppIcon.ico";
         TileContainer tileContainer = new();
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
@@ -46,10 +47,10 @@ namespace GameplayTimeTracker
 
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
             m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
-            m_notifyIcon.BalloonTipTitle = "The App";
-            m_notifyIcon.Text = "The App";
+            m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
+            m_notifyIcon.Text = "Gameplay Time Tracker";
             //TODO: Change this
-            m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
+            m_notifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
         }
 
@@ -229,9 +230,9 @@ namespace GameplayTimeTracker
         {
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
             m_notifyIcon.BalloonTipText = "The app has been minimized. Click the tray icon to show.";
-            m_notifyIcon.BalloonTipTitle = "The App";
-            m_notifyIcon.Text = "The App";
-            m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
+            m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
+            m_notifyIcon.Text = "Gameplay Time Tracker";
+            m_notifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             m_notifyIcon.Visible = true; // Make sure it's visible
         }

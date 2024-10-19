@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="Gameplay Time Tracker" Height="650" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged" IsVisibleChanged="OnIsVisibleChanged">
+        Title="Gameplay Time Tracker" Height="650" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged" IsVisibleChanged="OnIsVisibleChanged"
+        Icon="pack://application:,,,/assets/MyAppIcon.ico"
+        >
     <Window.Resources>
         <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
         <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Black" />
