@@ -322,7 +322,14 @@ public class Tile : UserControl
 
     private void LaunchExe(object sender, RoutedEventArgs e)
     {
-        Process.Start(ExePath);
+        try
+        {
+            Process.Start(ExePath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
