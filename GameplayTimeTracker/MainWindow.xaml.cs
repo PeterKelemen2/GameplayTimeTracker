@@ -49,7 +49,6 @@ namespace GameplayTimeTracker
             m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
             m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
             m_notifyIcon.Text = "Gameplay Time Tracker";
-            //TODO: Change this
             m_notifyIcon.Icon =
                 new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
@@ -189,6 +188,7 @@ namespace GameplayTimeTracker
             foreach (var tile in tilesList)
             {
                 tile.Margin = new Thickness(Offset, 5, 0, 5);
+                //TODO: Handle no icon found exception
                 mainStackPanel.Children.Add(tile);
             }
         }
