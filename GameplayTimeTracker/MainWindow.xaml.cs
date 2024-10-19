@@ -19,6 +19,7 @@ namespace GameplayTimeTracker
     {
         private const double Offset = 8;
         private const string jsonFilePath = "data.json";
+        private const string? SampleImagePath = "assets/no_icon.png";
         TileContainer tileContainer = new();
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
@@ -113,16 +114,25 @@ namespace GameplayTimeTracker
 
                 Console.WriteLine(iconPath);
                 PrepIcon(filePath, iconPath);
+                iconPath = IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Offset, 5, 0, 5);
                 tileContainer.AddTile(newTile, newlyAdded: true);
-                tileContainer.ListTiles();
+                if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+                      Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+                {
+                    tileContainer.ListTiles();
 
-                MessageBox.Show($"Selected file: {fileName}");
+                    MessageBox.Show($"Selected file: {fileName}");
 
-                var tilesList = tileContainer.GetTiles();
-                mainStackPanel.Children.Add(tilesList.Last());
+                    var tilesList = tileContainer.GetTiles();
+                    mainStackPanel.Children.Add(tilesList.Last());
+                }
+                else
+                {
+                    MessageBox.Show("Sorry, I can't keep tabs on myself.", "Existential crisis", MessageBoxButton.OK);
+                }
             }
 
             handler.WriteContentToFile(tileContainer, jsonFilePath);
@@ -132,7 +142,14 @@ namespace GameplayTimeTracker
         {
             var source = filePath;
             using var s = File.Create(outputImagePath);
-            IconExtractor.Extract1stIconTo(source, s);
+            try
+            {
+                IconExtractor.Extract1stIconTo(source, s);
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             // // GetLargestIcon(filePath);
             // // var icon = GetLargestIcon(filePath);
             // var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
@@ -217,6 +234,32 @@ namespace GameplayTimeTracker
             m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             m_notifyIcon.Visible = true; // Make sure it's visible
+        }
+
+        bool IsValidImage(string imagePath)
+        {
+            try
+            {
+                // Create a BitmapImage object and load the image
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the entire image at once
+                bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
+                bitmap.EndInit();
+
+                // Ensure the image has valid pixel width and height
+                if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
+                {
+                    return true; // The image is valid
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception if needed
+                Console.WriteLine($"Invalid image: {ex.Message}");
+            }
+
+            return false; // If any exception occurs, or the image dimensions are invalid
         }
     }
 }

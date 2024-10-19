@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
+using System.Windows;
 
 namespace GameplayTimeTracker;
 
@@ -70,6 +71,7 @@ public class TileContainer
             }
 
             tilesList.Add(newTile);
+
 
             // This accounts for change in percentages when adding new tile
             double auxPlaytime = CalculateTotalPlaytime();
