@@ -50,7 +50,8 @@ namespace GameplayTimeTracker
             m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
             m_notifyIcon.Text = "Gameplay Time Tracker";
             //TODO: Change this
-            m_notifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
+            m_notifyIcon.Icon =
+                new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
         }
 
@@ -119,10 +120,11 @@ namespace GameplayTimeTracker
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Offset, 5, 0, 5);
-                tileContainer.AddTile(newTile, newlyAdded: true);
+
                 if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                 {
+                    tileContainer.AddTile(newTile, newlyAdded: true);
                     tileContainer.ListTiles();
 
                     MessageBox.Show($"Selected file: {fileName}");
@@ -232,7 +234,8 @@ namespace GameplayTimeTracker
             m_notifyIcon.BalloonTipText = "The app has been minimized. Click the tray icon to show.";
             m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
             m_notifyIcon.Text = "Gameplay Time Tracker";
-            m_notifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
+            m_notifyIcon.Icon =
+                new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             m_notifyIcon.Visible = true; // Make sure it's visible
         }
