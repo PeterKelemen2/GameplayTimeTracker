@@ -822,6 +822,8 @@ public class Tile : UserControl
                 Padding = new Thickness(20),
                 Child = image,
                 Effect = dropShadowIcon,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
             var bgImageBorder = new Border
