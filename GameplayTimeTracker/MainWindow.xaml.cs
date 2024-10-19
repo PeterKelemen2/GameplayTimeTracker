@@ -24,7 +24,7 @@ namespace GameplayTimeTracker
         ProcessTracker tracker = new();
 
         private System.Windows.Forms.NotifyIcon m_notifyIcon;
-        
+
         public MainWindow()
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
@@ -38,11 +38,11 @@ namespace GameplayTimeTracker
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             tracker.InitializeProcessTracker(tileContainer);
-            
+
             // tileContainer.UpdateBgImages();
-            
+
             this.Closing += MainWindow_Closing;
-            
+
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
             m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
             m_notifyIcon.BalloonTipTitle = "The App";
@@ -51,27 +51,34 @@ namespace GameplayTimeTracker
             m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
         }
-        
+
         // ==== Tray ====
-        void OnClose(object sender, CancelEventArgs args)
+        void OnCloseNotify(object sender, CancelEventArgs args)
         {
-            m_notifyIcon.Dispose();
-            m_notifyIcon = null;
+            // Only dispose if you are exiting
+            if (!args.Cancel)
+            {
+                m_notifyIcon.Dispose();
+                m_notifyIcon = null;
+            }
         }
 
         private WindowState m_storedWindowState = WindowState.Normal;
+
         void OnStateChanged(object sender, EventArgs args)
         {
             if (WindowState == WindowState.Minimized)
             {
                 Hide();
-                if(m_notifyIcon != null)
+                if (m_notifyIcon != null)
                     m_notifyIcon.ShowBalloonTip(2000);
             }
             else
                 m_storedWindowState = WindowState;
         }
-        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args) {
+
+        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
             if (m_notifyIcon != null)
                 m_notifyIcon.Visible = !IsVisible;
         }
@@ -87,9 +94,9 @@ namespace GameplayTimeTracker
             if (m_notifyIcon != null)
                 m_notifyIcon.Visible = show;
         }
-        
+
         // ==== Tray ====
-        
+
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -176,16 +183,40 @@ namespace GameplayTimeTracker
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Add your logic here (e.g., saving data, confirming exit)
-            if (MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButton.YesNo) ==
-                MessageBoxResult.No)
+            try
             {
-                e.Cancel = true; // Cancel the closing event
+                if (MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButton.YesNo) ==
+                    MessageBoxResult.No)
+                {
+                    e.Cancel = true; // Cancel closing
+                    // Reinitialize NotifyIcon if it's null
+                    if (m_notifyIcon == null)
+                    {
+                        InitializeNotifyIcon(); // Custom method to reinitialize the NotifyIcon
+                    }
+
+                    return; // Exit the method
+                }
+
+                // If the user confirmed the exit, proceed with the save logic
+                tileContainer?.InitSave();
             }
-            else
+            catch (Exception ex)
             {
-                tileContainer.InitSave();
+                MessageBox.Show("An error occurred: " + ex.Message);
+                e.Cancel = true; // Cancel closing in case of an error
             }
+        }
+
+        private void InitializeNotifyIcon()
+        {
+            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
+            m_notifyIcon.BalloonTipText = "The app has been minimized. Click the tray icon to show.";
+            m_notifyIcon.BalloonTipTitle = "The App";
+            m_notifyIcon.Text = "The App";
+            m_notifyIcon.Icon = new System.Drawing.Icon("C:\\Users\\Peti\\Downloads\\question_bubble_icon_262696.ico");
+            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            m_notifyIcon.Visible = true; // Make sure it's visible
         }
     }
 }
