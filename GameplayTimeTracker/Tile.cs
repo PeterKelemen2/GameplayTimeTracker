@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using Application = System.Windows.Application;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using MessageBox = System.Windows.MessageBox;
 
 
 namespace GameplayTimeTracker;
@@ -414,7 +418,7 @@ public class Tile : UserControl
             _tileContainer.UpdatePlaytimeBars();
             _tileContainer.InitSave();
         }
-        
+
         // if (resetCurrent)
         // {
         //     mLast = 0;
@@ -442,7 +446,7 @@ public class Tile : UserControl
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
     }
-    
+
     private (double, double) CalculatePlaytimeFromMinutes(double playtime)
     {
         double h = 0;
@@ -482,11 +486,11 @@ public class Tile : UserControl
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
-        
+
         absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
         bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
-        
+
         InitializeTile();
     }
 
@@ -715,7 +719,6 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 60, 50, 0),
             Effect = dropShadowIcon,
-            
         };
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
 
@@ -777,7 +780,7 @@ public class Tile : UserControl
             double imageScale = 1.5;
             containerGrid = new Grid
             {
-                Width = TileHeight * imageScale,
+                Width = TileHeight * imageScale + 20,
                 Height = TileHeight,
                 ClipToBounds = true,
                 Margin = new Thickness(10, 0, 0, 0),
@@ -788,7 +791,7 @@ public class Tile : UserControl
             // string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
             // var bgSourceGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
             // var bgSourceColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
-            
+
             bgImage = new Image
             {
                 Source = bgImageColor,
@@ -798,11 +801,10 @@ public class Tile : UserControl
                 Height = TileHeight * imageScale,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 0),
-                // Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
                 Effect = blurEffect,
                 Opacity = 0.7
             };
+
             image = new Image
             {
                 Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
@@ -811,14 +813,34 @@ public class Tile : UserControl
                 Height = TileHeight / 2,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(-10, 30, 0, 0),
-                // Margin = new Thickness(50, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+                Margin = new Thickness(-10, 20, 10, 0),
+                // Effect = dropShadowIcon,
+            };
+
+            var imageBorder = new Border
+            {
+                Padding = new Thickness(20),
+                Child = image,
                 Effect = dropShadowIcon,
             };
+
+            var bgImageBorder = new Border
+            {
+                Padding = new Thickness(20, 0, 20, 0),
+                Height = TileHeight * 2,
+                Width = TileHeight * 2,
+                Child = bgImage,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                // Effect = blurEffect,
+            };
+
             // ToggleBgImageColor();
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
-            containerGrid.Children.Add(bgImage);
-            containerGrid.Children.Add(image);
+            // containerGrid.Children.Add(bgImage);
+            containerGrid.Children.Add(bgImageBorder);
+            containerGrid.Children.Add(imageBorder);
+            // containerGrid.Children.Add(image);
         }
         else
         {
@@ -940,7 +962,7 @@ public class Tile : UserControl
     {
         bgImage.Source = runningBool ? bgImageColor : bgImageGray;
     }
-    
+
     public static BitmapSource ConvertToGrayscale(BitmapSource source)
     {
         var stride = (source.PixelWidth * source.Format.BitsPerPixel + 7) / 8;
