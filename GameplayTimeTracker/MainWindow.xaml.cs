@@ -34,6 +34,7 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
+            ShowTilesOnCanvas();
             tileContainer.ListTiles();
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             SetupNotifyIcon();
@@ -56,7 +57,7 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
-                
+
                 while (true)
                 {
                     stopwatch.Restart();
@@ -164,8 +165,8 @@ namespace GameplayTimeTracker
 
                     MessageBox.Show($"Selected file: {fileName}");
 
-                    var tilesList = tileContainer.GetTiles();
-                    mainStackPanel.Children.Add(tilesList.Last());
+                    // var tilesList = tileContainer.GetTiles();
+                    // mainStackPanel.Children.Add(tilesList.Last());
                 }
                 else
                 {
