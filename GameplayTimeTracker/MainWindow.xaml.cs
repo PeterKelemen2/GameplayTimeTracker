@@ -39,7 +39,7 @@ namespace GameplayTimeTracker
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
-            tracker.InitializeProcessTracker(tileContainer);
+            // tracker.InitializeProcessTracker(tileContainer);
 
             // tileContainer.UpdateBgImages();
 
@@ -113,7 +113,6 @@ namespace GameplayTimeTracker
                 string uniqueFileName = Guid.NewGuid().ToString() + ".png";
                 string? iconPath = $"assets/{uniqueFileName}";
 
-                Console.WriteLine(iconPath);
                 PrepIcon(filePath, iconPath);
                 iconPath = IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
@@ -248,7 +247,7 @@ namespace GameplayTimeTracker
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the entire image at once
-                bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
+                bitmap.UriSource = new Uri(imagePath, UriKind.Relative);
                 bitmap.EndInit();
 
                 // Ensure the image has valid pixel width and height
