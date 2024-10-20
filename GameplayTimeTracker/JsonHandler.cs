@@ -24,7 +24,7 @@ public class JsonHandler
         }
 
         string jsonString = File.ReadAllText(filePath);
-        Console.WriteLine(jsonString);
+        // Console.WriteLine(jsonString);
 
         List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
         if (paramsList != null && paramsList.Count > 0)
@@ -54,6 +54,6 @@ public class JsonHandler
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(filePath, jsonString);
-        Console.WriteLine("---- Wrote content");
+        Console.WriteLine($"!! Saved data to {filePath} !!");
     }
 }

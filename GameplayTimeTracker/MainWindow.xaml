@@ -192,8 +192,8 @@
     <Grid>
         <!-- Define row definitions for the Grid -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="8*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
         </Grid.RowDefinitions>
 
         <Rectangle x:Name="OverlayTop" Width="800" Height="40"
@@ -216,15 +216,22 @@
         </ScrollViewer>
 
         <!-- Other content in the bottom 1/4 -->
-        <StackPanel Grid.Row="1" Background="LightGreen">
+        <Grid Grid.Row="1" Background="LightGreen">
             <!-- Add other UI elements here -->
             <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Margin="20,18,0,0" 
+                    Margin="20,0,0,0" 
                     Height="30"
                     Width="140"
                     Click="AddExecButton_Click"/>
-        </StackPanel>
+            <TextBlock x:Name="TotalPlaytimeTextBlock" 
+                       Text="Total Playtime: 0 hours" 
+                       Foreground="Black" 
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Margin="0,0,20,0"
+                       FontSize="16"/>
+        </Grid>
     </Grid>
 </Window>

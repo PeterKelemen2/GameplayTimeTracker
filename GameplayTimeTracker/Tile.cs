@@ -95,7 +95,7 @@ public class Tile : UserControl
     private const double BorderRadius = 10;
     private const int MenuTopMargin = -20;
     private const int TextBoxHeight = 25;
-    private bool isMenuOpen = false;
+    public bool isMenuOpen = false;
     private bool wasOpened = false;
     public bool isRunning = false;
     private bool isRunningGame = false;
@@ -166,6 +166,8 @@ public class Tile : UserControl
     public double MTotal { get; set; }
     public double MLast { get; set; }
     public bool IsRunning { get; set; }
+    public bool IsMenuToggled { get; set; }
+
     public bool IsRunningGame { get; set; }
     public bool WasRunning { get; set; }
 
@@ -178,6 +180,8 @@ public class Tile : UserControl
     private void ToggleEdit(object sender, RoutedEventArgs e)
     {
         isMenuOpen = !isMenuOpen;
+        IsMenuToggled = !IsMenuToggled;
+        isMenuOpen = IsMenuToggled;
         double animationDuration = 0.15;
 
         DoubleAnimation heightAnimation = new DoubleAnimation
@@ -307,7 +311,6 @@ public class Tile : UserControl
             CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
         (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
 
-        // Text = $"{hTotal}h {mTotal}m"
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBoxH.Text = hTotal.ToString();
         editPlaytimeBoxM.Text = mTotal.ToString();
@@ -315,11 +318,6 @@ public class Tile : UserControl
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
         Console.WriteLine("File Saved !!!");
-    }
-
-    public void SmallSave()
-    {
-        _tileContainer.InitSave();
     }
 
     private void LaunchExe(object sender, RoutedEventArgs e)
@@ -332,7 +330,8 @@ public class Tile : UserControl
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -399,6 +398,12 @@ public class Tile : UserControl
         lastPlaytime.Text = $"{hLast}h {mLast}m";
     }
 
+    public void UpdateEditPlaytimeText()
+    {
+        editPlaytimeBoxH.Text = $"{hTotal}";
+        editPlaytimeBoxM.Text = $"{mTotal}";
+    }
+
     public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
     {
         int customHour = 60 - 1;
@@ -423,24 +428,13 @@ public class Tile : UserControl
 
             TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
             LastPlaytime = CalculatePlaytimeFromHnM(hLast, mLast);
-            LastPlaytimePercent = LastPlaytime / TotalPlaytime;
+            LastPlaytimePercent = TotalPlaytime > 0 ? LastPlaytime / TotalPlaytime : 0; // Avoid division by zero
             CurrentPlaytime = 0;
+
             UpdatePlaytimeText();
             _tileContainer.UpdatePlaytimeBars();
             _tileContainer.InitSave();
         }
-
-        // if (resetCurrent)
-        // {
-        //     mLast = 0;
-        //     hLast = 0;
-        //     CurrentPlaytime = 0;
-        //     LastPlaytime = 0;
-        //     LastPlaytimePercent = 0;
-        //     UpdatePlaytimeText();
-        //     _tileContainer.UpdatePlaytimeBars();
-        //     _tileContainer.InitSave();
-        // }
 
         Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
         Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");
@@ -460,17 +454,7 @@ public class Tile : UserControl
 
     private (double, double) CalculatePlaytimeFromMinutes(double playtime)
     {
-        double h = 0;
-
-        double aux = playtime;
-
-        while (aux >= 60)
-        {
-            h += 1;
-            aux -= 60;
-        }
-
-        return (h, aux);
+        return ((int)(playtime / 60), (int)(playtime % 60));
     }
 
     private double CalculatePlaytimeFromHnM(double h, double m)
@@ -497,6 +481,7 @@ public class Tile : UserControl
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
+        IsMenuToggled = false;
 
         absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
         bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
@@ -802,10 +787,6 @@ public class Tile : UserControl
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
             };
-
-            // string absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
-            // var bgSourceGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
-            // var bgSourceColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
 
             bgImage = new Image
             {

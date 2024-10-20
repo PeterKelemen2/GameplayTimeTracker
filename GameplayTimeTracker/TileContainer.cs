@@ -17,11 +17,11 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
+    MainWindow _mainWindow;
 
     public TileContainer()
     {
     }
-
 
     public List<Tile> GetTiles()
     {
@@ -136,6 +136,8 @@ public class TileContainer
                     $" Total%: {tile.TotalPlaytimePercent} | Last: {tile.LastPlaytime} | " +
                     $"Last%: {tile.LastPlaytimePercent} | Icon: {tile.IconImagePath} | Exe: {tile.ExePath}");
             }
+
+            Console.WriteLine(GetTotalPlaytimePretty());
         }
         catch (Exception e)
         {
@@ -198,13 +200,13 @@ public class TileContainer
 
     public double CalculateTotalPlaytime()
     {
-        double playtime = 0;
-        foreach (var tile in tilesList)
-        {
-            playtime += tile.TotalPlaytime;
-        }
+        return tilesList.Sum(tile => tile.TotalPlaytime);
+    }
 
-        return playtime;
+    public string GetTotalPlaytimePretty()
+    {
+        double playtime = CalculateTotalPlaytime();
+        return $"{(int)(playtime / 60)}h {(int)(playtime % 60)}m";
     }
 
     public void UpdatePlaytimeBars()

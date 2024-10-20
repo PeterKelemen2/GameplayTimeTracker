@@ -72,6 +72,11 @@ public class ProcessTracker
                 tile.IsRunning = false;
             }
 
+            if (tile.IsMenuToggled)
+            {
+                tile.UpdateEditPlaytimeText();
+            }
+
             tile.ToggleBgImageColor(isRunning);
         }
 

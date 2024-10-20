@@ -24,11 +24,9 @@ namespace GameplayTimeTracker
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
         private const string? AppIcon = "assets/MyAppIcon.ico";
-        public bool toUpdate = false;
 
         TileContainer tileContainer = new();
 
-        // List<Tile> tilesList = new();
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
 
@@ -39,7 +37,7 @@ namespace GameplayTimeTracker
             tileContainer.ListTiles();
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             SetupNotifyIcon();
-
+            TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
         }
@@ -58,6 +56,7 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
+                
                 while (true)
                 {
                     stopwatch.Restart();
@@ -66,6 +65,7 @@ namespace GameplayTimeTracker
                         tracker.HandleProcesses();
                         tileContainer.SortByProperty("IsRunning", false);
                         ShowTilesOnCanvas();
+                        TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
                     if ((int)stopwatch.ElapsedMilliseconds > 1000)
