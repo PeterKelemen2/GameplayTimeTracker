@@ -82,7 +82,6 @@ public class ProcessTracker
             }
 
             _tileContainer.SortByProperty("IsRunning", false);
-            _tileContainer.CallSubcribers();
             Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
             Console.WriteLine($"{runningString}");
             Console.WriteLine($"{notRunningString}");

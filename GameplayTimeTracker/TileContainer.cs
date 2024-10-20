@@ -17,29 +17,11 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
-    public ObservableCollection<Tile> Tiles { get; } = new ObservableCollection<Tile>();
-    public EventHandler TilesChanged;
 
     public TileContainer()
     {
-        Tiles.CollectionChanged += Tiles_CollectionChanged;
     }
 
-    protected virtual void OnTilesChanged()
-    {
-        TilesChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    public void CallSubcribers()
-    {
-        OnTilesChanged();
-    }
-
-    private void Tiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        // Handle the collection changed event
-        // e.Action will tell you what changed (add, remove, etc.)
-    }
 
     public List<Tile> GetTiles()
     {
@@ -76,9 +58,11 @@ public class TileContainer
         }
 
         // Sort in ascending or descending order based on the flag
-        tilesList = ascending
+        var newTilesList = ascending
             ? tilesList.OrderBy(item => propertyInfo.GetValue(item, null)).ToList()
             : tilesList.OrderByDescending(item => propertyInfo.GetValue(item, null)).ToList();
+        tilesList.RemoveAll(item => propertyInfo.GetValue(item, null) == null);
+        tilesList = newTilesList;
     }
 
     public List<String> GetExecutableNames()
