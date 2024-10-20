@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,10 +17,28 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
-
+    public ObservableCollection<Tile> Tiles { get; } = new ObservableCollection<Tile>();
+    public EventHandler TilesChanged;
 
     public TileContainer()
     {
+        Tiles.CollectionChanged += Tiles_CollectionChanged;
+    }
+
+    protected virtual void OnTilesChanged()
+    {
+        TilesChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void CallSubcribers()
+    {
+        OnTilesChanged();
+    }
+
+    private void Tiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        // Handle the collection changed event
+        // e.Action will tell you what changed (add, remove, etc.)
     }
 
     public List<Tile> GetTiles()
@@ -30,7 +50,7 @@ public class TileContainer
     {
         tilesList = newTiles;
     }
-    
+
     public void InitSave()
     {
         handler.WriteContentToFile(this, jsonFilePath);
@@ -59,29 +79,7 @@ public class TileContainer
         tilesList = ascending
             ? tilesList.OrderBy(item => propertyInfo.GetValue(item, null)).ToList()
             : tilesList.OrderByDescending(item => propertyInfo.GetValue(item, null)).ToList();
-
-        // Build the sorted string
-        // string order = ascending ? "ascending" : "descending";
-        // string sortedString = $"Sorted by {propertyName} in {order} order:\n\n";
-        // foreach (var tile in sortedItems)
-        // {
-        //     var propertyValue = propertyInfo.GetValue(tile, null);
-        //     if (propertyName.Equals("IsRunning"))
-        //     {
-        //         sortedString += $"{tile.GameName} - {tile.IsRunning}.\n";
-        //     }
-        //     else
-        //     {
-        //         sortedString += propertyValue + "\n";
-        //     }
-        // }
-
-        // Display the sorted results
-        // MessageBox.Show(sortedString);
-        // return sortedItems;
     }
-
-
 
     public List<String> GetExecutableNames()
     {

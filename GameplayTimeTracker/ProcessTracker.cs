@@ -43,6 +43,8 @@ public class ProcessTracker
             stopwatch.Restart();
             var runningProcesses = Process.GetProcesses();
             Console.WriteLine("=================");
+            string runningString = "Running: ";
+            string notRunningString = "Not running: ";
             foreach (var tile in tilesList)
             {
                 var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
@@ -63,21 +65,27 @@ public class ProcessTracker
 
                     tile.runningTextBlock.Text = "Running!";
                     tile.CurrentPlaytime++;
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
+                    // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
+                    runningString += $"{tile.GameName} | ";
+
                     tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
                 }
                 else
                 {
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
+                    // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
                     tile.runningTextBlock.Text = "";
                     tile.wasRunning = false;
+                    notRunningString += $"{tile.GameName} | ";
                 }
 
                 tile.ToggleBgImageColor(isRunning);
             }
 
             _tileContainer.SortByProperty("IsRunning", false);
-
+            _tileContainer.CallSubcribers();
+            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
+            Console.WriteLine($"{runningString}");
+            Console.WriteLine($"{notRunningString}");
             stopwatch.Stop();
             await Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds);
         }

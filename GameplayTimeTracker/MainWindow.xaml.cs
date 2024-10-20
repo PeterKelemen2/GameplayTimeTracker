@@ -51,8 +51,15 @@ namespace GameplayTimeTracker
             InitializeComponent();
             this.Closing += MainWindow_Closing;
             Loaded += OnLoaded;
+            tileContainer.TilesChanged += TileContainer_TilesChanged;
         }
-
+        
+        private void TileContainer_TilesChanged(object sender, EventArgs e)
+        {
+            // Handle the update, e.g., refresh the UI
+            ShowTilesOnCanvas();
+        }
+        
         // ==== Tray ====
         void SetupNotifyIcon()
         {
