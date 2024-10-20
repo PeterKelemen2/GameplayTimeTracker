@@ -47,6 +47,7 @@ public class ProcessTracker
                     runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
                 if (isRunning)
                 {
+                    tile.IsRunning = true;
                     if (tile.wasRunning == false)
                     {
                         tile.wasRunning = true;
@@ -71,7 +72,9 @@ public class ProcessTracker
 
                 tile.ToggleBgImageColor(isRunning);
             }
-
+            
+            // _tileContainer.OverwriteTiles(_tileContainer.SortByProperty("IsRunning", false));
+            _tileContainer.SortByProperty("IsRunning", false);
             stopwatch.Stop();
             await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
         }

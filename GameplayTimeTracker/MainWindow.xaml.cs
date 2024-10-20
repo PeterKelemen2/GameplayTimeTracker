@@ -39,9 +39,12 @@ namespace GameplayTimeTracker
             // WriteToJson(tileContainer, "data.json");
             // tileContainer.WriteContentToFile(jsonFilePath);
             handler.WriteContentToFile(tileContainer, jsonFilePath);
-            // tracker.InitializeProcessTracker(tileContainer);
+            tracker.InitializeProcessTracker(tileContainer);
 
             // tileContainer.UpdateBgImages();
+            // tileContainer.SortByProperty("GameName");
+            // tileContainer.SortByProperty("TotalPlaytime", false);
+            // tileContainer.SortByProperty("IsRunning", false);
 
             this.Closing += MainWindow_Closing;
 
@@ -52,6 +55,8 @@ namespace GameplayTimeTracker
             m_notifyIcon.Icon =
                 new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            
+            
         }
 
         // ==== Tray ====

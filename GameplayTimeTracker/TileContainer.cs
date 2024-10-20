@@ -15,7 +15,7 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
-    
+
 
     public TileContainer()
     {
@@ -26,11 +26,62 @@ public class TileContainer
         return tilesList;
     }
 
+    public void OverwriteTiles(List<Tile> newTiles)
+    {
+        tilesList = newTiles;
+    }
+    
     public void InitSave()
     {
         handler.WriteContentToFile(this, jsonFilePath);
         Console.WriteLine(" ==== Saved! ====");
     }
+
+    public void SortByProperty(string propertyName = "", bool ascending = true)
+    {
+        // Check if the property name is valid
+        if (string.IsNullOrWhiteSpace(propertyName))
+        {
+            MessageBox.Show("Property name is required.");
+            return;
+        }
+
+        // Get the property info using reflection
+        var propertyInfo = typeof(Tile).GetProperty(propertyName);
+
+        if (propertyInfo == null)
+        {
+            MessageBox.Show("Invalid property name.");
+            return;
+        }
+
+        // Sort in ascending or descending order based on the flag
+        tilesList = ascending
+            ? tilesList.OrderBy(item => propertyInfo.GetValue(item, null)).ToList()
+            : tilesList.OrderByDescending(item => propertyInfo.GetValue(item, null)).ToList();
+
+        // Build the sorted string
+        // string order = ascending ? "ascending" : "descending";
+        // string sortedString = $"Sorted by {propertyName} in {order} order:\n\n";
+        // foreach (var tile in sortedItems)
+        // {
+        //     var propertyValue = propertyInfo.GetValue(tile, null);
+        //     if (propertyName.Equals("IsRunning"))
+        //     {
+        //         sortedString += $"{tile.GameName} - {tile.IsRunning}.\n";
+        //     }
+        //     else
+        //     {
+        //         sortedString += propertyValue + "\n";
+        //     }
+        // }
+
+        // Display the sorted results
+        // MessageBox.Show(sortedString);
+        // return sortedItems;
+    }
+
+
 
     public List<String> GetExecutableNames()
     {

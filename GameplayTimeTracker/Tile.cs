@@ -98,6 +98,7 @@ public class Tile : UserControl
     private bool isMenuOpen = false;
     private bool wasOpened = false;
     public bool isRunning = false;
+    private bool isRunningGame = false;
     public bool wasRunning = false;
 
     private Grid grid;
@@ -165,6 +166,7 @@ public class Tile : UserControl
     public double MTotal { get; set; }
     public double MLast { get; set; }
     public bool IsRunning { get; set; }
+    public bool IsRunningGame { get; set; }
     public bool WasRunning { get; set; }
 
 
@@ -778,6 +780,10 @@ public class Tile : UserControl
         if (!isRunning)
         {
             runningTextBlock.Text = "";
+        }
+        else
+        {
+            isRunningGame = true;
         }
 
 
