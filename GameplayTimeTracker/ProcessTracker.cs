@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Gtk;
 
 namespace GameplayTimeTracker;
 
@@ -21,13 +22,16 @@ public class ProcessTracker
         exeNames = tileContainer.GetExecutableNames();
         _tileContainer = tileContainer;
         tilesList = tileContainer.GetTiles();
+
         foreach (var exeName in exeNames)
         {
             Console.WriteLine($"Exe name: {exeName}");
         }
 
+        // Start tracking processes asynchronously
         TrackProcessesAsync();
     }
+
 
     public async Task TrackProcessesAsync()
     {
@@ -36,8 +40,7 @@ public class ProcessTracker
         Stopwatch stopwatch = new Stopwatch();
         while (true)
         {
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
+            stopwatch.Restart();
             var runningProcesses = Process.GetProcesses();
             Console.WriteLine("=================");
             foreach (var tile in tilesList)
@@ -72,11 +75,11 @@ public class ProcessTracker
 
                 tile.ToggleBgImageColor(isRunning);
             }
-            
-            // _tileContainer.OverwriteTiles(_tileContainer.SortByProperty("IsRunning", false));
+
             _tileContainer.SortByProperty("IsRunning", false);
+
             stopwatch.Stop();
-            await Task.Delay(1000 - (Int16)stopwatch.ElapsedMilliseconds);
+            await Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds);
         }
     }
 }

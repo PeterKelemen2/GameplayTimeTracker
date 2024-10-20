@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Toolbelt.Drawing;
+using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -21,33 +23,39 @@ namespace GameplayTimeTracker
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
         private const string? AppIcon = "assets/MyAppIcon.ico";
+        public bool toUpdate = false;
+
         TileContainer tileContainer = new();
+
+        // List<Tile> tilesList = new();
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
 
         private System.Windows.Forms.NotifyIcon m_notifyIcon;
 
+        public void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ShowTilesOnCanvas();
+
+            tileContainer.ListTiles();
+            // tileContainer.GetExecutableNames();
+            handler.WriteContentToFile(tileContainer, jsonFilePath);
+            SetupNotifyIcon();
+            
+            tracker.InitializeProcessTracker(tileContainer);
+        }
+
         public MainWindow()
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
             InitializeComponent();
-
-            Loaded += ShowTilesOnCanvas;
-
-            tileContainer.ListTiles();
-            tileContainer.GetExecutableNames();
-            // WriteToJson(tileContainer, "data.json");
-            // tileContainer.WriteContentToFile(jsonFilePath);
-            handler.WriteContentToFile(tileContainer, jsonFilePath);
-            tracker.InitializeProcessTracker(tileContainer);
-
-            // tileContainer.UpdateBgImages();
-            // tileContainer.SortByProperty("GameName");
-            // tileContainer.SortByProperty("TotalPlaytime", false);
-            // tileContainer.SortByProperty("IsRunning", false);
-
             this.Closing += MainWindow_Closing;
+            Loaded += OnLoaded;
+        }
 
+        // ==== Tray ====
+        void SetupNotifyIcon()
+        {
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
             m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
             m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
@@ -55,11 +63,7 @@ namespace GameplayTimeTracker
             m_notifyIcon.Icon =
                 new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            
-            
         }
-
-        // ==== Tray ====
         void OnCloseNotify(object sender, CancelEventArgs args)
         {
             // Only dispose if you are exiting
@@ -156,45 +160,23 @@ namespace GameplayTimeTracker
             {
                 MessageBox.Show(ex.Message);
             }
-            // // GetLargestIcon(filePath);
-            // // var icon = GetLargestIcon(filePath);
-            // var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
-            // if (icon != null)
-            // {
-            //     string directoryPath = Path.GetDirectoryName(outputImagePath);
-            //
-            //     // Ensure the directory path is valid and writable
-            //     if (string.IsNullOrWhiteSpace(directoryPath) || !Directory.Exists(directoryPath))
-            //     {
-            //         MessageBox.Show("Directory does not exist or is invalid.");
-            //         return;
-            //     }
-            //
-            //     using (MemoryStream iconStream = new MemoryStream())
-            //     {
-            //         // Save the icon to a MemoryStream
-            //         icon.ToBitmap().Save(iconStream, System.Drawing.Imaging.ImageFormat.Png);
-            //         iconStream.Seek(0, SeekOrigin.Begin);
-            //
-            //         // Save the MemoryStream to a file
-            //         using (FileStream fileStream = new FileStream(outputImagePath, FileMode.Create, FileAccess.Write))
-            //         {
-            //             iconStream.WriteTo(fileStream);
-            //         }
-            //     }
-            // }
         }
 
 
-        private void ShowTilesOnCanvas(object sender, RoutedEventArgs e)
+        private void ShowTilesOnCanvas()
         {
+            mainStackPanel.Children.Clear();
             var tilesList = tileContainer.GetTiles();
             foreach (var tile in tilesList)
             {
                 tile.Margin = new Thickness(Offset, 5, 0, 5);
-                //TODO: Handle no icon found exception
                 mainStackPanel.Children.Add(tile);
             }
+        }
+
+        public void TestMethod()
+        {
+            Console.WriteLine("ASDASDASDASDASDASDASDASDASD\nASDASDASDASDASDASDASDASDASDASDSAD");
         }
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
