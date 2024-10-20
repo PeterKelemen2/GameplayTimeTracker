@@ -9,6 +9,13 @@ namespace GameplayTimeTracker;
 
 public class JsonHandler
 {
+    private const string SampleImagePath = "assets/no_icon.png";
+
+    private string CheckForFile(string filePath)
+    {
+        return File.Exists(filePath) ? filePath : SampleImagePath;
+    }
+
     public void InitializeContainer(TileContainer container, string filePath)
     {
         if (!File.Exists(filePath))
@@ -29,7 +36,7 @@ public class JsonHandler
                     param.gameName,
                     param.totalTime,
                     param.lastPlayedTime,
-                    param.iconPath,
+                    CheckForFile(param.iconPath),
                     param.exePath));
             }
         }
