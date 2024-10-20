@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows;
@@ -324,8 +325,32 @@ public class Tile : UserControl
     {
         try
         {
-            Console.WriteLine($"ASDASDASDASD {ExePath}");
-            Process.Start(ExePath);
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = ExePath,
+                UseShellExecute = true
+            };
+
+            Process.Start(startInfo);
+        }
+        catch (Win32Exception win32Ex) when (win32Ex.NativeErrorCode == 740) // Error 740 means elevation required
+        {
+            // Prompt user for admin if the error suggests elevation is needed
+            MessageBoxResult result = MessageBox.Show($"The application {GameName} requires administrator privileges. Do you want to run it as administrator?", 
+                "Elevation Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        
+            if (result == MessageBoxResult.Yes)
+            {
+                // Re-launch with admin privileges
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = ExePath,
+                    UseShellExecute = true,
+                    Verb = "runas"
+                };
+
+                Process.Start(startInfo);
+            }
         }
         catch (Exception ex)
         {
@@ -334,6 +359,7 @@ public class Tile : UserControl
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
