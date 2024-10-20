@@ -106,7 +106,6 @@ public class TileContainer
 
             tilesList.Add(newTile);
 
-
             // This accounts for change in percentages when adding new tile
             double auxPlaytime = CalculateTotalPlaytime();
             foreach (var tile in tilesList)

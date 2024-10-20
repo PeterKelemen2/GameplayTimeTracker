@@ -511,10 +511,24 @@ public class Tile : UserControl
             Opacity = 1,
             Direction = 200,
         };
+        DropShadowEffect dropShadowTextEdit = new DropShadowEffect
+        {
+            BlurRadius = 5,
+            ShadowDepth = 0,
+            Color = Colors.LightBlue,
+            Opacity = 1,
+            Direction = 200,
+        };
 
         DropShadowEffect dropShadowIcon = new DropShadowEffect
         {
             BlurRadius = 10,
+            ShadowDepth = 0
+        };
+        
+        DropShadowEffect dropShadowRectangle = new DropShadowEffect
+        {
+            BlurRadius = 20,
             ShadowDepth = 0
         };
 
@@ -539,7 +553,8 @@ public class Tile : UserControl
             RadiusY = CornerRadius,
             Fill = new SolidColorBrush(RightColor),
             // Margin = new Thickness(0, MenuTopMargin, 0, 0)
-            MaxHeight = 0
+            MaxHeight = 0,
+            Effect = dropShadowRectangle,
         };
 
         editNameTitle = new TextBlock
@@ -550,7 +565,7 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(DarkColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            MaxHeight = 0
+            MaxHeight = 0,
         };
 
         editNameBox = new TextBox
@@ -563,7 +578,8 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             TextAlignment = TextAlignment.Left, // Center-align text horizontally
             HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Effect = dropShadowIcon
         };
 
         editPlaytimeTitle = new TextBlock
@@ -587,7 +603,8 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             TextAlignment = TextAlignment.Left, // Center-align text horizontally
             HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Effect = dropShadowIcon
         };
 
         editPlaytimeH = new TextBlock
@@ -611,7 +628,8 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             TextAlignment = TextAlignment.Left, // Center-align text horizontally
             HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Effect = dropShadowIcon
         };
 
         editPlaytimeM = new TextBlock
@@ -633,7 +651,8 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 100, 0),
-            MaxHeight = 0
+            MaxHeight = 0,
+            Effect = dropShadowIcon
         };
         editSaveButton.Click += SaveEditedData;
 
@@ -645,7 +664,8 @@ public class Tile : UserControl
             Width = 120,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Center,
-            MaxHeight = 0
+            MaxHeight = 0,
+            Effect = dropShadowIcon
         };
 
         Grid.SetRow(menuRectangle, 1);
