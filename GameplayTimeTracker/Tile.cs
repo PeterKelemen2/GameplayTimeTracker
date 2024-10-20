@@ -326,11 +326,13 @@ public class Tile : UserControl
     {
         try
         {
+            Console.WriteLine($"ASDASDASDASD {ExePath}");
             Process.Start(ExePath);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -807,7 +809,7 @@ public class Tile : UserControl
 
             bgImage = new Image
             {
-                Source = bgImageColor,
+                Source = bgImageGray,
                 // Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
                 Stretch = Stretch.UniformToFill,
                 Width = TileHeight * imageScale,

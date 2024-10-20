@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -35,30 +36,50 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ShowTilesOnCanvas();
-
             tileContainer.ListTiles();
-            // tileContainer.GetExecutableNames();
             handler.WriteContentToFile(tileContainer, jsonFilePath);
             SetupNotifyIcon();
-            
+
             tracker.InitializeProcessTracker(tileContainer);
+            UpdateStackPane();
         }
 
         public MainWindow()
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
             InitializeComponent();
-            this.Closing += MainWindow_Closing;
+            Closing += MainWindow_Closing;
             Loaded += OnLoaded;
         }
-        
-        private void TileContainer_TilesChanged(object sender, EventArgs e)
+
+        private async void UpdateStackPane()
         {
-            // Handle the update, e.g., refresh the UI
-            ShowTilesOnCanvas();
+            Stopwatch stopwatch = new Stopwatch();
+            await Task.Run(() =>
+            {
+                stopwatch.Start();
+                while (true)
+                {
+                    stopwatch.Restart();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        tracker.HandleProcesses();
+                        tileContainer.SortByProperty("IsRunning", false);
+                        ShowTilesOnCanvas();
+                    });
+                    stopwatch.Stop();
+                    if ((int)stopwatch.ElapsedMilliseconds > 1000)
+                    {
+                        Task.Delay(1000).Wait();
+                    }
+                    else
+                    {
+                        Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds).Wait();
+                    }
+                }
+            });
         }
-        
+
         // ==== Tray ====
         void SetupNotifyIcon()
         {
@@ -70,6 +91,7 @@ namespace GameplayTimeTracker
                 new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
         }
+
         void OnCloseNotify(object sender, CancelEventArgs args)
         {
             // Only dispose if you are exiting

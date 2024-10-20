@@ -58,11 +58,11 @@ public class TileContainer
         }
 
         // Sort in ascending or descending order based on the flag
-        var newTilesList = ascending
+        tilesList = ascending
             ? tilesList.OrderBy(item => propertyInfo.GetValue(item, null)).ToList()
             : tilesList.OrderByDescending(item => propertyInfo.GetValue(item, null)).ToList();
-        tilesList.RemoveAll(item => propertyInfo.GetValue(item, null) == null);
-        tilesList = newTilesList;
+        // tilesList.RemoveAll(item => propertyInfo.GetValue(item, null) == null);
+        // tilesList = newTilesList;
     }
 
     public List<String> GetExecutableNames()
