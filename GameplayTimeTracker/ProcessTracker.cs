@@ -34,6 +34,7 @@ public class ProcessTracker
 
     public void HandleProcesses()
     {
+        tilesList = _tileContainer.GetTiles();
         var runningProcesses = Process.GetProcesses();
         Console.WriteLine("=================");
         string runningString = "Running: ";
