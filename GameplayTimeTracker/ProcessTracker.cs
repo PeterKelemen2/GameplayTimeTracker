@@ -9,9 +9,9 @@ namespace GameplayTimeTracker;
 
 public class ProcessTracker
 {
-    List<Tile> tilesList = new();
-    List<String> exeNames = new();
-    TileContainer _tileContainer = new();
+    List<Tile> _tilesList;
+    List<String> _exeNames;
+    TileContainer _tileContainer;
 
     public ProcessTracker()
     {
@@ -19,27 +19,24 @@ public class ProcessTracker
 
     public void InitializeProcessTracker(TileContainer tileContainer)
     {
-        exeNames = tileContainer.GetExecutableNames();
         _tileContainer = tileContainer;
-        tilesList = tileContainer.GetTiles();
+        _exeNames = _tileContainer.GetExecutableNames();
+        _tilesList = _tileContainer.GetTiles();
 
-        foreach (var exeName in exeNames)
+        foreach (var exeName in _exeNames)
         {
             Console.WriteLine($"Exe name: {exeName}");
         }
-
-        // Start tracking processes asynchronously
-        // TrackProcessesAsync();
     }
 
     public void HandleProcesses()
     {
-        tilesList = _tileContainer.GetTiles();
+        _tilesList = _tileContainer.GetTiles();
         var runningProcesses = Process.GetProcesses();
         Console.WriteLine("=================");
         string runningString = "Running: ";
         string notRunningString = "Not running: ";
-        foreach (var tile in tilesList)
+        foreach (var tile in _tilesList)
         {
             var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
             var isRunning =
@@ -100,7 +97,7 @@ public class ProcessTracker
             Console.WriteLine("=================");
             string runningString = "Running: ";
             string notRunningString = "Not running: ";
-            foreach (var tile in tilesList)
+            foreach (var tile in _tilesList)
             {
                 var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
                 var isRunning =

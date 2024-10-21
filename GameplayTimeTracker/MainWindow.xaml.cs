@@ -64,18 +64,16 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-                        var auxList = tileContainer.SortedByProperty("IsRunning", false);
-                        if (!tileContainer.IsListEqual(auxList))
+                        var sortedList = tileContainer.SortedByProperty("IsRunning", false);
+                        if (!tileContainer.IsListEqual(sortedList))
                         {
-                            tileContainer.SetTilesList(auxList);
+                            tileContainer.SetTilesList(sortedList);
                             ShowTilesOnCanvas();
                         }
-                        // tileContainer.SortByProperty("IsRunning", false);
-                        // ShowTilesOnCanvas();
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
-                    Console.WriteLine($"Cycle took {(int)stopwatch.ElapsedMilliseconds}ms");
+                    Console.WriteLine($"Cycle took {stopwatch.Elapsed}ms");
                     if ((int)stopwatch.ElapsedMilliseconds > 1000)
                     {
                         Task.Delay(1000).Wait();
@@ -169,7 +167,7 @@ namespace GameplayTimeTracker
                 {
                     tileContainer.AddTile(newTile, newlyAdded: true);
                     tileContainer.ListTiles();
-
+                    ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {fileName}");
 
                     // var tilesList = tileContainer.GetTiles();
