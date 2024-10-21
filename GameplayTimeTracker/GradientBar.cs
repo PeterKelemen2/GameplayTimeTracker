@@ -43,6 +43,7 @@ public class GradientBar : UserControl
         gradientBrush.EndPoint = new Point(1, 0);
         gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
         gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
+        gradientBrush.Freeze();
 
         InitializeBar();
     }
@@ -56,7 +57,14 @@ public class GradientBar : UserControl
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        barForeground.Width = CalculateWidth();
+
+        double newWidth = CalculateWidth();
+        if (Math.Abs(barForeground.Width - newWidth) > 0.01) // Only update if width has significantly changed
+        {
+            barForeground.Width = newWidth;
+            Console.WriteLine("GB Update ran!!");
+        }
+
         stopwatch.Stop();
         Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
     }
