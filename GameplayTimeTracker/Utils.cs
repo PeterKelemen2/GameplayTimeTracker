@@ -26,13 +26,13 @@ public class Utils
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
 
-    private const int TextMargin = 10;
-    private const int TitleFontSize = 17;
-    private const int TextFontSize = 14;
-    private const double THeight = 150;
-    private const double BorderRadius = 10;
-    private const int MenuTopMargin = -20;
-    private const int TextBoxHeight = 28;
+    public const int TextMargin = 10;
+    public const int TitleFontSize = 17;
+    public const int TextFontSize = 14;
+    public const double THeight = 150;
+    public const double BorderRadius = 10;
+    public const int MenuTopMargin = -20;
+    public const int TextBoxHeight = 28;
 
     public static BlurEffect blurEffect = new BlurEffect
     {
