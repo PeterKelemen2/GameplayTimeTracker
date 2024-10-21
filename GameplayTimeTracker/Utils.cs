@@ -33,6 +33,7 @@ public class Utils
     public const double BorderRadius = 10;
     public const int MenuTopMargin = -20;
     public const int TextBoxHeight = 28;
+    public const int EditTextMaxHeight = 30;
 
     public static BlurEffect blurEffect = new BlurEffect
     {
@@ -68,6 +69,8 @@ public class Utils
         BlurRadius = 20,
         ShadowDepth = 0
     };
+    
+    
 
     public static TextBlock NewTextBlock()
     {

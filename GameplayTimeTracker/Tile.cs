@@ -58,6 +58,9 @@ public class Tile : UserControl
     public BitmapSource bgImageColor;
     private string absoluteIconPath;
 
+    List<UIElement> editElements = new List<UIElement>();
+    List<UIElement> mainElements = new List<UIElement>();
+
     private double hTotal;
     private double mTotal;
     private double hLast;
@@ -103,29 +106,25 @@ public class Tile : UserControl
 
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
-            From = isMenuOpen ? 0 : TileHeight,
-            To = isMenuOpen ? TileHeight : 0,
+            From = isMenuOpen ? 0 : TileHeight, To = isMenuOpen ? TileHeight : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
         DoubleAnimation heightAnimationBox = new DoubleAnimation
         {
-            From = isMenuOpen ? 0 : Utils.TextBoxHeight,
-            To = isMenuOpen ? Utils.TextBoxHeight : 0,
+            From = isMenuOpen ? 0 : Utils.TextBoxHeight, To = isMenuOpen ? Utils.TextBoxHeight : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
         DoubleAnimation heightAnimationButton = new DoubleAnimation
         {
-            From = isMenuOpen ? 0 : 40,
-            To = isMenuOpen ? 40 : 0,
+            From = isMenuOpen ? 0 : 40, To = isMenuOpen ? 40 : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
         DoubleAnimation opacityAnimation = new DoubleAnimation
         {
-            From = isMenuOpen ? 0 : 1,
-            To = isMenuOpen ? 1 : 0,
+            From = isMenuOpen ? 0 : 1, To = isMenuOpen ? 1 : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
@@ -146,67 +145,43 @@ public class Tile : UserControl
 
             menuRectangle.MaxHeight = TileHeight;
 
-            editNameTitle.MaxHeight = 30;
+            editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
             editNameBox.Height = Utils.TextBoxHeight;
             editNameBox.MaxHeight = Utils.TextBoxHeight;
 
-            editPlaytimeTitle.MaxHeight = 30;
+            editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
             editPlaytimeBoxH.MaxHeight = Utils.TextBoxHeight;
             editPlaytimeBoxH.Height = Utils.TextBoxHeight;
             editPlaytimeBoxM.Height = Utils.TextBoxHeight;
             editPlaytimeBoxM.MaxHeight = Utils.TextBoxHeight;
-            editPlaytimeH.MaxHeight = 30;
-            editPlaytimeM.MaxHeight = 30;
+            editPlaytimeH.MaxHeight = Utils.EditTextMaxHeight;
+            editPlaytimeM.MaxHeight = Utils.EditTextMaxHeight;
 
             editSaveButton.Height = 40;
             editSaveButton.MaxHeight = 40;
-            changeIconButton.MaxHeight = 30;
+            changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
 
             wasOpened = true;
         }
 
-        var uiElements = new List<UIElement>
-        {
-            menuRectangle,
-            editNameTitle,
-            editNameBox,
-            editPlaytimeTitle,
-            editPlaytimeBoxH,
-            editPlaytimeH,
-            editPlaytimeBoxM,
-            editPlaytimeM,
-            editSaveButton,
-            changeIconButton
-        };
-
         heightAnimation.Completed += (s, a) =>
         {
-            if (!isMenuOpen)
+            foreach (var elem in editElements)
             {
-                foreach (var element in uiElements)
-                {
-                    element.Visibility = Visibility.Collapsed;
-                }
-            }
-            else
-            {
-                foreach (var element in uiElements)
-                {
-                    element.Visibility = Visibility.Visible;
-                }
+                elem.Visibility = !isMenuOpen ? Visibility.Collapsed : Visibility.Visible;
             }
         };
 
         // Set the visibility to visible before starting the animation if we are opening the menu
         if (isMenuOpen)
         {
-            foreach (var element in uiElements)
+            foreach (var element in editElements)
             {
                 element.Visibility = Visibility.Visible;
             }
         }
 
-        foreach (var element in uiElements)
+        foreach (var element in editElements)
         {
             element.BeginAnimation(HeightProperty, heightAnimation);
             element.BeginAnimation(OpacityProperty, opacityAnimation);
@@ -224,9 +199,20 @@ public class Tile : UserControl
         }
 
         Console.WriteLine(TotalPlaytime);
-        TotalPlaytime =
-            CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
-        (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        try
+        {
+            TotalPlaytime =
+                CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
+            (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Format Exception");
+            MessageBox.Show("An error occured while saving new playtime");
+            editPlaytimeBoxH.Text = hTotal.ToString();
+            editPlaytimeBoxM.Text = mTotal.ToString();
+        }
+
 
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBoxH.Text = hTotal.ToString();
@@ -434,6 +420,7 @@ public class Tile : UserControl
         bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
 
+
         InitializeTile();
     }
 
@@ -446,8 +433,8 @@ public class Tile : UserControl
         gradientBrush.GradientStops.Add(new GradientStop(Utils.TileColor2, 1.0));
         gradientBrush.Freeze();
 
-        var editElements = new List<UIElement>();
-        var mainElements = new List<UIElement>();
+        editElements = new List<UIElement>();
+        mainElements = new List<UIElement>();
         var sampleTextBlock = Utils.NewTextBlock();
 
 
