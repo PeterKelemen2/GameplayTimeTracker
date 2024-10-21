@@ -35,6 +35,7 @@ public class ProcessTracker
     {
         _tilesList = _tileContainer.GetTiles();
         var runningProcesses = Process.GetProcesses();
+
         Console.WriteLine("=================");
         foreach (var tile in _tilesList)
         {
@@ -51,7 +52,6 @@ public class ProcessTracker
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
                     _tileContainer.UpdatePlaytimeBars();
-                    // _tileContainer.InitSave();
                     Console.WriteLine($"Setting new last playtime for {newExeName}");
                 }
 
@@ -61,7 +61,6 @@ public class ProcessTracker
                 }
 
                 tile.CurrentPlaytime++;
-
                 tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
             }
             else
@@ -140,8 +139,8 @@ public class ProcessTracker
 
             // _tileContainer.SortByProperty("IsRunning", false);
             Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
-            Console.WriteLine($"{runningString}");
-            Console.WriteLine($"{notRunningString}");
+            // Console.WriteLine($"{runningString}");
+            // Console.WriteLine($"{notRunningString}");
             stopwatch.Stop();
             await Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds);
         }

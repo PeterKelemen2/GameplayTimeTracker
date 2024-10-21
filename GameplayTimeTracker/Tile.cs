@@ -32,6 +32,8 @@ public class GradientBar : UserControl
 
     private Rectangle barBackground;
     private Rectangle barForeground;
+    private LinearGradientBrush gradientBrush;
+    private Grid grid = new Grid();
 
     public GradientBar(double gWidth, double gHeight, double percent, Color color1, Color color2, Color bgColor,
         double gPadding = 5,
@@ -46,18 +48,19 @@ public class GradientBar : UserControl
         BgColor = bgColor;
         GPadding = gPadding;
         Radius = radius;
+        
+        gradientBrush = new LinearGradientBrush();
+        gradientBrush.StartPoint = new Point(0, 0);
+        gradientBrush.EndPoint = new Point(1, 0);
+        gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
+        gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
+        
         InitializeBar();
     }
 
     public void InitializeBar()
     {
-        Grid grid = new Grid();
-
-        LinearGradientBrush gradientBrush = new LinearGradientBrush();
-        gradientBrush.StartPoint = new Point(0, 0);
-        gradientBrush.EndPoint = new Point(1, 0);
-        gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
-        gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
+        // Grid grid = new Grid();
 
         barBackground = new Rectangle
         {
