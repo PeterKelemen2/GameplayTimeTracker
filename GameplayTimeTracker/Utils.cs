@@ -25,6 +25,7 @@ public class Utils
     public static Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
+    public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#292929");
 
     public const int TextMargin = 10;
     public const int TitleFontSize = 17;
@@ -34,6 +35,13 @@ public class Utils
     public const int MenuTopMargin = -20;
     public const int TextBoxHeight = 28;
     public const int EditTextMaxHeight = 30;
+    public const int EditFirstRowTopMargin = 20;
+    public const int EditSecondRowTopMargin = 60;
+
+    public static BlurEffect fakeShadow = new BlurEffect
+    {
+        Radius = 8
+    };
 
     public static BlurEffect blurEffect = new BlurEffect
     {
@@ -63,14 +71,19 @@ public class Utils
         BlurRadius = 10,
         ShadowDepth = 0
     };
+    
+    public static DropShadowEffect dropShadowLightArea = new DropShadowEffect
+    {
+        BlurRadius = 5,
+        ShadowDepth = 0
+    };
 
     public static DropShadowEffect dropShadowRectangle = new DropShadowEffect
     {
         BlurRadius = 20,
         ShadowDepth = 0
     };
-    
-    
+
 
     public static TextBlock NewTextBlock()
     {

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using Atk;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MessageBox = System.Windows.MessageBox;
@@ -30,6 +31,7 @@ public class Tile : UserControl
 
     private Grid grid;
     private Rectangle menuRectangle;
+    private Rectangle shadowRectangle;
     private Rectangle container;
     private Button editButton;
     private Button removeButton;
@@ -95,7 +97,7 @@ public class Tile : UserControl
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private bool wasOnceOpened = false;
-    
+
     //TODO: Put shadow under the tile if toggled
     private void ToggleEdit(object sender, RoutedEventArgs e)
     {
@@ -103,6 +105,7 @@ public class Tile : UserControl
         IsMenuToggled = !IsMenuToggled;
         isMenuOpen = IsMenuToggled;
         double animationDuration = 0.15;
+
 
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
@@ -119,20 +122,23 @@ public class Tile : UserControl
         if (!wasOpened)
         {
             menuRectangle.Margin = new Thickness(0, Utils.MenuTopMargin, 0, 0);
-            editNameTitle.Margin = new Thickness(50, 12, 0, 0);
-            editNameBox.Margin = new Thickness(100, 10, 0, 0);
+            shadowRectangle.Margin = new Thickness(0, -2*TileHeight + 30, 0, 0);
+            editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin, 0, 0);
+            editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
-            editPlaytimeTitle.Margin = new Thickness(300, 12, 0, 0);
-            editPlaytimeBoxH.Margin = new Thickness(370, 10, 0, 0);
-            editPlaytimeBoxM.Margin = new Thickness(440, 10, 0, 0);
-            editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
-            editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
-            editPlaytimeBox.Margin = new Thickness(370, 70, 0, 0);
+            editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin, 0, 0);
+            editPlaytimeBoxH.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
+            editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
+            editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
+            editPlaytimeM.Margin = new Thickness(495, Utils.EditFirstRowTopMargin, 0, 0);
+            
+            editPlaytimeBox.Margin = new Thickness(370, Utils.EditSecondRowTopMargin, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, 0, 60, 0);
-            changeIconButton.Margin = new Thickness(50, 0, 0, 0);
+            changeIconButton.Margin = new Thickness(50, Utils.EditSecondRowTopMargin, 0, 0);
 
             menuRectangle.MaxHeight = TileHeight;
+            shadowRectangle.MaxHeight = 30;
 
             editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
             editNameBox.Height = Utils.TextBoxHeight;
@@ -155,12 +161,12 @@ public class Tile : UserControl
 
             wasOpened = true;
 
-
             if (!wasOnceOpened)
             {
                 animatedElements = new List<UIElement>();
                 animatedElements.AddRange(new UIElement[]
                 {
+                    shadowRectangle, changeIconButton,
                     editNameTitle, editNameBox,
                     editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeH, editPlaytimeBoxM, editPlaytimeM,
                     editPlaytimeBox
@@ -203,13 +209,16 @@ public class Tile : UserControl
                 Thickness originalMargin = originalMargins[element];
 
                 // Determine the target top margin based on the menu state
-                double targetTopMargin = isMenuOpen ? originalMargin.Top : 0; // Animate to 0 if closing, otherwise to original
+                double targetTopMargin =
+                    isMenuOpen ? originalMargin.Top : 0; // Animate to 0 if closing, otherwise to original
 
                 // Create the margin animation
                 ThicknessAnimation marginAnimation = new ThicknessAnimation
                 {
-                    From = new Thickness(originalMargin.Left, isMenuOpen ? 0 : originalMargin.Top, originalMargin.Right, originalMargin.Bottom),
-                    To = new Thickness(originalMargin.Left, targetTopMargin, originalMargin.Right, originalMargin.Bottom),
+                    From = new Thickness(originalMargin.Left, isMenuOpen ? 0 : originalMargin.Top, originalMargin.Right,
+                        originalMargin.Bottom),
+                    To = new Thickness(originalMargin.Left, targetTopMargin, originalMargin.Right,
+                        originalMargin.Bottom),
                     Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
                     FillBehavior = FillBehavior.HoldEnd // Holds the end value after the animation completes
                 };
@@ -499,6 +508,12 @@ public class Tile : UserControl
             Effect = Utils.dropShadowRectangle,
         };
 
+        shadowRectangle = new Rectangle();
+        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
+        shadowRectangle.Width = TileWidth-20;
+        shadowRectangle.MaxHeight = 0;
+        shadowRectangle.Effect = Utils.fakeShadow;
+
         editNameTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editNameTitle.Text = "Name";
         editNameTitle.MaxHeight = 0;
@@ -508,6 +523,8 @@ public class Tile : UserControl
         editNameBox = Utils.CloneTextBoxEdit(sampleTextBox);
         editNameBox.Text = GameName;
         editNameBox.Width = 150;
+        editNameBox.Effect = Utils.dropShadowLightArea;
+        
 
         editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeTitle.Text = "Playtime";
@@ -517,6 +534,7 @@ public class Tile : UserControl
 
         editPlaytimeBoxH = Utils.CloneTextBoxEdit(sampleTextBox);
         editPlaytimeBoxH.Text = hTotal.ToString();
+        editPlaytimeBoxH.Effect = Utils.dropShadowLightArea;
 
         editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeH.Text = "H";
@@ -526,6 +544,7 @@ public class Tile : UserControl
 
         editPlaytimeBoxM = Utils.CloneTextBoxEdit(sampleTextBox);
         editPlaytimeBoxM.Text = mTotal.ToString();
+        editPlaytimeBoxM.Effect = Utils.dropShadowLightArea;
 
         editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeM.Text = "M";
@@ -557,14 +576,14 @@ public class Tile : UserControl
             Height = 30,
             Width = 120,
             HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
         };
 
         editElements.AddRange(new UIElement[]
         {
-            menuRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
+            menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
             editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, editSaveButton, changeIconButton,
             editPlaytimeBox
         });
