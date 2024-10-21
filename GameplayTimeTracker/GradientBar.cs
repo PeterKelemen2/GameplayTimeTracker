@@ -24,7 +24,9 @@ public class GradientBar : UserControl
     private LinearGradientBrush gradientBrush;
     private Grid grid = new();
 
-    public GradientBar(double gWidth, double gHeight, double percent, Color color1, Color color2, Color bgColor,
+    public GradientBar(double percent,
+        double gWidth = 150,
+        double gHeight = 30,
         double gPadding = 5,
         double radius = 10)
     {
@@ -32,9 +34,9 @@ public class GradientBar : UserControl
         GWidth = gWidth;
         GHeight = gHeight;
         Percent = percent;
-        Color1 = color1;
-        Color2 = color2;
-        BgColor = bgColor;
+        Color1 = Utils.LeftColor;
+        Color2 = Utils.RightColor;
+        BgColor = Utils.DarkColor;
         GPadding = gPadding;
         Radius = radius;
 
