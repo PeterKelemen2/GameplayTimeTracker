@@ -448,7 +448,7 @@ public class Tile : UserControl
         IsMenuToggled = false;
 
         absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
-        bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+        bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
 
         InitializeTile();
@@ -501,14 +501,12 @@ public class Tile : UserControl
             MaxHeight = 0,
             Effect = Utils.dropShadowRectangle,
         };
-        editElements.Add(menuRectangle);
 
         editNameTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editNameTitle.Text = "Name";
         editNameTitle.MaxHeight = 0;
         editNameTitle.Foreground = new SolidColorBrush(DarkColor);
         editNameTitle.Effect = null;
-        editElements.Add(editNameTitle);
 
         editNameBox = new TextBox
         {
@@ -523,14 +521,12 @@ public class Tile : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon
         };
-        editElements.Add(editNameBox);
 
         editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeTitle.Text = "Playtime";
         editPlaytimeTitle.MaxHeight = 0;
         editPlaytimeTitle.Foreground = new SolidColorBrush(DarkColor);
         editPlaytimeTitle.Effect = null;
-        editElements.Add(editPlaytimeTitle);
 
         editPlaytimeBoxH = new TextBox
         {
@@ -545,14 +541,12 @@ public class Tile : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon
         };
-        editElements.Add(editPlaytimeBoxH);
 
         editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeH.Text = "H";
         editPlaytimeH.MaxHeight = 0;
         editPlaytimeH.Foreground = new SolidColorBrush(DarkColor);
         editPlaytimeH.Effect = null;
-        editElements.Add(editPlaytimeH);
 
 
         editPlaytimeBoxM = new TextBox
@@ -568,14 +562,12 @@ public class Tile : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon
         };
-        editElements.Add(editPlaytimeBoxM);
 
         editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeM.Text = "M";
         editPlaytimeM.MaxHeight = 0;
         editPlaytimeM.Foreground = new SolidColorBrush(DarkColor);
         editPlaytimeM.Effect = null;
-        editElements.Add(editPlaytimeM);
 
         editSaveButton = new Button
         {
@@ -589,7 +581,6 @@ public class Tile : UserControl
             Effect = Utils.dropShadowIcon
         };
         editSaveButton.Click += SaveEditedData;
-        editElements.Add(editSaveButton);
 
         changeIconButton = new Button
         {
@@ -602,34 +593,18 @@ public class Tile : UserControl
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
         };
-        editElements.Add(changeIconButton);
 
+        editElements.AddRange(new UIElement[]
+        {
+            menuRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
+            editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, editSaveButton, changeIconButton
+        });
         foreach (var elem in editElements)
         {
             Grid.SetRow(elem, 1);
             grid.Children.Add(elem);
         }
 
-        // Grid.SetRow(menuRectangle, 1);
-        // Grid.SetRow(editNameTitle, 1);
-        // Grid.SetRow(editNameBox, 1);
-        // Grid.SetRow(editPlaytimeTitle, 1);
-        // Grid.SetRow(editPlaytimeH, 1);
-        // Grid.SetRow(editPlaytimeM, 1);
-        // Grid.SetRow(editPlaytimeBoxH, 1);
-        // Grid.SetRow(editPlaytimeBoxM, 1);
-        // Grid.SetRow(editSaveButton, 1);
-        // Grid.SetRow(changeIconButton, 1);
-        // grid.Children.Add(menuRectangle);
-        // grid.Children.Add(editNameTitle);
-        // grid.Children.Add(editNameBox);
-        // grid.Children.Add(editPlaytimeTitle);
-        // grid.Children.Add(editPlaytimeH);
-        // grid.Children.Add(editPlaytimeM);
-        // grid.Children.Add(editPlaytimeBoxH);
-        // grid.Children.Add(editPlaytimeBoxM);
-        // grid.Children.Add(editSaveButton);
-        // grid.Children.Add(changeIconButton);
 
         // Create the second Rectangle
         container = new Rectangle
