@@ -837,31 +837,56 @@ public class Tile : UserControl
         // grid.Children.Add(bgImage);
         grid.Children.Add(containerGrid);
         // Add playtime elements
-        totalPlaytimeTitle = new TextBlock
+
+        var sampleTextBlock = new TextBlock
         {
-            Text = "Total Playtime:",
+            Text = "",
             FontWeight = FontWeights.Bold,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin =
-                new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0),
+                new Thickness(0, 0, 0, 0),
             Effect = dropShadowText,
         };
 
-        totalPlaytime = new TextBlock
-        {
-            Text = $"{hTotal}h {mTotal}m",
-            FontWeight = FontWeights.Normal,
-            FontSize = TextFontSize,
-            Foreground = new SolidColorBrush(FontColor),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin =
-                new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0),
-            Effect = dropShadowText,
-        };
+        totalPlaytimeTitle = CloneTextBlock(sampleTextBlock);
+        totalPlaytimeTitle.Text = "Total Playtime:";
+        totalPlaytimeTitle.Margin =
+            new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0);
+        
+        totalPlaytime = CloneTextBlock(sampleTextBlock);
+        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+        totalPlaytime.FontWeight = FontWeights.Normal;
+        totalPlaytime.Margin = Margin =
+            new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0);
+        
+        // totalPlaytimeTitle = new TextBlock
+        // {
+        //     Text = "Total Playtime:",
+        //     FontWeight = FontWeights.Bold,
+        //     FontSize = TextFontSize,
+        //     Foreground = new SolidColorBrush(FontColor),
+        //     HorizontalAlignment = HorizontalAlignment.Left,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     Margin =
+        //         new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0),
+        //     Effect = dropShadowText,
+        // };
+
+        // totalPlaytime = new TextBlock
+        // {
+        //     Text = $"{hTotal}h {mTotal}m",
+        //     FontWeight = FontWeights.Normal,
+        //     FontSize = TextFontSize,
+        //     Foreground = new SolidColorBrush(FontColor),
+        //     HorizontalAlignment = HorizontalAlignment.Left,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     Margin =
+        //         new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0),
+        //     Effect = dropShadowText,
+        // };
 
         totalTimeGradientBar = new GradientBar(
             gWidth: 150,
@@ -939,7 +964,23 @@ public class Tile : UserControl
         // Set the Grid as the content of the UserControl
         Content = grid;
     }
-
+    
+    public TextBlock CloneTextBlock(TextBlock original)
+    {
+        return new TextBlock
+        {
+            Text = original.Text,
+            FontWeight = original.FontWeight,
+            FontSize = original.FontSize,
+            Foreground = original.Foreground.Clone(), // Clone the brush if needed
+            HorizontalAlignment = original.HorizontalAlignment,
+            VerticalAlignment = original.VerticalAlignment,
+            Margin = original.Margin,
+            Effect = original.Effect,
+            // Add other properties that you need to copy as well...
+        };
+    }
+    
     public void ToggleBgImageColor(bool runningBool)
     {
         bgImage.Source = runningBool ? bgImageColor : bgImageGray;
