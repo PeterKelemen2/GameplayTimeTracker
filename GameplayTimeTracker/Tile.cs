@@ -49,6 +49,7 @@ public class Tile : UserControl
     private TextBlock editNameTitle;
     private TextBox editPlaytimeBoxH;
     private TextBox editPlaytimeBoxM;
+    private TextBox editPlaytimeBox;
     private TextBlock editPlaytimeTitle;
     private TextBlock editPlaytimeH;
     private TextBlock editPlaytimeM;
@@ -60,6 +61,7 @@ public class Tile : UserControl
 
     List<UIElement> editElements = new List<UIElement>();
     List<UIElement> mainElements = new List<UIElement>();
+    List<UIElement> animatedElements = new List<UIElement>();
 
     private double hTotal;
     private double mTotal;
@@ -91,6 +93,8 @@ public class Tile : UserControl
     public bool IsRunningGame { get; set; }
     public bool WasRunning { get; set; }
 
+    private Dictionary<UIElement, Thickness> originalMargins = new();
+    private bool wasOnceOpened = false;
 
     private double CalculateTileWidth()
     {
@@ -128,6 +132,13 @@ public class Tile : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
+        DoubleAnimation maxHeightAnimationBox = new DoubleAnimation
+        {
+            From = isMenuOpen ? 0 : Utils.TextBoxHeight, To = isMenuOpen ? Utils.TextBoxHeight : 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+
         if (!wasOpened)
         {
             menuRectangle.Margin = new Thickness(0, Utils.MenuTopMargin, 0, 0);
@@ -139,6 +150,7 @@ public class Tile : UserControl
             editPlaytimeBoxM.Margin = new Thickness(440, 10, 0, 0);
             editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
             editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
+            editPlaytimeBox.Margin = new Thickness(370, 70, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, 0, 60, 0);
             changeIconButton.Margin = new Thickness(50, 0, 0, 0);
@@ -148,6 +160,9 @@ public class Tile : UserControl
             editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
             editNameBox.Height = Utils.TextBoxHeight;
             editNameBox.MaxHeight = Utils.TextBoxHeight;
+            editPlaytimeBox.MaxHeight = Utils.EditTextMaxHeight;
+
+            // editNameTitle, editPlaytimeBox, editNameBox, editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeBoxM, editPlaytimeH, editPlaytimeM
 
             editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
             editPlaytimeBoxH.MaxHeight = Utils.TextBoxHeight;
@@ -162,6 +177,28 @@ public class Tile : UserControl
             changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
 
             wasOpened = true;
+
+
+            if (!wasOnceOpened)
+            {
+                animatedElements = new List<UIElement>();
+                animatedElements.AddRange(new UIElement[]
+                {
+                    editNameTitle, editNameBox,
+                    editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeH, editPlaytimeBoxM, editPlaytimeM,
+                    editPlaytimeBox
+                });
+                foreach (var element in animatedElements)
+                {
+                    if (element is FrameworkElement frameworkElement)
+                    {
+                        // Store the original margin in the dictionary
+                        originalMargins[element] = frameworkElement.Margin;
+                    }
+                }
+
+                wasOnceOpened = true;
+            }
         }
 
         heightAnimation.Completed += (s, a) =>
@@ -183,7 +220,29 @@ public class Tile : UserControl
 
         foreach (var element in editElements)
         {
-            element.BeginAnimation(HeightProperty, heightAnimation);
+            if (animatedElements.Contains(element) && element is FrameworkElement frameworkElement)
+            {
+                // Get the original margin
+                Thickness originalMargin = originalMargins[element];
+
+                // Determine the target top margin based on the menu state
+                double targetTopMargin = isMenuOpen ? originalMargin.Top : 0; // Animate to 0 if closing, otherwise to original
+
+                // Create the margin animation
+                ThicknessAnimation marginAnimation = new ThicknessAnimation
+                {
+                    From = new Thickness(originalMargin.Left, isMenuOpen ? 0 : originalMargin.Top, originalMargin.Right, originalMargin.Bottom),
+                    To = new Thickness(originalMargin.Left, targetTopMargin, originalMargin.Right, originalMargin.Bottom),
+                    Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+                    FillBehavior = FillBehavior.HoldEnd // Holds the end value after the animation completes
+                };
+
+                // Start the margin animation
+                frameworkElement.BeginAnimation(MarginProperty, marginAnimation);
+            }
+
+            // Start the other animations
+            element.BeginAnimation(MaxHeightProperty, heightAnimation);
             element.BeginAnimation(OpacityProperty, opacityAnimation);
         }
 
@@ -497,6 +556,10 @@ public class Tile : UserControl
         editPlaytimeM.Foreground = new SolidColorBrush(Utils.DarkColor);
         editPlaytimeM.Effect = null;
 
+        editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
+        editPlaytimeBox.Width = 200;
+
+
         editSaveButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonSave"),
@@ -525,7 +588,8 @@ public class Tile : UserControl
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
-            editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, editSaveButton, changeIconButton
+            editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, editSaveButton, changeIconButton,
+            editPlaytimeBox
         });
         foreach (var elem in editElements)
         {
