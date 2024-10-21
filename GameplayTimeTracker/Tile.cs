@@ -100,7 +100,8 @@ public class Tile : UserControl
     {
         return ActualWidth - (2 * 10 + 2 * SystemParameters.VerticalScrollBarWidth); // Change 10 to var
     }
-
+    
+    //TODO: Put shadow under the tile if toggled
     private void ToggleEdit(object sender, RoutedEventArgs e)
     {
         isMenuOpen = !isMenuOpen;
