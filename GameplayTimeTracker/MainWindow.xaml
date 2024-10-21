@@ -48,7 +48,9 @@
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
-
+        
+        
+        
         <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="Visibility" Value="Hidden" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -209,9 +211,10 @@
         <ScrollViewer x:Name="ScrollViewer"
                       Grid.Row="0"
                       ScrollChanged="ShowScrollViewerOverlay"
-                      VerticalScrollBarVisibility="Visible"
+                      VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
-                      Padding="0,0,0,0" Background="#1E2030">
+                      Padding="-5,5,5,5" Background="#1E2030"
+                      >
             <StackPanel x:Name="mainStackPanel" Orientation="Vertical" Background="#1E2030" />
         </ScrollViewer>
 

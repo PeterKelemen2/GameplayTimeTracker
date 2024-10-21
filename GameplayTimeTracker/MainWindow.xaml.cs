@@ -20,7 +20,6 @@ namespace GameplayTimeTracker
 {
     public partial class MainWindow : System.Windows.Window
     {
-        private const double Offset = 8;
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
         private const string? AppIcon = "assets/MyAppIcon.ico";
@@ -70,6 +69,7 @@ namespace GameplayTimeTracker
                             tileContainer.SetTilesList(sortedList);
                             ShowTilesOnCanvas();
                         }
+
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
@@ -160,7 +160,7 @@ namespace GameplayTimeTracker
                 iconPath = IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
-                newTile.Margin = new Thickness(Offset, 5, 0, 5);
+                newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 
                 if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
@@ -203,7 +203,7 @@ namespace GameplayTimeTracker
             var tilesList = tileContainer.GetTiles();
             foreach (var tile in tilesList)
             {
-                tile.Margin = new Thickness(Offset, 5, 0, 5);
+                tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
                 mainStackPanel.Children.Add(tile);
             }
         }
@@ -215,10 +215,19 @@ namespace GameplayTimeTracker
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            ScrollViewer scrollViewer = sender as ScrollViewer;
+            bool isVerticalScrollVisible = scrollViewer.ExtentHeight > scrollViewer.ViewportHeight;
+
             OverlayTop.Visibility = e.VerticalOffset > 0 ? Visibility.Visible : Visibility.Collapsed;
             OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+
+            double newWidth = isVerticalScrollVisible
+                ? Width - 2 * Utils.TileLeftMargin - 2 * SystemParameters.VerticalScrollBarWidth
+                : Width - 5 * Utils.TileLeftMargin;
+            tileContainer.UpdateTilesWidth(newWidth);
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -121,8 +121,8 @@ public class Tile : UserControl
 
         if (!wasOpened)
         {
-            menuRectangle.Margin = new Thickness(0, Utils.MenuTopMargin, 0, 0);
-            shadowRectangle.Margin = new Thickness(0, -2*TileHeight + 30, 0, 0);
+            menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
+            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 30, 0, 0);
             editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin, 0, 0);
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
@@ -131,7 +131,7 @@ public class Tile : UserControl
             editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
             editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
             editPlaytimeM.Margin = new Thickness(495, Utils.EditFirstRowTopMargin, 0, 0);
-            
+
             editPlaytimeBox.Margin = new Thickness(370, Utils.EditSecondRowTopMargin, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, 0, 60, 0);
@@ -365,6 +365,13 @@ public class Tile : UserControl
         set { SetValue(GameNameProperty, value); }
     }
 
+    public void UpdateTileWidth(double newWidth)
+    {
+        TileWidth = newWidth;
+        container.Width = TileWidth;
+        menuRectangle.Width = TileWidth - 30;
+        shadowRectangle.Width = TileWidth - 20;
+    }
 
     public void UpdatePlaytimeText()
     {
@@ -504,14 +511,16 @@ public class Tile : UserControl
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
             Fill = new SolidColorBrush(Utils.RightColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
             MaxHeight = 0,
             Effect = Utils.dropShadowRectangle,
         };
 
         shadowRectangle = new Rectangle();
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
-        shadowRectangle.Width = TileWidth-20;
+        shadowRectangle.Width = TileWidth - 20;
         shadowRectangle.MaxHeight = 0;
+        shadowRectangle.HorizontalAlignment = HorizontalAlignment.Left;
         shadowRectangle.Effect = Utils.fakeShadow;
 
         editNameTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
@@ -524,7 +533,7 @@ public class Tile : UserControl
         editNameBox.Text = GameName;
         editNameBox.Width = 150;
         editNameBox.Effect = Utils.dropShadowLightArea;
-        
+
 
         editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeTitle.Text = "Playtime";
@@ -602,6 +611,8 @@ public class Tile : UserControl
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
             Fill = gradientBrush,
+            Margin = new Thickness(Utils.TileLeftMargin, 0, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left
         };
 
         int topMargin = -40;

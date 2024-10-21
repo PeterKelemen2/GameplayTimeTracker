@@ -18,6 +18,9 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
+
+    public double TileWidth { get; set; }
+
     MainWindow _mainWindow;
 
     public TileContainer()
@@ -255,6 +258,14 @@ public class TileContainer
         Console.WriteLine($"Updating LAST playtime bar took: {stopwatch.Elapsed}");
     }
 
+    public void UpdateTilesWidth(double newWidth)
+    {
+        foreach (var tile in tilesList)
+        {
+            tile.UpdateTileWidth(newWidth);
+        }
+    }
+
     public void UpdatePlaytimeBars()
     {
         Stopwatch stopwatch = new Stopwatch();
@@ -266,7 +277,7 @@ public class TileContainer
             tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
             // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
             tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
-            
+
             tile.totalTimeGradientBar.UpdateBar();
             // tile.totalTimeGradientBar.InitializeBar();
             tile.lastTimeGradientBar.UpdateBar();

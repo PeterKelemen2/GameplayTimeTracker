@@ -26,8 +26,9 @@ public class Utils
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#292929");
-
+    
     public const int TextMargin = 10;
+    public const int TileLeftMargin = 7;
     public const int TitleFontSize = 17;
     public const int TextFontSize = 14;
     public const double THeight = 150;
