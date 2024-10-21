@@ -95,11 +95,6 @@ public class Tile : UserControl
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private bool wasOnceOpened = false;
-
-    private double CalculateTileWidth()
-    {
-        return ActualWidth - (2 * 10 + 2 * SystemParameters.VerticalScrollBarWidth); // Change 10 to var
-    }
     
     //TODO: Put shadow under the tile if toggled
     private void ToggleEdit(object sender, RoutedEventArgs e)
@@ -115,30 +110,11 @@ public class Tile : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
-        DoubleAnimation heightAnimationBox = new DoubleAnimation
-        {
-            From = isMenuOpen ? 0 : Utils.TextBoxHeight, To = isMenuOpen ? Utils.TextBoxHeight : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
-        };
-
-        DoubleAnimation heightAnimationButton = new DoubleAnimation
-        {
-            From = isMenuOpen ? 0 : 40, To = isMenuOpen ? 40 : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
-        };
-
         DoubleAnimation opacityAnimation = new DoubleAnimation
         {
             From = isMenuOpen ? 0 : 1, To = isMenuOpen ? 1 : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
-
-        DoubleAnimation maxHeightAnimationBox = new DoubleAnimation
-        {
-            From = isMenuOpen ? 0 : Utils.TextBoxHeight, To = isMenuOpen ? Utils.TextBoxHeight : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
-        };
-
 
         if (!wasOpened)
         {
