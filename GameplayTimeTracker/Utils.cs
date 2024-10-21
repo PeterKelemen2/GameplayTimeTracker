@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace GameplayTimeTracker;
 
@@ -24,6 +26,13 @@ public class Utils
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
 
+    private const int TextMargin = 10;
+    private const int TitleFontSize = 17;
+    private const int TextFontSize = 14;
+    private const double THeight = 150;
+    private const double BorderRadius = 10;
+    private const int MenuTopMargin = -20;
+    private const int TextBoxHeight = 28;
 
     public static BlurEffect blurEffect = new BlurEffect
     {
@@ -38,6 +47,7 @@ public class Utils
         Opacity = 1,
         Direction = 200,
     };
+
     public static DropShadowEffect dropShadowTextEdit = new DropShadowEffect
     {
         BlurRadius = 5,
@@ -59,6 +69,24 @@ public class Utils
         ShadowDepth = 0
     };
 
+    public static TextBlock NewTextBlock()
+    {
+        var sampleTextBlock = new TextBlock
+        {
+            Text = "",
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin =
+                new Thickness(0, 0, 0, 0),
+            Effect = dropShadowText,
+        };
+
+        return sampleTextBlock;
+    }
+
     public static TextBlock CloneTextBlock(TextBlock original, bool isBold = true)
     {
         return new TextBlock
@@ -74,7 +102,42 @@ public class Utils
             // Add other properties that you need to copy as well...
         };
     }
-    
+
+    public static TextBox NewTextBoxEdit()
+    {
+        var sampleTextBoxEdit = new TextBox
+        {
+            Text = "Text",
+            Width = 50,
+            MaxHeight = 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left,
+            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Effect = Utils.dropShadowIcon
+        };
+
+        return sampleTextBoxEdit;
+    }
+
+    public static TextBox CloneTextBoxEdit(TextBox original)
+    {
+        return new TextBox
+        {
+            Text = original.Text,
+            Width = original.Width,
+            MaxHeight = original.MaxHeight,
+            HorizontalAlignment = original.HorizontalAlignment,
+            VerticalAlignment = original.VerticalAlignment,
+            TextAlignment = original.TextAlignment,
+            HorizontalContentAlignment = original.HorizontalContentAlignment,
+            VerticalContentAlignment = original.VerticalContentAlignment,
+            Effect = Utils.dropShadowIcon,
+            Style = original.Style,
+        };
+    }
+
     public static BitmapSource ConvertToGrayscale(BitmapSource source)
     {
         var stride = (source.PixelWidth * source.Format.BitsPerPixel + 7) / 8;

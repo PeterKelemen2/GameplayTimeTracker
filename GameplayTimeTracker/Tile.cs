@@ -464,24 +464,27 @@ public class Tile : UserControl
         gradientBrush.Freeze();
 
         var editElements = new List<UIElement>();
+        var sampleTextBlock = Utils.NewTextBlock();
 
-        var sampleTextBlock = new TextBlock
-        {
-            Text = "",
-            FontWeight = FontWeights.Bold,
-            FontSize = TextFontSize,
-            Foreground = new SolidColorBrush(FontColor),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin =
-                new Thickness(0, 0, 0, 0),
-            Effect = Utils.dropShadowText,
-        };
+        // var sampleTextBox = new TextBox
+        // {
+        //     Style = (Style)Application.Current.FindResource("RoundedTextBox"),
+        //     Text = GameName,
+        //     Width = 150,
+        //     MaxHeight = 0,
+        //     HorizontalAlignment = HorizontalAlignment.Left,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     TextAlignment = TextAlignment.Left, // Center-align text horizontally
+        //     HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+        //     VerticalContentAlignment = VerticalAlignment.Center,
+        //     Effect = Utils.dropShadowIcon
+        // };
+
+        var sampleTextBox = Utils.NewTextBoxEdit();
+        sampleTextBox.Style = (Style)Application.Current.FindResource("RoundedTextBox");
 
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        // (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        // (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         (hLast, mLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
         // Define the grid rows
@@ -508,61 +511,28 @@ public class Tile : UserControl
         editNameTitle.Foreground = new SolidColorBrush(DarkColor);
         editNameTitle.Effect = null;
 
-        editNameBox = new TextBox
-        {
-            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = GameName,
-            Width = 150,
-            MaxHeight = 0,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            TextAlignment = TextAlignment.Left, // Center-align text horizontally
-            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center,
-            Effect = Utils.dropShadowIcon
-        };
-
+        editNameBox = Utils.CloneTextBoxEdit(sampleTextBox);
+        editNameBox.Text = GameName;
+        editNameBox.Width = 150;
+        
         editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeTitle.Text = "Playtime";
         editPlaytimeTitle.MaxHeight = 0;
         editPlaytimeTitle.Foreground = new SolidColorBrush(DarkColor);
         editPlaytimeTitle.Effect = null;
-
-        editPlaytimeBoxH = new TextBox
-        {
-            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = hTotal.ToString(),
-            Width = 50,
-            MaxHeight = 0,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            TextAlignment = TextAlignment.Left, // Center-align text horizontally
-            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center,
-            Effect = Utils.dropShadowIcon
-        };
-
+        
+        editPlaytimeBoxH = Utils.CloneTextBoxEdit(sampleTextBox);
+        editPlaytimeBoxH.Text = hTotal.ToString();
+        
         editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeH.Text = "H";
         editPlaytimeH.MaxHeight = 0;
         editPlaytimeH.Foreground = new SolidColorBrush(DarkColor);
         editPlaytimeH.Effect = null;
 
-
-        editPlaytimeBoxM = new TextBox
-        {
-            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = mTotal.ToString(),
-            Width = 50,
-            MaxHeight = 0,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            TextAlignment = TextAlignment.Left, // Center-align text horizontally
-            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
-            VerticalContentAlignment = VerticalAlignment.Center,
-            Effect = Utils.dropShadowIcon
-        };
-
+        editPlaytimeBoxM = Utils.CloneTextBoxEdit(sampleTextBox);
+        editPlaytimeBoxM.Text = mTotal.ToString();
+        
         editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeM.Text = "M";
         editPlaytimeM.MaxHeight = 0;
