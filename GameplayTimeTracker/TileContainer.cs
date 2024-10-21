@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 using System.Windows;
+using MonoMac.CoreText;
 
 namespace GameplayTimeTracker;
 
@@ -28,6 +29,11 @@ public class TileContainer
         return tilesList;
     }
 
+    public void SetTilesList(List<Tile> newList)
+    {
+        tilesList = newList;
+    }
+
     public void OverwriteTiles(List<Tile> newTiles)
     {
         tilesList = newTiles;
@@ -39,13 +45,24 @@ public class TileContainer
         Console.WriteLine(" ==== Saved! ====");
     }
 
-    public void SortByProperty(string propertyName = "", bool ascending = true)
+    public bool IsListEqual(List<Tile> newList)
+    {
+        if (tilesList.Count != newList.Count) return false;
+        for (int i = 0; i < tilesList.Count; i++)
+        {
+            if (!tilesList[i].Equals(newList[i])) return false;
+        }
+
+        return true;
+    }
+
+    public List<Tile> SortedByProperty(string propertyName = "", bool ascending = true)
     {
         // Check if the property name is valid
         if (string.IsNullOrWhiteSpace(propertyName))
         {
             MessageBox.Show("Property name is required.");
-            return;
+            return null;
         }
 
         // Get the property info using reflection
@@ -54,15 +71,17 @@ public class TileContainer
         if (propertyInfo == null)
         {
             MessageBox.Show("Invalid property name.");
-            return;
+            return null;
         }
 
         // Sort in ascending or descending order based on the flag
-        tilesList = ascending
+        var sortedTilesList = ascending
             ? tilesList.OrderBy(item => propertyInfo.GetValue(item, null)).ToList()
             : tilesList.OrderByDescending(item => propertyInfo.GetValue(item, null)).ToList();
+
         // tilesList.RemoveAll(item => propertyInfo.GetValue(item, null) == null);
         // tilesList = newTilesList;
+        return sortedTilesList;
     }
 
     public List<String> GetExecutableNames()

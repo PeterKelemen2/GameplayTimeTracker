@@ -64,11 +64,18 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-                        tileContainer.SortByProperty("IsRunning", false);
-                        ShowTilesOnCanvas();
+                        var auxList = tileContainer.SortedByProperty("IsRunning", false);
+                        if (!tileContainer.IsListEqual(auxList))
+                        {
+                            tileContainer.SetTilesList(auxList);
+                            ShowTilesOnCanvas();
+                        }
+                        // tileContainer.SortByProperty("IsRunning", false);
+                        // ShowTilesOnCanvas();
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
+                    Console.WriteLine($"Cycle took {(int)stopwatch.ElapsedMilliseconds}ms");
                     if ((int)stopwatch.ElapsedMilliseconds > 1000)
                     {
                         Task.Delay(1000).Wait();
