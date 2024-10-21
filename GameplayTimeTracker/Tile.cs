@@ -48,13 +48,13 @@ public class GradientBar : UserControl
         BgColor = bgColor;
         GPadding = gPadding;
         Radius = radius;
-        
+
         gradientBrush = new LinearGradientBrush();
         gradientBrush.StartPoint = new Point(0, 0);
         gradientBrush.EndPoint = new Point(1, 0);
         gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
         gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
-        
+
         InitializeBar();
     }
 
@@ -339,9 +339,10 @@ public class Tile : UserControl
         catch (Win32Exception win32Ex) when (win32Ex.NativeErrorCode == 740) // Error 740 means elevation required
         {
             // Prompt user for admin if the error suggests elevation is needed
-            MessageBoxResult result = MessageBox.Show($"The application {GameName} requires administrator privileges. Do you want to run it as administrator?", 
+            MessageBoxResult result = MessageBox.Show(
+                $"The application {GameName} requires administrator privileges. Do you want to run it as administrator?",
                 "Elevation Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        
+
             if (result == MessageBoxResult.Yes)
             {
                 // Re-launch with admin privileges
@@ -429,8 +430,11 @@ public class Tile : UserControl
 
     public void UpdateEditPlaytimeText()
     {
-        editPlaytimeBoxH.Text = $"{hTotal}";
-        editPlaytimeBoxM.Text = $"{mTotal}";
+        if (!(editPlaytimeBoxH.IsFocused || editPlaytimeBoxM.IsFocused))
+        {
+            editPlaytimeBoxH.Text = $"{hTotal}";
+            editPlaytimeBoxM.Text = $"{mTotal}";
+        }
     }
 
     public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
@@ -555,7 +559,7 @@ public class Tile : UserControl
             BlurRadius = 10,
             ShadowDepth = 0
         };
-        
+
         DropShadowEffect dropShadowRectangle = new DropShadowEffect
         {
             BlurRadius = 20,
