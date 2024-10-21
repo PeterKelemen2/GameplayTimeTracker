@@ -248,7 +248,8 @@ public class TileContainer
         tileToUpdate.lastTimeGradientBar.Percent =
             Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
 
-        tileToUpdate.lastTimeGradientBar.InitializeBar();
+        tileToUpdate.lastTimeGradientBar.UpdateBar();
+        // tileToUpdate.lastTimeGradientBar.InitializeBar();
 
         stopwatch.Stop();
         Console.WriteLine($"Updating LAST playtime bar took: {stopwatch.Elapsed}");
@@ -265,12 +266,11 @@ public class TileContainer
             tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
             // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
             tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
-        }
-
-        foreach (var tile in tilesList)
-        {
-            tile.totalTimeGradientBar.InitializeBar();
-            tile.lastTimeGradientBar.InitializeBar();
+            
+            tile.totalTimeGradientBar.UpdateBar();
+            // tile.totalTimeGradientBar.InitializeBar();
+            tile.lastTimeGradientBar.UpdateBar();
+            // tile.lastTimeGradientBar.InitializeBar();
         }
 
         stopwatch.Stop();

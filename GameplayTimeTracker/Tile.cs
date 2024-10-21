@@ -58,10 +58,25 @@ public class GradientBar : UserControl
         InitializeBar();
     }
 
+    private double CalculateWidth()
+    {
+        return (GWidth - 2 * GPadding) * Percent;
+    }
+    
+    public void UpdateBar()
+    {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        barForeground.Width = CalculateWidth();
+        stopwatch.Stop();
+        Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
+    }
+    
     public void InitializeBar()
     {
         // Grid grid = new Grid();
-
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         barBackground = new Rectangle
         {
             Width = GWidth,
@@ -71,12 +86,13 @@ public class GradientBar : UserControl
             Fill = new SolidColorBrush(BgColor)
         };
 
+        double radiusValue = Radius - GPadding / 2;
         barForeground = new Rectangle
         {
-            Width = (GWidth - 2 * GPadding) * Percent,
+            Width = CalculateWidth(),
             Height = GHeight - 2 * GPadding,
-            RadiusX = Radius - GPadding / 2,
-            RadiusY = Radius - GPadding / 2,
+            RadiusX = radiusValue,
+            RadiusY = radiusValue,
             Fill = gradientBrush,
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(GPadding, 0, 0, 0)
@@ -86,6 +102,9 @@ public class GradientBar : UserControl
         grid.Children.Add(barForeground);
 
         Content = grid;
+        
+        stopwatch.Stop();
+        Console.WriteLine($"Initializin GB took {stopwatch.Elapsed}");
     }
 }
 
