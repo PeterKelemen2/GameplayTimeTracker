@@ -474,7 +474,8 @@ public class Tile : UserControl
         LastPlaytime = 0;
         LastPlaytimePercent = 0;
         UpdatePlaytimeText();
-        _tileContainer.UpdatePlaytimeBars();
+        // _tileContainer.UpdatePlaytimeBars();
+        _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
         _tileContainer.InitSave();
     }
 

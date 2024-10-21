@@ -216,6 +216,19 @@ public class TileContainer
         }
     }
 
+    private Tile GetTileById(int id)
+    {
+        foreach (var tile in tilesList)
+        {
+            if (tile.Id.Equals(id))
+            {
+                return tile;
+            }
+        }
+
+        return null;
+    }
+
     public double CalculateTotalPlaytime()
     {
         return tilesList.Sum(tile => tile.TotalPlaytime);
@@ -227,13 +240,30 @@ public class TileContainer
         return $"{(int)(playtime / 60)}h {(int)(playtime % 60)}m";
     }
 
+    public void UpdateLastPlaytimeBarOfTile(int tileId)
+    {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var tileToUpdate = GetTileById(tileId);
+        tileToUpdate.lastTimeGradientBar.Percent =
+            Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
+
+        tileToUpdate.lastTimeGradientBar.InitializeBar();
+
+        stopwatch.Stop();
+        Console.WriteLine($"Updating LAST playtime bar took: {stopwatch.Elapsed}");
+    }
+
     public void UpdatePlaytimeBars()
     {
-        double globalTotalPlaytime = CalculateTotalPlaytime();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
         foreach (var tile in tilesList)
         {
-            tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime / globalTotalPlaytime, 2);
-            Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
+            tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
+            // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
             tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
         }
 
@@ -242,5 +272,8 @@ public class TileContainer
             tile.totalTimeGradientBar.InitializeBar();
             tile.lastTimeGradientBar.InitializeBar();
         }
+
+        stopwatch.Stop();
+        Console.WriteLine($"Updating BOTH playtime bars took: {stopwatch.Elapsed}");
     }
 }
