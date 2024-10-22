@@ -253,6 +253,7 @@ public class Tile : UserControl
             TotalPlaytime =
                 CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+            
         }
         catch (FormatException)
         {
@@ -262,6 +263,7 @@ public class Tile : UserControl
             editPlaytimeBoxM.Text = mTotal.ToString();
         }
 
+        MessageBox.Show(Utils.DecodeTimeString(editPlaytimeBox.Text).ToString());
 
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBoxH.Text = hTotal.ToString();

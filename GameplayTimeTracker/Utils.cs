@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Mime;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -88,6 +89,42 @@ public class Utils
         ShadowDepth = 0
     };
 
+
+    public static (double, double) DecodeTimeString(string timeString)
+    {
+        // Regular expression to match the different formats: 
+        // - "23-56", "23h 56m", "23h56m", or "23 56"
+        string pattern = @"(\d+)\D*(\d+)";
+
+        // string pattern = @"(\d+)[h\- ]?(\d+)[m]?";
+
+        // Match the input string against the pattern
+        Match match = Regex.Match(timeString, pattern);
+
+        double h;
+        double m;
+        // (double h, double m) values;
+        if (match.Success)
+        {
+            // Extract the matched numbers and convert them to double
+            // values = (double.Parse(match.Groups[1].Value), double.Parse(match.Groups[2].Value));
+            h = double.Parse(match.Groups[1].Value);
+            m = double.Parse(match.Groups[2].Value);
+
+            if (m > 59)
+            {
+                h += (int)(m / 60);
+                m %= 60;
+            }
+
+            Console.WriteLine($"{timeString} Decoded as: {h} {m}");
+            return (h, m);
+        }
+        else
+        {
+            throw new FormatException("Input does not contain valid numbers in the expected format.");
+        }
+    }
 
     public static bool IsValidImage(string imagePath)
     {
