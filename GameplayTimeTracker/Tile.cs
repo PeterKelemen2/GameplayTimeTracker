@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
@@ -244,7 +247,12 @@ public class Tile : UserControl
         Console.WriteLine(isMenuOpen);
     }
 
-    public void SaveEditedData(object sender, RoutedEventArgs e)
+    public void editSaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        SaveEditedData();
+    }
+
+    public void SaveEditedData()
     {
         titleTextBlock.Text = editNameBox.Text;
         if (!GameName.Equals(editNameBox.Text))
@@ -605,7 +613,7 @@ public class Tile : UserControl
         editNameBox.Text = GameName;
         editNameBox.Width = 150;
         editNameBox.Effect = Utils.dropShadowLightArea;
-
+        editNameBox.KeyDown += editBox_KeyDown;
 
         editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         editPlaytimeTitle.Text = "Playtime";
@@ -613,31 +621,12 @@ public class Tile : UserControl
         editPlaytimeTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
         editPlaytimeTitle.Effect = null;
 
-        // editPlaytimeBoxH = Utils.CloneTextBoxEdit(sampleTextBox);
-        // editPlaytimeBoxH.Text = hTotal.ToString();
-        // editPlaytimeBoxH.Effect = Utils.dropShadowLightArea;
-        //
-        // editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        // editPlaytimeH.Text = "H";
-        // editPlaytimeH.MaxHeight = 0;
-        // editPlaytimeH.Foreground = new SolidColorBrush(Utils.DarkColor);
-        // editPlaytimeH.Effect = null;
-        //
-        // editPlaytimeBoxM = Utils.CloneTextBoxEdit(sampleTextBox);
-        // editPlaytimeBoxM.Text = mTotal.ToString();
-        // editPlaytimeBoxM.Effect = Utils.dropShadowLightArea;
-        //
-        // editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        // editPlaytimeM.Text = "M";
-        // editPlaytimeM.MaxHeight = 0;
-        // editPlaytimeM.Foreground = new SolidColorBrush(Utils.DarkColor);
-        // editPlaytimeM.Effect = null;
-
         editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBox.Width = 150;
         editPlaytimeBox.Height = Utils.TextBoxHeight;
         editPlaytimeBox.Effect = Utils.dropShadowLightArea;
+        editPlaytimeBox.KeyDown += editBox_KeyDown;
 
         editSaveButton = new Button
         {
@@ -650,7 +639,7 @@ public class Tile : UserControl
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
         };
-        editSaveButton.Click += SaveEditedData;
+        editSaveButton.Click += editSaveButton_Click;
 
         changeIconButton = new Button
         {
@@ -908,6 +897,16 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
+    }
+
+    private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            // Call your method here
+            SaveEditedData();
+            e.Handled = true; // Optional, prevents the beep sound
+        }
     }
 
     public void ToggleBgImageColor(bool runningBool)
