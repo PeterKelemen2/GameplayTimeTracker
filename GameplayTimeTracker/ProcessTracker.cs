@@ -79,10 +79,10 @@ public class ProcessTracker
 
             tile.ToggleBgImageColor(isRunning);
 
-            if (tile.IsMenuToggled)
-            {
-                tile.UpdateEditPlaytimeText();
-            }
+            //if (tile.IsMenuToggled)
+            //{
+            //    tile.UpdateEditPlaytimeText();
+            //}
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");

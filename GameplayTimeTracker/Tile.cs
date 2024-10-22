@@ -46,7 +46,8 @@ public class Tile : UserControl
     private Button launchButton;
     private Image image;
     public Image bgImage;
-    private Grid containerGrid;
+    private Grid iconContainerGrid;
+    private Grid editImageContainerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -138,10 +139,6 @@ public class Tile : UserControl
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
             editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin + 2, 0, 0);
-            // editPlaytimeBoxH.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
-            // editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
-            // editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
-            // editPlaytimeM.Margin = new Thickness(495, Utils.EditFirstRowTopMargin, 0, 0);
 
             editPlaytimeBox.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
 
@@ -156,15 +153,7 @@ public class Tile : UserControl
             editNameBox.MaxHeight = Utils.TextBoxHeight;
             editPlaytimeBox.MaxHeight = Utils.EditTextMaxHeight;
 
-            // editNameTitle, editPlaytimeBox, editNameBox, editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeBoxM, editPlaytimeH, editPlaytimeM
-
             editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
-            // editPlaytimeBoxH.MaxHeight = Utils.TextBoxHeight;
-            // editPlaytimeBoxH.Height = Utils.TextBoxHeight;
-            // editPlaytimeBoxM.Height = Utils.TextBoxHeight;
-            // editPlaytimeBoxM.MaxHeight = Utils.TextBoxHeight;
-            // editPlaytimeH.MaxHeight = Utils.EditTextMaxHeight;
-            // editPlaytimeM.MaxHeight = Utils.EditTextMaxHeight;
 
             editSaveButton.Height = 40;
             editSaveButton.MaxHeight = 40;
@@ -180,7 +169,6 @@ public class Tile : UserControl
                     shadowRectangle, changeIconButton,
                     editNameTitle, editNameBox,
                     editPlaytimeTitle,
-                    // editPlaytimeBoxH, editPlaytimeH, editPlaytimeBoxM, editPlaytimeM,
                     editPlaytimeBox
                 });
                 foreach (var element in animatedElements)
@@ -266,8 +254,6 @@ public class Tile : UserControl
         Console.WriteLine(TotalPlaytime);
         try
         {
-            // TotalPlaytime =
-            //     CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
             (double hAux, double mAux) = Utils.DecodeTimeString(editPlaytimeBox.Text, hTotal, mTotal);
             if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
             {
@@ -334,7 +320,6 @@ public class Tile : UserControl
         }
     }
 
-
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
         MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {GameName} from the library?",
@@ -383,7 +368,6 @@ public class Tile : UserControl
         BeginAnimation(HeightProperty, heightAnimation);
         BeginAnimation(OpacityProperty, opacityAnimation);
     }
-
 
     public string GameName
     {
@@ -456,16 +440,6 @@ public class Tile : UserControl
         lastPlaytime.Text = $"{hLast}h {mLast}m";
     }
 
-    public void UpdateEditPlaytimeText()
-    {
-        // if (!(editPlaytimeBoxH.IsFocused || editPlaytimeBoxM.IsFocused))
-        // {
-        //     editPlaytimeBoxH.Text = $"{hTotal}";
-        //     editPlaytimeBoxM.Text = $"{mTotal}";
-        // }
-        Console.WriteLine("UpdateEditPlaytimeText");
-    }
-
     public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
     {
         int customHour = 60 - 1;
@@ -510,7 +484,6 @@ public class Tile : UserControl
         LastPlaytime = 0;
         LastPlaytimePercent = 0;
         UpdatePlaytimeText();
-        // _tileContainer.UpdatePlaytimeBars();
         _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
         _tileContainer.InitSave();
     }
@@ -548,10 +521,6 @@ public class Tile : UserControl
         IsMenuToggled = false;
 
         SetupIconVars();
-        // absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
-        // bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
-        // bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
-
 
         InitializeTile();
     }
@@ -654,19 +623,41 @@ public class Tile : UserControl
         };
         changeIconButton.Click += UpdateIcons;
 
+        // editImageContainerGrid = new Grid
+        // {
+        //     Width = TileHeight,
+        //     Height = TileHeight,
+        //     ClipToBounds = true,
+        //     HorizontalAlignment = HorizontalAlignment.Center,
+        //     VerticalAlignment = VerticalAlignment.Center,
+        // };
+        //
+        // var editImageSource = new BitmapImage(new Uri("assets\\editImage.png", UriKind.Relative));
+        // var editImage = new Image
+        // {
+        //     Source = editImageSource,
+        //     Stretch = Stretch.UniformToFill,
+        //     HorizontalAlignment = HorizontalAlignment.Center,
+        //     VerticalAlignment = VerticalAlignment.Center,
+        //     Effect = Utils.blurEffect,
+        //     Opacity = 0.7
+        // };
+        // editImageContainerGrid.Children.Add(editImage);
+
+
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
             // editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, 
             editSaveButton, changeIconButton,
-            editPlaytimeBox
+            editPlaytimeBox,
+            // editImageContainerGrid
         });
         foreach (var elem in editElements)
         {
             Grid.SetRow(elem, 1);
             grid.Children.Add(elem);
         }
-
 
         // Create the second Rectangle
         container = new Rectangle
@@ -679,7 +670,6 @@ public class Tile : UserControl
             Margin = new Thickness(Utils.TileLeftMargin, 0, 0, 0),
             HorizontalAlignment = HorizontalAlignment.Left
         };
-
         int topMargin = -40;
 
         editButton = new Button
@@ -731,7 +721,6 @@ public class Tile : UserControl
         grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
 
-        // Create a TextBlock for displaying text
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         titleTextBlock.Text = GameName;
@@ -739,7 +728,6 @@ public class Tile : UserControl
         titleTextBlock.Margin = new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2, 0, 0);
         TextOptions.SetTextRenderingMode(titleTextBlock, TextRenderingMode.ClearType);
         TextOptions.SetTextFormattingMode(titleTextBlock, TextFormattingMode.Ideal);
-
 
         runningTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         runningTextBlock.Text = "Running!";
@@ -769,7 +757,7 @@ public class Tile : UserControl
         if (IconImagePath != null)
         {
             double imageScale = 1.5;
-            containerGrid = new Grid
+            iconContainerGrid = new Grid
             {
                 Width = TileHeight * imageScale + 20,
                 Height = TileHeight,
@@ -822,8 +810,8 @@ public class Tile : UserControl
             };
 
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
-            containerGrid.Children.Add(bgImageBorder);
-            containerGrid.Children.Add(imageBorder);
+            iconContainerGrid.Children.Add(bgImageBorder);
+            iconContainerGrid.Children.Add(imageBorder);
         }
         else
         {
@@ -834,9 +822,9 @@ public class Tile : UserControl
         // Add all other elements as before, positioning them in the second row
         // Grid.SetRow(image, 0);
         // Grid.SetRow(bgImage, 0);
-        Grid.SetRow(containerGrid, 0);
+        Grid.SetRow(iconContainerGrid, 0);
         // grid.Children.Add(bgImage);
-        grid.Children.Add(containerGrid);
+        grid.Children.Add(iconContainerGrid);
         // Add playtime elements
 
 

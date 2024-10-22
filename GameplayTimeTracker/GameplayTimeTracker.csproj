@@ -42,6 +42,10 @@
       <Content Include="assets\MyAppIcon.ico">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="assets\editImage.png" />
+      <Content Include="assets\editImage.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
