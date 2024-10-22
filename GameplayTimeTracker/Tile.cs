@@ -395,7 +395,8 @@ public class Tile : UserControl
             }
             else
             {
-                IconImagePath = potentialImagePath;
+                // IconImagePath = potentialImagePath;
+                IconImagePath = System.IO.Path.Combine(AssetsFolder, $"{fileName}.png");
             }
 
             UpdateImageVars();
