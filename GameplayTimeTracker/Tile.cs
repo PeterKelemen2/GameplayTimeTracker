@@ -258,7 +258,6 @@ public class Tile : UserControl
             {
                 TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
-
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         }
         catch (FormatException)
@@ -273,6 +272,7 @@ public class Tile : UserControl
 
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
+        Console.WriteLine("Updating bars from Tile - SaveEditedData");
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
@@ -356,6 +356,7 @@ public class Tile : UserControl
         {
             // Remove the tile from the container and the parent after the animation completes
             _tileContainer.RemoveTileById(Id);
+            Console.WriteLine("Updating bars from Tile - Delete");
             _tileContainer.UpdatePlaytimeBars();
             if (Parent is Panel panel)
             {
@@ -467,6 +468,7 @@ public class Tile : UserControl
             CurrentPlaytime = 0;
 
             UpdatePlaytimeText();
+            Console.WriteLine("Updating bars from Tile - CalculatePlaytimeFromSec");
             _tileContainer.UpdatePlaytimeBars();
             _tileContainer.InitSave();
         }
@@ -510,7 +512,6 @@ public class Tile : UserControl
         CornerRadius = Utils.BorderRadius;
         TotalPlaytime = totalTime;
         LastPlaytime = lastPlayedTime;
-        //TODO: Handle new last play
         // LastPlaytime = 0;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         // LastPlaytimePercent = 0;
@@ -521,7 +522,7 @@ public class Tile : UserControl
 
         SetupIconVars();
 
-        InitializeTile();
+        // InitializeTile();
     }
 
     public void InitializeTile()

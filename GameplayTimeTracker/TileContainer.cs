@@ -273,16 +273,35 @@ public class TileContainer
         stopwatch.Start();
 
         double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
+        if (tilesList.Count == 1)
+        {
+            globalTotalPlaytime = 1;
+        }
+
+        Console.WriteLine("Global: " + globalTotalPlaytime);
         foreach (var tile in tilesList)
         {
             tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
+
+            if (tilesList.Count == 1)
+            {
+                tile.totalTimeGradientBar.Percent = 1;
+            }
+
+            Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
             // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
             tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
 
-            tile.totalTimeGradientBar.UpdateBar();
-            // tile.totalTimeGradientBar.InitializeBar();
+            if (!tile.totalTimeGradientBar.WasInitialized)
+            {
+                tile.totalTimeGradientBar.InitializeBar();
+            }
+            else
+            {
+                tile.totalTimeGradientBar.UpdateBar();
+            }
+            
             tile.lastTimeGradientBar.UpdateBar();
-            // tile.lastTimeGradientBar.InitializeBar();
         }
 
         stopwatch.Stop();

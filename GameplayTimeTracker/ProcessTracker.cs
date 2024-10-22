@@ -51,6 +51,7 @@ public class ProcessTracker
                     tile.wasRunning = true;
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
+                    Console.WriteLine("Updating bars from ProcessTracker - HandleProcesses");
                     _tileContainer.UpdatePlaytimeBars();
                     Console.WriteLine($"Setting new last playtime for {newExeName}");
                 }
@@ -78,71 +79,66 @@ public class ProcessTracker
             }
 
             tile.ToggleBgImageColor(isRunning);
-
-            //if (tile.IsMenuToggled)
-            //{
-            //    tile.UpdateEditPlaytimeText();
-            //}
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
     }
 
 
-    public async Task TrackProcessesAsync()
-    {
-        Console.WriteLine("Starting process tracking...");
-
-        Stopwatch stopwatch = new Stopwatch();
-        while (true)
-        {
-            stopwatch.Restart();
-            var runningProcesses = Process.GetProcesses();
-            Console.WriteLine("=================");
-            string runningString = "Running: ";
-            string notRunningString = "Not running: ";
-            foreach (var tile in _tilesList)
-            {
-                var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
-                var isRunning =
-                    runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
-                if (isRunning)
-                {
-                    tile.IsRunning = true;
-                    if (tile.wasRunning == false)
-                    {
-                        tile.wasRunning = true;
-                        tile.ResetLastPlaytime();
-                        tile.UpdatePlaytimeText();
-                        _tileContainer.UpdatePlaytimeBars();
-                        _tileContainer.InitSave();
-                        Console.WriteLine($"Setting new last playtime for {newExeName}");
-                    }
-
-                    tile.runningTextBlock.Text = "Running!";
-                    tile.CurrentPlaytime++;
-                    // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
-                    runningString += $"{tile.GameName} | ";
-
-                    tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
-                }
-                else
-                {
-                    // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
-                    tile.runningTextBlock.Text = "";
-                    tile.wasRunning = false;
-                    notRunningString += $"{tile.GameName} | ";
-                }
-
-                tile.ToggleBgImageColor(isRunning);
-            }
-
-            // _tileContainer.SortByProperty("IsRunning", false);
-            Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
-            // Console.WriteLine($"{runningString}");
-            // Console.WriteLine($"{notRunningString}");
-            stopwatch.Stop();
-            await Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds);
-        }
-    }
+    // public async Task TrackProcessesAsync()
+    // {
+    //     Console.WriteLine("Starting process tracking...");
+    //
+    //     Stopwatch stopwatch = new Stopwatch();
+    //     while (true)
+    //     {
+    //         stopwatch.Restart();
+    //         var runningProcesses = Process.GetProcesses();
+    //         Console.WriteLine("=================");
+    //         string runningString = "Running: ";
+    //         string notRunningString = "Not running: ";
+    //         foreach (var tile in _tilesList)
+    //         {
+    //             var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
+    //             var isRunning =
+    //                 runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
+    //             if (isRunning)
+    //             {
+    //                 tile.IsRunning = true;
+    //                 if (tile.wasRunning == false)
+    //                 {
+    //                     tile.wasRunning = true;
+    //                     tile.ResetLastPlaytime();
+    //                     tile.UpdatePlaytimeText();
+    //                     _tileContainer.UpdatePlaytimeBars();
+    //                     _tileContainer.InitSave();
+    //                     Console.WriteLine($"Setting new last playtime for {newExeName}");
+    //                 }
+    //
+    //                 tile.runningTextBlock.Text = "Running!";
+    //                 tile.CurrentPlaytime++;
+    //                 // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is running.");
+    //                 runningString += $"{tile.GameName} | ";
+    //
+    //                 tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+    //             }
+    //             else
+    //             {
+    //                 // Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} - {newExeName} is not running.");
+    //                 tile.runningTextBlock.Text = "";
+    //                 tile.wasRunning = false;
+    //                 notRunningString += $"{tile.GameName} | ";
+    //             }
+    //
+    //             tile.ToggleBgImageColor(isRunning);
+    //         }
+    //
+    //         // _tileContainer.SortByProperty("IsRunning", false);
+    //         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
+    //         // Console.WriteLine($"{runningString}");
+    //         // Console.WriteLine($"{notRunningString}");
+    //         stopwatch.Stop();
+    //         await Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds);
+    //     }
+    // }
 }

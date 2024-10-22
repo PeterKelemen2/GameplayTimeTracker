@@ -19,6 +19,8 @@ public class GradientBar : UserControl
     public double GPadding { get; set; }
     public double Radius { get; set; }
 
+    public bool WasInitialized { get; set; }
+
     private Rectangle barBackground;
     private Rectangle barForeground;
     private LinearGradientBrush gradientBrush;
@@ -59,14 +61,9 @@ public class GradientBar : UserControl
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-
+        Console.WriteLine("Changing bar size to " + Percent);
         double newWidth = CalculateWidth();
-        if (Math.Abs(barForeground.Width - newWidth) > 0.01) // Only update if width has significantly changed
-        {
-            barForeground.Width = newWidth;
-            Console.WriteLine("GB Update ran!!");
-        }
-
+        barForeground.Width = newWidth;
         stopwatch.Stop();
         Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
     }
@@ -104,5 +101,6 @@ public class GradientBar : UserControl
 
         stopwatch.Stop();
         Console.WriteLine($"Initializin GB took {stopwatch.Elapsed}");
+        WasInitialized = true;
     }
 }
