@@ -94,7 +94,7 @@ public class Utils
     {
         // Regular expression to match the different formats: 
         // - "23-56", "23h 56m", "23h56m", or "23 56"
-        string pattern = @"(\d+)\D*(\d+)";
+        string pattern = @"(\d+)\D*(\d+)?";
 
         // string pattern = @"(\d+)[h\- ]?(\d+)[m]?";
 
@@ -103,13 +103,18 @@ public class Utils
 
         double h;
         double m;
-        // (double h, double m) values;
         if (match.Success)
         {
             // Extract the matched numbers and convert them to double
-            // values = (double.Parse(match.Groups[1].Value), double.Parse(match.Groups[2].Value));
             h = double.Parse(match.Groups[1].Value);
-            m = double.Parse(match.Groups[2].Value);
+            if (match.Groups[2].Success)
+            {
+                m = double.Parse(match.Groups[2].Value);
+            }
+            else
+            {
+                m = 0;
+            }
 
             if (m > 59)
             {
