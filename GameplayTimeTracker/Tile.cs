@@ -47,7 +47,6 @@ public class Tile : UserControl
     private Image image;
     public Image bgImage;
     private Grid iconContainerGrid;
-    private Grid editImageContainerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -623,35 +622,11 @@ public class Tile : UserControl
         };
         changeIconButton.Click += UpdateIcons;
 
-        // editImageContainerGrid = new Grid
-        // {
-        //     Width = TileHeight,
-        //     Height = TileHeight,
-        //     ClipToBounds = true,
-        //     HorizontalAlignment = HorizontalAlignment.Center,
-        //     VerticalAlignment = VerticalAlignment.Center,
-        // };
-        //
-        // var editImageSource = new BitmapImage(new Uri("assets\\editImage.png", UriKind.Relative));
-        // var editImage = new Image
-        // {
-        //     Source = editImageSource,
-        //     Stretch = Stretch.UniformToFill,
-        //     HorizontalAlignment = HorizontalAlignment.Center,
-        //     VerticalAlignment = VerticalAlignment.Center,
-        //     Effect = Utils.blurEffect,
-        //     Opacity = 0.7
-        // };
-        // editImageContainerGrid.Children.Add(editImage);
-
-
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
-            // editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, 
             editSaveButton, changeIconButton,
             editPlaytimeBox,
-            // editImageContainerGrid
         });
         foreach (var elem in editElements)
         {
@@ -817,7 +792,6 @@ public class Tile : UserControl
         {
             Console.WriteLine("Icon was null");
         }
-
 
         // Add all other elements as before, positioning them in the second row
         // Grid.SetRow(image, 0);
