@@ -51,13 +51,17 @@ public class Tile : UserControl
     private TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
     private TextBox editNameBox;
+
     private TextBlock editNameTitle;
-    private TextBox editPlaytimeBoxH;
-    private TextBox editPlaytimeBoxM;
+
+    // private TextBox editPlaytimeBoxH;
+    // private TextBox editPlaytimeBoxM;
     private TextBox editPlaytimeBox;
+
     private TextBlock editPlaytimeTitle;
-    private TextBlock editPlaytimeH;
-    private TextBlock editPlaytimeM;
+
+    // private TextBlock editPlaytimeH;
+    // private TextBlock editPlaytimeM;
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
     public BitmapSource bgImageGray;
@@ -131,12 +135,12 @@ public class Tile : UserControl
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
             editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin, 0, 0);
-            editPlaytimeBoxH.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
-            editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
-            editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
-            editPlaytimeM.Margin = new Thickness(495, Utils.EditFirstRowTopMargin, 0, 0);
+            // editPlaytimeBoxH.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
+            // editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
+            // editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
+            // editPlaytimeM.Margin = new Thickness(495, Utils.EditFirstRowTopMargin, 0, 0);
 
-            editPlaytimeBox.Margin = new Thickness(370, Utils.EditSecondRowTopMargin, 0, 0);
+            editPlaytimeBox.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, 0, 60, 0);
             changeIconButton.Margin = new Thickness(50, Utils.EditSecondRowTopMargin, 0, 0);
@@ -152,12 +156,12 @@ public class Tile : UserControl
             // editNameTitle, editPlaytimeBox, editNameBox, editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeBoxM, editPlaytimeH, editPlaytimeM
 
             editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
-            editPlaytimeBoxH.MaxHeight = Utils.TextBoxHeight;
-            editPlaytimeBoxH.Height = Utils.TextBoxHeight;
-            editPlaytimeBoxM.Height = Utils.TextBoxHeight;
-            editPlaytimeBoxM.MaxHeight = Utils.TextBoxHeight;
-            editPlaytimeH.MaxHeight = Utils.EditTextMaxHeight;
-            editPlaytimeM.MaxHeight = Utils.EditTextMaxHeight;
+            // editPlaytimeBoxH.MaxHeight = Utils.TextBoxHeight;
+            // editPlaytimeBoxH.Height = Utils.TextBoxHeight;
+            // editPlaytimeBoxM.Height = Utils.TextBoxHeight;
+            // editPlaytimeBoxM.MaxHeight = Utils.TextBoxHeight;
+            // editPlaytimeH.MaxHeight = Utils.EditTextMaxHeight;
+            // editPlaytimeM.MaxHeight = Utils.EditTextMaxHeight;
 
             editSaveButton.Height = 40;
             editSaveButton.MaxHeight = 40;
@@ -172,7 +176,8 @@ public class Tile : UserControl
                 {
                     shadowRectangle, changeIconButton,
                     editNameTitle, editNameBox,
-                    editPlaytimeTitle, editPlaytimeBoxH, editPlaytimeH, editPlaytimeBoxM, editPlaytimeM,
+                    editPlaytimeTitle,
+                    // editPlaytimeBoxH, editPlaytimeH, editPlaytimeBoxM, editPlaytimeM,
                     editPlaytimeBox
                 });
                 foreach (var element in animatedElements)
@@ -261,7 +266,6 @@ public class Tile : UserControl
                 TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
 
-            // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         }
         catch (FormatException)
@@ -272,16 +276,10 @@ public class Tile : UserControl
             TotalPlaytime = savedTotal;
             _tileContainer.InitSave();
             MessageBox.Show("An error occured while saving new playtime");
-            // editPlaytimeBoxH.Text = hTotal.ToString();
-            // editPlaytimeBoxM.Text = mTotal.ToString();
         }
-
-        // MessageBox.Show(Utils.DecodeTimeString(editPlaytimeBox.Text).ToString());
 
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
-        // editPlaytimeBoxH.Text = hTotal.ToString();
-        // editPlaytimeBoxM.Text = mTotal.ToString();
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
@@ -452,11 +450,12 @@ public class Tile : UserControl
 
     public void UpdateEditPlaytimeText()
     {
-        if (!(editPlaytimeBoxH.IsFocused || editPlaytimeBoxM.IsFocused))
-        {
-            editPlaytimeBoxH.Text = $"{hTotal}";
-            editPlaytimeBoxM.Text = $"{mTotal}";
-        }
+        // if (!(editPlaytimeBoxH.IsFocused || editPlaytimeBoxM.IsFocused))
+        // {
+        //     editPlaytimeBoxH.Text = $"{hTotal}";
+        //     editPlaytimeBoxM.Text = $"{mTotal}";
+        // }
+        Console.WriteLine("UpdateEditPlaytimeText");
     }
 
     public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
@@ -614,29 +613,30 @@ public class Tile : UserControl
         editPlaytimeTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
         editPlaytimeTitle.Effect = null;
 
-        editPlaytimeBoxH = Utils.CloneTextBoxEdit(sampleTextBox);
-        editPlaytimeBoxH.Text = hTotal.ToString();
-        editPlaytimeBoxH.Effect = Utils.dropShadowLightArea;
-
-        editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        editPlaytimeH.Text = "H";
-        editPlaytimeH.MaxHeight = 0;
-        editPlaytimeH.Foreground = new SolidColorBrush(Utils.DarkColor);
-        editPlaytimeH.Effect = null;
-
-        editPlaytimeBoxM = Utils.CloneTextBoxEdit(sampleTextBox);
-        editPlaytimeBoxM.Text = mTotal.ToString();
-        editPlaytimeBoxM.Effect = Utils.dropShadowLightArea;
-
-        editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        editPlaytimeM.Text = "M";
-        editPlaytimeM.MaxHeight = 0;
-        editPlaytimeM.Foreground = new SolidColorBrush(Utils.DarkColor);
-        editPlaytimeM.Effect = null;
+        // editPlaytimeBoxH = Utils.CloneTextBoxEdit(sampleTextBox);
+        // editPlaytimeBoxH.Text = hTotal.ToString();
+        // editPlaytimeBoxH.Effect = Utils.dropShadowLightArea;
+        //
+        // editPlaytimeH = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
+        // editPlaytimeH.Text = "H";
+        // editPlaytimeH.MaxHeight = 0;
+        // editPlaytimeH.Foreground = new SolidColorBrush(Utils.DarkColor);
+        // editPlaytimeH.Effect = null;
+        //
+        // editPlaytimeBoxM = Utils.CloneTextBoxEdit(sampleTextBox);
+        // editPlaytimeBoxM.Text = mTotal.ToString();
+        // editPlaytimeBoxM.Effect = Utils.dropShadowLightArea;
+        //
+        // editPlaytimeM = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
+        // editPlaytimeM.Text = "M";
+        // editPlaytimeM.MaxHeight = 0;
+        // editPlaytimeM.Foreground = new SolidColorBrush(Utils.DarkColor);
+        // editPlaytimeM.Effect = null;
 
         editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
+        editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
         editPlaytimeBox.Width = 200;
-
+        editPlaytimeBox.Effect = Utils.dropShadowLightArea;
 
         editSaveButton = new Button
         {
@@ -667,7 +667,8 @@ public class Tile : UserControl
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
-            editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, editSaveButton, changeIconButton,
+            // editPlaytimeH, editPlaytimeM, editPlaytimeBoxH, editPlaytimeBoxM, 
+            editSaveButton, changeIconButton,
             editPlaytimeBox
         });
         foreach (var elem in editElements)
