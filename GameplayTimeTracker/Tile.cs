@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,10 +9,12 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using Microsoft.Win32;
 using Atk;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 
 namespace GameplayTimeTracker;
@@ -365,6 +368,46 @@ public class Tile : UserControl
         set { SetValue(GameNameProperty, value); }
     }
 
+    public void UpdateIcons(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter =
+            "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            string filePath = openFileDialog.FileName;
+            string fileName = System.IO.Path.GetFileName(filePath);
+            fileName = fileName.Substring(0, fileName.Length - 4);
+
+            string uniqueFileName = Guid.NewGuid().ToString() + ".png";
+            string? iconPath = $"assets/{uniqueFileName}";
+
+            Utils.PrepIcon(filePath, iconPath);
+            iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+            IconImagePath = iconPath;
+
+            UpdateImageVars();
+        }
+    }
+
+    private void SetupIconVars()
+    {
+        absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+        bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+        bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
+    }
+
+    private void UpdateImageVars()
+    {
+        SetupIconVars();
+        bgImage.Source = bgImageGray;
+        image.Source = bgImageColor;
+        ToggleBgImageColor(IsRunning);
+        _tileContainer.InitSave();
+        Console.WriteLine($"Icon for {GameName} changed to {absoluteIconPath}");
+    }
+
     public void UpdateTileWidth(double newWidth)
     {
         TileWidth = newWidth;
@@ -450,6 +493,7 @@ public class Tile : UserControl
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
+
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
         string? iconImagePath = SampleImagePath, string exePath = "", double width = 740)
     {
@@ -468,9 +512,10 @@ public class Tile : UserControl
         ExePath = exePath;
         IsMenuToggled = false;
 
-        absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
-        bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
-        bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
+        SetupIconVars();
+        // absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+        // bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+        // bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
 
 
         InitializeTile();
@@ -589,6 +634,7 @@ public class Tile : UserControl
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
         };
+        changeIconButton.Click += UpdateIcons;
 
         editElements.AddRange(new UIElement[]
         {

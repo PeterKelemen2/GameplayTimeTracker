@@ -262,7 +262,8 @@ public class TileContainer
     {
         foreach (var tile in tilesList)
         {
-            tile.UpdateTileWidth(newWidth);
+            if (Math.Abs(newWidth - tile.TileWidth) > 0)
+                tile.UpdateTileWidth(newWidth);
         }
     }
 

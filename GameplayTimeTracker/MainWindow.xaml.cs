@@ -33,9 +33,9 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ShowTilesOnCanvas();
-            tileContainer.ListTiles();
-            handler.WriteContentToFile(tileContainer, jsonFilePath);
+            // ShowTilesOnCanvas();
+            // tileContainer.ListTiles();
+            // handler.WriteContentToFile(tileContainer, jsonFilePath);
             SetupNotifyIcon();
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
@@ -46,8 +46,15 @@ namespace GameplayTimeTracker
         {
             handler.InitializeContainer(tileContainer, jsonFilePath);
             InitializeComponent();
+
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
+            ContentRendered += MainWindow_ContentRendered;
+        }
+
+        private void MainWindow_ContentRendered(object sender, EventArgs e)
+        {
+            ShowTilesOnCanvas();
         }
 
         private async void UpdateStackPane()
@@ -156,8 +163,8 @@ namespace GameplayTimeTracker
                 string uniqueFileName = Guid.NewGuid().ToString() + ".png";
                 string? iconPath = $"assets/{uniqueFileName}";
 
-                PrepIcon(filePath, iconPath);
-                iconPath = IsValidImage(iconPath) ? iconPath : SampleImagePath;
+                Utils.PrepIcon(filePath, iconPath);
+                iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
                 Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
                 newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
@@ -169,9 +176,6 @@ namespace GameplayTimeTracker
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {fileName}");
-
-                    // var tilesList = tileContainer.GetTiles();
-                    // mainStackPanel.Children.Add(tilesList.Last());
                 }
                 else
                 {
@@ -215,7 +219,6 @@ namespace GameplayTimeTracker
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
         {
-            Stopwatch stopwatch = new Stopwatch();
             ScrollViewer scrollViewer = sender as ScrollViewer;
             bool isVerticalScrollVisible = scrollViewer.ExtentHeight > scrollViewer.ViewportHeight;
 
@@ -269,30 +272,30 @@ namespace GameplayTimeTracker
             m_notifyIcon.Visible = true; // Make sure it's visible
         }
 
-        bool IsValidImage(string imagePath)
-        {
-            try
-            {
-                // Create a BitmapImage object and load the image
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the entire image at once
-                bitmap.UriSource = new Uri(imagePath, UriKind.Relative);
-                bitmap.EndInit();
-
-                // Ensure the image has valid pixel width and height
-                if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
-                {
-                    return true; // The image is valid
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception if needed
-                Console.WriteLine($"Invalid image: {ex.Message}");
-            }
-
-            return false; // If any exception occurs, or the image dimensions are invalid
-        }
+        // bool IsValidImage(string imagePath)
+        // {
+        //     try
+        //     {
+        //         // Create a BitmapImage object and load the image
+        //         BitmapImage bitmap = new BitmapImage();
+        //         bitmap.BeginInit();
+        //         bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the entire image at once
+        //         bitmap.UriSource = new Uri(imagePath, UriKind.Relative);
+        //         bitmap.EndInit();
+        //
+        //         // Ensure the image has valid pixel width and height
+        //         if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
+        //         {
+        //             return true; // The image is valid
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // Log or handle the exception if needed
+        //         Console.WriteLine($"Invalid image: {ex.Message}");
+        //     }
+        //
+        //     return false; // If any exception occurs, or the image dimensions are invalid
+        // }
     }
 }
