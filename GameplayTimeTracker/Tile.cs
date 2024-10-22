@@ -250,10 +250,11 @@ public class Tile : UserControl
         Console.WriteLine(TotalPlaytime);
         try
         {
-            TotalPlaytime =
-                CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
+            // TotalPlaytime =
+            //     CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
+            (double hAux, double mAux) = Utils.DecodeTimeString(editPlaytimeBox.Text);
+            TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-            
         }
         catch (FormatException)
         {
