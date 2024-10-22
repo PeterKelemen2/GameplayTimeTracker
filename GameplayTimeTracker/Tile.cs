@@ -131,10 +131,10 @@ public class Tile : UserControl
         {
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
             shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 30, 0, 0);
-            editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin, 0, 0);
+            editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin + 2, 0, 0);
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
-            editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin, 0, 0);
+            editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin + 2, 0, 0);
             // editPlaytimeBoxH.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
             // editPlaytimeBoxM.Margin = new Thickness(440, Utils.EditFirstRowTopMargin, 0, 0);
             // editPlaytimeH.Margin = new Thickness(425, Utils.EditFirstRowTopMargin, 0, 0);
@@ -635,7 +635,8 @@ public class Tile : UserControl
 
         editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
-        editPlaytimeBox.Width = 200;
+        editPlaytimeBox.Width = 150;
+        editPlaytimeBox.Height = Utils.TextBoxHeight;
         editPlaytimeBox.Effect = Utils.dropShadowLightArea;
 
         editSaveButton = new Button
