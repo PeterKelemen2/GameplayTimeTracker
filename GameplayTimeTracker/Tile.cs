@@ -247,28 +247,41 @@ public class Tile : UserControl
             GameName = editNameBox.Text;
         }
 
+        double savedH = hTotal;
+        double savedM = mTotal;
+        double savedTotal = TotalPlaytime;
         Console.WriteLine(TotalPlaytime);
         try
         {
             // TotalPlaytime =
             //     CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
-            (double hAux, double mAux) = Utils.DecodeTimeString(editPlaytimeBox.Text);
-            TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+            (double hAux, double mAux) = Utils.DecodeTimeString(editPlaytimeBox.Text, hTotal, mTotal);
+            if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
+            {
+                TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+            }
+
+            // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         }
         catch (FormatException)
         {
             Console.WriteLine("Format Exception");
+            hTotal = savedH;
+            mTotal = savedM;
+            TotalPlaytime = savedTotal;
+            _tileContainer.InitSave();
             MessageBox.Show("An error occured while saving new playtime");
-            editPlaytimeBoxH.Text = hTotal.ToString();
-            editPlaytimeBoxM.Text = mTotal.ToString();
+            // editPlaytimeBoxH.Text = hTotal.ToString();
+            // editPlaytimeBoxM.Text = mTotal.ToString();
         }
 
-        MessageBox.Show(Utils.DecodeTimeString(editPlaytimeBox.Text).ToString());
+        // MessageBox.Show(Utils.DecodeTimeString(editPlaytimeBox.Text).ToString());
 
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-        editPlaytimeBoxH.Text = hTotal.ToString();
-        editPlaytimeBoxM.Text = mTotal.ToString();
+        editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
+        // editPlaytimeBoxH.Text = hTotal.ToString();
+        // editPlaytimeBoxM.Text = mTotal.ToString();
         _tileContainer.UpdatePlaytimeBars();
         _tileContainer.InitSave();
         _tileContainer.ListTiles();

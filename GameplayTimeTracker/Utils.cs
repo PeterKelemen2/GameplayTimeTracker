@@ -90,11 +90,16 @@ public class Utils
     };
 
 
-    public static (double, double) DecodeTimeString(string timeString)
+    public static (double, double) DecodeTimeString(string timeString, double prevH, double prevM)
     {
+        if (string.IsNullOrWhiteSpace(timeString))
+        {
+            return (prevH, prevM);
+        }
+
         // Regular expression to match the different formats: 
         // - "23-56", "23h 56m", "23h56m", or "23 56"
-        string pattern = @"(\d+)\D*(\d+)?";
+        string pattern = @"(\d+)?\D*(\d+)?";
 
         // string pattern = @"(\d+)[h\- ]?(\d+)[m]?";
 
@@ -106,19 +111,12 @@ public class Utils
         if (match.Success)
         {
             // Extract the matched numbers and convert them to double
-            h = double.Parse(match.Groups[1].Value);
-            if (match.Groups[2].Success)
-            {
-                m = double.Parse(match.Groups[2].Value);
-            }
-            else
-            {
-                m = 0;
-            }
+            h = match.Groups[1].Success ? double.Parse(match.Groups[1].Value) : prevH;
+            m = match.Groups[2].Success ? double.Parse(match.Groups[2].Value) : prevM;
 
             if (m > 59)
             {
-                h += (int)(m / 60);
+                h += Math.Floor(m / 60);
                 m %= 60;
             }
 
