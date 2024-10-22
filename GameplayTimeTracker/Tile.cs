@@ -75,6 +75,7 @@ public class Tile : UserControl
     private double currentPlaytime;
 
     private const string? SampleImagePath = "assets/no_icon.png";
+    private const string? AssetsFolder = "assets";
 
     public int Id { get; set; }
     public double TileWidth { get; set; }
@@ -380,12 +381,22 @@ public class Tile : UserControl
             string fileName = System.IO.Path.GetFileName(filePath);
             fileName = fileName.Substring(0, fileName.Length - 4);
 
-            string uniqueFileName = Guid.NewGuid().ToString() + ".png";
-            string? iconPath = $"assets/{uniqueFileName}";
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string potentialImagePath = System.IO.Path.Combine(currentDirectory, AssetsFolder, $"{fileName}.png");
 
-            Utils.PrepIcon(filePath, iconPath);
-            iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-            IconImagePath = iconPath;
+            if (!Equals(filePath, potentialImagePath))
+            {
+                string uniqueFileName = $"{GameName}-{Guid.NewGuid().ToString()}.png";
+                string? iconPath = $"assets/{uniqueFileName}";
+
+                Utils.PrepIcon(filePath, iconPath);
+                iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+                IconImagePath = iconPath;
+            }
+            else
+            {
+                IconImagePath = potentialImagePath;
+            }
 
             UpdateImageVars();
         }

@@ -133,15 +133,18 @@ public class Utils
     {
         try
         {
-            if (IsExecutable(filePath))
+            if (!(File.Exists(outputImagePath) && IsValidImage(outputImagePath)))
             {
-                using var s = File.Create(outputImagePath);
-                IconExtractor.Extract1stIconTo(filePath, s);
-            }
+                if (IsExecutable(filePath))
+                {
+                    using var s = File.Create(outputImagePath);
+                    IconExtractor.Extract1stIconTo(filePath, s);
+                }
 
-            if (IsImageFile(filePath))
-            {
-                File.Copy(filePath, outputImagePath);
+                if (IsImageFile(filePath))
+                {
+                    File.Copy(filePath, outputImagePath);
+                }
             }
         }
         catch (IOException ex)
