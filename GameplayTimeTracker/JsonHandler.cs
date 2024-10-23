@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text.Json;
-using Gtk;
 
 namespace GameplayTimeTracker;
 

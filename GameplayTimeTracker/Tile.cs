@@ -3,17 +3,10 @@ using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Net.Mime;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using Microsoft.Win32;
-using Atk;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MessageBox = System.Windows.MessageBox;
@@ -390,13 +383,20 @@ public class Tile : UserControl
     {
         try
         {
-            var startInfo = new ProcessStartInfo
+            if (IsRunning)
             {
-                FileName = ExePath,
-                UseShellExecute = true
-            };
+                Console.WriteLine("Already running");
+            }
+            else
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = ExePath,
+                    UseShellExecute = true
+                };
 
-            Process.Start(startInfo);
+                Process.Start(startInfo);
+            }
         }
         catch (Win32Exception win32Ex) when (win32Ex.NativeErrorCode == 740) // Error 740 means elevation required
         {
