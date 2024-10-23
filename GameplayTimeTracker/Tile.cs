@@ -59,10 +59,12 @@ public class Tile : UserControl
     private TextBox sampleTextBox;
 
     private TextBlock editNameTitle;
-
     private TextBox editPlaytimeBox;
-
     private TextBlock editPlaytimeTitle;
+
+    private TextBlock editExePathTitle;
+    private TextBox editExePathBox;
+    private Button editExePathButton;
 
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
@@ -136,11 +138,14 @@ public class Tile : UserControl
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
             editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin + 2, 0, 0);
-
             editPlaytimeBox.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
 
-            editSaveButton.Margin = new Thickness(0, 0, 60, 0);
-            changeIconButton.Margin = new Thickness(50, Utils.EditSecondRowTopMargin, 0, 0);
+            editExePathTitle.Margin = new Thickness(50, Utils.EditSecondRowTopMargin + 2, 0, 0);
+            editExePathBox.Margin = new Thickness(100, Utils.EditSecondRowTopMargin, 0, 0);
+            editExePathButton.Margin = new Thickness(300, Utils.EditSecondRowTopMargin, 0, 0);
+
+            editSaveButton.Margin = new Thickness(0, Utils.EditFirstRowTopMargin, 60, 0);
+            changeIconButton.Margin = new Thickness(0, Utils.EditSecondRowTopMargin + 20, 60, 0);
 
             menuRectangle.MaxHeight = TileHeight;
             shadowRectangle.MaxHeight = 30;
@@ -162,7 +167,9 @@ public class Tile : UserControl
                 shadowRectangle, changeIconButton,
                 editNameTitle, editNameBox,
                 editPlaytimeTitle,
-                editPlaytimeBox
+                editPlaytimeBox,
+                editExePathTitle, editExePathBox, editExePathButton,
+                editSaveButton,
             });
             foreach (var element in animatedElements)
             {
@@ -579,7 +586,7 @@ public class Tile : UserControl
 
         editNameBox = Utils.CloneTextBoxEdit(sampleTextBox);
         editNameBox.Text = GameName;
-        editNameBox.Width = 150;
+        // editNameBox.Width = 150;
         editNameBox.Effect = Utils.dropShadowLightArea;
         editNameBox.KeyDown += editBox_KeyDown;
 
@@ -591,18 +598,43 @@ public class Tile : UserControl
 
         editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
-        editPlaytimeBox.Width = 150;
+        // editPlaytimeBox.Width = 150;
         editPlaytimeBox.Height = Utils.TextBoxHeight;
         editPlaytimeBox.Effect = Utils.dropShadowLightArea;
         editPlaytimeBox.KeyDown += editBox_KeyDown;
 
+        editExePathTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
+        editExePathTitle.Text = "Path";
+        editExePathTitle.MaxHeight = 0;
+        editExePathTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
+        editExePathTitle.Effect = null;
+
+        editExePathBox = Utils.CloneTextBoxEdit(sampleTextBox);
+        editExePathBox.Text = $"{ExePath}";
+        // editExePathBox.Width = 150;
+        editExePathBox.Height = Utils.TextBoxHeight;
+        editExePathBox.Effect = Utils.dropShadowLightArea;
+        editExePathBox.KeyDown += editBox_KeyDown;
+
+        editExePathButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Content = "Browse",
+            Height = 30,
+            Width = 120,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            MaxHeight = 0,
+            Effect = Utils.dropShadowIcon
+        };
+
         editSaveButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonSave"),
-            Height = 40,
+            Height = 48,
             Width = 96,
             HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 0, 100, 0),
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
@@ -615,7 +647,7 @@ public class Tile : UserControl
             Content = "Change icon",
             Height = 30,
             Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
@@ -627,6 +659,7 @@ public class Tile : UserControl
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
             editSaveButton, changeIconButton,
             editPlaytimeBox,
+            editExePathTitle, editExePathBox, editExePathButton,
         });
         foreach (var elem in editElements)
         {

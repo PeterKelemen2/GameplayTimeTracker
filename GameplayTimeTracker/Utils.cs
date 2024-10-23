@@ -232,7 +232,7 @@ public class Utils
         var sampleTextBoxEdit = new TextBox
         {
             Text = "Text",
-            Width = 50,
+            Width = 180,
             MaxHeight = 0,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
