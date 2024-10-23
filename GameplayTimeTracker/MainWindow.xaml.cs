@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -275,7 +276,7 @@ namespace GameplayTimeTracker
             // Create the BlurEffect
             blurOverlay.Effect = new BlurEffect
             {
-                Radius = 10 // Set the blur radius
+                Radius = 20 // Set the blur radius
             };
 
             // Add the Rectangle to the Grid
@@ -287,6 +288,18 @@ namespace GameplayTimeTracker
             Console.WriteLine("Open Settings Window");
             isBlurToggled = !isBlurToggled;
             CreateBlurRectangle();
+            Grid settingsContainerGrid = new Grid();
+            settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
+
+            ThicknessAnimation rollInAnimation = new ThicknessAnimation
+            {
+                From = new Thickness(0, 0, 0, -(int)ActualHeight),
+                To = new Thickness(0, 0, 0, 0),
+                Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+                FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            };
+
             Rectangle settingsRect = new Rectangle
             {
                 Width = (int)ActualWidth / 2,
@@ -294,9 +307,9 @@ namespace GameplayTimeTracker
                 Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
                 RadiusX = Utils.SettingsRadius,
                 RadiusY = Utils.SettingsRadius,
-                Effect = Utils.dropShadowIcon
+                Effect = Utils.dropShadowRectangle
             };
-            ContainerGrid.Children.Add(settingsRect);
+            settingsContainerGrid.Children.Add(settingsRect);
             Button closeButton = new Button
             {
                 Style = (Style)Application.Current.FindResource("RoundedButton"),
@@ -307,7 +320,7 @@ namespace GameplayTimeTracker
                 Margin = new Thickness(0, 0, 0, (int)ActualHeight * 0.25),
             };
             closeButton.Click += CloseSettingsWindow;
-            ContainerGrid.Children.Add(closeButton);
+            settingsContainerGrid.Children.Add(closeButton);
 
             TextBlock settingsTitle = new TextBlock
             {
@@ -319,27 +332,31 @@ namespace GameplayTimeTracker
                 FontWeight = FontWeights.Bold,
             };
             settingsTitle.Margin = new Thickness(0, 0, 0, (int)(ActualHeight * 0.25) + 110);
-            ContainerGrid.Children.Add(settingsTitle);
+            settingsContainerGrid.Children.Add(settingsTitle);
+
+            ContainerGrid.Children.Add(settingsContainerGrid);
+            settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
         }
 
         private void CloseSettingsWindow(object sender, RoutedEventArgs e)
         {
-            // Create a list to hold the elements to remove
-            var elementsToRemove = new List<UIElement>();
+            // Create a list to store children that need to be removed
+            List<UIElement> childrenToRemove = new List<UIElement>();
 
-            // Iterate over the children and add non-Grid elements to the list
+            // Iterate through the children of the grid
             foreach (UIElement child in ContainerGrid.Children)
             {
-                if (child.GetType() != typeof(Grid))
+                // Check if the child is a FrameworkElement and if its name does not match the one we want to keep
+                if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
                 {
-                    elementsToRemove.Add(child);
+                    childrenToRemove.Add(child); // Mark for removal
                 }
             }
 
-            // Remove the collected elements
-            foreach (UIElement element in elementsToRemove)
+            // Remove the marked children
+            foreach (UIElement child in childrenToRemove)
             {
-                ContainerGrid.Children.Remove(element);
+                ContainerGrid.Children.Remove(child);
             }
         }
 

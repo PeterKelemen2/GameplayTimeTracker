@@ -110,18 +110,20 @@ public class Tile : UserControl
         isMenuOpen = !isMenuOpen;
         IsMenuToggled = !IsMenuToggled;
         isMenuOpen = IsMenuToggled;
-        double animationDuration = 0.15;
+        double animationDuration = 0.35;
 
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
             From = isMenuOpen ? 0 : TileHeight + 20, To = isMenuOpen ? TileHeight + 20 : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
 
         DoubleAnimation opacityAnimation = new DoubleAnimation
         {
             From = isMenuOpen ? 0 : 1, To = isMenuOpen ? 1 : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
 
         if (!WasOpened)
@@ -263,7 +265,8 @@ public class Tile : UserControl
                     To = new Thickness(originalMargin.Left, targetTopMargin, originalMargin.Right,
                         originalMargin.Bottom),
                     Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
-                    FillBehavior = FillBehavior.HoldEnd // Holds the end value after the animation completes
+                    FillBehavior = FillBehavior.HoldEnd,
+                    EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
                 };
 
 
@@ -275,7 +278,8 @@ public class Tile : UserControl
             DoubleAnimation heightAnimationFromOG = new DoubleAnimation
             {
                 From = isMenuOpen ? 0 : oHeight, To = isMenuOpen ? oHeight : 0,
-                Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+                Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
             };
 
             // Start the other animations
