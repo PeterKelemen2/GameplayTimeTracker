@@ -155,7 +155,7 @@ public class Tile : UserControl
 
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
             shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
-                -2 * TileHeight + 26, 0, 0);
+                -2 * TileHeight + 29, 0, 0);
             // shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
             //     -2 * TileHeight + 30, 0, 0);
 
@@ -615,10 +615,17 @@ public class Tile : UserControl
     {
         LinearGradientBrush gradientBrush = new LinearGradientBrush();
         gradientBrush.StartPoint = new Point(0, 0);
-        gradientBrush.EndPoint = new Point(1, 0);
+        gradientBrush.EndPoint = new Point(0, 1);
         gradientBrush.GradientStops.Add(new GradientStop(Utils.TileColor1, 0.0));
         gradientBrush.GradientStops.Add(new GradientStop(Utils.TileColor2, 1.0));
         gradientBrush.Freeze();
+
+        LinearGradientBrush editGradientBrush = new LinearGradientBrush();
+        editGradientBrush.StartPoint = new Point(0, 0);
+        editGradientBrush.EndPoint = new Point(0, 1);
+        editGradientBrush.GradientStops.Add(new GradientStop(Utils.EditColor1, 0.0));
+        editGradientBrush.GradientStops.Add(new GradientStop(Utils.EditColor2, 1.0));
+        editGradientBrush.Freeze();
 
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();
@@ -645,7 +652,7 @@ public class Tile : UserControl
             Height = TileHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
-            Fill = new SolidColorBrush(Utils.RightColor),
+            Fill = editGradientBrush,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
@@ -707,7 +714,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
-            Effect = Utils.dropShadowIcon
+            Effect = Utils.dropShadowLightArea
         };
         editExePathButton.Click += UpdateExe;
 
@@ -720,7 +727,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 0, 100, 0),
             MaxHeight = 0,
-            Effect = Utils.dropShadowIcon
+            Effect = Utils.dropShadowLightArea
         };
         editSaveButton.Click += editSaveButton_Click;
 
@@ -733,7 +740,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
-            Effect = Utils.dropShadowIcon
+            Effect = Utils.dropShadowLightArea
         };
         changeIconButton.Click += UpdateIcons;
 
