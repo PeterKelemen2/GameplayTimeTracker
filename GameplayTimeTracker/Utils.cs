@@ -29,7 +29,7 @@ public class Utils
     public static Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
-    public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#292929");
+    public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
 
     public const int TextMargin = 10;
     public const int TileLeftMargin = 7;
@@ -43,6 +43,10 @@ public class Utils
     public const int EditFirstRowTopMargin = 20;
     public const int EditSecondRowTopMargin = 60;
     public const int EditThirdRowTopMargin = 100;
+    public const int EditFColLeft = 50;
+    public const int EditSColLeft = 190;
+    public const int EditColTop = 10;
+
 
     public static BlurEffect fakeShadow = new BlurEffect
     {

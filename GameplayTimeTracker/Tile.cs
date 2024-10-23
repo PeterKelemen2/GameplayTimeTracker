@@ -133,34 +133,53 @@ public class Tile : UserControl
 
         if (!WasOpened)
         {
-            menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
-            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 10, 0, 0);
-            editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin + 2, 0, 0);
-            editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
-
-            editPlaytimeTitle.Margin = new Thickness(300, Utils.EditFirstRowTopMargin + 2, 0, 0);
-            editPlaytimeBox.Margin = new Thickness(370, Utils.EditFirstRowTopMargin, 0, 0);
-
-            editExePathTitle.Margin = new Thickness(50, Utils.EditSecondRowTopMargin + 2, 0, 0);
-            editExePathBox.Margin = new Thickness(100, Utils.EditSecondRowTopMargin, 0, 0);
-            editExePathButton.Margin = new Thickness(300, Utils.EditSecondRowTopMargin, 0, 0);
-
-            editSaveButton.Margin = new Thickness(0, Utils.EditFirstRowTopMargin, 60, 0);
-            changeIconButton.Margin = new Thickness(50, Utils.EditThirdRowTopMargin, 50, 0);
-
-            menuRectangle.MaxHeight = TileHeight + 40;
-            shadowRectangle.MaxHeight = 30;
+            double padding = 3;
+            // menuRectangle.MaxHeight = TileHeight + 40;
+            // shadowRectangle.MaxHeight = 30;
 
             editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
             editNameBox.Height = Utils.TextBoxHeight;
             editNameBox.MaxHeight = Utils.TextBoxHeight;
-            editPlaytimeBox.MaxHeight = Utils.EditTextMaxHeight;
 
+            editPlaytimeBox.MaxHeight = Utils.EditTextMaxHeight;
             editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
 
-            editSaveButton.Height = 40;
-            editSaveButton.MaxHeight = 40;
-            changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
+            // changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
+            editSaveButton.Height = Utils.TextBoxHeight;
+            editSaveButton.Width = changeIconButton.Width;
+            // editSaveButton.MaxHeight = Utils.TextBoxHeight;
+
+            editExePathButton.Height = Utils.TextBoxHeight;
+            changeIconButton.Height = Utils.TextBoxHeight;
+
+
+            menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
+            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
+                -2 * TileHeight + 26, 0, 0);
+            // shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
+            //     -2 * TileHeight + 30, 0, 0);
+
+            editNameTitle.Margin = new Thickness(Utils.EditFColLeft, Utils.EditColTop, 0, 0);
+            editNameTitle.Padding = new Thickness(4, 0, 0, 15);
+            editNameBox.Margin = new Thickness(editNameTitle.Margin.Left,
+                (int)(editNameTitle.Margin.Top + editNameTitle.ActualHeight + padding), 0, 0);
+
+            editExePathTitle.Margin = new Thickness(editNameTitle.Margin.Left,
+                (int)(editNameBox.Margin.Top * 2), 0, 0);
+            editExePathTitle.Padding = new Thickness(4, 0, 0, 15);
+            editExePathBox.Margin = new Thickness(editNameTitle.Margin.Left,
+                (int)(editExePathTitle.Margin.Top + editExePathTitle.ActualHeight + padding), 0, 0);
+            editExePathButton.Margin = new Thickness(editNameTitle.Margin.Left + Utils.EditSColLeft,
+                editExePathBox.Margin.Top, 0, 0);
+
+            editPlaytimeTitle.Margin =
+                new Thickness(editNameTitle.Margin.Left + Utils.EditSColLeft, editNameTitle.Margin.Top, 0, 0);
+            editPlaytimeTitle.Padding = new Thickness(4, 0, 0, 15);
+            editPlaytimeBox.Margin = new Thickness(editPlaytimeTitle.Margin.Left, editNameBox.Margin.Top, 0, 0);
+
+            changeIconButton.Margin = new Thickness(0, editNameBox.Margin.Top, Utils.EditFColLeft, 0);
+            editSaveButton.Margin = new Thickness(0, editExePathBox.Margin.Top, Utils.EditFColLeft, 0);
+
 
             animatedElements = new List<UIElement>();
             animatedElements.AddRange(new UIElement[]
@@ -196,7 +215,6 @@ public class Tile : UserControl
                     }
                 }
             }
-
 
             WasOpened = true;
         }
@@ -261,7 +279,7 @@ public class Tile : UserControl
             {
                 element.BeginAnimation(MaxHeightProperty, heightAnimation);
             }
-            
+
             if (element is Rectangle)
             {
                 Console.WriteLine("Rectangle found");
@@ -624,7 +642,7 @@ public class Tile : UserControl
         menuRectangle = new Rectangle
         {
             Width = TileWidth - 30,
-            Height = TileHeight + 20,
+            Height = TileHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
             Fill = new SolidColorBrush(Utils.RightColor),
@@ -685,7 +703,7 @@ public class Tile : UserControl
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Content = "Browse",
             Height = 30,
-            Width = 120,
+            Width = 80,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
@@ -712,7 +730,7 @@ public class Tile : UserControl
             Content = "Change icon",
             Height = 30,
             Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
