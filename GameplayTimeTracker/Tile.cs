@@ -873,7 +873,6 @@ public class Tile : UserControl
                 Height = TileHeight * imageScale,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Effect = Utils.blurEffect,
                 Opacity = 0.7
             };
 
@@ -892,22 +891,24 @@ public class Tile : UserControl
             {
                 Padding = new Thickness(20),
                 Child = image,
-                Effect = Utils.dropShadowIcon,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                Effect = Utils.dropShadowIcon,
             };
 
             var bgImageBorder = new Border
             {
-                Padding = new Thickness(20, 0, 20, 0),
+                Padding = new Thickness(20),
+                Child = bgImage,
                 Height = TileHeight * 2,
                 Width = TileHeight * 2,
-                Child = bgImage,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
+                Effect = Utils.blurEffect
             };
 
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+            RenderOptions.SetBitmapScalingMode(bgImage, BitmapScalingMode.HighQuality);
             iconContainerGrid.Children.Add(bgImageBorder);
             iconContainerGrid.Children.Add(imageBorder);
         }
