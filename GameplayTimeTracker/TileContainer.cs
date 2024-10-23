@@ -18,7 +18,7 @@ public class TileContainer
     private List<Tile> tilesList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
-    
+
     public double TileWidth { get; set; }
 
     public List<Theme> themes { get; set; } = new();
@@ -102,10 +102,13 @@ public class TileContainer
         {
             if (tile.ExePath is not "")
             {
-                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(tile.ExePath);
-                executableNames.Add(Path.GetFileName(tile.ExePath));
-                Console.WriteLine(fileInfo.FileDescription);
-                Console.WriteLine(executableNames[executableNames.Count - 1]);
+                if (Path.Exists(tile.ExePath))
+                {
+                    FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(tile.ExePath);
+                    executableNames.Add(Path.GetFileName(tile.ExePath));
+                    Console.WriteLine(fileInfo.FileDescription);
+                    Console.WriteLine(executableNames[executableNames.Count - 1]);
+                }
             }
         }
 

@@ -42,10 +42,11 @@ public class JsonHandler
                     Console.WriteLine($"{color.Key}: {color.Value}");
                 }
             }
+
             Console.WriteLine($"Theme(s) found: {themes.Count}");
             return themes;
         }
-        
+
         return null;
     }
 

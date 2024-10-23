@@ -2,6 +2,7 @@
   {
     "themeName": "default",
     "colors": {
+      "bgColor": "#1E2030",
       "darkColor": "#1E2030",
       "lightColor": "#2E324A",
       "fontColor": "#DAE4FF",

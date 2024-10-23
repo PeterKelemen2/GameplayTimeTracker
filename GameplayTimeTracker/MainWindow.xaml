@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="Gameplay Time Tracker" Height="650" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged" IsVisibleChanged="OnIsVisibleChanged"
-        Icon="pack://application:,,,/assets/MyAppIcon.ico"
-        >
+        Title="Gameplay Time Tracker" Height="650" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged"
+        IsVisibleChanged="OnIsVisibleChanged"
+        Icon="pack://application:,,,/assets/MyAppIcon.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
         <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Black" />
@@ -48,9 +48,8 @@
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
-        
-        
-        
+
+
         <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="Visibility" Value="Hidden" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -191,7 +190,7 @@
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="Grid">
         <!-- Define row definitions for the Grid -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -213,9 +212,8 @@
                       ScrollChanged="ShowScrollViewerOverlay"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
-                      Padding="-5,5,5,5" Background="#1E2030"
-                      >
-            <StackPanel x:Name="mainStackPanel" Orientation="Vertical" Background="#1E2030" />
+                      Padding="-5,5,5,5" Background="#1E2030">
+            <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
         </ScrollViewer>
 
         <!-- Other content in the bottom 1/4 -->
@@ -224,7 +222,7 @@
             <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Margin="20,0,0,0" 
+                    Margin="20,0,0,0"
                     Height="30"
                     Width="140"
                     Click="AddExecButton_Click">
@@ -232,15 +230,15 @@
                     <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
                 </Button.Effect>
             </Button>
-            
-            <TextBlock x:Name="TotalPlaytimeTextBlock" 
-                       Text="Total Playtime: 0 hours" 
-                       Foreground="Black" 
+
+            <TextBlock x:Name="TotalPlaytimeTextBlock"
+                       Text="Total Playtime: 0 hours"
+                       Foreground="Black"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        Margin="0,0,20,0"
                        FontSize="16"
-                       FontWeight="Bold"/>
+                       FontWeight="Bold" />
         </Grid>
     </Grid>
 </Window>

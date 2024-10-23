@@ -21,6 +21,7 @@ namespace GameplayTimeTracker;
 
 public class Utils
 {
+    public static Color BgColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
@@ -40,6 +41,7 @@ public class Utils
     {
         try
         {
+            BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
             DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
             LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
             FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);
@@ -55,6 +57,8 @@ public class Utils
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            BgColor = (Color)ColorConverter.ConvertFromString("#45092b");
+            DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
             DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
             LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
             FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");

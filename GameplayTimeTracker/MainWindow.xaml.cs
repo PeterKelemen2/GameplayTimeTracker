@@ -10,10 +10,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Gtk;
 using Microsoft.Win32;
 using Toolbelt.Drawing;
 using Application = System.Windows.Application;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -53,6 +57,11 @@ namespace GameplayTimeTracker
                 {
                     if (theme.ThemeName.Equals(themeName))
                     {
+                        SolidColorBrush scb =
+                            new SolidColorBrush((Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]));
+                        ScrollViewer.Background = scb;
+                        MainStackPanel.Background = scb;
+                        Grid.Background = scb;
                         Utils.SetColors(theme.Colors);
                         return;
                     }
@@ -62,6 +71,7 @@ namespace GameplayTimeTracker
 
         public MainWindow()
         {
+            InitializeComponent();
             handler.InitializeSettings();
 
             themesList = handler.GetThemesFromFile();
@@ -69,7 +79,6 @@ namespace GameplayTimeTracker
 
             handler.InitializeContainer(tileContainer, jsonFilePath);
 
-            InitializeComponent();
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
@@ -224,13 +233,13 @@ namespace GameplayTimeTracker
 
         private void ShowTilesOnCanvas()
         {
-            mainStackPanel.Children.Clear();
+            MainStackPanel.Children.Clear();
             var tilesList = tileContainer.GetTiles();
             foreach (var tile in tilesList)
             {
                 tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 
-                mainStackPanel.Children.Add(tile);
+                MainStackPanel.Children.Add(tile);
             }
         }
 
