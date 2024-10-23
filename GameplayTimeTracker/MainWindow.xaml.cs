@@ -291,13 +291,15 @@ namespace GameplayTimeTracker
             {
                 Width = (int)ActualWidth / 2,
                 Height = (int)ActualHeight / 2,
-                Fill = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
                 RadiusX = Utils.SettingsRadius,
-                RadiusY = Utils.SettingsRadius
+                RadiusY = Utils.SettingsRadius,
+                Effect = Utils.dropShadowIcon
             };
             ContainerGrid.Children.Add(settingsRect);
             Button closeButton = new Button
             {
+                Style = (Style)Application.Current.FindResource("RoundedButton"),
                 Content = "Close",
                 Width = 80,
                 Height = 30,
@@ -306,6 +308,18 @@ namespace GameplayTimeTracker
             };
             closeButton.Click += CloseSettingsWindow;
             ContainerGrid.Children.Add(closeButton);
+
+            TextBlock settingsTitle = new TextBlock
+            {
+                Text = "Settings",
+                Foreground = new SolidColorBrush(Utils.FontColor),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+            };
+            settingsTitle.Margin = new Thickness(0, 0, 0, (int)(ActualHeight * 0.25) + 110);
+            ContainerGrid.Children.Add(settingsTitle);
         }
 
         private void CloseSettingsWindow(object sender, RoutedEventArgs e)
