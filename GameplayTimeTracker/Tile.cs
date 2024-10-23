@@ -294,7 +294,7 @@ public class Tile : UserControl
             string filePath = openFileDialog.FileName;
             if (!ExePath.Equals(filePath))
             {
-                if (_tileContainer.GetTilesExePath().Contains(ExePath))
+                if (_tileContainer.GetTilesExePath().Contains(filePath))
                 {
                     MessageBox.Show("This executable is already in use!");
                 }
