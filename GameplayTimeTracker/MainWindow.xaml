@@ -190,55 +190,69 @@
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Grid x:Name="Grid">
-        <!-- Define row definitions for the Grid -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="70" />
-        </Grid.RowDefinitions>
+    <Grid x:Name="ContainerGrid">
+        <Grid x:Name="Grid">
+            <!-- Define row definitions for the Grid -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="70" />
+            </Grid.RowDefinitions>
 
-        <Rectangle x:Name="OverlayTop" Width="800" Height="40"
-                   Fill="{StaticResource OverlayGradientTop}"
-                   HorizontalAlignment="Left" VerticalAlignment="Top"
-                   Panel.ZIndex="1" />
-        <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
-                   Fill="{StaticResource OverlayGradientBottom}"
-                   HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                   Panel.ZIndex="1" />
+            <Rectangle x:Name="OverlayTop" Width="800" Height="40"
+                       Fill="{StaticResource OverlayGradientTop}"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       Panel.ZIndex="1" />
+            <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
+                       Fill="{StaticResource OverlayGradientBottom}"
+                       HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                       Panel.ZIndex="1" />
 
-        <!-- Scrollable area in the top 3/4 -->
-        <ScrollViewer x:Name="ScrollViewer"
-                      Grid.Row="0"
-                      ScrollChanged="ShowScrollViewerOverlay"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
-                      Padding="-5,5,5,5" Background="#1E2030">
-            <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
-        </ScrollViewer>
 
-        <!-- Other content in the bottom 1/4 -->
-        <Grid Grid.Row="1" Background="LightGreen">
-            <!-- Add other UI elements here -->
-            <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="20,0,0,0"
-                    Height="30"
-                    Width="140"
-                    Click="AddExecButton_Click">
-                <Button.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
-                </Button.Effect>
-            </Button>
+            <!-- Scrollable area in the top 3/4 -->
+            <ScrollViewer x:Name="ScrollViewer"
+                          Grid.Row="0"
+                          ScrollChanged="ShowScrollViewerOverlay"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Padding="-5,5,5,5" Background="#1E2030">
+                <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
+            </ScrollViewer>
 
-            <TextBlock x:Name="TotalPlaytimeTextBlock"
-                       Text="Total Playtime: 0 hours"
-                       Foreground="Black"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       Margin="0,0,20,0"
-                       FontSize="16"
-                       FontWeight="Bold" />
+            <!-- Other content in the bottom 1/4 -->
+            <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
+                <!-- Add other UI elements here -->
+                <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
+                        HorizontalAlignment="Left"
+                        Margin="20,0,0,0"
+                        Height="30"
+                        Width="140"
+                        Click="AddExecButton_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+
+                <Button Content="Settings" Style="{StaticResource RoundedButton}"
+                        HorizontalAlignment="Left"
+                        Margin="180,0,0,0"
+                        Height="30"
+                        Width="140"
+                        Click="OpenSettingsWindow">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+
+                <TextBlock x:Name="TotalPlaytimeTextBlock"
+                           Text="Total Playtime: 0 hours"
+                           Foreground="Black"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0,0,20,0"
+                           FontSize="16"
+                           FontWeight="Bold" />
+            </Grid>
         </Grid>
     </Grid>
+
 </Window>

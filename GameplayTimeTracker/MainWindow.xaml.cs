@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Path = System.IO.Path;
 
 namespace GameplayTimeTracker
 {
@@ -20,6 +23,7 @@ namespace GameplayTimeTracker
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
         private const string? AppIcon = "assets/MyAppIcon.ico";
+        private bool isBlurToggled = false;
 
         TileContainer tileContainer = new();
 
@@ -54,6 +58,9 @@ namespace GameplayTimeTracker
                         ScrollViewer.Background = scb;
                         MainStackPanel.Background = scb;
                         Grid.Background = scb;
+                        Grid gridFooter = (Grid)FindName("Footer");
+                        gridFooter.Background =
+                            new SolidColorBrush((Color)ColorConverter.ConvertFromString(theme.Colors["footerColor"]));
                         Utils.SetColors(theme.Colors);
                         return;
                     }
@@ -221,6 +228,105 @@ namespace GameplayTimeTracker
             }
 
             handler.WriteContentToFile(tileContainer, jsonFilePath);
+        }
+
+
+        private void CreateBlurRectangle()
+        {
+            // Create a new Rectangle for the blur overlay
+            Rectangle blurOverlay = new Rectangle
+            {
+                Width = ContainerGrid.ActualWidth,
+                Height = ContainerGrid.ActualHeight,
+                Fill = new SolidColorBrush(Colors.Black),
+                // Opacity = 0.8,
+                // IsHitTestVisible = false // Make the overlay non-clickable
+            };
+
+            // Set attached properties
+            Panel.SetZIndex(blurOverlay, 0); // Ensure it appears above other elements
+            Grid.SetRow(blurOverlay, 0); // Set to the first row of the Grid
+
+            // Create a VisualBrush to capture visuals behind the rectangle
+            VisualBrush visualBrush = new VisualBrush();
+
+            // Create a DrawingVisual to capture the visuals
+            DrawingVisual drawingVisual = new DrawingVisual();
+
+            // Render the visuals into the DrawingVisual
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                // Render the current visuals into the DrawingVisual
+                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+                    (int)ActualWidth, (int)ActualHeight, 98, 102, PixelFormats.Pbgra32);
+
+                renderTargetBitmap.Render(this); // Render the current visual tree to the bitmap
+
+                // Draw the bitmap into the DrawingVisual
+                drawingContext.DrawImage(renderTargetBitmap, new Rect(0, 0, ActualWidth, ActualHeight));
+            }
+
+            // Set the VisualBrush to the DrawingVisual
+            visualBrush.Visual = drawingVisual;
+
+            // Set the Fill of the Rectangle to the VisualBrush
+            blurOverlay.Fill = visualBrush;
+
+            // Create the BlurEffect
+            blurOverlay.Effect = new BlurEffect
+            {
+                Radius = 10 // Set the blur radius
+            };
+
+            // Add the Rectangle to the Grid
+            ContainerGrid.Children.Add(blurOverlay);
+        }
+
+        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Open Settings Window");
+            isBlurToggled = !isBlurToggled;
+            CreateBlurRectangle();
+            Rectangle settingsRect = new Rectangle
+            {
+                Width = (int)ActualWidth / 2,
+                Height = (int)ActualHeight / 2,
+                Fill = new SolidColorBrush(Colors.Black),
+                RadiusX = Utils.SettingsRadius,
+                RadiusY = Utils.SettingsRadius
+            };
+            ContainerGrid.Children.Add(settingsRect);
+            Button closeButton = new Button
+            {
+                Content = "Close",
+                Width = 80,
+                Height = 30,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                Margin = new Thickness(0, 0, 0, (int)ActualHeight * 0.25),
+            };
+            closeButton.Click += CloseSettingsWindow;
+            ContainerGrid.Children.Add(closeButton);
+        }
+
+        private void CloseSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            // Create a list to hold the elements to remove
+            var elementsToRemove = new List<UIElement>();
+
+            // Iterate over the children and add non-Grid elements to the list
+            foreach (UIElement child in ContainerGrid.Children)
+            {
+                if (child.GetType() != typeof(Grid))
+                {
+                    elementsToRemove.Add(child);
+                }
+            }
+
+            // Remove the collected elements
+            foreach (UIElement element in elementsToRemove)
+            {
+                ContainerGrid.Children.Remove(element);
+            }
         }
 
         private void ShowTilesOnCanvas()
