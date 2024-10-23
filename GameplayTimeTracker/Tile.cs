@@ -152,23 +152,22 @@ public class Tile : UserControl
             editExePathButton.Height = Utils.TextBoxHeight;
             changeIconButton.Height = Utils.TextBoxHeight;
 
+            double rowMargin = 20;
 
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
             shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
                 -2 * TileHeight + 29, 0, 0);
-            // shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
-            //     -2 * TileHeight + 30, 0, 0);
 
             editNameTitle.Margin = new Thickness(Utils.EditFColLeft, Utils.EditColTop, 0, 0);
             editNameTitle.Padding = new Thickness(4, 0, 0, 15);
             editNameBox.Margin = new Thickness(editNameTitle.Margin.Left,
-                (int)(editNameTitle.Margin.Top + editNameTitle.ActualHeight + padding), 0, 0);
+                (int)(editNameTitle.Margin.Top + rowMargin + padding), 0, 0);
 
             editExePathTitle.Margin = new Thickness(editNameTitle.Margin.Left,
                 (int)(editNameBox.Margin.Top * 2), 0, 0);
             editExePathTitle.Padding = new Thickness(4, 0, 0, 15);
             editExePathBox.Margin = new Thickness(editNameTitle.Margin.Left,
-                (int)(editExePathTitle.Margin.Top + editExePathTitle.ActualHeight + padding), 0, 0);
+                (int)(editExePathTitle.Margin.Top + rowMargin + padding), 0, 0);
             editExePathButton.Margin = new Thickness(editNameTitle.Margin.Left + Utils.EditSColLeft,
                 editExePathBox.Margin.Top, 0, 0);
 
@@ -197,6 +196,22 @@ public class Tile : UserControl
                 {
                     // Store the original margin in the dictionary
                     originalMargins[element] = frameworkElement.Margin;
+                }
+            }
+
+            foreach (var elem in editElements)
+            {
+                if (elem is FrameworkElement frameworkElement)
+                {
+                    if (!double.IsNaN(frameworkElement.Height))
+                    {
+                        originalHeights[elem] = frameworkElement.Height;
+                        Console.WriteLine(frameworkElement.Height);
+                    }
+                    else
+                    {
+                        originalHeights[elem] = 0;
+                    }
                 }
             }
 
