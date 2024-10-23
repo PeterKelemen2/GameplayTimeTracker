@@ -345,6 +345,12 @@ public class Tile : UserControl
     public void UpdateExe(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
+        // openFileDialog.InitialDirectory = Sy
+        if (System.IO.Path.Exists(ExePath))
+        {
+            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ExePath);
+        }
+
         openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
         if (openFileDialog.ShowDialog() == true)
         {
