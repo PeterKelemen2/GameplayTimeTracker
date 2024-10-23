@@ -42,6 +42,7 @@ public class Utils
     public const int EditTextMaxHeight = 30;
     public const int EditFirstRowTopMargin = 20;
     public const int EditSecondRowTopMargin = 60;
+    public const int EditThirdRowTopMargin = 100;
 
     public static BlurEffect fakeShadow = new BlurEffect
     {

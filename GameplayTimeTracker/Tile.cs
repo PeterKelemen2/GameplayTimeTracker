@@ -109,6 +109,7 @@ public class Tile : UserControl
     public bool WasOpened { get; set; }
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
+    private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
 
     public void ToggleEdit()
@@ -120,7 +121,7 @@ public class Tile : UserControl
 
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
-            From = isMenuOpen ? 0 : TileHeight, To = isMenuOpen ? TileHeight : 0,
+            From = isMenuOpen ? 0 : TileHeight + 20, To = isMenuOpen ? TileHeight + 20 : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
@@ -133,7 +134,7 @@ public class Tile : UserControl
         if (!WasOpened)
         {
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
-            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 30, 0, 0);
+            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 10, 0, 0);
             editNameTitle.Margin = new Thickness(50, Utils.EditFirstRowTopMargin + 2, 0, 0);
             editNameBox.Margin = new Thickness(100, Utils.EditFirstRowTopMargin, 0, 0);
 
@@ -145,9 +146,9 @@ public class Tile : UserControl
             editExePathButton.Margin = new Thickness(300, Utils.EditSecondRowTopMargin, 0, 0);
 
             editSaveButton.Margin = new Thickness(0, Utils.EditFirstRowTopMargin, 60, 0);
-            changeIconButton.Margin = new Thickness(0, Utils.EditSecondRowTopMargin + 20, 60, 0);
+            changeIconButton.Margin = new Thickness(50, Utils.EditThirdRowTopMargin, 50, 0);
 
-            menuRectangle.MaxHeight = TileHeight;
+            menuRectangle.MaxHeight = TileHeight + 40;
             shadowRectangle.MaxHeight = 30;
 
             editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
@@ -179,6 +180,23 @@ public class Tile : UserControl
                     originalMargins[element] = frameworkElement.Margin;
                 }
             }
+
+            foreach (var elem in editElements)
+            {
+                if (elem is FrameworkElement frameworkElement)
+                {
+                    if (!double.IsNaN(frameworkElement.Height))
+                    {
+                        originalHeights[elem] = frameworkElement.Height;
+                        Console.WriteLine(frameworkElement.Height);
+                    }
+                    else
+                    {
+                        originalHeights[elem] = 0;
+                    }
+                }
+            }
+
 
             WasOpened = true;
         }
@@ -222,12 +240,33 @@ public class Tile : UserControl
                     FillBehavior = FillBehavior.HoldEnd // Holds the end value after the animation completes
                 };
 
+
                 // Start the margin animation
                 frameworkElement.BeginAnimation(MarginProperty, marginAnimation);
             }
 
+            double oHeight = originalHeights[element];
+            DoubleAnimation heightAnimationFromOG = new DoubleAnimation
+            {
+                From = isMenuOpen ? 0 : oHeight, To = isMenuOpen ? oHeight : 0,
+                Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+            };
+
             // Start the other animations
-            element.BeginAnimation(MaxHeightProperty, heightAnimation);
+            if (oHeight > 0)
+            {
+                element.BeginAnimation(MaxHeightProperty, heightAnimationFromOG);
+            }
+            else
+            {
+                element.BeginAnimation(MaxHeightProperty, heightAnimation);
+            }
+            
+            if (element is Rectangle)
+            {
+                Console.WriteLine("Rectangle found");
+            }
+
             element.BeginAnimation(OpacityProperty, opacityAnimation);
         }
 
@@ -296,7 +335,7 @@ public class Tile : UserControl
             {
                 if (_tileContainer.GetTilesExePath().Contains(filePath))
                 {
-                    MessageBox.Show("This executable is already in use!");
+                    MessageBox.Show("This executable is already in use!", "Duplicate");
                 }
                 else
                 {
@@ -585,11 +624,12 @@ public class Tile : UserControl
         menuRectangle = new Rectangle
         {
             Width = TileWidth - 30,
-            Height = TileHeight,
+            Height = TileHeight + 20,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
             Fill = new SolidColorBrush(Utils.RightColor),
             HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
             Effect = Utils.dropShadowRectangle,
         };
@@ -597,6 +637,7 @@ public class Tile : UserControl
         shadowRectangle = new Rectangle();
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
         shadowRectangle.Width = TileWidth - 20;
+        shadowRectangle.Height = TileHeight;
         shadowRectangle.MaxHeight = 0;
         shadowRectangle.HorizontalAlignment = HorizontalAlignment.Left;
         shadowRectangle.Effect = Utils.fakeShadow;
@@ -671,7 +712,7 @@ public class Tile : UserControl
             Content = "Change icon",
             Height = 30,
             Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Right,
+            HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
