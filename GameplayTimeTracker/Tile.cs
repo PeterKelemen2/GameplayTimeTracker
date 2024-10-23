@@ -294,9 +294,16 @@ public class Tile : UserControl
             string filePath = openFileDialog.FileName;
             if (!ExePath.Equals(filePath))
             {
-                ExePath = filePath;
-                editExePathBox.Text = $"{ExePath}";
-                _tileContainer.InitSave();
+                if (_tileContainer.GetTilesExePath().Contains(ExePath))
+                {
+                    MessageBox.Show("This executable is already in use!");
+                }
+                else
+                {
+                    ExePath = filePath;
+                    editExePathBox.Text = $"{ExePath}";
+                    _tileContainer.InitSave();
+                }
             }
         }
     }

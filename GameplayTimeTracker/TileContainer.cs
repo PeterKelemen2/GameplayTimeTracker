@@ -32,6 +32,11 @@ public class TileContainer
         return tilesList;
     }
 
+    public List<string> GetTilesExePath()
+    {
+        return tilesList.Select(x => x.ExePath).ToList();
+    }
+
     public void SetTilesList(List<Tile> newList)
     {
         tilesList = newList;
