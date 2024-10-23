@@ -29,8 +29,10 @@ using System.Windows.Shapes;
 public class Tile : UserControl
 {
     private TileContainer _tileContainer;
+
     public bool isMenuOpen = false;
-    private bool wasOpened = false;
+
+    // private bool wasOpened = false;
     public bool isRunning = false;
     private bool isRunningGame = false;
     public bool wasRunning = false;
@@ -53,7 +55,9 @@ public class Tile : UserControl
     private TextBlock totalPlaytime;
     private TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
+    private TextBlock sampleTextBlock;
     private TextBox editNameBox;
+    private TextBox sampleTextBox;
 
     private TextBlock editNameTitle;
 
@@ -105,18 +109,17 @@ public class Tile : UserControl
 
     public bool IsRunningGame { get; set; }
     public bool WasRunning { get; set; }
+    public bool WasOpened { get; set; }
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
-    private bool wasOnceOpened = false;
+    // private bool wasOnceOpened = false;
 
-    //TODO: Put shadow under the tile if toggled
-    private void ToggleEdit(object sender, RoutedEventArgs e)
+    public void ToggleEdit()
     {
         isMenuOpen = !isMenuOpen;
         IsMenuToggled = !IsMenuToggled;
         isMenuOpen = IsMenuToggled;
         double animationDuration = 0.15;
-
 
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
@@ -130,7 +133,7 @@ public class Tile : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
-        if (!wasOpened)
+        if (!WasOpened)
         {
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
             shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10, -2 * TileHeight + 30, 0, 0);
@@ -158,29 +161,24 @@ public class Tile : UserControl
             editSaveButton.MaxHeight = 40;
             changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
 
-            wasOpened = true;
-
-            if (!wasOnceOpened)
+            animatedElements = new List<UIElement>();
+            animatedElements.AddRange(new UIElement[]
             {
-                animatedElements = new List<UIElement>();
-                animatedElements.AddRange(new UIElement[]
+                shadowRectangle, changeIconButton,
+                editNameTitle, editNameBox,
+                editPlaytimeTitle,
+                editPlaytimeBox
+            });
+            foreach (var element in animatedElements)
+            {
+                if (element is FrameworkElement frameworkElement)
                 {
-                    shadowRectangle, changeIconButton,
-                    editNameTitle, editNameBox,
-                    editPlaytimeTitle,
-                    editPlaytimeBox
-                });
-                foreach (var element in animatedElements)
-                {
-                    if (element is FrameworkElement frameworkElement)
-                    {
-                        // Store the original margin in the dictionary
-                        originalMargins[element] = frameworkElement.Margin;
-                    }
+                    // Store the original margin in the dictionary
+                    originalMargins[element] = frameworkElement.Margin;
                 }
-
-                wasOnceOpened = true;
             }
+
+            WasOpened = true;
         }
 
         heightAnimation.Completed += (s, a) =>
@@ -234,6 +232,11 @@ public class Tile : UserControl
         Console.WriteLine(isMenuOpen);
     }
 
+    public void ToggleEdit_Click(object sender, RoutedEventArgs e)
+    {
+        ToggleEdit();
+    }
+
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
     {
         SaveEditedData();
@@ -258,6 +261,7 @@ public class Tile : UserControl
             {
                 TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
+
             (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
         }
         catch (FormatException)
@@ -536,10 +540,10 @@ public class Tile : UserControl
 
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();
-        var sampleTextBlock = Utils.NewTextBlock();
+        sampleTextBlock = Utils.NewTextBlock();
 
 
-        var sampleTextBox = Utils.NewTextBoxEdit();
+        sampleTextBox = Utils.NewTextBoxEdit();
         sampleTextBox.Style = (Style)Application.Current.FindResource("RoundedTextBox");
 
         // Create a Grid to hold the Rectangle and TextBlock
@@ -658,7 +662,7 @@ public class Tile : UserControl
             Margin = new Thickness(0, topMargin, 100, 0),
             Effect = Utils.dropShadowIcon
         };
-        editButton.Click += ToggleEdit;
+        editButton.Click += ToggleEdit_Click;
 
         removeButton = new Button
         {

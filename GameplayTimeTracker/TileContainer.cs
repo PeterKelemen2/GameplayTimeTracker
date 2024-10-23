@@ -267,6 +267,17 @@ public class TileContainer
         }
     }
 
+    public void CloseAllEditMenus()
+    {
+        foreach (var tile in tilesList)
+        {
+            if (tile.IsMenuToggled)
+            {
+                tile.ToggleEdit();
+            }
+        }
+    }
+
     public void UpdatePlaytimeBars()
     {
         Stopwatch stopwatch = new Stopwatch();
@@ -300,7 +311,7 @@ public class TileContainer
             {
                 tile.totalTimeGradientBar.UpdateBar();
             }
-            
+
             tile.lastTimeGradientBar.UpdateBar();
         }
 

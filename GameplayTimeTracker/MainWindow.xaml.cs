@@ -90,6 +90,7 @@ namespace GameplayTimeTracker
                     {
                         Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds).Wait();
                     }
+                    // Task.Delay(10).Wait();
                 }
             });
         }
@@ -174,7 +175,18 @@ namespace GameplayTimeTracker
                 if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                 {
+                    // Closing all opened edit menus and reseting them to avoid graphical glitch
+                    foreach (var tile in tileContainer.GetTiles())
+                    {
+                        if (tile.IsMenuToggled)
+                        {
+                            tile.ToggleEdit();
+                            tile.WasOpened = false;
+                        }
+                    }
+
                     tileContainer.AddTile(newTile, newlyAdded: true);
+
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {fileName}");
@@ -210,6 +222,12 @@ namespace GameplayTimeTracker
             foreach (var tile in tilesList)
             {
                 tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+                // if (tile.IsMenuToggled)
+                // {
+                //     tile.ToggleEdit();
+                //     tile.WasOpened = false;
+                // }
+
                 mainStackPanel.Children.Add(tile);
             }
         }
