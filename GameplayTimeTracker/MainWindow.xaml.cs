@@ -200,21 +200,6 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer, jsonFilePath);
         }
 
-        private void PrepIcon(string filePath, string? outputImagePath)
-        {
-            var source = filePath;
-            using var s = File.Create(outputImagePath);
-            try
-            {
-                IconExtractor.Extract1stIconTo(source, s);
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-
         private void ShowTilesOnCanvas()
         {
             mainStackPanel.Children.Clear();
@@ -222,19 +207,9 @@ namespace GameplayTimeTracker
             foreach (var tile in tilesList)
             {
                 tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-                // if (tile.IsMenuToggled)
-                // {
-                //     tile.ToggleEdit();
-                //     tile.WasOpened = false;
-                // }
 
                 mainStackPanel.Children.Add(tile);
             }
-        }
-
-        public void TestMethod()
-        {
-            Console.WriteLine("ASDASDASDASDASDASDASDASDASD\nASDASDASDASDASDASDASDASDASDASDSAD");
         }
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
@@ -291,31 +266,5 @@ namespace GameplayTimeTracker
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             m_notifyIcon.Visible = true; // Make sure it's visible
         }
-
-        // bool IsValidImage(string imagePath)
-        // {
-        //     try
-        //     {
-        //         // Create a BitmapImage object and load the image
-        //         BitmapImage bitmap = new BitmapImage();
-        //         bitmap.BeginInit();
-        //         bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the entire image at once
-        //         bitmap.UriSource = new Uri(imagePath, UriKind.Relative);
-        //         bitmap.EndInit();
-        //
-        //         // Ensure the image has valid pixel width and height
-        //         if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
-        //         {
-        //             return true; // The image is valid
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // Log or handle the exception if needed
-        //         Console.WriteLine($"Invalid image: {ex.Message}");
-        //     }
-        //
-        //     return false; // If any exception occurs, or the image dimensions are invalid
-        // }
     }
 }

@@ -32,7 +32,6 @@ public class Tile : UserControl
 
     public bool isMenuOpen = false;
 
-    // private bool wasOpened = false;
     public bool isRunning = false;
     private bool isRunningGame = false;
     public bool wasRunning = false;
@@ -61,14 +60,10 @@ public class Tile : UserControl
 
     private TextBlock editNameTitle;
 
-    // private TextBox editPlaytimeBoxH;
-    // private TextBox editPlaytimeBoxM;
     private TextBox editPlaytimeBox;
 
     private TextBlock editPlaytimeTitle;
 
-    // private TextBlock editPlaytimeH;
-    // private TextBlock editPlaytimeM;
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
     public BitmapSource bgImageGray;
