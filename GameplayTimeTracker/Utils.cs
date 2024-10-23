@@ -30,8 +30,8 @@ public class Utils
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
-    public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#3DB0CF");
-    public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3D93CC");
+    public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
+    public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
     
