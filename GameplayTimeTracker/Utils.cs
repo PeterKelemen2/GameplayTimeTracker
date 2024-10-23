@@ -36,25 +36,37 @@ public class Utils
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
 
-    public void SetColors(List<string> colors)
+    public static void SetColors(Dictionary<string, string> colors)
     {
-        // Dictionary<string, string> colorMap = new Dictionary<string, string>();
-        // foreach (string color in colors)
-        // {
-        //     colorMap.Add(color, color);
-        // }
-
-        DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
-        LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
-        FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
-        RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
-        LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
-        RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
-        TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
-        TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
-        ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
-        EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
-        EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
+        try
+        {
+            DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
+            LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
+            FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);
+            RunningColor = (Color)ColorConverter.ConvertFromString(colors["runningColor"]);
+            LeftColor = (Color)ColorConverter.ConvertFromString(colors["leftColor"]);
+            RightColor = (Color)ColorConverter.ConvertFromString(colors["rightColor"]);
+            TileColor1 = (Color)ColorConverter.ConvertFromString(colors["tileColor1"]);
+            TileColor2 = (Color)ColorConverter.ConvertFromString(colors["tileColor2"]);
+            ShadowColor = (Color)ColorConverter.ConvertFromString(colors["shadowColor"]);
+            EditColor1 = (Color)ColorConverter.ConvertFromString(colors["editColor1"]);
+            EditColor2 = (Color)ColorConverter.ConvertFromString(colors["editColor2"]);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
+            LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
+            FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
+            RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
+            LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
+            RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
+            TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
+            TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
+            ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
+            EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
+            EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
+        }
     }
 
 

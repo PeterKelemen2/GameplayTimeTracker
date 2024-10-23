@@ -65,7 +65,7 @@ public class GradientBar : UserControl
         double newWidth = CalculateWidth();
         barForeground.Width = newWidth;
         stopwatch.Stop();
-        Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
+        // Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
     }
 
     public void InitializeBar()
@@ -100,7 +100,7 @@ public class GradientBar : UserControl
         Content = grid;
 
         stopwatch.Stop();
-        Console.WriteLine($"Initializin GB took {stopwatch.Elapsed}");
+        // Console.WriteLine($"Initializin GB took {stopwatch.Elapsed}");
         WasInitialized = true;
     }
 }

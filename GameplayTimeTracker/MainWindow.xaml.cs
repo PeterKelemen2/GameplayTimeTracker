@@ -30,6 +30,8 @@ namespace GameplayTimeTracker
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
 
+        List<Theme> themesList = new List<Theme>();
+
         private System.Windows.Forms.NotifyIcon m_notifyIcon;
 
         public void OnLoaded(object sender, RoutedEventArgs e)
@@ -43,9 +45,30 @@ namespace GameplayTimeTracker
             UpdateStackPane();
         }
 
+        private void LoadTheme(string themeName)
+        {
+            if (themesList.Count > 0)
+            {
+                foreach (var theme in themesList)
+                {
+                    if (theme.ThemeName.Equals(themeName))
+                    {
+                        Utils.SetColors(theme.Colors);
+                        return;
+                    }
+                }
+            }
+        }
+
         public MainWindow()
         {
+            handler.InitializeSettings();
+
+            themesList = handler.GetThemesFromFile();
+            LoadTheme("default");
+
             handler.InitializeContainer(tileContainer, jsonFilePath);
+
             InitializeComponent();
 
             Closing += MainWindow_Closing;

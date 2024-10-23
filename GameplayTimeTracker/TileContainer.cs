@@ -19,8 +19,10 @@ public class TileContainer
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
     
-
     public double TileWidth { get; set; }
+
+    public List<Theme> themes { get; set; } = new();
+    public Theme currentTheme { get; set; } = new();
 
     MainWindow _mainWindow;
 
