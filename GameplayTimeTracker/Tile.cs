@@ -285,6 +285,22 @@ public class Tile : UserControl
         Console.WriteLine("File Saved !!!");
     }
 
+    public void UpdateExe(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+        if (openFileDialog.ShowDialog() == true)
+        {
+            string filePath = openFileDialog.FileName;
+            if (!ExePath.Equals(filePath))
+            {
+                ExePath = filePath;
+                editExePathBox.Text = $"{ExePath}";
+                _tileContainer.InitSave();
+            }
+        }
+    }
+
     private void LaunchExe(object sender, RoutedEventArgs e)
     {
         try
@@ -627,6 +643,7 @@ public class Tile : UserControl
             MaxHeight = 0,
             Effect = Utils.dropShadowIcon
         };
+        editExePathButton.Click += UpdateExe;
 
         editSaveButton = new Button
         {
