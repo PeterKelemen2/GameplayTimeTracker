@@ -114,13 +114,16 @@ public class SettingsMenu : UserControl
             Stretch = Stretch.UniformToFill,
             Width = WinWidth,
             Height = WinHeight,
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(0, 0, 0, 0),
             Effect = Utils.blurEffect
         };
-        // Set attached properties
-        Panel.SetZIndex(bgImage, 0); // Ensure it appears above other elements
-        Grid.SetRow(bgImage, 0); // Set to the first row of the Grid
+
+        Image newImage = Utils.ApplyBlurWithoutEdgeArtifacts(bgImage, 10);
+
+        // Add the final image to the container
         ContainerGrid.Children.Add(bgImage);
+        // ContainerGrid.Children.Add(bgOverlay);
     }
 }

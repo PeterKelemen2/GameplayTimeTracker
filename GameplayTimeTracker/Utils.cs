@@ -92,14 +92,71 @@ public class Utils
     public const int SettingsRadius = 20;
 
 
+    public static Image ApplyBlurWithoutEdgeArtifacts(Image originalImage, double blurRadius)
+    {
+        int padding = (int)(blurRadius * 2); // Ensure enough padding based on blur radius
+
+        // Calculate the padded width and height
+        int paddedWidth = (int)originalImage.Width + 2 * padding;
+        int paddedHeight = (int)originalImage.Height + 2 * padding;
+
+        // Render the original image onto a larger RenderTargetBitmap
+        RenderTargetBitmap paddedBitmap = new RenderTargetBitmap(
+            paddedWidth, paddedHeight, 96, 96, PixelFormats.Pbgra32);
+
+        // Create a container to render the image with padding
+        Border container = new Border
+        {
+            Width = paddedWidth,
+            Height = paddedHeight,
+            Background = Brushes.Transparent,
+            Child = new Image
+            {
+                Source = originalImage.Source,
+                Width = originalImage.Width,
+                Height = originalImage.Height,
+                Stretch = originalImage.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            }
+        };
+
+        // Render the container with padding
+        paddedBitmap.Render(container);
+
+        // Apply the blur effect to the padded RenderTargetBitmap
+        Image paddedImage = new Image { Source = paddedBitmap };
+        paddedImage.Effect = new BlurEffect { Radius = blurRadius };
+
+        // Render the blurred image again into a new RenderTargetBitmap
+        RenderTargetBitmap blurredBitmap = new RenderTargetBitmap(
+            paddedWidth, paddedHeight, 96, 96, PixelFormats.Pbgra32);
+        blurredBitmap.Render(paddedImage);
+
+        // Crop the image to the original size, excluding padding
+        CroppedBitmap croppedBitmap = new CroppedBitmap(
+            blurredBitmap,
+            new Int32Rect(padding, padding, (int)originalImage.Width, (int)originalImage.Height));
+
+        // Return the final image with blur applied without edge artifacts
+        return new Image { Source = croppedBitmap };
+    }
+
+
     public static BlurEffect fakeShadow = new BlurEffect
     {
-        Radius = 8
+        Radius = 8,
     };
 
     public static BlurEffect blurEffect = new BlurEffect
     {
-        Radius = 10
+        Radius = 10,
+        RenderingBias = RenderingBias.Performance
+    };
+
+    public static OuterGlowBitmapEffect outerGlowEffect = new OuterGlowBitmapEffect
+    {
+        GlowSize = 10
     };
 
     public static DropShadowEffect dropShadowText = new DropShadowEffect
@@ -138,6 +195,18 @@ public class Utils
         ShadowDepth = 0
     };
 
+    public static void SaveBitmapSourceToFile(BitmapSource bitmapSource, string filePath)
+    {
+        // Create an encoder for the format you want to save (e.g., PNG)
+        PngBitmapEncoder encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+        // Save the bitmap to the specified file
+        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            encoder.Save(fileStream);
+        }
+    }
 
     public static BitmapSource CaptureCurrentWindow()
     {
