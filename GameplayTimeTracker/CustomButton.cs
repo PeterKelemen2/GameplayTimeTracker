@@ -1,6 +1,9 @@
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
@@ -9,9 +12,11 @@ public class CustomButton : UserControl
 {
     private bool isDisabled = false;
     private Rectangle ButtonBase;
+    private string ButtonImagePath;
+    public Image ButtonImage = new Image();
 
     public CustomButton(Grid parent, double width, double height, double borderRadius, string text = "",
-        double fontSize = 16, bool isBold = false, bool isDisabled = false)
+        double fontSize = 16, bool isBold = false, string buttonImagePath = "", bool isDisabled = false)
     {
         ButtonBase = new();
         BTextBlock = new();
@@ -22,6 +27,7 @@ public class CustomButton : UserControl
         ButtonText = text;
         ButtonFontSize = fontSize;
         IsBold = isBold;
+        ButtonImagePath = buttonImagePath;
         IsButtonDisabled = isDisabled;
 
         Grid = new Grid();
@@ -49,7 +55,44 @@ public class CustomButton : UserControl
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
             Margin = new Thickness(0, 0, 0, FontSize / 4),
         };
-        Grid.Children.Add(BTextBlock);
+        if (!BTextBlock.Text.Equals(""))
+        {
+            Grid.Children.Add(BTextBlock);
+        }
+
+        if (!string.Equals(ButtonImagePath, ""))
+        {
+            if (File.Exists(ButtonImagePath))
+            {
+                ButtonImage.Source = new BitmapImage(new Uri(ButtonImagePath, UriKind.RelativeOrAbsolute));
+                ButtonImage.Width = (int)ButtonHeight / 2;
+                ButtonImage.Height = (int)ButtonHeight / 2;
+                ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
+
+                if (!BTextBlock.Text.Equals(""))
+                {
+                    double padding = 5;
+                    Grid combinedGrid = new();
+                    combinedGrid.HorizontalAlignment = HorizontalAlignment.Center;
+                    ButtonImage.HorizontalAlignment = HorizontalAlignment.Left;
+                    ButtonImage.Margin = new Thickness(0, 0, ButtonImage.Width + padding, 0);
+                    BTextBlock.Margin = new Thickness(ButtonImage.Width + padding, 0, 0, 0);
+                    if (Grid.Children.Contains(BTextBlock))
+                    {
+                        Grid.Children.Remove(BTextBlock);
+                    }
+
+                    combinedGrid.Children.Add(BTextBlock);
+                    combinedGrid.Children.Add(ButtonImage);
+                    Grid.Children.Add(combinedGrid);
+                }
+                else
+                {
+                    Grid.Children.Add(ButtonImage);
+                }
+                // RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
+            }
+        }
 
         ButtonParent.Children.Add(Grid);
     }
@@ -99,12 +142,10 @@ public class CustomButton : UserControl
         return new Thickness(Grid.Margin.Left, Grid.Margin.Top, Grid.Margin.Right, Grid.Margin.Bottom);
     }
 
-
     private void SetGridMargin(Thickness value)
     {
         Grid.Margin = value;
     }
-
 
     public TextBlock BTextBlock { get; set; }
 

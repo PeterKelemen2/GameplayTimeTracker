@@ -105,7 +105,8 @@ namespace GameplayTimeTracker
             // clickableRectangle.MouseDown += ClickableRect_MouseDown;
             // Footer.Children.Add(clickableRectangle);
 
-            CustomButton testButton = new CustomButton(Footer, 100, 30, 7, "Test", isBold: true);
+            CustomButton testButton = new CustomButton(Footer, 100, 40, 7, "Test", isBold: true,
+                buttonImagePath: "assets/edit.png");
             testButton.Margin = new Thickness(250, 0, 0, 0);
             testButton.Grid.MouseDown += ClickableRect_MouseDown;
 
