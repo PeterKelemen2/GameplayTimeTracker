@@ -89,6 +89,8 @@ public class Tile : UserControl
     public double LastPlaytimePercent { get; set; }
     public string? IconImagePath { get; set; }
     public string ExePath { get; set; }
+    public string ExePathName { get; set; }
+    
     public double CurrentPlaytime { get; set; }
     public double HTotal { get; set; }
     public double HLast { get; set; }
@@ -629,6 +631,7 @@ public class Tile : UserControl
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         ExePath = exePath;
+        ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
         IsMenuToggled = false;
 
         SetupIconVars();

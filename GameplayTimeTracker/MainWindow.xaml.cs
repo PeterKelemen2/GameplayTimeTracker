@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace GameplayTimeTracker
         private bool isBlurToggled = false;
 
         TileContainer tileContainer = new();
+        List<Tile> tilesList = new List<Tile>();
 
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
@@ -78,6 +80,7 @@ namespace GameplayTimeTracker
             LoadTheme("default");
 
             handler.InitializeContainer(tileContainer, jsonFilePath);
+            tilesList = tileContainer.GetTiles();
 
 
             Closing += MainWindow_Closing;
@@ -103,6 +106,7 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
+
                         var sortedList = tileContainer.SortedByProperty("IsRunning", false);
                         if (!tileContainer.IsListEqual(sortedList))
                         {
@@ -113,7 +117,8 @@ namespace GameplayTimeTracker
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
-                    Console.WriteLine($"Cycle took {stopwatch.Elapsed}ms");
+                    Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
+
                     if ((int)stopwatch.ElapsedMilliseconds > 1000)
                     {
                         Task.Delay(1000).Wait();
@@ -194,7 +199,7 @@ namespace GameplayTimeTracker
                 string fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 4);
 
-                string uniqueFileName = Guid.NewGuid().ToString() + ".png";
+                string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
                 string? iconPath = $"assets/{uniqueFileName}";
 
                 Utils.PrepIcon(filePath, iconPath);
@@ -207,7 +212,7 @@ namespace GameplayTimeTracker
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                 {
                     // Closing all opened edit menus and reseting them to avoid graphical glitch
-                    foreach (var tile in tileContainer.GetTiles())
+                    foreach (var tile in tilesList)
                     {
                         if (tile.IsMenuToggled)
                         {
@@ -217,7 +222,7 @@ namespace GameplayTimeTracker
                     }
 
                     tileContainer.AddTile(newTile, newlyAdded: true);
-
+                    tilesList = tileContainer.GetTiles();
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {fileName}");

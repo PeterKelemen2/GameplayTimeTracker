@@ -287,7 +287,7 @@ public class TileContainer
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-
+        
         double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
         // if (tilesList.Count == 1)
         // {

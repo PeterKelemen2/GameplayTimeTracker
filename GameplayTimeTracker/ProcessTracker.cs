@@ -12,9 +12,29 @@ public class ProcessTracker
     TileContainer _tileContainer;
     private string runningText = "Running!";
     private string notRunningText = "";
+    private Dictionary<string, bool> runningDictionary;
+
+    public bool IsDictSet { get; set; }
 
     public ProcessTracker()
     {
+    }
+
+    public void InitializeExeDictionary()
+    {
+        foreach (var tile in _tilesList)
+        {
+            if (runningDictionary != null)
+            {
+                if (!runningDictionary.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(tile.ExePath)))
+                {
+                    // string newKey = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
+                    runningDictionary.Add(tile.GameName, tile.IsRunning);
+                }
+            }
+        }
+
+        IsDictSet = true;
     }
 
     public void InitializeProcessTracker(TileContainer tileContainer)
@@ -22,6 +42,7 @@ public class ProcessTracker
         _tileContainer = tileContainer;
         _exeNames = _tileContainer.GetExecutableNames();
         _tilesList = _tileContainer.GetTiles();
+        InitializeExeDictionary();
 
         foreach (var exeName in _exeNames)
         {
@@ -37,30 +58,35 @@ public class ProcessTracker
         Console.WriteLine("=================");
         foreach (var tile in _tilesList)
         {
-            var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
+            // var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
             var isRunning =
-                runningProcesses.Any(p => p.ProcessName.Equals(newExeName, StringComparison.OrdinalIgnoreCase));
+                runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
+
             if (isRunning)
             {
-                tile.IsRunning = true;
-
+                // Setting things up if game changes running state
                 if (tile.wasRunning == false)
                 {
+                    tile.IsRunning = true;
                     tile.wasRunning = true;
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
-                    Console.WriteLine("Updating bars from ProcessTracker - HandleProcesses");
-                    _tileContainer.UpdatePlaytimeBars();
-                    Console.WriteLine($"Setting new last playtime for {newExeName}");
-                }
+                    Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
+                    if (!tile.runningTextBlock.Text.Equals(runningText))
+                    {
+                        tile.runningTextBlock.Text = runningText;
+                    }
 
-                if (!tile.runningTextBlock.Text.Equals(runningText))
-                {
-                    tile.runningTextBlock.Text = runningText;
+                    tile.ToggleBgImageColor(isRunning);
                 }
 
                 tile.CurrentPlaytime++;
                 tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+                // Only update if a minute is passed
+                if (tile.CurrentPlaytime % 60 == 0)
+                {
+                    _tileContainer.UpdatePlaytimeBars();
+                }
             }
             else
             {
@@ -73,10 +99,9 @@ public class ProcessTracker
 
                     tile.wasRunning = false;
                     tile.IsRunning = false;
+                    tile.ToggleBgImageColor(isRunning);
                 }
             }
-
-            tile.ToggleBgImageColor(isRunning);
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
