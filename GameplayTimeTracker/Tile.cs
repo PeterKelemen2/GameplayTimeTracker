@@ -609,6 +609,7 @@ public class Tile : UserControl
 
     private double CalculatePlaytimeFromHnM(double h, double m)
     {
+        // Converting h and m to minutes
         return 60 * h + m;
     }
 

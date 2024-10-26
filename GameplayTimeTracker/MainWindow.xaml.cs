@@ -35,14 +35,22 @@ namespace GameplayTimeTracker
 
         List<Theme> themesList = new List<Theme>();
 
-        private System.Windows.Forms.NotifyIcon m_notifyIcon;
+        private NotificationHandler notificationHandler = new();
+
+        private SettingsMenu settingsMenu;
+        // private System.Windows.Forms.NotifyIcon m_notifyIcon;
+
+        public Grid GetContainerGrid()
+        {
+            return ContainerGrid;
+        }
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
             // ShowTilesOnCanvas();
             // tileContainer.ListTiles();
             // handler.WriteContentToFile(tileContainer, jsonFilePath);
-            SetupNotifyIcon();
+            notificationHandler.SetupNotifyIcon();
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
@@ -74,6 +82,8 @@ namespace GameplayTimeTracker
         public MainWindow()
         {
             InitializeComponent();
+            notificationHandler = new NotificationHandler();
+            settingsMenu = new SettingsMenu(ContainerGrid);
             handler.InitializeSettings();
 
             themesList = handler.GetThemesFromFile();
@@ -132,62 +142,6 @@ namespace GameplayTimeTracker
             });
         }
 
-        // ==== Tray ====
-        void SetupNotifyIcon()
-        {
-            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
-            m_notifyIcon.BalloonTipText = "The app has been minimised. Click the tray icon to show.";
-            m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
-            m_notifyIcon.Text = "Gameplay Time Tracker";
-            m_notifyIcon.Icon =
-                new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
-            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-        }
-
-        void OnCloseNotify(object sender, CancelEventArgs args)
-        {
-            // Only dispose if you are exiting
-            if (!args.Cancel)
-            {
-                m_notifyIcon.Dispose();
-                m_notifyIcon = null;
-            }
-        }
-
-        private WindowState m_storedWindowState = WindowState.Normal;
-
-        void OnStateChanged(object sender, EventArgs args)
-        {
-            if (WindowState == WindowState.Minimized)
-            {
-                Hide();
-                if (m_notifyIcon != null)
-                    m_notifyIcon.ShowBalloonTip(2000);
-            }
-            else
-                m_storedWindowState = WindowState;
-        }
-
-        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args)
-        {
-            if (m_notifyIcon != null)
-                m_notifyIcon.Visible = !IsVisible;
-        }
-
-        void m_notifyIcon_Click(object sender, EventArgs e)
-        {
-            Show();
-            WindowState = m_storedWindowState;
-        }
-
-        void ShowTrayIcon(bool show)
-        {
-            if (m_notifyIcon != null)
-                m_notifyIcon.Visible = show;
-        }
-
-        // ==== Tray ====
-
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -237,133 +191,133 @@ namespace GameplayTimeTracker
         }
 
 
-        private void CreateBlurRectangle()
-        {
-            // Create a new Rectangle for the blur overlay
-            Rectangle blurOverlay = new Rectangle
-            {
-                Width = ContainerGrid.ActualWidth,
-                Height = ContainerGrid.ActualHeight,
-                Fill = new SolidColorBrush(Colors.Black),
-                // Opacity = 0.8,
-                // IsHitTestVisible = false // Make the overlay non-clickable
-            };
-
-            // Set attached properties
-            Panel.SetZIndex(blurOverlay, 0); // Ensure it appears above other elements
-            Grid.SetRow(blurOverlay, 0); // Set to the first row of the Grid
-
-            // Create a VisualBrush to capture visuals behind the rectangle
-            VisualBrush visualBrush = new VisualBrush();
-
-            // Create a DrawingVisual to capture the visuals
-            DrawingVisual drawingVisual = new DrawingVisual();
-
-            // Render the visuals into the DrawingVisual
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                // Render the current visuals into the DrawingVisual
-                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
-                    (int)ActualWidth, (int)ActualHeight, 98, 102, PixelFormats.Pbgra32);
-
-                renderTargetBitmap.Render(this); // Render the current visual tree to the bitmap
-
-                // Draw the bitmap into the DrawingVisual
-                drawingContext.DrawImage(renderTargetBitmap, new Rect(0, 0, ActualWidth, ActualHeight));
-            }
-
-            // Set the VisualBrush to the DrawingVisual
-            visualBrush.Visual = drawingVisual;
-
-            // Set the Fill of the Rectangle to the VisualBrush
-            blurOverlay.Fill = visualBrush;
-
-            // Create the BlurEffect
-            blurOverlay.Effect = new BlurEffect
-            {
-                Radius = 20 // Set the blur radius
-            };
-
-            // Add the Rectangle to the Grid
-            ContainerGrid.Children.Add(blurOverlay);
-        }
-
-        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("Open Settings Window");
-            isBlurToggled = !isBlurToggled;
-            CreateBlurRectangle();
-            Grid settingsContainerGrid = new Grid();
-            settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
-
-            ThicknessAnimation rollInAnimation = new ThicknessAnimation
-            {
-                From = new Thickness(0, 0, 0, -(int)ActualHeight),
-                To = new Thickness(0, 0, 0, 0),
-                Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-                FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-            };
-
-            Rectangle settingsRect = new Rectangle
-            {
-                Width = (int)ActualWidth / 2,
-                Height = (int)ActualHeight / 2,
-                Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
-                RadiusX = Utils.SettingsRadius,
-                RadiusY = Utils.SettingsRadius,
-                Effect = Utils.dropShadowRectangle
-            };
-            settingsContainerGrid.Children.Add(settingsRect);
-            Button closeButton = new Button
-            {
-                Style = (Style)Application.Current.FindResource("RoundedButton"),
-                Content = "Close",
-                Width = 80,
-                Height = 30,
-                VerticalAlignment = VerticalAlignment.Bottom,
-                Margin = new Thickness(0, 0, 0, (int)ActualHeight * 0.25),
-            };
-            closeButton.Click += CloseSettingsWindow;
-            settingsContainerGrid.Children.Add(closeButton);
-
-            TextBlock settingsTitle = new TextBlock
-            {
-                Text = "Settings",
-                Foreground = new SolidColorBrush(Utils.FontColor),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                FontSize = 20,
-                FontWeight = FontWeights.Bold,
-            };
-            settingsTitle.Margin = new Thickness(0, 0, 0, (int)(ActualHeight * 0.25) + 110);
-            settingsContainerGrid.Children.Add(settingsTitle);
-
-            ContainerGrid.Children.Add(settingsContainerGrid);
-            settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
-        }
-
-        private void CloseSettingsWindow(object sender, RoutedEventArgs e)
-        {
-            // Create a list to store children that need to be removed
-            List<UIElement> childrenToRemove = new List<UIElement>();
-
-            // Iterate through the children of the grid
-            foreach (UIElement child in ContainerGrid.Children)
-            {
-                // Check if the child is a FrameworkElement and if its name does not match the one we want to keep
-                if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
-                {
-                    childrenToRemove.Add(child); // Mark for removal
-                }
-            }
-
-            // Remove the marked children
-            foreach (UIElement child in childrenToRemove)
-            {
-                ContainerGrid.Children.Remove(child);
-            }
-        }
+        // private void CreateBlurRectangle()
+        // {
+        //     // Create a new Rectangle for the blur overlay
+        //     Rectangle blurOverlay = new Rectangle
+        //     {
+        //         Width = ContainerGrid.ActualWidth,
+        //         Height = ContainerGrid.ActualHeight,
+        //         Fill = new SolidColorBrush(Colors.Black),
+        //         // Opacity = 0.8,
+        //         // IsHitTestVisible = false // Make the overlay non-clickable
+        //     };
+        //
+        //     // Set attached properties
+        //     Panel.SetZIndex(blurOverlay, 0); // Ensure it appears above other elements
+        //     Grid.SetRow(blurOverlay, 0); // Set to the first row of the Grid
+        //
+        //     // Create a VisualBrush to capture visuals behind the rectangle
+        //     VisualBrush visualBrush = new VisualBrush();
+        //
+        //     // Create a DrawingVisual to capture the visuals
+        //     DrawingVisual drawingVisual = new DrawingVisual();
+        //
+        //     // Render the visuals into the DrawingVisual
+        //     using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+        //     {
+        //         // Render the current visuals into the DrawingVisual
+        //         RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+        //             (int)ActualWidth, (int)ActualHeight, 98, 102, PixelFormats.Pbgra32);
+        //
+        //         renderTargetBitmap.Render(this); // Render the current visual tree to the bitmap
+        //
+        //         // Draw the bitmap into the DrawingVisual
+        //         drawingContext.DrawImage(renderTargetBitmap, new Rect(0, 0, ActualWidth, ActualHeight));
+        //     }
+        //
+        //     // Set the VisualBrush to the DrawingVisual
+        //     visualBrush.Visual = drawingVisual;
+        //
+        //     // Set the Fill of the Rectangle to the VisualBrush
+        //     blurOverlay.Fill = visualBrush;
+        //
+        //     // Create the BlurEffect
+        //     blurOverlay.Effect = new BlurEffect
+        //     {
+        //         Radius = 20 // Set the blur radius
+        //     };
+        //
+        //     // Add the Rectangle to the Grid
+        //     ContainerGrid.Children.Add(blurOverlay);
+        // }
+        //
+        // private void OpenSettingsWindow(object sender, RoutedEventArgs e)
+        // {
+        //     Console.WriteLine("Open Settings Window");
+        //     isBlurToggled = !isBlurToggled;
+        //     CreateBlurRectangle();
+        //     Grid settingsContainerGrid = new Grid();
+        //     settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
+        //
+        //     ThicknessAnimation rollInAnimation = new ThicknessAnimation
+        //     {
+        //         From = new Thickness(0, 0, 0, -(int)ActualHeight),
+        //         To = new Thickness(0, 0, 0, 0),
+        //         Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+        //         FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+        //         EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        //     };
+        //
+        //     Rectangle settingsRect = new Rectangle
+        //     {
+        //         Width = (int)ActualWidth / 2,
+        //         Height = (int)ActualHeight / 2,
+        //         Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
+        //         RadiusX = Utils.SettingsRadius,
+        //         RadiusY = Utils.SettingsRadius,
+        //         Effect = Utils.dropShadowRectangle
+        //     };
+        //     settingsContainerGrid.Children.Add(settingsRect);
+        //     Button closeButton = new Button
+        //     {
+        //         Style = (Style)Application.Current.FindResource("RoundedButton"),
+        //         Content = "Close",
+        //         Width = 80,
+        //         Height = 30,
+        //         VerticalAlignment = VerticalAlignment.Bottom,
+        //         Margin = new Thickness(0, 0, 0, (int)ActualHeight * 0.25),
+        //     };
+        //     closeButton.Click += CloseSettingsWindow;
+        //     settingsContainerGrid.Children.Add(closeButton);
+        //
+        //     TextBlock settingsTitle = new TextBlock
+        //     {
+        //         Text = "Settings",
+        //         Foreground = new SolidColorBrush(Utils.FontColor),
+        //         HorizontalAlignment = HorizontalAlignment.Center,
+        //         VerticalAlignment = VerticalAlignment.Center,
+        //         FontSize = 20,
+        //         FontWeight = FontWeights.Bold,
+        //     };
+        //     settingsTitle.Margin = new Thickness(0, 0, 0, (int)(ActualHeight * 0.25) + 110);
+        //     settingsContainerGrid.Children.Add(settingsTitle);
+        //
+        //     ContainerGrid.Children.Add(settingsContainerGrid);
+        //     settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
+        // }
+        //
+        // private void CloseSettingsWindow(object sender, RoutedEventArgs e)
+        // {
+        //     // Create a list to store children that need to be removed
+        //     List<UIElement> childrenToRemove = new List<UIElement>();
+        //
+        //     // Iterate through the children of the grid
+        //     foreach (UIElement child in ContainerGrid.Children)
+        //     {
+        //         // Check if the child is a FrameworkElement and if its name does not match the one we want to keep
+        //         if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
+        //         {
+        //             childrenToRemove.Add(child); // Mark for removal
+        //         }
+        //     }
+        //
+        //     // Remove the marked children
+        //     foreach (UIElement child in childrenToRemove)
+        //     {
+        //         ContainerGrid.Children.Remove(child);
+        //     }
+        // }
 
         private void ShowTilesOnCanvas()
         {
@@ -400,14 +354,15 @@ namespace GameplayTimeTracker
                 if (MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButton.YesNo) ==
                     MessageBoxResult.No)
                 {
-                    e.Cancel = true; // Cancel closing
+                    e.Cancel = true;
+
                     // Reinitialize NotifyIcon if it's null
-                    if (m_notifyIcon == null)
+                    if (notificationHandler.m_notifyIcon == null)
                     {
-                        InitializeNotifyIcon(); // Custom method to reinitialize the NotifyIcon
+                        notificationHandler.InitializeNotifyIcon();
                     }
 
-                    return; // Exit the method
+                    return;
                 }
 
                 // If the user confirmed the exit, proceed with the save logic
@@ -420,16 +375,24 @@ namespace GameplayTimeTracker
             }
         }
 
-        private void InitializeNotifyIcon()
+        private void OnCloseNotify(object? sender, CancelEventArgs e)
         {
-            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
-            m_notifyIcon.BalloonTipText = "The app has been minimized. Click the tray icon to show.";
-            m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
-            m_notifyIcon.Text = "Gameplay Time Tracker";
-            m_notifyIcon.Icon =
-                new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
-            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            m_notifyIcon.Visible = true; // Make sure it's visible
+            notificationHandler.OnCloseNotify(sender, e);
+        }
+
+        private void OnStateChanged(object? sender, EventArgs e)
+        {
+            notificationHandler.OnStateChanged(sender, e);
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            notificationHandler.OnIsVisibleChanged(sender, e);
+        }
+
+        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            settingsMenu.OpenSettingsWindow(sender, e);
         }
     }
 }

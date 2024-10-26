@@ -33,6 +33,8 @@ public class Utils
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
 
+    public static System.Windows.Window mainWindow = Application.Current.MainWindow;
+
     public static void SetColors(Dictionary<string, string> colors)
     {
         try
@@ -136,6 +138,33 @@ public class Utils
         ShadowDepth = 0
     };
 
+
+    public static BitmapSource CaptureCurrentWindow()
+    {
+        // Define the width and height of the bitmap, matching the element's size
+        int width = 800;
+        int height = 650;
+
+        // Create a RenderTargetBitmap with the dimensions of the target element
+        RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+            width, height, 96, 96, PixelFormats.Pbgra32);
+
+        // Render the target element onto the bitmap
+        renderBitmap.Render(mainWindow);
+
+        // Optionally, encode the bitmap to save as an image
+        // Example: Save to PNG
+        BitmapEncoder encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+        using (var fileStream = new System.IO.FileStream("CapturedWindow.png", System.IO.FileMode.Create))
+        {
+            encoder.Save(fileStream);
+        }
+
+        // Return the bitmap
+        return renderBitmap;
+    }
 
     public static (double, double) DecodeTimeString(string timeString, double prevH, double prevM)
     {
