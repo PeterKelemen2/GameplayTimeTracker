@@ -256,6 +256,7 @@ public class TileContainer
         tileToUpdate.lastTimeGradientBar.Percent =
             Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
 
+        Console.WriteLine($"Updating last gradient bar {tileToUpdate.GameName}");
         tileToUpdate.lastTimeGradientBar.UpdateBar();
         // tileToUpdate.lastTimeGradientBar.InitializeBar();
 
@@ -287,7 +288,7 @@ public class TileContainer
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        
+
         double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
         // if (tilesList.Count == 1)
         // {
@@ -306,7 +307,21 @@ public class TileContainer
 
             Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
             // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
-            tile.lastTimeGradientBar.Percent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
+
+            var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
+            // switch (newPercent)
+            // {
+            //     case < 0:
+            //         Console.WriteLine("Percent is smaller than 0");
+            //         newPercent = 0;
+            //         break;
+            //     case > 1:
+            //         Console.WriteLine("Percent is bigger than 1");
+            //         newPercent = 1;
+            //         break;
+            // }
+            
+            tile.lastTimeGradientBar.Percent = newPercent;
 
             if (!tile.totalTimeGradientBar.WasInitialized)
             {
@@ -314,13 +329,15 @@ public class TileContainer
             }
             else
             {
+                Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
                 tile.totalTimeGradientBar.UpdateBar();
             }
 
+            Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
             tile.lastTimeGradientBar.UpdateBar();
         }
 
         stopwatch.Stop();
-        Console.WriteLine($"Updating BOTH playtime bars took: {stopwatch.Elapsed}");
+        Console.WriteLine($"Updating ALL playtime bars took: {stopwatch.Elapsed}");
     }
 }

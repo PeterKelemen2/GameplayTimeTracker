@@ -54,6 +54,7 @@ public class GradientBar : UserControl
 
     private double CalculateWidth()
     {
+        Percent = Percent > 1 ? 1 : (Percent < 0 ? 0 : Percent);
         return (GWidth - 2 * GPadding) * Percent;
     }
 

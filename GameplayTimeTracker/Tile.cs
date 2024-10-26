@@ -90,7 +90,7 @@ public class Tile : UserControl
     public string? IconImagePath { get; set; }
     public string ExePath { get; set; }
     public string ExePathName { get; set; }
-    
+
     public double CurrentPlaytime { get; set; }
     public double HTotal { get; set; }
     public double HLast { get; set; }
@@ -553,7 +553,7 @@ public class Tile : UserControl
         lastPlaytime.Text = $"{hLast}h {mLast}m";
     }
 
-    public void CalculatePlaytimeFromSec(double sec, bool resetCurrent = false)
+    public void CalculatePlaytimeFromSec(double sec)
     {
         int customHour = 60 - 1;
         if (sec > customHour) // 60-1
@@ -623,8 +623,11 @@ public class Tile : UserControl
         TileWidth = width;
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
-        TotalPlaytime = totalTime;
+        // TotalPlaytime = totalTime;
+        TotalPlaytime = totalTime < 0 ? 0 : totalTime;
+        LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         LastPlaytime = lastPlayedTime;
+        // Percent = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         // LastPlaytime = 0;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         // LastPlaytimePercent = 0;

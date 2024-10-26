@@ -212,7 +212,7 @@ namespace GameplayTimeTracker
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                 {
                     // Closing all opened edit menus and reseting them to avoid graphical glitch
-                    foreach (var tile in tilesList)
+                    foreach (var tile in tileContainer.GetTiles())
                     {
                         if (tile.IsMenuToggled)
                         {

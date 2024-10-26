@@ -67,17 +67,19 @@ public class ProcessTracker
                 // Setting things up if game changes running state
                 if (tile.wasRunning == false)
                 {
-                    tile.IsRunning = true;
                     tile.wasRunning = true;
+                    tile.IsRunning = true;
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
                     Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
-                    if (!tile.runningTextBlock.Text.Equals(runningText))
-                    {
-                        tile.runningTextBlock.Text = runningText;
-                    }
+
 
                     tile.ToggleBgImageColor(isRunning);
+                }
+
+                if (!tile.runningTextBlock.Text.Equals(runningText))
+                {
+                    tile.runningTextBlock.Text = runningText;
                 }
 
                 tile.CurrentPlaytime++;
@@ -92,14 +94,14 @@ public class ProcessTracker
             {
                 if (tile.IsRunning)
                 {
-                    if (!tile.runningTextBlock.Text.Equals(notRunningText))
-                    {
-                        tile.runningTextBlock.Text = notRunningText;
-                    }
-
                     tile.wasRunning = false;
                     tile.IsRunning = false;
                     tile.ToggleBgImageColor(isRunning);
+                }
+
+                if (!tile.runningTextBlock.Text.Equals(notRunningText))
+                {
+                    tile.runningTextBlock.Text = notRunningText;
                 }
             }
         }
