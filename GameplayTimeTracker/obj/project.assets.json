@@ -2390,19 +2390,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Peti\\.nuget\\packages\\": {}
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+      "projectUniqueName": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTrackerWPF\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
       "projectName": "Gameplay Time Tracker",
-      "projectPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
-      "packagesPath": "C:\\Users\\Peti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\obj\\",
+      "projectPath": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTrackerWPF\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTrackerWPF\\GameplayTimeTracker\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Peti\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0-windows"
@@ -2420,11 +2420,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2477,24 +2472,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -2503,7 +2480,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Peti\\.dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\Administrator\\.dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
       }
     }
   },
