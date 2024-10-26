@@ -92,56 +92,97 @@ public class Utils
     public const int SettingsRadius = 20;
 
 
-    public static Image ApplyBlurWithoutEdgeArtifacts(Image originalImage, double blurRadius)
+    public static (byte[] topRow, byte[] bottomRow, byte[] leftColumn, byte[] rightColumn) GetEdges(BitmapSource bitmap)
     {
-        int padding = (int)(blurRadius * 2); // Ensure enough padding based on blur radius
+        int width = bitmap.PixelWidth;
+        int height = bitmap.PixelHeight;
+        int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8; // Bits per pixel rounded to bytes
+        int rowStride = width * bytesPerPixel; // Byte width of a single row
+        int columnStride = height * bytesPerPixel; // Byte height of a single column
 
-        // Calculate the padded width and height
-        int paddedWidth = (int)originalImage.Width + 2 * padding;
-        int paddedHeight = (int)originalImage.Height + 2 * padding;
+        // Create buffers for top row, bottom row, left column, and right column
+        byte[] topRow = new byte[rowStride];
+        byte[] bottomRow = new byte[rowStride];
+        byte[] leftColumn = new byte[columnStride];
+        byte[] rightColumn = new byte[columnStride];
 
-        // Render the original image onto a larger RenderTargetBitmap
-        RenderTargetBitmap paddedBitmap = new RenderTargetBitmap(
-            paddedWidth, paddedHeight, 96, 96, PixelFormats.Pbgra32);
+        // Define rectangles for each region
+        Int32Rect topRowRect = new Int32Rect(0, 0, width, 1);
+        Int32Rect bottomRowRect = new Int32Rect(0, height - 1, width, 1);
+        Int32Rect leftColumnRect = new Int32Rect(0, 0, 1, height);
+        Int32Rect rightColumnRect = new Int32Rect(width - 1, 0, 1, height);
 
-        // Create a container to render the image with padding
-        Border container = new Border
-        {
-            Width = paddedWidth,
-            Height = paddedHeight,
-            Background = Brushes.Transparent,
-            Child = new Image
-            {
-                Source = originalImage.Source,
-                Width = originalImage.Width,
-                Height = originalImage.Height,
-                Stretch = originalImage.Stretch,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            }
-        };
+        // Copy pixels for each region
+        bitmap.CopyPixels(topRowRect, topRow, rowStride, 0);
+        bitmap.CopyPixels(bottomRowRect, bottomRow, rowStride, 0);
+        bitmap.CopyPixels(leftColumnRect, leftColumn, bytesPerPixel, 0);
+        bitmap.CopyPixels(rightColumnRect, rightColumn, bytesPerPixel, 0);
 
-        // Render the container with padding
-        paddedBitmap.Render(container);
-
-        // Apply the blur effect to the padded RenderTargetBitmap
-        Image paddedImage = new Image { Source = paddedBitmap };
-        paddedImage.Effect = new BlurEffect { Radius = blurRadius };
-
-        // Render the blurred image again into a new RenderTargetBitmap
-        RenderTargetBitmap blurredBitmap = new RenderTargetBitmap(
-            paddedWidth, paddedHeight, 96, 96, PixelFormats.Pbgra32);
-        blurredBitmap.Render(paddedImage);
-
-        // Crop the image to the original size, excluding padding
-        CroppedBitmap croppedBitmap = new CroppedBitmap(
-            blurredBitmap,
-            new Int32Rect(padding, padding, (int)originalImage.Width, (int)originalImage.Height));
-
-        // Return the final image with blur applied without edge artifacts
-        return new Image { Source = croppedBitmap };
+        return (topRow, bottomRow, leftColumn, rightColumn);
     }
 
+    public static BitmapSource ExtendEdgesAroundCenter(BitmapSource bitmap, int n)
+    {
+        BitmapSource cropped = CropTransparentAreas(bitmap);
+        bitmap = cropped;
+
+        int originalWidth = bitmap.PixelWidth;
+        int originalHeight = bitmap.PixelHeight;
+        int extendedWidth = originalWidth + 2 * n;
+        int extendedHeight = originalHeight + 2 * n;
+        int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
+
+        // Ensure n is positive and within image bounds
+        if (n < 0 || originalWidth < 1 || originalHeight < 1)
+            throw new ArgumentException("Invalid dimensions or extension size.");
+
+        // Get top, bottom, left, and right edges
+        var (topRow, bottomRow, leftColumn, rightColumn) = GetEdges(bitmap);
+
+        // Create a buffer for the extended image
+        byte[] extendedPixels = new byte[extendedWidth * extendedHeight * bytesPerPixel];
+
+        // Copy the original image into the center of the extended image
+        bitmap.CopyPixels(new Int32Rect(0, 0, originalWidth, originalHeight),
+            extendedPixels,
+            extendedWidth * bytesPerPixel,
+            n * extendedWidth * bytesPerPixel + n * bytesPerPixel);
+
+        // Fill top edge
+        for (int i = 0; i < n; i++)
+        {
+            Array.Copy(topRow, 0, extendedPixels, i * extendedWidth * bytesPerPixel + n * bytesPerPixel, topRow.Length);
+        }
+
+        // Fill bottom edge
+        for (int i = 0; i < n; i++)
+        {
+            Array.Copy(bottomRow, 0, extendedPixels,
+                (extendedHeight - n + i - 1) * extendedWidth * bytesPerPixel + n * bytesPerPixel, bottomRow.Length);
+        }
+
+        // Fill left and right edges
+        for (int y = 0; y < originalHeight; y++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                // Left edge
+                Array.Copy(leftColumn, y * bytesPerPixel, extendedPixels, ((y + n) * extendedWidth + i) * bytesPerPixel,
+                    bytesPerPixel);
+                // Right edge
+                Array.Copy(rightColumn, y * bytesPerPixel, extendedPixels,
+                    ((y + n) * extendedWidth + (originalWidth + n + i)) * bytesPerPixel, bytesPerPixel);
+            }
+        }
+
+        BitmapSource newBitmapSource = BitmapSource.Create(extendedWidth, extendedHeight, bitmap.DpiX, bitmap.DpiY,
+            bitmap.Format, null,
+            extendedPixels, extendedWidth * bytesPerPixel);
+        SaveBitmapSourceToFile(newBitmapSource, "assets/new_sok.png");
+        // Return the new extended bitmap
+        return BitmapSource.Create(extendedWidth, extendedHeight, bitmap.DpiX, bitmap.DpiY, bitmap.Format, null,
+            extendedPixels, extendedWidth * bytesPerPixel);
+    }
 
     public static BlurEffect fakeShadow = new BlurEffect
     {
@@ -208,11 +249,76 @@ public class Utils
         }
     }
 
+    public static BitmapSource CropTransparentAreas(BitmapSource bitmap)
+    {
+        int width = bitmap.PixelWidth;
+        int height = bitmap.PixelHeight;
+        int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
+
+        // Create a buffer to hold the pixels
+        byte[] pixels = new byte[width * height * bytesPerPixel];
+        bitmap.CopyPixels(pixels, width * bytesPerPixel, 0);
+
+        // Find the bounds of the non-transparent pixels
+        int minX = width;
+        int minY = height;
+        int maxX = 0;
+        int maxY = 0;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int index = (y * width + x) * bytesPerPixel;
+                byte alpha = pixels[index + 3]; // Assuming the format has alpha channel (e.g., BGRA)
+
+                if (alpha > 0) // Check if the pixel is not transparent
+                {
+                    if (x < minX) minX = x;
+                    if (y < minY) minY = y;
+                    if (x > maxX) maxX = x;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+
+        // Calculate new width and height
+        int croppedWidth = maxX - minX + 1;
+        int croppedHeight = maxY - minY + 1;
+
+        if (croppedWidth <= 0 || croppedHeight <= 0)
+        {
+            // No non-transparent pixels found; return the original bitmap
+            return bitmap;
+        }
+
+        // Create a new pixel buffer for the cropped image
+        byte[] croppedPixels = new byte[croppedWidth * croppedHeight * bytesPerPixel];
+
+        // Copy the non-transparent pixels to the new buffer
+        for (int y = 0; y < croppedHeight; y++)
+        {
+            for (int x = 0; x < croppedWidth; x++)
+            {
+                int originalIndex = ((minY + y) * width + (minX + x)) * bytesPerPixel;
+                int croppedIndex = (y * croppedWidth + x) * bytesPerPixel;
+
+                Array.Copy(pixels, originalIndex, croppedPixels, croppedIndex, bytesPerPixel);
+            }
+        }
+
+        // Create the cropped BitmapSource
+        BitmapSource croppedBitmap = BitmapSource.Create(croppedWidth, croppedHeight, bitmap.DpiX, bitmap.DpiY,
+            bitmap.Format, null, croppedPixels, croppedWidth * bytesPerPixel);
+
+        return croppedBitmap;
+    }
+
     public static BitmapSource CaptureCurrentWindow()
     {
         // Define the width and height of the bitmap, matching the element's size
-        int width = 800;
-        int height = 650;
+        int width = (int)mainWindow.ActualWidth;
+        int height = (int)mainWindow.ActualHeight;
 
         // Create a RenderTargetBitmap with the dimensions of the target element
         RenderTargetBitmap renderBitmap = new RenderTargetBitmap(

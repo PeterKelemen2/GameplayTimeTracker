@@ -107,23 +107,23 @@ public class SettingsMenu : UserControl
 
     private void CreateBlurOverlay()
     {
+        int bRadius = 10;
         BitmapSource settingsBgBitmap = Utils.CaptureCurrentWindow();
+        BitmapSource extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
+
         Image bgImage = new Image
         {
-            Source = settingsBgBitmap,
-            Stretch = Stretch.UniformToFill,
+            Source = extendedBitmap,
+            Stretch = Stretch.Uniform,
             Width = WinWidth,
             Height = WinHeight,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(0, 0, 0, 0),
+            Margin = new Thickness(-bRadius, -bRadius, 0, 0),
             Effect = Utils.blurEffect
         };
 
-        Image newImage = Utils.ApplyBlurWithoutEdgeArtifacts(bgImage, 10);
-
         // Add the final image to the container
         ContainerGrid.Children.Add(bgImage);
-        // ContainerGrid.Children.Add(bgOverlay);
     }
 }
