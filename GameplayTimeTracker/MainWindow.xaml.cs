@@ -6,11 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Windows.Forms.Cursors;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
@@ -92,10 +94,29 @@ namespace GameplayTimeTracker
             handler.InitializeContainer(tileContainer, jsonFilePath);
             tilesList = tileContainer.GetTiles();
 
+            // Rectangle clickableRectangle = new Rectangle
+            // {
+            //     Width = 80,
+            //     Height = 30,
+            //     RadiusX = 10,
+            //     RadiusY = 10,
+            //     Fill = new SolidColorBrush(Utils.EditColor1),
+            // };
+            // clickableRectangle.MouseDown += ClickableRect_MouseDown;
+            // Footer.Children.Add(clickableRectangle);
+
+            CustomButton testButton = new CustomButton(Footer, 100, 30, 7, "Test", isBold: true);
+            testButton.Margin = new Thickness(250, 0, 0, 0);
+            testButton.Grid.MouseDown += ClickableRect_MouseDown;
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
             ContentRendered += MainWindow_ContentRendered;
+        }
+
+        private void ClickableRect_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("Clicked rect!!");
         }
 
         private void MainWindow_ContentRendered(object sender, EventArgs e)
