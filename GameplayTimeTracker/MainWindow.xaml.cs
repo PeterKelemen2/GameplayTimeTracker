@@ -94,21 +94,15 @@ namespace GameplayTimeTracker
             handler.InitializeContainer(tileContainer, jsonFilePath);
             tilesList = tileContainer.GetTiles();
 
-            // Rectangle clickableRectangle = new Rectangle
-            // {
-            //     Width = 80,
-            //     Height = 30,
-            //     RadiusX = 10,
-            //     RadiusY = 10,
-            //     Fill = new SolidColorBrush(Utils.EditColor1),
-            // };
-            // clickableRectangle.MouseDown += ClickableRect_MouseDown;
-            // Footer.Children.Add(clickableRectangle);
 
-            CustomButton testButton = new CustomButton(Footer, 100, 40, 7, "Test", isBold: true,
-                buttonImagePath: "assets/edit.png");
+            CustomButton testButton =
+                new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
             testButton.Margin = new Thickness(250, 0, 0, 0);
+            testButton.Height = 0;
+            Footer.Children.Add(testButton);
+            testButton.Height = 40;
             testButton.Grid.MouseDown += ClickableRect_MouseDown;
+
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;

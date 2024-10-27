@@ -7,10 +7,13 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using Gdk;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Key = System.Windows.Input.Key;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Point = System.Windows.Point;
 
 
 namespace GameplayTimeTracker;
@@ -58,6 +61,8 @@ public class Tile : UserControl
     private TextBlock editExePathTitle;
     private TextBox editExePathBox;
     private Button editExePathButton;
+
+    private CustomButton newTestButton;
 
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
@@ -107,6 +112,11 @@ public class Tile : UserControl
     private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
 
+    private void ClickableRect_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        Console.WriteLine("Clicked rect!!");
+    }
+
     public void ToggleEdit()
     {
         isMenuOpen = !isMenuOpen;
@@ -149,6 +159,9 @@ public class Tile : UserControl
             editExePathButton.Height = Utils.TextBoxHeight;
             changeIconButton.Height = Utils.TextBoxHeight;
 
+            newTestButton.ButtonBase.Height = 30;
+            newTestButton.Grid.Height = 30;
+
             double rowMargin = 20;
 
             menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
@@ -176,6 +189,9 @@ public class Tile : UserControl
             changeIconButton.Margin = new Thickness(0, editNameBox.Margin.Top, Utils.EditFColLeft, 0);
             editSaveButton.Margin = new Thickness(0, editExePathBox.Margin.Top, Utils.EditFColLeft, 0);
 
+            newTestButton.Margin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
+
+            Thickness testButtonMargin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
 
             animatedElements = new List<UIElement>();
             animatedElements.AddRange(new UIElement[]
@@ -186,7 +202,10 @@ public class Tile : UserControl
                 editPlaytimeBox,
                 editExePathTitle, editExePathBox, editExePathButton,
                 editSaveButton,
+                newTestButton.Grid, newTestButton.ButtonBase
             });
+
+
             foreach (var element in animatedElements)
             {
                 if (element is FrameworkElement frameworkElement)
@@ -250,6 +269,11 @@ public class Tile : UserControl
 
         foreach (var element in editElements)
         {
+            if (element is CustomButton)
+            {
+                Console.WriteLine("Custom Button found!");
+            }
+
             if (animatedElements.Contains(element) && element is FrameworkElement frameworkElement)
             {
                 // Get the original margin
@@ -273,6 +297,7 @@ public class Tile : UserControl
 
 
                 // Start the margin animation
+
                 frameworkElement.BeginAnimation(MarginProperty, marginAnimation);
             }
 
@@ -776,12 +801,22 @@ public class Tile : UserControl
         };
         changeIconButton.Click += UpdateIcons;
 
+
+        newTestButton = new CustomButton(height: 0, text: "EditB");
+        newTestButton.HorizontalAlignment = HorizontalAlignment.Left;
+        newTestButton.VerticalAlignment = VerticalAlignment.Top;
+        // newTestButton.Margin = new Thickness(0, 150, 0, 0);
+        newTestButton.MouseDown += ClickableRect_MouseDown;
+        Panel.SetZIndex(newTestButton, 10);
+        
+        //TODO: Fix animation
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
             editSaveButton, changeIconButton,
             editPlaytimeBox,
             editExePathTitle, editExePathBox, editExePathButton,
+            newTestButton
         });
         foreach (var elem in editElements)
         {
@@ -840,16 +875,24 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
+        CustomButton tileButton = new CustomButton(text: "TestWauu");
+        tileButton.HorizontalAlignment = HorizontalAlignment.Left;
+        tileButton.VerticalAlignment = VerticalAlignment.Top;
+        tileButton.MouseDown += ClickableRect_MouseDown;
+        Panel.SetZIndex(tileButton, 10);
+
         mainElements.AddRange(new UIElement[] { container, editButton, removeButton, launchButton });
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
+        Grid.SetRow(tileButton, 0);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
+        grid.Children.Add(tileButton);
 
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);

@@ -11,33 +11,39 @@ namespace GameplayTimeTracker;
 public class CustomButton : UserControl
 {
     private bool isDisabled = false;
-    private Rectangle ButtonBase;
+    public Rectangle ButtonBase;
     private string ButtonImagePath;
     public Image ButtonImage = new Image();
+    public Grid Grid { get; private set; } // Make Grid a property with private set
 
-    public CustomButton(Grid parent, double width, double height, double borderRadius, string text = "",
-        double fontSize = 16, bool isBold = false, string buttonImagePath = "", bool isDisabled = false)
+    // Dependency Properties
+    public static readonly DependencyProperty MarginProperty =
+        DependencyProperty.Register("Margin", typeof(Thickness), typeof(CustomButton),
+            new PropertyMetadata(new Thickness(0), OnMarginChanged));
+
+    public static readonly DependencyProperty OpacityProperty =
+        DependencyProperty.Register("Opacity", typeof(double), typeof(CustomButton),
+            new PropertyMetadata(1.0, OnOpacityChanged));
+
+    public static readonly DependencyProperty HeightProperty =
+        DependencyProperty.Register("Height", typeof(double), typeof(CustomButton),
+            new PropertyMetadata(40.0, OnHeightChanged));
+
+    public CustomButton(Grid parent = null, double width = 100, double height = 30, double borderRadius = 7,
+        string text = "", double fontSize = 16, bool isBold = true,
+        string buttonImagePath = "", bool isDisabled = false)
     {
-        ButtonBase = new();
-        BTextBlock = new();
-        ButtonParent = parent;
-        ButtonWidth = width;
-        ButtonHeight = height;
-        BorderRadius = borderRadius;
-        ButtonText = text;
-        ButtonFontSize = fontSize;
-        IsBold = isBold;
-        ButtonImagePath = buttonImagePath;
-        IsButtonDisabled = isDisabled;
-
-        Grid = new Grid();
-        Grid.Width = ButtonWidth;
-        Grid.Height = ButtonHeight;
+        Grid = new Grid
+        {
+            Width = width,
+            Height = height
+        };
+        this.Content = Grid; // Set the inner Grid as the content of the UserControl
 
         ButtonBase = new Rectangle
         {
             Width = width,
-            Height = height,
+            Height = 30,
             RadiusX = borderRadius,
             RadiusY = borderRadius,
             Fill = new SolidColorBrush(Utils.ButtonColor),
@@ -45,44 +51,44 @@ public class CustomButton : UserControl
         };
         Grid.Children.Add(ButtonBase);
 
-        BTextBlock = new TextBlock
+        TextBlock buttonTextBlock = new TextBlock
         {
-            Text = ButtonText,
+            Text = text,
             Foreground = new SolidColorBrush(Colors.Black),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            FontSize = ButtonFontSize,
+            FontSize = fontSize,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
-            Margin = new Thickness(0, 0, 0, FontSize / 4),
+            Margin = new Thickness(0, 0, 0, fontSize / 4),
         };
-        if (!BTextBlock.Text.Equals(""))
+        if (!buttonTextBlock.Text.Equals(""))
         {
-            Grid.Children.Add(BTextBlock);
+            Grid.Children.Add(buttonTextBlock);
         }
 
-        if (!string.Equals(ButtonImagePath, ""))
+        if (!string.Equals(buttonImagePath, ""))
         {
-            if (File.Exists(ButtonImagePath))
+            if (File.Exists(buttonImagePath))
             {
-                ButtonImage.Source = new BitmapImage(new Uri(ButtonImagePath, UriKind.RelativeOrAbsolute));
-                ButtonImage.Width = (int)ButtonHeight / 2;
-                ButtonImage.Height = (int)ButtonHeight / 2;
+                ButtonImage.Source = new BitmapImage(new Uri(buttonImagePath, UriKind.RelativeOrAbsolute));
+                ButtonImage.Width = height / 2;
+                ButtonImage.Height = height / 2;
                 ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
 
-                if (!BTextBlock.Text.Equals(""))
+                if (!buttonTextBlock.Text.Equals(""))
                 {
                     double padding = 5;
                     Grid combinedGrid = new();
                     combinedGrid.HorizontalAlignment = HorizontalAlignment.Center;
                     ButtonImage.HorizontalAlignment = HorizontalAlignment.Left;
                     ButtonImage.Margin = new Thickness(0, 0, ButtonImage.Width + padding, 0);
-                    BTextBlock.Margin = new Thickness(ButtonImage.Width + padding, 0, 0, 0);
-                    if (Grid.Children.Contains(BTextBlock))
+                    buttonTextBlock.Margin = new Thickness(ButtonImage.Width + padding, 0, 0, 0);
+                    if (Grid.Children.Contains(buttonTextBlock))
                     {
-                        Grid.Children.Remove(BTextBlock);
+                        Grid.Children.Remove(buttonTextBlock);
                     }
 
-                    combinedGrid.Children.Add(BTextBlock);
+                    combinedGrid.Children.Add(buttonTextBlock);
                     combinedGrid.Children.Add(ButtonImage);
                     Grid.Children.Add(combinedGrid);
                 }
@@ -90,76 +96,59 @@ public class CustomButton : UserControl
                 {
                     Grid.Children.Add(ButtonImage);
                 }
-                // RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
             }
         }
 
-        ButtonParent.Children.Add(Grid);
+        if (parent != null)
+        {
+            parent.Children.Add(this); // Add this CustomButton to the parent grid
+        }
     }
 
-    public bool IsButtonDisabled
+    // Dependency Property Change Callbacks
+    private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        get => GetButtonState();
-        set => SetButtonState(value);
+        if (d is CustomButton customButton && customButton.Grid != null) // Check if Grid is not null
+        {
+            customButton.Grid.Margin = (Thickness)e.NewValue;
+        }
     }
 
-    private void SetButtonState(bool value)
+    private static void OnOpacityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        ButtonBase.Fill = value ? new SolidColorBrush(Colors.DarkGray) : new SolidColorBrush(Utils.ButtonColor);
-        BTextBlock.Foreground = value ? new SolidColorBrush(Colors.DimGray) : new SolidColorBrush(Colors.Black);
-        isDisabled = value;
+        if (d is CustomButton customButton && customButton.Grid != null) // Check if Grid is not null
+        {
+            customButton.Grid.Opacity = (double)e.NewValue;
+        }
     }
 
-    private bool GetButtonState()
+    private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        return isDisabled;
+        if (d is CustomButton customButton && customButton.Grid != null) // Check if Grid is not null
+        {
+            double newHeight = (double)e.NewValue;
+            customButton.Grid.Height = newHeight;
+            customButton.ButtonBase.Height = newHeight;
+            customButton.ButtonImage.Height = newHeight / 2; // Adjust image size accordingly
+        }
     }
 
-    public double ButtonFontSize
+    // Properties to access the dependency properties
+    public new Thickness Margin
     {
-        get => GetFontSize();
-        set => SetFontSize(value);
+        get => (Thickness)GetValue(MarginProperty);
+        set => SetValue(MarginProperty, value);
     }
 
-    private void SetFontSize(double value)
+    public new double Opacity
     {
-        BTextBlock.FontSize = value;
+        get => (double)GetValue(OpacityProperty);
+        set => SetValue(OpacityProperty, value);
     }
 
-    private double GetFontSize()
+    public new double Height
     {
-        return BTextBlock.FontSize;
+        get => (double)GetValue(HeightProperty);
+        set => SetValue(HeightProperty, value);
     }
-
-    public Thickness Margin
-    {
-        get => GetGridMargin();
-        set => SetGridMargin(value);
-    }
-
-    private Thickness GetGridMargin()
-    {
-        return new Thickness(Grid.Margin.Left, Grid.Margin.Top, Grid.Margin.Right, Grid.Margin.Bottom);
-    }
-
-    private void SetGridMargin(Thickness value)
-    {
-        Grid.Margin = value;
-    }
-
-    public TextBlock BTextBlock { get; set; }
-
-    public bool IsBold { get; set; }
-
-    public Grid Grid { get; set; }
-
-    public Grid ButtonParent { get; set; }
-
-    public string ButtonText { get; set; }
-
-    public double ButtonHeight { get; set; }
-
-    public double ButtonWidth { get; set; }
-
-    public double BorderRadius { get; set; }
 }
