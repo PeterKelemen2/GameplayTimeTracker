@@ -76,6 +76,10 @@
             "System.Windows.Forms": {
               "target": "Package",
               "version": "[4.0.0, )"
+            },
+            "WindowsShortcutFactory": {
+              "target": "Package",
+              "version": "[1.2.0, )"
             }
           },
           "imports": [

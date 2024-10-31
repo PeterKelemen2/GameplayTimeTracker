@@ -95,8 +95,7 @@ namespace GameplayTimeTracker
 
             handler.InitializeContainer(tileContainer, jsonFilePath);
             tilesList = tileContainer.GetTiles();
-
-
+            
             // CustomButton testButton =
             //     new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
             // testButton.Margin = new Thickness(250, 0, 0, 0);

@@ -542,6 +542,19 @@
         "runtime": {
           "lib/System.Windows.Forms.dll": {}
         }
+      },
+      "WindowsShortcutFactory/1.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0-windows7.0/WindowsShortcutFactory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/WindowsShortcutFactory.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -2375,6 +2388,24 @@
         "system.windows.forms.4.0.0.nupkg.sha512",
         "system.windows.forms.nuspec"
       ]
+    },
+    "WindowsShortcutFactory/1.2.0": {
+      "sha512": "N6T0AWtPK6Qs5SLMJDyzdbEWntvueSyzzHAMW46RYk8lY9211JYuDaXPBU73BftPaPnOuNYyafdy7NznJRjg5A==",
+      "type": "package",
+      "path": "windowsshortcutfactory/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0-windows7.0/WindowsShortcutFactory.dll",
+        "lib/net6.0-windows7.0/WindowsShortcutFactory.xml",
+        "lib/net8.0-windows7.0/WindowsShortcutFactory.dll",
+        "lib/net8.0-windows7.0/WindowsShortcutFactory.xml",
+        "lib/netstandard2.0/WindowsShortcutFactory.dll",
+        "lib/netstandard2.0/WindowsShortcutFactory.xml",
+        "windowsshortcutfactory.1.2.0.nupkg.sha512",
+        "windowsshortcutfactory.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -2386,7 +2417,8 @@
       "NotifyIcon.Base >= 1.23.10209.11223",
       "NotifyIcon.Windows >= 1.23.10209.11223",
       "System.Drawing.Common >= 8.0.10",
-      "System.Windows.Forms >= 4.0.0"
+      "System.Windows.Forms >= 4.0.0",
+      "WindowsShortcutFactory >= 1.2.0"
     ]
   },
   "packageFolders": {
@@ -2464,6 +2496,10 @@
           "System.Windows.Forms": {
             "target": "Package",
             "version": "[4.0.0, )"
+          },
+          "WindowsShortcutFactory": {
+            "target": "Package",
+            "version": "[1.2.0, )"
           }
         },
         "imports": [

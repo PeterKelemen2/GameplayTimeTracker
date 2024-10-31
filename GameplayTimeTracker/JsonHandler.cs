@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
+using WindowsShortcutFactory;
 
 namespace GameplayTimeTracker;
 
@@ -39,6 +42,8 @@ public class JsonHandler
         if (settings != null)
         {
             Console.WriteLine($"Start With System: {settings.StartWithSystem}");
+            if (settings.StartWithSystem) CreateShortcutForStartup();
+
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
             foreach (var theme in settings.ThemeList)
             {
@@ -51,6 +56,28 @@ public class JsonHandler
         }
 
         return settings;
+    }
+
+    public void CreateShortcutForStartup()
+    {
+        string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
+            $"{Assembly.GetExecutingAssembly().GetName().Name}.lnk");
+        if (!File.Exists(shortcutPath))
+        {
+            string exeLocation = Process.GetCurrentProcess().MainModule.FileName;
+            string workingDirectory = Path.GetDirectoryName(exeLocation);
+            using var shortcut = new WindowsShortcut
+            {
+                Path = exeLocation,
+                WorkingDirectory = workingDirectory,
+                Description = "Shortcut to Gameplay Time Tracker",
+            };
+            shortcut.Save(shortcutPath);
+        }
+        else
+        {
+            Console.WriteLine("Already in autostart!");
+        }
     }
 
     public void InitializeContainer(TileContainer container, string filePath)
