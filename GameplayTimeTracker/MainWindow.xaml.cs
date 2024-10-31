@@ -125,14 +125,15 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
-
+                
                 while (true)
                 {
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-
+                        settingsMenu.SetBlurImage();
+                        
                         var sortedList = tileContainer.SortedByProperty("IsRunning", false);
                         if (!tileContainer.IsListEqual(sortedList))
                         {

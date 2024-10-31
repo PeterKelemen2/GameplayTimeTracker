@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -18,7 +19,7 @@ public class SettingsMenu : UserControl
         WinHeight = 650;
         WinWidth = 800;
         IsToggled = isToggled;
-
+        IsImageSet = false;
 
         rollInAnimation = new ThicknessAnimation
         {
@@ -57,14 +58,14 @@ public class SettingsMenu : UserControl
         blurInAnimation = new DoubleAnimation
         {
             From = 0, // Start with no blur
-            To = 10, // Increase to a blur radius of 20 (adjust as needed)
+            To = bRadius, // Increase to a blur radius of 20 (adjust as needed)
             Duration = new Duration(TimeSpan.FromSeconds(0.5)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
 
         blurOutAnimation = new DoubleAnimation
         {
-            From = 10, // Start with no blur
+            From = bRadius, // Start with no blur
             To = 0, // Increase to a blur radius of 20 (adjust as needed)
             Duration = new Duration(TimeSpan.FromSeconds(0.5)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
@@ -76,6 +77,7 @@ public class SettingsMenu : UserControl
     public int WinHeight { get; set; }
 
     public bool IsToggled { get; set; }
+    public bool IsImageSet { get; set; }
 
     public Grid ContainerGrid { get; set; }
     public Grid settingsContainerGrid { get; set; }
@@ -89,7 +91,12 @@ public class SettingsMenu : UserControl
     private ThicknessAnimation rollInAnimation;
     private ThicknessAnimation rollOutAnimation;
     private ScaleTransform scaleTransform;
+
+    BitmapSource settingsBgBitmap;
+    BitmapSource extendedBitmap;
+
     private double _zoomPercent = 1.07;
+    int bRadius = 10;
 
     public Image bgImage;
 
@@ -138,7 +145,7 @@ public class SettingsMenu : UserControl
 
         ContainerGrid.Children.Add(settingsContainerGrid);
         settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
-        
+
         IsToggled = true;
     }
 
@@ -166,6 +173,7 @@ public class SettingsMenu : UserControl
             }
 
             IsToggled = false;
+            IsImageSet = false;
         };
         settingsContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
@@ -174,12 +182,21 @@ public class SettingsMenu : UserControl
     }
 
 
+    public void SetBlurImage()
+    {
+        if (IsToggled)
+        {
+            settingsBgBitmap = Utils.CaptureContainerGrid();
+            extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
+            bgImage.Source = extendedBitmap;
+        }
+    }
+
     private void CreateBlurOverlay()
     {
-        int bRadius = 10;
-        BitmapSource settingsBgBitmap = Utils.CaptureCurrentWindow();
-        BitmapSource extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
-        int auxPadding = 4;
+        settingsBgBitmap = Utils.CaptureContainerGrid();
+        extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
+        int auxPadding = bRadius / 2 - 1;
         bgImage = new Image
         {
             Source = extendedBitmap,
@@ -189,15 +206,12 @@ public class SettingsMenu : UserControl
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
         };
-        RenderOptions.SetBitmapScalingMode(bgImage, BitmapScalingMode.HighQuality);
-
         // Create a BlurEffect and set its initial Radius to 0 (no blur)
         BlurEffect blurEffect = new BlurEffect { Radius = 0 };
         bgImage.Effect = blurEffect;
 
         scaleTransform = new ScaleTransform();
         bgImage.RenderTransform = scaleTransform;
-        // Center
         bgImage.RenderTransformOrigin = new Point(0.5, 0.5);
 
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurInAnimation);

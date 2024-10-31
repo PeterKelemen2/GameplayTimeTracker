@@ -328,17 +328,32 @@ public class Utils
         // Render the target element onto the bitmap
         renderBitmap.Render(mainWindow);
 
-        // Optionally, encode the bitmap to save as an image
-        // Example: Save to PNG
-        // BitmapEncoder encoder = new PngBitmapEncoder();
-        // encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+        return renderBitmap;
+    }
 
-        // using (var fileStream = new System.IO.FileStream("CapturedWindow.png", System.IO.FileMode.Create))
-        // {
-        //     encoder.Save(fileStream);
-        // }
+    public static BitmapSource CaptureContainerGrid()
+    {
+        int width = (int)mainWindow.ActualWidth;
+        int height = (int)mainWindow.ActualHeight;
+        var containerGrid = (Grid)mainWindow.FindName("ContainerGrid");
+        containerGrid = (Grid)containerGrid.FindName("Grid");
 
-        // Return the bitmap
+        // Store current effects and transformations
+        var originalEffect = containerGrid.Effect;
+        var originalTransform = containerGrid.RenderTransform;
+
+        // Remove effects and transformations for a "clean" capture
+        containerGrid.Effect = null;
+        containerGrid.RenderTransform = null;
+
+        RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+            width, height, 96, 96, PixelFormats.Pbgra32);
+        renderBitmap.Render(containerGrid);
+
+        // Restore original effects and transformations
+        containerGrid.Effect = originalEffect;
+        containerGrid.RenderTransform = originalTransform;
+
         return renderBitmap;
     }
 
