@@ -60,25 +60,23 @@ public class ProcessTracker
         Console.WriteLine("=================");
         foreach (var tile in _tilesList)
         {
-            // var newExeName = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
             var isRunning =
                 runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
 
             if (isRunning)
             {
-                // Setting things up if game changes running state
+                // Setting things up if first start
                 if (tile.wasRunning == false)
                 {
                     tile.wasRunning = true;
                     tile.IsRunning = true;
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
-                    Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
-
-
                     tile.ToggleBgImageColor(isRunning);
+                    Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
                 }
-
+                
+                // Only change text if it's not already the correct string
                 if (!tile.lastPlaytimeTitle.Text.Equals(currentlyRunningTimeString))
                 {
                     tile.lastPlaytimeTitle.Text = currentlyRunningTimeString;
@@ -100,6 +98,7 @@ public class ProcessTracker
             }
             else
             {
+                // If it was running, set it back to initial state
                 if (tile.IsRunning)
                 {
                     tile.wasRunning = false;
@@ -109,7 +108,8 @@ public class ProcessTracker
                     tile.ToggleBgImageColor(isRunning);
                 }
             }
-
+            
+            // Update text every cycle for seconds
             tile.UpdatePlaytimeText();
         }
 
