@@ -18,25 +18,26 @@ public class SettingsMenu : UserControl
         IsBlurToggled = isBlurToggled;
         WinHeight = 650;
         WinWidth = 800;
-    }
 
-    public int WinWidth { get; set; }
+        fadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
 
-    public int WinHeight { get; set; }
+        fadeOutAnimation = new DoubleAnimation
+        {
+            From = 1,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
 
-    public bool IsBlurToggled { get; set; }
-
-    public Grid ContainerGrid { get; set; }
-
-    public void OpenSettingsWindow(object sender, RoutedEventArgs e)
-    {
-        Console.WriteLine("Open Settings Window");
-        IsBlurToggled = !IsBlurToggled;
-        CreateBlurOverlay();
-        Grid settingsContainerGrid = new Grid();
-        settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
-
-        ThicknessAnimation rollInAnimation = new ThicknessAnimation
+        rollInAnimation = new ThicknessAnimation
         {
             From = new Thickness(0, 0, 0, -WinHeight),
             To = new Thickness(0, 0, 0, 0),
@@ -44,6 +45,46 @@ public class SettingsMenu : UserControl
             FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
+
+        rollOutAnimation = new ThicknessAnimation
+        {
+            From = new Thickness(0, 0, 0, 0),
+            To = new Thickness(0, 0, 0, -WinHeight),
+            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+    }
+
+    public int WinWidth { get; set; }
+
+    public int WinHeight { get; set; }
+
+    public bool IsBlurToggled { get; set; }
+    public bool IsToggled { get; set; }
+
+    public Grid ContainerGrid { get; set; }
+    public Grid settingsContainerGrid { get; set; }
+
+    private DoubleAnimation fadeInAnimation;
+    private DoubleAnimation fadeOutAnimation;
+    private ThicknessAnimation rollInAnimation;
+    private ThicknessAnimation rollOutAnimation;
+
+    public Image bgImage;
+
+    public void OpenSettingsWindow(object sender, RoutedEventArgs e)
+    {
+        Console.WriteLine("Open Settings Window");
+        IsBlurToggled = true;
+        IsToggled = true;
+
+        CreateBlurOverlay();
+        bgImage.BeginAnimation(OpacityProperty, fadeInAnimation);
+
+        settingsContainerGrid = new Grid();
+        settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
+
 
         Rectangle settingsRect = new Rectangle
         {
@@ -80,30 +121,44 @@ public class SettingsMenu : UserControl
         settingsContainerGrid.Children.Add(settingsTitle);
 
         ContainerGrid.Children.Add(settingsContainerGrid);
+        // ContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
         settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
     }
 
     public void CloseSettingsWindow(object sender, RoutedEventArgs e)
     {
-        // Create a list to store children that need to be removed
-        List<UIElement> childrenToRemove = new List<UIElement>();
-
-        // Iterate through the children of the grid
-        foreach (UIElement child in ContainerGrid.Children)
+        // Fade-out animation on bgImage
+        fadeOutAnimation.Completed += (s, args) =>
         {
-            // Check if the child is a FrameworkElement and if its name does not match the one we want to keep
-            if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
+            // TODO: Time them correctly
+            rollOutAnimation.Completed += (s, args) =>
             {
-                childrenToRemove.Add(child); // Mark for removal
-            }
-        }
+                // Create a list to store children that need to be removed after the animation
+                List<UIElement> childrenToRemove = new List<UIElement>();
 
-        // Remove the marked children
-        foreach (UIElement child in childrenToRemove)
-        {
-            ContainerGrid.Children.Remove(child);
-        }
+                foreach (UIElement child in ContainerGrid.Children)
+                {
+                    if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
+                    {
+                        childrenToRemove.Add(child); // Mark for removal
+                    }
+                }
+
+                // Remove the marked children after the fade-out animation completes
+                foreach (UIElement child in childrenToRemove)
+                {
+                    ContainerGrid.Children.Remove(child);
+                }
+
+                // Set IsBlurToggled to false after closing
+                IsBlurToggled = false;
+            };
+            settingsContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
+        };
+
+        bgImage.BeginAnimation(OpacityProperty, fadeOutAnimation);
     }
+
 
     private void CreateBlurOverlay()
     {
@@ -111,19 +166,20 @@ public class SettingsMenu : UserControl
         BitmapSource settingsBgBitmap = Utils.CaptureCurrentWindow();
         BitmapSource extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
 
-        Image bgImage = new Image
+        bgImage = new Image
         {
             Source = extendedBitmap,
+            Width = WinWidth - bRadius / 2,
+            Height = WinHeight - bRadius / 2,
             Stretch = Stretch.Uniform,
-            Width = WinWidth,
-            Height = WinHeight,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(-bRadius, -bRadius, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            // Margin = new Thickness(-bRadius, -bRadius, 0, 0),
             Effect = Utils.blurEffect
         };
 
         // Add the final image to the container
         ContainerGrid.Children.Add(bgImage);
+        // bgImage.BeginAnimation(Image.OpacityProperty, fadeAnimation);
     }
 }

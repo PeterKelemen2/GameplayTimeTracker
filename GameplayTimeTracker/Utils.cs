@@ -29,6 +29,7 @@ public class Utils
     public static Color ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
     public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
     public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
+
     public static Color ButtonColor = (Color)ColorConverter.ConvertFromString("#3BC9E3");
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
@@ -329,13 +330,13 @@ public class Utils
 
         // Optionally, encode the bitmap to save as an image
         // Example: Save to PNG
-        BitmapEncoder encoder = new PngBitmapEncoder();
-        encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+        // BitmapEncoder encoder = new PngBitmapEncoder();
+        // encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
-        using (var fileStream = new System.IO.FileStream("CapturedWindow.png", System.IO.FileMode.Create))
-        {
-            encoder.Save(fileStream);
-        }
+        // using (var fileStream = new System.IO.FileStream("CapturedWindow.png", System.IO.FileMode.Create))
+        // {
+        //     encoder.Save(fileStream);
+        // }
 
         // Return the bitmap
         return renderBitmap;
