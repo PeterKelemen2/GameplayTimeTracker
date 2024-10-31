@@ -187,24 +187,25 @@ public class SettingsMenu : UserControl
         if (IsToggled)
         {
             settingsBgBitmap = Utils.CaptureContainerGrid();
-            extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
-            bgImage.Source = extendedBitmap;
+            // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
+            bgImage.Source = settingsBgBitmap;
         }
     }
 
     private void CreateBlurOverlay()
     {
         settingsBgBitmap = Utils.CaptureContainerGrid();
-        extendedBitmap = Utils.ExtendEdgesAroundCenter(settingsBgBitmap, bRadius);
+        // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
         int auxPadding = bRadius / 2 - 1;
         bgImage = new Image
         {
-            Source = extendedBitmap,
-            Width = WinWidth + auxPadding,
-            Height = WinHeight + auxPadding,
+            Source = settingsBgBitmap,
+            Width = WinWidth,
+            Height = WinHeight,
             Stretch = Stretch.Uniform,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(0, 0, 0, 0)
         };
         // Create a BlurEffect and set its initial Radius to 0 (no blur)
         BlurEffect blurEffect = new BlurEffect { Radius = 0 };

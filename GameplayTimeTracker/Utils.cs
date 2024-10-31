@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -99,31 +101,136 @@ public class Utils
         int height = bitmap.PixelHeight;
         int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8; // Bits per pixel rounded to bytes
         int rowStride = width * bytesPerPixel; // Byte width of a single row
-        int columnStride = height * bytesPerPixel; // Byte height of a single column
 
-        // Create buffers for top row, bottom row, left column, and right column
+        // Create a single buffer to hold the top and bottom rows, and left/right columns
+        byte[] pixelBuffer = new byte[height * rowStride];
+        bitmap.CopyPixels(pixelBuffer, rowStride, 0); // Copy all pixels at once
+
+        // Retrieve the edges from the buffer
         byte[] topRow = new byte[rowStride];
         byte[] bottomRow = new byte[rowStride];
-        byte[] leftColumn = new byte[columnStride];
-        byte[] rightColumn = new byte[columnStride];
+        byte[] leftColumn = new byte[height * bytesPerPixel];
+        byte[] rightColumn = new byte[height * bytesPerPixel];
 
-        // Define rectangles for each region
-        Int32Rect topRowRect = new Int32Rect(0, 0, width, 1);
-        Int32Rect bottomRowRect = new Int32Rect(0, height - 1, width, 1);
-        Int32Rect leftColumnRect = new Int32Rect(0, 0, 1, height);
-        Int32Rect rightColumnRect = new Int32Rect(width - 1, 0, 1, height);
+        // Top row
+        Array.Copy(pixelBuffer, 0, topRow, 0, rowStride);
 
-        // Copy pixels for each region
-        bitmap.CopyPixels(topRowRect, topRow, rowStride, 0);
-        bitmap.CopyPixels(bottomRowRect, bottomRow, rowStride, 0);
-        bitmap.CopyPixels(leftColumnRect, leftColumn, bytesPerPixel, 0);
-        bitmap.CopyPixels(rightColumnRect, rightColumn, bytesPerPixel, 0);
+        // Bottom row
+        Array.Copy(pixelBuffer, (height - 1) * rowStride, bottomRow, 0, rowStride);
+
+        // Left column
+        for (int y = 0; y < height; y++)
+        {
+            int index = y * rowStride;
+            Array.Copy(pixelBuffer, index, leftColumn, y * bytesPerPixel, bytesPerPixel);
+        }
+
+        // Right column
+        for (int y = 0; y < height; y++)
+        {
+            int index = y * rowStride + (width - 1) * bytesPerPixel;
+            Array.Copy(pixelBuffer, index, rightColumn, y * bytesPerPixel, bytesPerPixel);
+        }
 
         return (topRow, bottomRow, leftColumn, rightColumn);
     }
 
+    public static (byte[] leftColumn, byte[] rightColumn) GetEdgesSides(BitmapSource bitmap)
+    {
+        int width = bitmap.PixelWidth;
+        int height = bitmap.PixelHeight;
+        int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8; // Bits per pixel rounded to bytes
+        int rowStride = width * bytesPerPixel; // Byte width of a single row
+
+        // Create buffers for left and right columns
+        byte[] leftColumn = new byte[height * bytesPerPixel];
+        byte[] rightColumn = new byte[height * bytesPerPixel];
+
+        // Create a buffer to hold all pixels
+        byte[] pixelBuffer = new byte[height * rowStride];
+        bitmap.CopyPixels(pixelBuffer, rowStride, 0); // Copy all pixels at once
+
+        // Copy the left column
+        for (int y = 0; y < height; y++)
+        {
+            int index = y * rowStride; // Index for left column
+            Array.Copy(pixelBuffer, index, leftColumn, y * bytesPerPixel, bytesPerPixel);
+        }
+
+        // Copy the right column
+        for (int y = 0; y < height; y++)
+        {
+            int index = y * rowStride + (width - 1) * bytesPerPixel; // Index for right column
+            Array.Copy(pixelBuffer, index, rightColumn, y * bytesPerPixel, bytesPerPixel);
+        }
+
+        return (leftColumn, rightColumn);
+    }
+
+
+
+    public static BitmapSource ExtendEdgesLeftRight(BitmapSource bitmap, int n)
+    {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Restart();
+
+        BitmapSource cropped = CropTransparentAreas(bitmap);
+        bitmap = cropped;
+
+        int originalWidth = bitmap.PixelWidth;
+        int originalHeight = bitmap.PixelHeight;
+        int extendedWidth = originalWidth + 2 * n; // Only change width
+        int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
+
+        // Ensure n is positive and within image bounds
+        if (n < 0 || originalWidth < 1 || originalHeight < 1)
+            throw new ArgumentException("Invalid dimensions or extension size.");
+
+        // Get left and right edges
+        var (leftColumn, rightColumn) = GetEdgesSides(bitmap);
+
+        // Create a buffer for the extended image
+        byte[] extendedPixels = new byte[extendedWidth * originalHeight * bytesPerPixel];
+
+        // Copy the original image into the center of the extended image
+        bitmap.CopyPixels(new Int32Rect(0, 0, originalWidth, originalHeight),
+            extendedPixels,
+            extendedWidth * bytesPerPixel,
+            0); // No offset needed for the first copy
+
+        // Fill left edge
+        for (int y = 0; y < originalHeight; y++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Buffer.BlockCopy(leftColumn, y * bytesPerPixel, extendedPixels,
+                    (y * extendedWidth + i) * bytesPerPixel, bytesPerPixel);
+            }
+        }
+
+        // Fill right edge
+        for (int y = 0; y < originalHeight; y++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Buffer.BlockCopy(rightColumn, y * bytesPerPixel, extendedPixels,
+                    (y * extendedWidth + (originalWidth + n + i)) * bytesPerPixel, bytesPerPixel);
+            }
+        }
+
+        stopwatch.Stop();
+        Console.WriteLine($"Extending edges left and right: {stopwatch.Elapsed.TotalMilliseconds:F2}ms");
+
+        return BitmapSource.Create(extendedWidth, originalHeight, bitmap.DpiX, bitmap.DpiY, bitmap.Format, null,
+            extendedPixels, extendedWidth * bytesPerPixel);
+    }
+
+
     public static BitmapSource ExtendEdgesAroundCenter(BitmapSource bitmap, int n)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Restart();
+
         BitmapSource cropped = CropTransparentAreas(bitmap);
         bitmap = cropped;
 
@@ -176,11 +283,9 @@ public class Utils
             }
         }
 
-        BitmapSource newBitmapSource = BitmapSource.Create(extendedWidth, extendedHeight, bitmap.DpiX, bitmap.DpiY,
-            bitmap.Format, null,
-            extendedPixels, extendedWidth * bytesPerPixel);
-        SaveBitmapSourceToFile(newBitmapSource, "assets/new_sok.png");
-        // Return the new extended bitmap
+        stopwatch.Stop();
+        Console.WriteLine($"Extending edges: {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
+
         return BitmapSource.Create(extendedWidth, extendedHeight, bitmap.DpiX, bitmap.DpiY, bitmap.Format, null,
             extendedPixels, extendedWidth * bytesPerPixel);
     }
@@ -261,12 +366,11 @@ public class Utils
         bitmap.CopyPixels(pixels, width * bytesPerPixel, 0);
 
         // Find the bounds of the non-transparent pixels
-        int minX = width;
-        int minY = height;
-        int maxX = 0;
-        int maxY = 0;
+        int minX = width, minY = height, maxX = 0, maxY = 0;
+        bool hasNonTransparent = false;
 
-        for (int y = 0; y < height; y++)
+        // Scan the pixels to find non-transparent bounds
+        Parallel.For(0, height, y =>
         {
             for (int x = 0; x < width; x++)
             {
@@ -275,23 +379,27 @@ public class Utils
 
                 if (alpha > 0) // Check if the pixel is not transparent
                 {
-                    if (x < minX) minX = x;
-                    if (y < minY) minY = y;
-                    if (x > maxX) maxX = x;
-                    if (y > maxY) maxY = y;
+                    hasNonTransparent = true;
+                    lock (pixels) // Use lock for shared state
+                    {
+                        if (x < minX) minX = x;
+                        if (y < minY) minY = y;
+                        if (x > maxX) maxX = x;
+                        if (y > maxY) maxY = y;
+                    }
                 }
             }
+        });
+
+        // Early exit if the image is fully transparent
+        if (!hasNonTransparent)
+        {
+            return bitmap;
         }
 
         // Calculate new width and height
         int croppedWidth = maxX - minX + 1;
         int croppedHeight = maxY - minY + 1;
-
-        if (croppedWidth <= 0 || croppedHeight <= 0)
-        {
-            // No non-transparent pixels found; return the original bitmap
-            return bitmap;
-        }
 
         // Create a new pixel buffer for the cropped image
         byte[] croppedPixels = new byte[croppedWidth * croppedHeight * bytesPerPixel];
@@ -315,6 +423,7 @@ public class Utils
         return croppedBitmap;
     }
 
+
     public static BitmapSource CaptureCurrentWindow()
     {
         // Define the width and height of the bitmap, matching the element's size
@@ -333,27 +442,17 @@ public class Utils
 
     public static BitmapSource CaptureContainerGrid()
     {
-        int width = (int)mainWindow.ActualWidth;
-        int height = (int)mainWindow.ActualHeight;
-        var containerGrid = (Grid)mainWindow.FindName("ContainerGrid");
-        containerGrid = (Grid)containerGrid.FindName("Grid");
-
-        // Store current effects and transformations
-        var originalEffect = containerGrid.Effect;
-        var originalTransform = containerGrid.RenderTransform;
-
-        // Remove effects and transformations for a "clean" capture
-        containerGrid.Effect = null;
-        containerGrid.RenderTransform = null;
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Restart();
+        var contentGrid = (Grid)mainWindow.FindName("ContainerGrid");
+        contentGrid = (Grid)contentGrid.FindName("Grid");
 
         RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
-            width, height, 96, 96, PixelFormats.Pbgra32);
-        renderBitmap.Render(containerGrid);
+            800, 650, 96, 96, PixelFormats.Pbgra32);
+        renderBitmap.Render(contentGrid);
 
-        // Restore original effects and transformations
-        containerGrid.Effect = originalEffect;
-        containerGrid.RenderTransform = originalTransform;
-
+        stopwatch.Stop();
+        Console.WriteLine($"Rendering content grid: {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
         return renderBitmap;
     }
 
