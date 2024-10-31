@@ -160,6 +160,18 @@ public class SettingsMenu : UserControl
         };
         settingsTitle.Margin = new Thickness(0, 0, 0, WinHeight * 0.25 + 110);
         settingsContainerGrid.Children.Add(settingsTitle);
+        
+        TextBlock placeholderText = new TextBlock
+        {
+            Text = "Work in progress!",
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            FontSize = 15,
+            FontWeight = FontWeights.Bold,
+        };
+        placeholderText.Margin = new Thickness(0, 0, 0, WinHeight * 0.25 + 50);
+        settingsContainerGrid.Children.Add(placeholderText);
 
         ContainerGrid.Children.Add(settingsContainerGrid);
         settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
