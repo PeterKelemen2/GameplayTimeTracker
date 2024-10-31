@@ -91,6 +91,7 @@ public class ProcessTracker
 
                 tile.CurrentPlaytime++;
                 tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
+
                 // Only update if a minute is passed
                 if (tile.CurrentPlaytime % 60 == 0)
                 {
@@ -108,6 +109,8 @@ public class ProcessTracker
                     tile.ToggleBgImageColor(isRunning);
                 }
             }
+
+            tile.UpdatePlaytimeText();
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
