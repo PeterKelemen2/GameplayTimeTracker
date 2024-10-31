@@ -20,6 +20,7 @@ public class SettingsMenu : UserControl
         WinWidth = 800;
         IsToggled = isToggled;
         IsImageSet = false;
+        ToClose = false;
 
         rollInAnimation = new ThicknessAnimation
         {
@@ -70,6 +71,22 @@ public class SettingsMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.5)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
+
+        fadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(0.05)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        fadeOutAnimation = new DoubleAnimation
+        {
+            From = 1,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.05)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
     }
 
     public int WinWidth { get; set; }
@@ -78,6 +95,7 @@ public class SettingsMenu : UserControl
 
     public bool IsToggled { get; set; }
     public bool IsImageSet { get; set; }
+    public bool ToClose { get; set; }
 
     public Grid ContainerGrid { get; set; }
     public Grid settingsContainerGrid { get; set; }
@@ -151,6 +169,9 @@ public class SettingsMenu : UserControl
 
     public void CloseSettingsWindow(object sender, RoutedEventArgs e)
     {
+        ToClose = true;
+        SetBlurImage(true);
+
         Console.WriteLine("Closing Settings Window...");
         // Zoom-out animation on bgImage
         zoomOutAnimation.Completed += (s, args) =>
@@ -172,21 +193,27 @@ public class SettingsMenu : UserControl
                 ContainerGrid.Children.Remove(child);
             }
 
-            IsToggled = false;
-            IsImageSet = false;
+
+            bgImage.BeginAnimation(OpacityProperty, fadeOutAnimation);
         };
+        IsToggled = false;
+        IsImageSet = false;
+        ToClose = false;
         settingsContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
+
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
     }
 
 
-    public void SetBlurImage()
+    public void SetBlurImage(bool toCapFullSize = false)
     {
         if (IsToggled)
         {
-            settingsBgBitmap = Utils.CaptureContainerGrid();
+            settingsBgBitmap = ToClose
+                ? Utils.CaptureContainerGrid(1.0)
+                : Utils.CaptureContainerGrid();
             // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
             bgImage.Source = settingsBgBitmap;
         }
@@ -196,13 +223,12 @@ public class SettingsMenu : UserControl
     {
         settingsBgBitmap = Utils.CaptureContainerGrid();
         // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
-        int auxPadding = bRadius / 2 - 1;
         bgImage = new Image
         {
             Source = settingsBgBitmap,
             Width = WinWidth,
             Height = WinHeight,
-            Stretch = Stretch.Uniform,
+            Stretch = Stretch.Fill,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 0, 0, 0)
@@ -216,6 +242,7 @@ public class SettingsMenu : UserControl
         bgImage.RenderTransformOrigin = new Point(0.5, 0.5);
 
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurInAnimation);
+        bgImage.BeginAnimation(OpacityProperty, fadeInAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomInAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomInAnimation);
         // Add the final image to the container

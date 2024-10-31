@@ -132,7 +132,10 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-                        settingsMenu.SetBlurImage();
+                        if (!settingsMenu.ToClose)
+                        {
+                            settingsMenu.SetBlurImage();
+                        }
                         
                         var sortedList = tileContainer.SortedByProperty("IsRunning", false);
                         if (!tileContainer.IsListEqual(sortedList))
