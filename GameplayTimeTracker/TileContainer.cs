@@ -46,7 +46,7 @@ public class TileContainer
 
     public void InitSave()
     {
-        handler.WriteContentToFile(this, jsonFilePath);
+        handler.WriteContentToFile(this);
         Console.WriteLine(" ==== Saved! ====");
     }
 

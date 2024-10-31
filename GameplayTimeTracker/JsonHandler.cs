@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text.Json;
 using WindowsShortcutFactory;
 
@@ -12,11 +13,16 @@ namespace GameplayTimeTracker;
 public class JsonHandler
 {
     private const string SampleImagePath = "assets/no_icon.png";
-    private const string SettingsPath = "settings.json";
+    private const string SettingsFileName = "settings.json";
+    private const string DataFileName = "data.json";
+
+    public static string DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        Assembly.GetExecutingAssembly().GetName().Name);
+
+    public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
 
     public string DefaultSettings =
         "{\n  \"startWithSystem\": true,\n  \"themeList\": [\n    {\n      \"themeName\": \"default\",\n      \"colors\": {\n        \"bgColor\": \"#1E2030\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#414769\",\n        \"tileColor2\": \"#2E324A\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    },\n    {\n      \"themeName\": \"pink\",\n      \"colors\": {\n        \"bgColor\": \"#45092b\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#db1484\",\n        \"tileColor2\": \"#7d2055\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    }\n  ]\n}\n";
-
 
     private string CheckForFile(string filePath)
     {
@@ -25,18 +31,17 @@ public class JsonHandler
 
     public void InitializeSettings()
     {
-        if (!File.Exists(SettingsPath))
+        if (!File.Exists(Path.Combine(DocumentsPath, SettingsFileName)))
         {
-            File.WriteAllText(SettingsPath, DefaultSettings);
+            File.WriteAllText(Path.Combine(DocumentsPath, SettingsFileName), DefaultSettings);
         }
     }
-
 
     public Settings GetSettingsFromFile()
     {
         InitializeSettings();
 
-        string json = File.ReadAllText(SettingsPath);
+        string json = File.ReadAllText(Path.Combine(DocumentsPath, SettingsFileName));
         Settings settings = JsonSerializer.Deserialize<Settings>(json);
 
         if (settings != null)
@@ -80,14 +85,31 @@ public class JsonHandler
         }
     }
 
-    public void InitializeContainer(TileContainer container, string filePath)
+    public void InitializeContainer(TileContainer container)
     {
-        if (!File.Exists(filePath))
+        if (!Directory.Exists(DocumentsPath))
         {
-            File.WriteAllText(filePath, "[]");
+            Directory.CreateDirectory(DocumentsPath);
+
+            // Get the current user's identity
+            string currentUser = Environment.UserName;
+            DirectoryInfo directoryInfo = new DirectoryInfo(DocumentsPath);
+            DirectorySecurity security = directoryInfo.GetAccessControl();
+
+            // Add access rule for the current user
+            security.AddAccessRule(new FileSystemAccessRule(currentUser,
+                FileSystemRights.Modify,
+                AccessControlType.Allow));
+
+            directoryInfo.SetAccessControl(security);
         }
 
-        string jsonString = File.ReadAllText(filePath);
+        if (!File.Exists(DataFilePath))
+        {
+            File.WriteAllText(DataFilePath, "[]");
+        }
+
+        string jsonString = File.ReadAllText(DataFilePath);
         // Console.WriteLine(jsonString);
 
         List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
@@ -106,7 +128,7 @@ public class JsonHandler
         }
     }
 
-    public void WriteContentToFile(TileContainer container, string filePath)
+    public void WriteContentToFile(TileContainer container)
     {
         List<Params> paramsList = new List<Params>();
 
@@ -117,7 +139,7 @@ public class JsonHandler
         }
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, jsonString);
-        Console.WriteLine($"!! Saved data to {filePath} !!");
+        File.WriteAllText(DataFilePath, jsonString);
+        Console.WriteLine($"!! Saved data to {DataFilePath} !!");
     }
 }

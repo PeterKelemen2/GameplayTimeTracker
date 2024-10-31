@@ -93,9 +93,9 @@ namespace GameplayTimeTracker
             themesList = settings.ThemeList;
             LoadTheme("pink");
 
-            handler.InitializeContainer(tileContainer, jsonFilePath);
+            handler.InitializeContainer(tileContainer);
             tilesList = tileContainer.GetTiles();
-            
+
             // CustomButton testButton =
             //     new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
             // testButton.Margin = new Thickness(250, 0, 0, 0);
@@ -208,7 +208,7 @@ namespace GameplayTimeTracker
                 }
             }
 
-            handler.WriteContentToFile(tileContainer, jsonFilePath);
+            handler.WriteContentToFile(tileContainer);
         }
 
 
