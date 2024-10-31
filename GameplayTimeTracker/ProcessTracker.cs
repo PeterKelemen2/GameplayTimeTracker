@@ -11,6 +11,8 @@ public class ProcessTracker
     List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
+    private string currentlyRunningTimeString = "Current playtime:";
+    private string LastPlaytimeString = "Last playtime:";
     private string notRunningText = "";
     private Dictionary<string, bool> runningDictionary;
 
@@ -77,6 +79,11 @@ public class ProcessTracker
                     tile.ToggleBgImageColor(isRunning);
                 }
 
+                if (!tile.lastPlaytimeTitle.Text.Equals(currentlyRunningTimeString))
+                {
+                    tile.lastPlaytimeTitle.Text = currentlyRunningTimeString;
+                }
+
                 if (!tile.runningTextBlock.Text.Equals(runningText))
                 {
                     tile.runningTextBlock.Text = runningText;
@@ -96,12 +103,9 @@ public class ProcessTracker
                 {
                     tile.wasRunning = false;
                     tile.IsRunning = false;
-                    tile.ToggleBgImageColor(isRunning);
-                }
-
-                if (!tile.runningTextBlock.Text.Equals(notRunningText))
-                {
+                    tile.lastPlaytimeTitle.Text = LastPlaytimeString;
                     tile.runningTextBlock.Text = notRunningText;
+                    tile.ToggleBgImageColor(isRunning);
                 }
             }
         }

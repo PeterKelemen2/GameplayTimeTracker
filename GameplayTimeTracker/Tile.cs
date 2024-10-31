@@ -48,7 +48,7 @@ public class Tile : UserControl
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
     private TextBlock totalPlaytime;
-    private TextBlock lastPlaytimeTitle;
+    public TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
     private TextBlock sampleTextBlock;
     private TextBox editNameBox;
@@ -62,7 +62,7 @@ public class Tile : UserControl
     private TextBox editExePathBox;
     private Button editExePathButton;
 
-    private CustomButton newTestButton;
+    // private CustomButton newTestButton;
 
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
@@ -159,8 +159,8 @@ public class Tile : UserControl
             editExePathButton.Height = Utils.TextBoxHeight;
             changeIconButton.Height = Utils.TextBoxHeight;
 
-            newTestButton.ButtonBase.Height = 30;
-            newTestButton.Grid.Height = 30;
+            // newTestButton.ButtonBase.Height = 30;
+            // newTestButton.Grid.Height = 30;
 
             double rowMargin = 20;
 
@@ -189,7 +189,7 @@ public class Tile : UserControl
             changeIconButton.Margin = new Thickness(0, editNameBox.Margin.Top, Utils.EditFColLeft, 0);
             editSaveButton.Margin = new Thickness(0, editExePathBox.Margin.Top, Utils.EditFColLeft, 0);
 
-            newTestButton.Margin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
+            // newTestButton.Margin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
 
             Thickness testButtonMargin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
 
@@ -202,7 +202,7 @@ public class Tile : UserControl
                 editPlaytimeBox,
                 editExePathTitle, editExePathBox, editExePathButton,
                 editSaveButton,
-                newTestButton.Grid, newTestButton.ButtonBase
+                // newTestButton.Grid, newTestButton.ButtonBase
             });
 
 
@@ -575,7 +575,8 @@ public class Tile : UserControl
     public void UpdatePlaytimeText()
     {
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-        lastPlaytime.Text = $"{hLast}h {mLast}m";
+        lastPlaytime.Text = IsRunning ? $"{hLast}h {mLast}m {CurrentPlaytime}s" : $"{hLast}h {mLast}m";
+        // lastPlaytime.Text = $"{hLast}h {mLast}m {CurrentPlaytime}s";
     }
 
     public void CalculatePlaytimeFromSec(double sec)
@@ -802,13 +803,13 @@ public class Tile : UserControl
         changeIconButton.Click += UpdateIcons;
 
 
-        newTestButton = new CustomButton(height: 0, text: "EditB");
-        newTestButton.HorizontalAlignment = HorizontalAlignment.Left;
-        newTestButton.VerticalAlignment = VerticalAlignment.Top;
-        // newTestButton.Margin = new Thickness(0, 150, 0, 0);
-        newTestButton.MouseDown += ClickableRect_MouseDown;
-        Panel.SetZIndex(newTestButton, 10);
-        
+        // newTestButton = new CustomButton(height: 0, text: "EditB");
+        // newTestButton.HorizontalAlignment = HorizontalAlignment.Left;
+        // newTestButton.VerticalAlignment = VerticalAlignment.Top;
+        // // newTestButton.Margin = new Thickness(0, 150, 0, 0);
+        // newTestButton.MouseDown += ClickableRect_MouseDown;
+        // Panel.SetZIndex(newTestButton, 10);
+
         //TODO: Fix animation
         editElements.AddRange(new UIElement[]
         {
@@ -816,7 +817,7 @@ public class Tile : UserControl
             editSaveButton, changeIconButton,
             editPlaytimeBox,
             editExePathTitle, editExePathBox, editExePathButton,
-            newTestButton
+            // newTestButton
         });
         foreach (var elem in editElements)
         {
@@ -875,11 +876,11 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
-        CustomButton tileButton = new CustomButton(text: "TestWauu");
-        tileButton.HorizontalAlignment = HorizontalAlignment.Left;
-        tileButton.VerticalAlignment = VerticalAlignment.Top;
-        tileButton.MouseDown += ClickableRect_MouseDown;
-        Panel.SetZIndex(tileButton, 10);
+        // CustomButton tileButton = new CustomButton(text: "TestWauu");
+        // tileButton.HorizontalAlignment = HorizontalAlignment.Left;
+        // tileButton.VerticalAlignment = VerticalAlignment.Top;
+        // tileButton.MouseDown += ClickableRect_MouseDown;
+        // Panel.SetZIndex(tileButton, 10);
 
         mainElements.AddRange(new UIElement[] { container, editButton, removeButton, launchButton });
 
@@ -887,12 +888,12 @@ public class Tile : UserControl
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
-        Grid.SetRow(tileButton, 0);
+        // Grid.SetRow(tileButton, 0);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
-        grid.Children.Add(tileButton);
+        // grid.Children.Add(tileButton);
 
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);

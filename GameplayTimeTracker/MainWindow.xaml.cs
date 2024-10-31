@@ -95,13 +95,13 @@ namespace GameplayTimeTracker
             tilesList = tileContainer.GetTiles();
 
 
-            CustomButton testButton =
-                new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
-            testButton.Margin = new Thickness(250, 0, 0, 0);
-            testButton.Height = 0;
-            Footer.Children.Add(testButton);
-            testButton.Height = 40;
-            testButton.Grid.MouseDown += ClickableRect_MouseDown;
+            // CustomButton testButton =
+            //     new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
+            // testButton.Margin = new Thickness(250, 0, 0, 0);
+            // testButton.Height = 0;
+            // Footer.Children.Add(testButton);
+            // testButton.Height = 40;
+            // testButton.Grid.MouseDown += ClickableRect_MouseDown;
 
 
             Closing += MainWindow_Closing;
