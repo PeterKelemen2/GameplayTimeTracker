@@ -36,6 +36,7 @@ namespace GameplayTimeTracker
         ProcessTracker tracker = new();
 
         List<Theme> themesList = new List<Theme>();
+        private Settings settings;
 
         private NotificationHandler notificationHandler = new();
 
@@ -84,12 +85,13 @@ namespace GameplayTimeTracker
         public MainWindow()
         {
             InitializeComponent();
+
             notificationHandler = new NotificationHandler();
             settingsMenu = new SettingsMenu(ContainerGrid);
-            handler.InitializeSettings();
+            settings = handler.GetSettingsFromFile();
 
-            themesList = handler.GetThemesFromFile();
-            LoadTheme("default");
+            themesList = settings.ThemeList;
+            LoadTheme("pink");
 
             handler.InitializeContainer(tileContainer, jsonFilePath);
             tilesList = tileContainer.GetTiles();
@@ -125,7 +127,7 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
-                
+
                 while (true)
                 {
                     stopwatch.Restart();
@@ -136,7 +138,7 @@ namespace GameplayTimeTracker
                         {
                             settingsMenu.SetBlurImage();
                         }
-                        
+
                         var sortedList = tileContainer.SortedByProperty("IsRunning", false);
                         if (!tileContainer.IsListEqual(sortedList))
                         {
