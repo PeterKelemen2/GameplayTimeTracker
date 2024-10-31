@@ -20,6 +20,8 @@ public class JsonHandler
         Assembly.GetExecutingAssembly().GetName().Name);
 
     public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
+    public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
+
 
     public string DefaultSettings =
         "{\n  \"startWithSystem\": true,\n  \"themeList\": [\n    {\n      \"themeName\": \"default\",\n      \"colors\": {\n        \"bgColor\": \"#1E2030\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#414769\",\n        \"tileColor2\": \"#2E324A\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    },\n    {\n      \"themeName\": \"pink\",\n      \"colors\": {\n        \"bgColor\": \"#45092b\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#db1484\",\n        \"tileColor2\": \"#7d2055\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    }\n  ]\n}\n";
@@ -28,12 +30,13 @@ public class JsonHandler
     {
         return File.Exists(filePath) ? filePath : SampleImagePath;
     }
-
+    
     public void InitializeSettings()
     {
-        if (!File.Exists(Path.Combine(DocumentsPath, SettingsFileName)))
+        CheckForDataDirectory();
+        if (!File.Exists(SettingsFilePath))
         {
-            File.WriteAllText(Path.Combine(DocumentsPath, SettingsFileName), DefaultSettings);
+            File.WriteAllText(SettingsFilePath, DefaultSettings);
         }
     }
 
@@ -41,7 +44,7 @@ public class JsonHandler
     {
         InitializeSettings();
 
-        string json = File.ReadAllText(Path.Combine(DocumentsPath, SettingsFileName));
+        string json = File.ReadAllText(SettingsFilePath);
         Settings settings = JsonSerializer.Deserialize<Settings>(json);
 
         if (settings != null)
@@ -85,7 +88,7 @@ public class JsonHandler
         }
     }
 
-    public void InitializeContainer(TileContainer container)
+    private void CheckForDataDirectory()
     {
         if (!Directory.Exists(DocumentsPath))
         {
@@ -103,6 +106,11 @@ public class JsonHandler
 
             directoryInfo.SetAccessControl(security);
         }
+    }
+
+    public void InitializeContainer(TileContainer container)
+    {
+        CheckForDataDirectory();
 
         if (!File.Exists(DataFilePath))
         {
@@ -110,7 +118,6 @@ public class JsonHandler
         }
 
         string jsonString = File.ReadAllText(DataFilePath);
-        // Console.WriteLine(jsonString);
 
         List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
         if (paramsList != null && paramsList.Count > 0)

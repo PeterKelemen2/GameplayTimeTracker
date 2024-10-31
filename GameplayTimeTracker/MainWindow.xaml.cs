@@ -91,7 +91,7 @@ namespace GameplayTimeTracker
             settings = handler.GetSettingsFromFile();
 
             themesList = settings.ThemeList;
-            LoadTheme("pink");
+            LoadTheme("default");
 
             handler.InitializeContainer(tileContainer);
             tilesList = tileContainer.GetTiles();
@@ -103,7 +103,6 @@ namespace GameplayTimeTracker
             // Footer.Children.Add(testButton);
             // testButton.Height = 40;
             // testButton.Grid.MouseDown += ClickableRect_MouseDown;
-
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
