@@ -9,14 +9,16 @@ namespace GameplayTimeTracker;
 
 public class TileContainer
 {
-    private List<Tile> tilesList = new();
-    private List<Tile> toMoveList = new();
+    // private List<Tile> tilesList = new();
+    // private List<Tile> toMoveList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
 
     public double TileWidth { get; set; }
 
     public List<Theme> themes { get; set; } = new();
+    public List<Tile> tilesList { get; set; } = new();
+    public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
 
     MainWindow _mainWindow;
@@ -25,10 +27,10 @@ public class TileContainer
     {
     }
 
-    public List<Tile> GetTiles()
-    {
-        return tilesList;
-    }
+    // public List<Tile> GetTiles()
+    // {
+    //     return tilesList;
+    // }
 
     public List<string> GetTilesExePath()
     {
@@ -65,9 +67,19 @@ public class TileContainer
         toMoveList = new();
     }
 
-    public List<Tile> GetMoveList()
+    // public List<Tile> GetMoveList()
+    // {
+    //     return toMoveList;
+    // }
+
+    public bool IsInMoveList(Tile tile)
     {
-        return toMoveList;
+        return toMoveList.Contains(tile);
+    }
+
+    public void RemoveFromMoveList(Tile tile)
+    {
+        toMoveList.Remove(tile);
     }
 
     public bool IsListEqual(List<Tile> newList)
@@ -151,6 +163,7 @@ public class TileContainer
                 }
             }
 
+            newTile.Index = tilesList.Count;
             tilesList.Add(newTile);
 
             // This accounts for change in percentages when adding new tile
@@ -168,6 +181,7 @@ public class TileContainer
             Console.WriteLine($"Something went wrong adding new Tile to container! ({e})");
         }
     }
+
 
     public void ListTiles()
     {
@@ -244,7 +258,8 @@ public class TileContainer
         }
     }
 
-    private Tile GetTileById(int id)
+
+    public Tile GetTileById(int id)
     {
         foreach (var tile in tilesList)
         {

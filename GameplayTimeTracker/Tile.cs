@@ -84,6 +84,7 @@ public class Tile : UserControl
     private const string? AssetsFolder = "assets";
 
     public int Id { get; set; }
+    public int Index { get; set; }
     public double TileWidth { get; set; }
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }

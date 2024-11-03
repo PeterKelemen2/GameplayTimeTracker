@@ -139,7 +139,7 @@ public class JsonHandler
     {
         List<Params> paramsList = new List<Params>();
 
-        foreach (var tile in container.GetTiles())
+        foreach (var tile in container.tilesList)
         {
             paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath,
                 tile.ExePath));

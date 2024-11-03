@@ -94,7 +94,7 @@ namespace GameplayTimeTracker
             LoadTheme("default");
 
             handler.InitializeContainer(tileContainer);
-            tilesList = tileContainer.GetTiles();
+            // tilesList = tileContainer.tilesList;
 
             // CustomButton testButton =
             //     new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
@@ -177,7 +177,7 @@ namespace GameplayTimeTracker
                       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                 {
                     // Closing all opened edit menus and reseting them to avoid graphical glitch
-                    foreach (var tile in tileContainer.GetTiles())
+                    foreach (var tile in tileContainer.tilesList)
                     {
                         if (tile.IsMenuToggled)
                         {
@@ -187,7 +187,7 @@ namespace GameplayTimeTracker
                     }
 
                     tileContainer.AddTile(newTile, newlyAdded: true);
-                    tilesList = tileContainer.GetTiles();
+                    // tilesList = tileContainer.GetTiles();
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {fileName}");
@@ -203,27 +203,24 @@ namespace GameplayTimeTracker
 
         private void RearrangeTiles()
         {
-            List<Tile> toMoveList = tileContainer.GetMoveList();
+            List<Tile> toMoveList = tileContainer.toMoveList;
+            Console.WriteLine(tileContainer.toMoveList.Count);
             for (int i = 0; i < toMoveList.Count; i++)
             {
-                if (MainStackPanel.Children.Contains(toMoveList[i]))
+                int currentIndex = MainStackPanel.Children.IndexOf(toMoveList[i]);
+                if (MainStackPanel.Children.Contains(toMoveList[i]) && currentIndex != i)
                 {
-                    if (MainStackPanel.Children.IndexOf(toMoveList[i]) != i)
-                    {
-                        MainStackPanel.Children.Remove(toMoveList[i]);
-                        MainStackPanel.Children.Insert(i, toMoveList[i]);
-                    }
+                    MainStackPanel.Children.Remove(toMoveList[i]);
+                    MainStackPanel.Children.Insert(i, toMoveList[i]);
                 }
             }
-
-            tileContainer.ResetMoveList();
         }
 
         private void ShowTilesOnCanvas()
         {
             MainStackPanel.Children.Clear();
-            var tilesList = tileContainer.GetTiles();
-            foreach (var tile in tilesList)
+            // var tilesList = tileContainer.GetTiles();
+            foreach (var tile in tileContainer.tilesList)
             {
                 tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 

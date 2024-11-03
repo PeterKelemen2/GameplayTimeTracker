@@ -7,7 +7,7 @@ namespace GameplayTimeTracker;
 
 public class ProcessTracker
 {
-    List<Tile> _tilesList;
+    // List<Tile> _tilesList;
     List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
@@ -24,7 +24,7 @@ public class ProcessTracker
 
     public void InitializeExeDictionary()
     {
-        foreach (var tile in _tilesList)
+        foreach (var tile in _tileContainer.tilesList)
         {
             if (runningDictionary != null)
             {
@@ -43,7 +43,7 @@ public class ProcessTracker
     {
         _tileContainer = tileContainer;
         _exeNames = _tileContainer.GetExecutableNames();
-        _tilesList = _tileContainer.GetTiles();
+        // _tilesList = _tileContainer.GetTiles();
         InitializeExeDictionary();
 
         foreach (var exeName in _exeNames)
@@ -54,11 +54,11 @@ public class ProcessTracker
 
     public void HandleProcesses()
     {
-        _tilesList = _tileContainer.GetTiles();
+        // _tilesList = _tileContainer.GetTiles();
         var runningProcesses = Process.GetProcesses();
 
         Console.WriteLine("=================");
-        foreach (var tile in _tilesList)
+        foreach (var tile in _tileContainer.tilesList)
         {
             var isRunning =
                 runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
@@ -96,7 +96,7 @@ public class ProcessTracker
                     _tileContainer.UpdatePlaytimeBars();
                 }
 
-                _tileContainer.AddToMoveList(tile);
+                if (!_tileContainer.IsInMoveList(tile)) _tileContainer.AddToMoveList(tile);
             }
             else
             {
@@ -109,6 +109,8 @@ public class ProcessTracker
                     tile.runningTextBlock.Text = notRunningText;
                     tile.ToggleBgImageColor(isRunning);
                 }
+
+                if (_tileContainer.IsInMoveList(tile)) _tileContainer.RemoveFromMoveList(tile);
             }
 
 
