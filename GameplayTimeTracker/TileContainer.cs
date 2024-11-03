@@ -67,11 +67,6 @@ public class TileContainer
         toMoveList = new();
     }
 
-    // public List<Tile> GetMoveList()
-    // {
-    //     return toMoveList;
-    // }
-
     public bool IsInMoveList(Tile tile)
     {
         return toMoveList.Contains(tile);

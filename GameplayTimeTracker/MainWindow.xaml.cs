@@ -204,17 +204,43 @@ namespace GameplayTimeTracker
         private void RearrangeTiles()
         {
             List<Tile> toMoveList = tileContainer.toMoveList;
-            Console.WriteLine(tileContainer.toMoveList.Count);
             for (int i = 0; i < toMoveList.Count; i++)
             {
-                int currentIndex = MainStackPanel.Children.IndexOf(toMoveList[i]);
-                if (MainStackPanel.Children.Contains(toMoveList[i]) && currentIndex != i)
+                var tileToMove = toMoveList[i];
+                if (MainStackPanel.Children.Contains(tileToMove))
                 {
-                    MainStackPanel.Children.Remove(toMoveList[i]);
-                    MainStackPanel.Children.Insert(i, toMoveList[i]);
+                    if (MainStackPanel.Children.IndexOf(tileToMove) != i)
+                    {
+                        int oldIndex = MainStackPanel.Children.IndexOf(tileToMove);
+                        double offset = -i * (tileToMove.RenderSize.Height + 10);
+
+                        var animation = new DoubleAnimation
+                        {
+                            From = 0,
+                            To = offset,
+                            Duration = TimeSpan.FromSeconds(0.3),
+                            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+                        };
+
+                        tileToMove.RenderTransform = new TranslateTransform();
+                        TranslateTransform transform = (TranslateTransform)tileToMove.RenderTransform;
+                        // transform.BeginAnimation(TranslateTransform.YProperty, animation);
+                        
+                        animation.Completed += (s, e) =>
+                        {
+                            MainStackPanel.Children.RemoveAt(oldIndex);
+                            MainStackPanel.Children.Insert(i, tileToMove);
+                            tileContainer.RemoveFromMoveList(tileToMove);
+
+                            // Reset transform after moving to avoid permanent offset
+                            transform.Y = 0;
+                        };
+                    }
                 }
             }
+            tileContainer.ResetMoveList();
         }
+
 
         private void ShowTilesOnCanvas()
         {
