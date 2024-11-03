@@ -554,9 +554,19 @@ public class Tile : UserControl
     private void SetupIconVars()
     {
         absoluteIconPath = System.IO.Path.GetFullPath(IconImagePath);
+
+        if (!System.IO.File.Exists(absoluteIconPath))
+        {
+            // Handle the case where the file does not exist
+            Console.WriteLine("Error: Icon file not found at " + absoluteIconPath);
+            return; // Exit the method, or handle as needed
+        }
+
+        // Proceed if the file exists
         bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
+
 
     private void UpdateImageVars()
     {
@@ -667,6 +677,11 @@ public class Tile : UserControl
         // LastPlaytimePercent = 0;
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
+        if (!File.Exists(IconImagePath))
+        {
+            IconImagePath = SampleImagePath;
+        }
+
         ExePath = exePath;
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
         IsMenuToggled = false;
