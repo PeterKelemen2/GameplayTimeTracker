@@ -30,7 +30,7 @@ public class JsonHandler
     {
         return File.Exists(filePath) ? filePath : SampleImagePath;
     }
-    
+
     public void InitializeSettings()
     {
         CheckForDataDirectory();
@@ -50,7 +50,14 @@ public class JsonHandler
         if (settings != null)
         {
             Console.WriteLine($"Start With System: {settings.StartWithSystem}");
-            if (settings.StartWithSystem) CreateShortcutForStartup();
+            if (settings.StartWithSystem)
+            {
+                CreateShortcutForStartup();
+            }
+            else
+            {
+                RemoveShortcutForStartup();
+            }
 
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
             foreach (var theme in settings.ThemeList)
@@ -64,6 +71,30 @@ public class JsonHandler
         }
 
         return settings;
+    }
+
+    private void RemoveShortcutForStartup()
+    {
+        string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
+            $"{Assembly.GetExecutingAssembly().GetName().Name}.lnk");
+        // Check if the file exists before attempting to delete
+        if (File.Exists(shortcutPath))
+        {
+            try
+            {
+                // Delete the shortcut file
+                File.Delete(shortcutPath);
+                Console.WriteLine("Shortcut removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to remove shortcut: {ex.Message}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Shortcut does not exist.");
+        }
     }
 
     public void CreateShortcutForStartup()

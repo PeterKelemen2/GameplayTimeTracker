@@ -1,5 +1,5 @@
 ﻿{
-  "startWithSystem": true,
+  "startWithSystem": false,
   "themeList": [
     {
       "themeName": "default",
