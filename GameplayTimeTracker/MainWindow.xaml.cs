@@ -12,10 +12,13 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Gtk;
 using static System.Windows.Forms.Cursors;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
+using Grid = System.Windows.Controls.Grid;
+using Int32 = System.Int32;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Path = System.IO.Path;
@@ -137,11 +140,7 @@ namespace GameplayTimeTracker
                             settingsMenu.SetBlurImage();
                         }
 
-                        // Call RearrangeTiles only if it's safe to do so
-                        if (!isRearranging)
-                        {
-                            RearrangeTiles();
-                        }
+                        RearrangeTiles();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
@@ -208,60 +207,73 @@ namespace GameplayTimeTracker
 
         private bool isRearranging = false;
 
+        private void UpdateTileIndexes()
+        {
+            tileContainer.tilesList = tileContainer.SortedByProperty("IsRunning", false);
+            for (int i = 0; i < tileContainer.tilesList.Count; i++)
+            {
+                tileContainer.tilesList[i].Index = i;
+            }
+
+            foreach (var tile in tileContainer.tilesList)
+            {
+                Console.WriteLine($"{tile.Index} - {tile.GameName}");
+            }
+        }
+
         private void RearrangeTiles()
         {
-            if (isRearranging)
-                return; // Prevent concurrent execution
+            UpdateTileIndexes();
 
-            isRearranging = true;
-
-            List<Tile> toMoveList = tileContainer.toMoveList;
-            for (int i = 0; i < toMoveList.Count; i++)
+            List<Int32> alreadyArranged = new List<Int32>();
+            for (int i = 0; i < tileContainer.tilesList.Count; i++)
             {
-                var tileToMove = toMoveList[i];
-                if (MainStackPanel.Children.Contains(tileToMove))
+                if (alreadyArranged.Contains(i))
                 {
-                    int oldIndex = MainStackPanel.Children.IndexOf(tileToMove);
-                    Console.WriteLine($"{tileToMove.GameName}: oldIndex={oldIndex}, newIndex={i}");
-                    if (oldIndex != i)
+                    break;
+                }
+                var tile = tileContainer.tilesList[i];
+                if (MainStackPanel.Children.Contains(tile))
+                {
+                    if (tile.Index != MainStackPanel.Children.IndexOf(tile))
                     {
-                        // Calculate the offset for animation
-                        double offset = -i * (tileToMove.RenderSize.Height + 10); // Adjust for spacing
+                        var currentTile = MainStackPanel.Children[tile.Index] as Tile;
+                        int oldIndex = MainStackPanel.Children.IndexOf(tile);
+                        double offset = (tile.Index - oldIndex) * (tile.RenderSize.Height + 10);
 
                         var animation = new DoubleAnimation
                         {
                             From = 0,
                             To = offset,
-                            Duration = TimeSpan.FromSeconds(0.3),
+                            Duration = TimeSpan.FromSeconds(0.15),
                             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
                         };
 
-                        tileToMove.RenderTransform = new TranslateTransform();
-                        TranslateTransform transform = (TranslateTransform)tileToMove.RenderTransform;
-                        tileToMove.WasMoved = true;
+                        tile.RenderTransform = new TranslateTransform();
+                        TranslateTransform transform = (TranslateTransform)tile.RenderTransform;
+                        // tile.WasMoved = true;
+                        
+                        int index1 = MainStackPanel.Children.IndexOf(currentTile);
+                        int index2 = MainStackPanel.Children.IndexOf(tile);
+                        alreadyArranged.Add(index1);
+                        alreadyArranged.Add(index2);
 
-                        var i1 = i;
                         animation.Completed += (s, e) =>
                         {
-                            // Remove and insert tile at new position
-                            MainStackPanel.Children.RemoveAt(oldIndex);
-                            MainStackPanel.Children.Insert(i1, tileToMove);
-                            Console.WriteLine($"{tileToMove.GameName}: current index: {MainStackPanel.Children.IndexOf(tileToMove)}");
-                            // Reset transform after moving to avoid permanent offset
+                            
+                            MainStackPanel.Children.Remove(currentTile);
+                            MainStackPanel.Children.Remove(tile);
+                            MainStackPanel.Children.Insert(index1, tile);
+                            MainStackPanel.Children.Insert(index2, currentTile);
+                        
                             transform.Y = 0;
-                            tileToMove.RenderTransform = null; // Clear transform for future animations
-                            tileToMove.WasMoved = true;
-                            Console.WriteLine("######### Animation finished!");
+                            tile.RenderTransform = null; // Clear transform for future animations
                         };
 
                         transform.BeginAnimation(TranslateTransform.YProperty, animation);
                     }
                 }
             }
-
-            // Reset move list after processing
-            tileContainer.ResetMoveList();
-            isRearranging = false; // Allow future rearrangements
         }
 
         private void ShowTilesOnCanvas()

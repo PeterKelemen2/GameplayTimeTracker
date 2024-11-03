@@ -96,7 +96,7 @@ public class ProcessTracker
                     _tileContainer.UpdatePlaytimeBars();
                 }
 
-                if (!_tileContainer.IsInMoveList(tile) && !tile.WasMoved) _tileContainer.AddToMoveList(tile);
+                if (!_tileContainer.IsInMoveList(tile)) _tileContainer.AddToMoveList(tile);
             }
             else
             {
