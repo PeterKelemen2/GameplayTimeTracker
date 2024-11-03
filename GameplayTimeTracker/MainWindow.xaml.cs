@@ -137,23 +137,14 @@ namespace GameplayTimeTracker
                             settingsMenu.SetBlurImage();
                         }
 
-                        var sortedList = tileContainer.SortedByProperty("IsRunning", false);
-                        if (!tileContainer.IsListEqual(sortedList))
-                        {
-                            tileContainer.SetTilesList(sortedList);
-                            ShowTilesOnCanvas();
-                        }
+                        RearrangeTiles();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
                     stopwatch.Stop();
                     Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
 
-                    if ((int)stopwatch.ElapsedMilliseconds > 1000)
-                    {
-                        Task.Delay(1000).Wait();
-                    }
-                    else
+                    if ((int)stopwatch.ElapsedMilliseconds < 1000)
                     {
                         Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds).Wait();
                     }
@@ -210,134 +201,23 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer);
         }
 
+        private void RearrangeTiles()
+        {
+            List<Tile> toMoveList = tileContainer.GetMoveList();
+            for (int i = 0; i < toMoveList.Count; i++)
+            {
+                if (MainStackPanel.Children.Contains(toMoveList[i]))
+                {
+                    if (MainStackPanel.Children.IndexOf(toMoveList[i]) != i)
+                    {
+                        MainStackPanel.Children.Remove(toMoveList[i]);
+                        MainStackPanel.Children.Insert(i, toMoveList[i]);
+                    }
+                }
+            }
 
-        // private void CreateBlurRectangle()
-        // {
-        //     // Create a new Rectangle for the blur overlay
-        //     Rectangle blurOverlay = new Rectangle
-        //     {
-        //         Width = ContainerGrid.ActualWidth,
-        //         Height = ContainerGrid.ActualHeight,
-        //         Fill = new SolidColorBrush(Colors.Black),
-        //         // Opacity = 0.8,
-        //         // IsHitTestVisible = false // Make the overlay non-clickable
-        //     };
-        //
-        //     // Set attached properties
-        //     Panel.SetZIndex(blurOverlay, 0); // Ensure it appears above other elements
-        //     Grid.SetRow(blurOverlay, 0); // Set to the first row of the Grid
-        //
-        //     // Create a VisualBrush to capture visuals behind the rectangle
-        //     VisualBrush visualBrush = new VisualBrush();
-        //
-        //     // Create a DrawingVisual to capture the visuals
-        //     DrawingVisual drawingVisual = new DrawingVisual();
-        //
-        //     // Render the visuals into the DrawingVisual
-        //     using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-        //     {
-        //         // Render the current visuals into the DrawingVisual
-        //         RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
-        //             (int)ActualWidth, (int)ActualHeight, 98, 102, PixelFormats.Pbgra32);
-        //
-        //         renderTargetBitmap.Render(this); // Render the current visual tree to the bitmap
-        //
-        //         // Draw the bitmap into the DrawingVisual
-        //         drawingContext.DrawImage(renderTargetBitmap, new Rect(0, 0, ActualWidth, ActualHeight));
-        //     }
-        //
-        //     // Set the VisualBrush to the DrawingVisual
-        //     visualBrush.Visual = drawingVisual;
-        //
-        //     // Set the Fill of the Rectangle to the VisualBrush
-        //     blurOverlay.Fill = visualBrush;
-        //
-        //     // Create the BlurEffect
-        //     blurOverlay.Effect = new BlurEffect
-        //     {
-        //         Radius = 20 // Set the blur radius
-        //     };
-        //
-        //     // Add the Rectangle to the Grid
-        //     ContainerGrid.Children.Add(blurOverlay);
-        // }
-        //
-        // private void OpenSettingsWindow(object sender, RoutedEventArgs e)
-        // {
-        //     Console.WriteLine("Open Settings Window");
-        //     isBlurToggled = !isBlurToggled;
-        //     CreateBlurRectangle();
-        //     Grid settingsContainerGrid = new Grid();
-        //     settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
-        //
-        //     ThicknessAnimation rollInAnimation = new ThicknessAnimation
-        //     {
-        //         From = new Thickness(0, 0, 0, -(int)ActualHeight),
-        //         To = new Thickness(0, 0, 0, 0),
-        //         Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-        //         FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-        //         EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        //     };
-        //
-        //     Rectangle settingsRect = new Rectangle
-        //     {
-        //         Width = (int)ActualWidth / 2,
-        //         Height = (int)ActualHeight / 2,
-        //         Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
-        //         RadiusX = Utils.SettingsRadius,
-        //         RadiusY = Utils.SettingsRadius,
-        //         Effect = Utils.dropShadowRectangle
-        //     };
-        //     settingsContainerGrid.Children.Add(settingsRect);
-        //     Button closeButton = new Button
-        //     {
-        //         Style = (Style)Application.Current.FindResource("RoundedButton"),
-        //         Content = "Close",
-        //         Width = 80,
-        //         Height = 30,
-        //         VerticalAlignment = VerticalAlignment.Bottom,
-        //         Margin = new Thickness(0, 0, 0, (int)ActualHeight * 0.25),
-        //     };
-        //     closeButton.Click += CloseSettingsWindow;
-        //     settingsContainerGrid.Children.Add(closeButton);
-        //
-        //     TextBlock settingsTitle = new TextBlock
-        //     {
-        //         Text = "Settings",
-        //         Foreground = new SolidColorBrush(Utils.FontColor),
-        //         HorizontalAlignment = HorizontalAlignment.Center,
-        //         VerticalAlignment = VerticalAlignment.Center,
-        //         FontSize = 20,
-        //         FontWeight = FontWeights.Bold,
-        //     };
-        //     settingsTitle.Margin = new Thickness(0, 0, 0, (int)(ActualHeight * 0.25) + 110);
-        //     settingsContainerGrid.Children.Add(settingsTitle);
-        //
-        //     ContainerGrid.Children.Add(settingsContainerGrid);
-        //     settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
-        // }
-        //
-        // private void CloseSettingsWindow(object sender, RoutedEventArgs e)
-        // {
-        //     // Create a list to store children that need to be removed
-        //     List<UIElement> childrenToRemove = new List<UIElement>();
-        //
-        //     // Iterate through the children of the grid
-        //     foreach (UIElement child in ContainerGrid.Children)
-        //     {
-        //         // Check if the child is a FrameworkElement and if its name does not match the one we want to keep
-        //         if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
-        //         {
-        //             childrenToRemove.Add(child); // Mark for removal
-        //         }
-        //     }
-        //
-        //     // Remove the marked children
-        //     foreach (UIElement child in childrenToRemove)
-        //     {
-        //         ContainerGrid.Children.Remove(child);
-        //     }
-        // }
+            tileContainer.ResetMoveList();
+        }
 
         private void ShowTilesOnCanvas()
         {

@@ -10,6 +10,7 @@ namespace GameplayTimeTracker;
 public class TileContainer
 {
     private List<Tile> tilesList = new();
+    private List<Tile> toMoveList = new();
     private JsonHandler handler = new JsonHandler();
     private const string jsonFilePath = "data.json";
 
@@ -48,6 +49,25 @@ public class TileContainer
     {
         handler.WriteContentToFile(this);
         Console.WriteLine(" ==== Saved! ====");
+    }
+
+    public void AddToMoveList(Tile tile)
+    {
+        if (tilesList.Contains(tile) && !toMoveList.Contains(tile))
+        {
+            toMoveList.Add(tile);
+            Console.WriteLine($" ==== Added Tile to move: {tile.GameName} ====");
+        }
+    }
+
+    public void ResetMoveList()
+    {
+        toMoveList = new();
+    }
+
+    public List<Tile> GetMoveList()
+    {
+        return toMoveList;
     }
 
     public bool IsListEqual(List<Tile> newList)
@@ -320,7 +340,7 @@ public class TileContainer
             //         newPercent = 1;
             //         break;
             // }
-            
+
             tile.lastTimeGradientBar.Percent = newPercent;
 
             if (!tile.totalTimeGradientBar.WasInitialized)

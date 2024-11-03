@@ -75,7 +75,7 @@ public class ProcessTracker
                     tile.ToggleBgImageColor(isRunning);
                     Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
                 }
-                
+
                 // Only change text if it's not already the correct string
                 if (!tile.lastPlaytimeTitle.Text.Equals(currentlyRunningTimeString))
                 {
@@ -95,6 +95,8 @@ public class ProcessTracker
                 {
                     _tileContainer.UpdatePlaytimeBars();
                 }
+
+                _tileContainer.AddToMoveList(tile);
             }
             else
             {
@@ -108,7 +110,8 @@ public class ProcessTracker
                     tile.ToggleBgImageColor(isRunning);
                 }
             }
-            
+
+
             // Update text every cycle for seconds
             tile.UpdatePlaytimeText();
         }
