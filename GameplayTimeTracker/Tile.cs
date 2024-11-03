@@ -43,6 +43,7 @@ public class Tile : UserControl
     private Button launchButton;
     private Image image;
     public Image bgImage;
+    public Image bgImage2;
     private Grid iconContainerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
@@ -518,6 +519,7 @@ public class Tile : UserControl
     public void UpdateIcons(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Title = $"{GameName} - New Icon";
         openFileDialog.Filter =
             "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
 
@@ -958,6 +960,17 @@ public class Tile : UserControl
                 Opacity = 0.7
             };
 
+            bgImage2 = new Image
+            {
+                Source = bgImageColor,
+                Stretch = Stretch.UniformToFill,
+                Width = TileHeight * imageScale,
+                Height = TileHeight * imageScale,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Opacity = 0.0
+            };
+
             image = new Image
             {
                 Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
@@ -989,9 +1002,22 @@ public class Tile : UserControl
                 Effect = Utils.blurEffect
             };
 
+            var bgImageBorder2 = new Border
+            {
+                Padding = new Thickness(20),
+                Child = bgImage2,
+                Height = TileHeight * 2,
+                Width = TileHeight * 2,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Effect = Utils.blurEffect
+            };
+
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
             RenderOptions.SetBitmapScalingMode(bgImage, BitmapScalingMode.HighQuality);
+            RenderOptions.SetBitmapScalingMode(bgImage2, BitmapScalingMode.HighQuality);
             iconContainerGrid.Children.Add(bgImageBorder);
+            iconContainerGrid.Children.Add(bgImageBorder2);
             iconContainerGrid.Children.Add(imageBorder);
         }
         else
@@ -1079,6 +1105,31 @@ public class Tile : UserControl
 
     public void ToggleBgImageColor(bool runningBool)
     {
-        bgImage.Source = runningBool ? bgImageColor : bgImageGray;
+        // Create the fade-in animation
+        DoubleAnimation fadeInAnimation = new DoubleAnimation
+        {
+            From = 0.0,
+            To = 0.7,
+            Duration = TimeSpan.FromSeconds(0.75),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+        DoubleAnimation fadeOutAnimation = new DoubleAnimation
+        {
+            From = 0.7,
+            To = 0.0,
+            Duration = TimeSpan.FromSeconds(0.75),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
+        };
+
+        if (runningBool)
+        {
+            bgImage.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+            bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+        }
+        else
+        {
+            bgImage.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+            bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+        }
     }
 }
