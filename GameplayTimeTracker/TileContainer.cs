@@ -18,7 +18,7 @@ public class TileContainer
 
     public List<Theme> themes { get; set; } = new();
     public List<Tile> tilesList { get; set; } = new();
-    public List<Tile> toMoveList { get; set; } = new();
+    // public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
 
     MainWindow _mainWindow;
@@ -53,29 +53,7 @@ public class TileContainer
         Console.WriteLine(" ==== Saved! ====");
     }
 
-    public void AddToMoveList(Tile tile)
-    {
-        if (tilesList.Contains(tile) && !toMoveList.Contains(tile))
-        {
-            toMoveList.Add(tile);
-            Console.WriteLine($" ==== Added Tile to move: {tile.GameName} ====");
-        }
-    }
-
-    public void ResetMoveList()
-    {
-        toMoveList = new();
-    }
-
-    public bool IsInMoveList(Tile tile)
-    {
-        return toMoveList.Contains(tile);
-    }
-
-    public void RemoveFromMoveList(Tile tile)
-    {
-        toMoveList.Remove(tile);
-    }
+    
 
     public bool IsListEqual(List<Tile> newList)
     {

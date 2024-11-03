@@ -143,7 +143,6 @@ namespace GameplayTimeTracker
                         }
 
                         RearrangeTiles();
-                        // RearrangeTiles2();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
@@ -207,17 +206,6 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer);
         }
 
-
-        private bool isRearranging = false;
-
-        private void PrintIndexes()
-        {
-            foreach (var tile in tileContainer.tilesList)
-            {
-                Console.WriteLine($"{tile.Index} - {tile.GameName}");
-            }
-        }
-
         private void UpdateTileIndexes()
         {
             tileContainer.tilesList = tileContainer.SortedByProperty("IsRunning", false);
@@ -225,15 +213,12 @@ namespace GameplayTimeTracker
             {
                 tileContainer.tilesList[i].Index = i;
             }
-
-            PrintIndexes();
         }
 
         private void RearrangeTiles()
         {
             UpdateTileIndexes();
 
-            List<int> alreadyArranged = new List<int>();
             int animationsPending = 0; // Track pending animations
 
             for (int i = 0; i < tileContainer.tilesList.Count; i++)
@@ -283,7 +268,6 @@ namespace GameplayTimeTracker
                                         t.RenderTransform = null;
                                     }
 
-                                    PrintIndexes(); // Optional: for debugging purposes
                                 }), DispatcherPriority.Background);
                             }
                         };
@@ -294,7 +278,6 @@ namespace GameplayTimeTracker
                 }
             }
         }
-
 
         private void ShowTilesOnCanvas()
         {
