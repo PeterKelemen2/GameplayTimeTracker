@@ -12,8 +12,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Gtk;
 using static System.Windows.Forms.Cursors;
+using Action = System.Action;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
@@ -141,6 +143,7 @@ namespace GameplayTimeTracker
                         }
 
                         RearrangeTiles();
+                        // RearrangeTiles2();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
@@ -207,6 +210,14 @@ namespace GameplayTimeTracker
 
         private bool isRearranging = false;
 
+        private void PrintIndexes()
+        {
+            foreach (var tile in tileContainer.tilesList)
+            {
+                Console.WriteLine($"{tile.Index} - {tile.GameName}");
+            }
+        }
+
         private void UpdateTileIndexes()
         {
             tileContainer.tilesList = tileContainer.SortedByProperty("IsRunning", false);
@@ -215,66 +226,75 @@ namespace GameplayTimeTracker
                 tileContainer.tilesList[i].Index = i;
             }
 
-            foreach (var tile in tileContainer.tilesList)
-            {
-                Console.WriteLine($"{tile.Index} - {tile.GameName}");
-            }
+            PrintIndexes();
         }
 
         private void RearrangeTiles()
         {
             UpdateTileIndexes();
 
-            List<Int32> alreadyArranged = new List<Int32>();
+            List<int> alreadyArranged = new List<int>();
+            int animationsPending = 0; // Track pending animations
+
             for (int i = 0; i < tileContainer.tilesList.Count; i++)
             {
-                if (alreadyArranged.Contains(i))
-                {
-                    break;
-                }
                 var tile = tileContainer.tilesList[i];
                 if (MainStackPanel.Children.Contains(tile))
                 {
-                    if (tile.Index != MainStackPanel.Children.IndexOf(tile))
+                    int oldIndex = MainStackPanel.Children.IndexOf(tile);
+                    if (tile.Index != oldIndex)
                     {
-                        var currentTile = MainStackPanel.Children[tile.Index] as Tile;
-                        int oldIndex = MainStackPanel.Children.IndexOf(tile);
                         double offset = (tile.Index - oldIndex) * (tile.RenderSize.Height + 10);
 
+                        // Create and configure the animation
                         var animation = new DoubleAnimation
                         {
                             From = 0,
                             To = offset,
-                            Duration = TimeSpan.FromSeconds(0.15),
+                            Duration = TimeSpan.FromSeconds(0.25),
                             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
                         };
 
                         tile.RenderTransform = new TranslateTransform();
                         TranslateTransform transform = (TranslateTransform)tile.RenderTransform;
-                        // tile.WasMoved = true;
-                        
-                        int index1 = MainStackPanel.Children.IndexOf(currentTile);
-                        int index2 = MainStackPanel.Children.IndexOf(tile);
-                        alreadyArranged.Add(index1);
-                        alreadyArranged.Add(index2);
 
+                        // Increment pending animations counter
+                        animationsPending++;
                         animation.Completed += (s, e) =>
                         {
-                            
-                            MainStackPanel.Children.Remove(currentTile);
-                            MainStackPanel.Children.Remove(tile);
-                            MainStackPanel.Children.Insert(index1, tile);
-                            MainStackPanel.Children.Insert(index2, currentTile);
-                        
-                            transform.Y = 0;
-                            tile.RenderTransform = null; // Clear transform for future animations
+                            animationsPending--; // Decrement counter
+
+                            // When all animations are completed
+                            if (animationsPending == 0)
+                            {
+                                // Rearrange tiles after all animations are finished
+                                Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    for (int j = 0; j < tileContainer.tilesList.Count; j++)
+                                    {
+                                        var t = tileContainer.tilesList[j];
+                                        if (MainStackPanel.Children.Contains(t))
+                                        {
+                                            MainStackPanel.Children.Remove(t);
+                                            MainStackPanel.Children.Insert(t.Index, t);
+                                        }
+
+                                        // Reset the transform to clear offset
+                                        t.RenderTransform = null;
+                                    }
+
+                                    PrintIndexes(); // Optional: for debugging purposes
+                                }), DispatcherPriority.Background);
+                            }
                         };
 
+                        // Start the animation on the tile
                         transform.BeginAnimation(TranslateTransform.YProperty, animation);
                     }
                 }
             }
         }
+
 
         private void ShowTilesOnCanvas()
         {

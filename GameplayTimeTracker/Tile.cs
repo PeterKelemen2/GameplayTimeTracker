@@ -644,6 +644,9 @@ public class Tile : UserControl
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
+    public Tile()
+    {
+    }
 
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
         string? iconImagePath = SampleImagePath, string exePath = "", double width = 740)
