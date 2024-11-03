@@ -137,7 +137,11 @@ namespace GameplayTimeTracker
                             settingsMenu.SetBlurImage();
                         }
 
-                        RearrangeTiles();
+                        // Call RearrangeTiles only if it's safe to do so
+                        if (!isRearranging)
+                        {
+                            RearrangeTiles();
+                        }
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
@@ -201,18 +205,28 @@ namespace GameplayTimeTracker
             handler.WriteContentToFile(tileContainer);
         }
 
+
+        private bool isRearranging = false;
+
         private void RearrangeTiles()
         {
+            if (isRearranging)
+                return; // Prevent concurrent execution
+
+            isRearranging = true;
+
             List<Tile> toMoveList = tileContainer.toMoveList;
             for (int i = 0; i < toMoveList.Count; i++)
             {
                 var tileToMove = toMoveList[i];
                 if (MainStackPanel.Children.Contains(tileToMove))
                 {
-                    if (MainStackPanel.Children.IndexOf(tileToMove) != i)
+                    int oldIndex = MainStackPanel.Children.IndexOf(tileToMove);
+                    Console.WriteLine($"{tileToMove.GameName}: oldIndex={oldIndex}, newIndex={i}");
+                    if (oldIndex != i)
                     {
-                        int oldIndex = MainStackPanel.Children.IndexOf(tileToMove);
-                        double offset = -i * (tileToMove.RenderSize.Height + 10);
+                        // Calculate the offset for animation
+                        double offset = -i * (tileToMove.RenderSize.Height + 10); // Adjust for spacing
 
                         var animation = new DoubleAnimation
                         {
@@ -224,23 +238,31 @@ namespace GameplayTimeTracker
 
                         tileToMove.RenderTransform = new TranslateTransform();
                         TranslateTransform transform = (TranslateTransform)tileToMove.RenderTransform;
-                        // transform.BeginAnimation(TranslateTransform.YProperty, animation);
-                        
+                        tileToMove.WasMoved = true;
+
+                        var i1 = i;
                         animation.Completed += (s, e) =>
                         {
+                            // Remove and insert tile at new position
                             MainStackPanel.Children.RemoveAt(oldIndex);
-                            MainStackPanel.Children.Insert(i, tileToMove);
-                            tileContainer.RemoveFromMoveList(tileToMove);
-
+                            MainStackPanel.Children.Insert(i1, tileToMove);
+                            Console.WriteLine($"{tileToMove.GameName}: current index: {MainStackPanel.Children.IndexOf(tileToMove)}");
                             // Reset transform after moving to avoid permanent offset
                             transform.Y = 0;
+                            tileToMove.RenderTransform = null; // Clear transform for future animations
+                            tileToMove.WasMoved = true;
+                            Console.WriteLine("######### Animation finished!");
                         };
+
+                        transform.BeginAnimation(TranslateTransform.YProperty, animation);
                     }
                 }
             }
-            tileContainer.ResetMoveList();
-        }
 
+            // Reset move list after processing
+            tileContainer.ResetMoveList();
+            isRearranging = false; // Allow future rearrangements
+        }
 
         private void ShowTilesOnCanvas()
         {

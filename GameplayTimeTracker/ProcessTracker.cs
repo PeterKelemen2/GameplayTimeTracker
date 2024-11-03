@@ -96,7 +96,7 @@ public class ProcessTracker
                     _tileContainer.UpdatePlaytimeBars();
                 }
 
-                if (!_tileContainer.IsInMoveList(tile)) _tileContainer.AddToMoveList(tile);
+                if (!_tileContainer.IsInMoveList(tile) && !tile.WasMoved) _tileContainer.AddToMoveList(tile);
             }
             else
             {
@@ -105,6 +105,7 @@ public class ProcessTracker
                 {
                     tile.wasRunning = false;
                     tile.IsRunning = false;
+                    tile.WasMoved = false;
                     tile.lastPlaytimeTitle.Text = LastPlaytimeString;
                     tile.runningTextBlock.Text = notRunningText;
                     tile.ToggleBgImageColor(isRunning);

@@ -108,6 +108,7 @@ public class Tile : UserControl
     public bool IsRunningGame { get; set; }
     public bool WasRunning { get; set; }
     public bool WasOpened { get; set; }
+    public bool WasMoved { get; set; }
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private Dictionary<UIElement, double> originalHeights = new();
@@ -664,6 +665,7 @@ public class Tile : UserControl
         ExePath = exePath;
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
         IsMenuToggled = false;
+        WasMoved = false;
 
         SetupIconVars();
 
