@@ -100,198 +100,6 @@ public class Utils
     public const int SettingsRadius = 20;
 
 
-    // public static (byte[] topRow, byte[] bottomRow, byte[] leftColumn, byte[] rightColumn) GetEdges(BitmapSource bitmap)
-    // {
-    //     int width = bitmap.PixelWidth;
-    //     int height = bitmap.PixelHeight;
-    //     int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8; // Bits per pixel rounded to bytes
-    //     int rowStride = width * bytesPerPixel; // Byte width of a single row
-    //
-    //     // Create a single buffer to hold the top and bottom rows, and left/right columns
-    //     byte[] pixelBuffer = new byte[height * rowStride];
-    //     bitmap.CopyPixels(pixelBuffer, rowStride, 0); // Copy all pixels at once
-    //
-    //     // Retrieve the edges from the buffer
-    //     byte[] topRow = new byte[rowStride];
-    //     byte[] bottomRow = new byte[rowStride];
-    //     byte[] leftColumn = new byte[height * bytesPerPixel];
-    //     byte[] rightColumn = new byte[height * bytesPerPixel];
-    //
-    //     // Top row
-    //     Array.Copy(pixelBuffer, 0, topRow, 0, rowStride);
-    //
-    //     // Bottom row
-    //     Array.Copy(pixelBuffer, (height - 1) * rowStride, bottomRow, 0, rowStride);
-    //
-    //     // Left column
-    //     for (int y = 0; y < height; y++)
-    //     {
-    //         int index = y * rowStride;
-    //         Array.Copy(pixelBuffer, index, leftColumn, y * bytesPerPixel, bytesPerPixel);
-    //     }
-    //
-    //     // Right column
-    //     for (int y = 0; y < height; y++)
-    //     {
-    //         int index = y * rowStride + (width - 1) * bytesPerPixel;
-    //         Array.Copy(pixelBuffer, index, rightColumn, y * bytesPerPixel, bytesPerPixel);
-    //     }
-    //
-    //     return (topRow, bottomRow, leftColumn, rightColumn);
-    // }
-    //
-    // public static (byte[] leftColumn, byte[] rightColumn) GetEdgesSides(BitmapSource bitmap)
-    // {
-    //     int width = bitmap.PixelWidth;
-    //     int height = bitmap.PixelHeight;
-    //     int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8; // Bits per pixel rounded to bytes
-    //     int rowStride = width * bytesPerPixel; // Byte width of a single row
-    //
-    //     // Create buffers for left and right columns
-    //     byte[] leftColumn = new byte[height * bytesPerPixel];
-    //     byte[] rightColumn = new byte[height * bytesPerPixel];
-    //
-    //     // Create a buffer to hold all pixels
-    //     byte[] pixelBuffer = new byte[height * rowStride];
-    //     bitmap.CopyPixels(pixelBuffer, rowStride, 0); // Copy all pixels at once
-    //
-    //     // Copy the left column
-    //     for (int y = 0; y < height; y++)
-    //     {
-    //         int index = y * rowStride; // Index for left column
-    //         Array.Copy(pixelBuffer, index, leftColumn, y * bytesPerPixel, bytesPerPixel);
-    //     }
-    //
-    //     // Copy the right column
-    //     for (int y = 0; y < height; y++)
-    //     {
-    //         int index = y * rowStride + (width - 1) * bytesPerPixel; // Index for right column
-    //         Array.Copy(pixelBuffer, index, rightColumn, y * bytesPerPixel, bytesPerPixel);
-    //     }
-    //
-    //     return (leftColumn, rightColumn);
-    // }
-    //
-    // public static BitmapSource ExtendEdgesLeftRight(BitmapSource bitmap, int n)
-    // {
-    //     Stopwatch stopwatch = new Stopwatch();
-    //     stopwatch.Restart();
-    //
-    //     BitmapSource cropped = CropTransparentAreas(bitmap);
-    //     bitmap = cropped;
-    //
-    //     int originalWidth = bitmap.PixelWidth;
-    //     int originalHeight = bitmap.PixelHeight;
-    //     int extendedWidth = originalWidth + 2 * n; // Only change width
-    //     int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
-    //
-    //     // Ensure n is positive and within image bounds
-    //     if (n < 0 || originalWidth < 1 || originalHeight < 1)
-    //         throw new ArgumentException("Invalid dimensions or extension size.");
-    //
-    //     // Get left and right edges
-    //     var (leftColumn, rightColumn) = GetEdgesSides(bitmap);
-    //
-    //     // Create a buffer for the extended image
-    //     byte[] extendedPixels = new byte[extendedWidth * originalHeight * bytesPerPixel];
-    //
-    //     // Copy the original image into the center of the extended image
-    //     bitmap.CopyPixels(new Int32Rect(0, 0, originalWidth, originalHeight),
-    //         extendedPixels,
-    //         extendedWidth * bytesPerPixel,
-    //         0); // No offset needed for the first copy
-    //
-    //     // Fill left edge
-    //     for (int y = 0; y < originalHeight; y++)
-    //     {
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             Buffer.BlockCopy(leftColumn, y * bytesPerPixel, extendedPixels,
-    //                 (y * extendedWidth + i) * bytesPerPixel, bytesPerPixel);
-    //         }
-    //     }
-    //
-    //     // Fill right edge
-    //     for (int y = 0; y < originalHeight; y++)
-    //     {
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             Buffer.BlockCopy(rightColumn, y * bytesPerPixel, extendedPixels,
-    //                 (y * extendedWidth + (originalWidth + n + i)) * bytesPerPixel, bytesPerPixel);
-    //         }
-    //     }
-    //
-    //     stopwatch.Stop();
-    //     Console.WriteLine($"Extending edges left and right: {stopwatch.Elapsed.TotalMilliseconds:F2}ms");
-    //
-    //     return BitmapSource.Create(extendedWidth, originalHeight, bitmap.DpiX, bitmap.DpiY, bitmap.Format, null,
-    //         extendedPixels, extendedWidth * bytesPerPixel);
-    // }
-    //
-    // public static BitmapSource ExtendEdgesAroundCenter(BitmapSource bitmap, int n)
-    // {
-    //     Stopwatch stopwatch = new Stopwatch();
-    //     stopwatch.Restart();
-    //
-    //     BitmapSource cropped = CropTransparentAreas(bitmap);
-    //     bitmap = cropped;
-    //
-    //     int originalWidth = bitmap.PixelWidth;
-    //     int originalHeight = bitmap.PixelHeight;
-    //     int extendedWidth = originalWidth + 2 * n;
-    //     int extendedHeight = originalHeight + 2 * n;
-    //     int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
-    //
-    //     // Ensure n is positive and within image bounds
-    //     if (n < 0 || originalWidth < 1 || originalHeight < 1)
-    //         throw new ArgumentException("Invalid dimensions or extension size.");
-    //
-    //     // Get top, bottom, left, and right edges
-    //     var (topRow, bottomRow, leftColumn, rightColumn) = GetEdges(bitmap);
-    //
-    //     // Create a buffer for the extended image
-    //     byte[] extendedPixels = new byte[extendedWidth * extendedHeight * bytesPerPixel];
-    //
-    //     // Copy the original image into the center of the extended image
-    //     bitmap.CopyPixels(new Int32Rect(0, 0, originalWidth, originalHeight),
-    //         extendedPixels,
-    //         extendedWidth * bytesPerPixel,
-    //         n * extendedWidth * bytesPerPixel + n * bytesPerPixel);
-    //
-    //     // Fill top edge
-    //     for (int i = 0; i < n; i++)
-    //     {
-    //         Array.Copy(topRow, 0, extendedPixels, i * extendedWidth * bytesPerPixel + n * bytesPerPixel, topRow.Length);
-    //     }
-    //
-    //     // Fill bottom edge
-    //     for (int i = 0; i < n; i++)
-    //     {
-    //         Array.Copy(bottomRow, 0, extendedPixels,
-    //             (extendedHeight - n + i - 1) * extendedWidth * bytesPerPixel + n * bytesPerPixel, bottomRow.Length);
-    //     }
-    //
-    //     // Fill left and right edges
-    //     for (int y = 0; y < originalHeight; y++)
-    //     {
-    //         for (int i = 0; i < n; i++)
-    //         {
-    //             // Left edge
-    //             Array.Copy(leftColumn, y * bytesPerPixel, extendedPixels, ((y + n) * extendedWidth + i) * bytesPerPixel,
-    //                 bytesPerPixel);
-    //             // Right edge
-    //             Array.Copy(rightColumn, y * bytesPerPixel, extendedPixels,
-    //                 ((y + n) * extendedWidth + (originalWidth + n + i)) * bytesPerPixel, bytesPerPixel);
-    //         }
-    //     }
-    //
-    //     stopwatch.Stop();
-    //     Console.WriteLine($"Extending edges: {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
-    //
-    //     return BitmapSource.Create(extendedWidth, extendedHeight, bitmap.DpiX, bitmap.DpiY, bitmap.Format, null,
-    //         extendedPixels, extendedWidth * bytesPerPixel);
-    // }
-
     public static BlurEffect fakeShadow = new BlurEffect
     {
         Radius = 8,
@@ -344,18 +152,18 @@ public class Utils
         ShadowDepth = 0
     };
 
-    public static void SaveBitmapSourceToFile(BitmapSource bitmapSource, string filePath)
-    {
-        // Create an encoder for the format you want to save (e.g., PNG)
-        PngBitmapEncoder encoder = new PngBitmapEncoder();
-        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-
-        // Save the bitmap to the specified file
-        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            encoder.Save(fileStream);
-        }
-    }
+    // public static void SaveBitmapSourceToFile(BitmapSource bitmapSource, string filePath)
+    // {
+    //     // Create an encoder for the format you want to save (e.g., PNG)
+    //     PngBitmapEncoder encoder = new PngBitmapEncoder();
+    //     encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+    //
+    //     // Save the bitmap to the specified file
+    //     using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+    //     {
+    //         encoder.Save(fileStream);
+    //     }
+    // }
 
     public static BitmapSource CropTransparentAreas(BitmapSource bitmap)
     {
