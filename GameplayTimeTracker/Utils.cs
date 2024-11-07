@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,17 @@ namespace GameplayTimeTracker;
 
 public class Utils
 {
+    public static string DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        Assembly.GetExecutingAssembly().GetName().Name);
+
+    private const string SampleImagePath = "assets/no_icon.png";
+    private const string SettingsFileName = "settings.json";
+    private const string DataFileName = "data.json";
+    private const string SavedIconsFolderName = "Saved Icons";
+    public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
+    public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
+    public static string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
+
     public static Color BgColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color FooterColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");

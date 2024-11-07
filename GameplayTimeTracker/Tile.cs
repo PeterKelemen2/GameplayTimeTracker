@@ -515,6 +515,11 @@ public class Tile : UserControl
     public void UpdateIcons(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
+        if (System.IO.Path.Exists(ExePath))
+        {
+            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ExePath);
+        }
+
         openFileDialog.Title = $"{GameName} - New Icon";
         openFileDialog.Filter =
             "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
@@ -526,12 +531,13 @@ public class Tile : UserControl
             fileName = fileName.Substring(0, fileName.Length - 4);
 
             string currentDirectory = Directory.GetCurrentDirectory();
-            string potentialImagePath = System.IO.Path.Combine(currentDirectory, AssetsFolder, $"{fileName}.png");
+            string potentialImagePath = System.IO.Path.Combine(Utils.SavedIconsPath, $"{fileName}.png");
 
             if (!Equals(filePath, potentialImagePath))
             {
                 string uniqueFileName = $"{GameName}-{Guid.NewGuid().ToString()}.png";
-                string? iconPath = $"assets/{uniqueFileName}";
+                string? iconPath = System.IO.Path.Combine(Utils.SavedIconsPath, uniqueFileName);
+                // string? iconPath = $"assets/{uniqueFileName}";
 
                 Utils.PrepIcon(filePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
@@ -540,7 +546,7 @@ public class Tile : UserControl
             else
             {
                 // IconImagePath = potentialImagePath;
-                IconImagePath = System.IO.Path.Combine(AssetsFolder, $"{fileName}.png");
+                IconImagePath = System.IO.Path.Combine(Utils.SavedIconsPath, $"{fileName}.png");
             }
 
             UpdateImageVars();

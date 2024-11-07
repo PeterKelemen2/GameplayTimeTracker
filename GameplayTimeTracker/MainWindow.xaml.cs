@@ -173,7 +173,7 @@ namespace GameplayTimeTracker
 
                 string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
                 // string? iconPath = $"assets/{uniqueFileName}";
-                string iconPath = Path.Combine(handler.SavedIconsPath, uniqueFileName);
+                string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
 
                 Utils.PrepIcon(filePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
