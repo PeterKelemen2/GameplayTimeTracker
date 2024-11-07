@@ -35,7 +35,9 @@ public class PopupMenu : UserControl
     public Grid MenuContainerGrid { get; set; }
 
     private DoubleAnimation fadeInAnimation;
+    private DoubleAnimation otherFadeInAnimation;
     private DoubleAnimation fadeOutAnimation;
+    private DoubleAnimation otherFadeOutAnimation;
     private DoubleAnimation zoomInAnimation;
     private DoubleAnimation zoomOutAnimation;
     private DoubleAnimation blurInAnimation;
@@ -49,6 +51,8 @@ public class PopupMenu : UserControl
 
     BitmapSource settingsBgBitmap;
     BitmapSource extendedBitmap;
+
+    private TextBlock menuTitle;
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
@@ -143,6 +147,22 @@ public class PopupMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.05)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
+        
+        otherFadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(1)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        otherFadeOutAnimation = new DoubleAnimation
+        {
+            From = 1,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(1)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
     }
 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -152,7 +172,7 @@ public class PopupMenu : UserControl
         WinHeight = e.NewSize.Height;
 
         rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
-        rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth);
+        rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
         SetBlurImage();
         // Adjust the height of the rectangle dynamically
         // H = WinHeight * 0.25; // For example, make the height 25% of the window height
@@ -206,7 +226,7 @@ public class PopupMenu : UserControl
         };
         MenuContainerGrid.Children.Add(menuRect);
 
-        TextBlock menuTitle = new TextBlock
+        menuTitle = new TextBlock
         {
             Text = MenuText,
             Foreground = new SolidColorBrush(Utils.FontColor),
@@ -268,7 +288,7 @@ public class PopupMenu : UserControl
         }
 
         ContainerGrid.Children.Add(MenuContainerGrid);
-
+        menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);
         MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
         blurUpdateTimer.Start();
         IsToggled = true;
@@ -309,7 +329,7 @@ public class PopupMenu : UserControl
         ToClose = false;
         MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
-
+        menuTitle.BeginAnimation(OpacityProperty, otherFadeOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
     }
