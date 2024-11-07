@@ -692,19 +692,6 @@ public class Tile : UserControl
         // InitializeTile();
     }
 
-    public void SetTimePercent(double globalTotal)
-    {
-        TotalPlaytimePercent = Math.Round(TotalPlaytime / globalTotal, 2);
-        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
-        Console.WriteLine($"Total playtime of {GameName}: {TotalPlaytimePercent} | {LastPlaytimePercent}");
-        // SetPlaytimeBars();
-    }
-
-    public void CalculateLastPlaytimePercent()
-    {
-        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
-    }
-
     public void InitializeTile()
     {
         LinearGradientBrush gradientBrush = new LinearGradientBrush();

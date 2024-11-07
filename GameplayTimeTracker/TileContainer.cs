@@ -21,6 +21,8 @@ public class TileContainer
     // public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
 
+    public TextBlock Total { get; set; }
+
     MainWindow _mainWindow;
 
     public TileContainer()
@@ -133,12 +135,12 @@ public class TileContainer
             newTile.Index = tilesList.Count;
             tilesList.Add(newTile);
             newTile.InitializeTile();
-            
+
             // This accounts for change in percentages when adding new tile
             UpdatePlaytimeBars();
-            
-            newTile.ToggleBgImageColor(newTile.IsRunning);
 
+            newTile.ToggleBgImageColor(newTile.IsRunning);
+            Total.Text = $"Games managed: {tilesList.Count}";
             Console.WriteLine($"Tile added to TileContainer!");
         }
         catch (Exception e)
@@ -180,8 +182,8 @@ public class TileContainer
                 {
                     tilesList.Remove(tile);
                     isRemoved = true;
-                    TextBlock totalText = _mainWindow.FindName("GamesLoaded") as TextBlock;
-                    totalText.Text = $"Games managed: {tilesList.Count}";
+                    // TextBlock totalText = _mainWindow.FindName("GamesLoaded") as TextBlock;
+                    Total.Text = $"Games managed: {tilesList.Count}";
                 }
             }
         }
@@ -193,6 +195,7 @@ public class TileContainer
         {
             String message = isRemoved ? $"Tile with ID {id} removed." : $"Couldn't find Tile with ID {id}";
             Console.WriteLine(message);
+
             InitSave();
         }
     }

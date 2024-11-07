@@ -63,8 +63,8 @@ namespace GameplayTimeTracker
             tracker.InitializeProcessTracker(tileContainer);
             settingsMenu = new SettingsMenu(ContainerGrid);
             UpdateStackPane();
+            tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
-            
         }
 
         private void LoadTheme(string themeName)
@@ -138,11 +138,6 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-                        // if (!settingsMenu.ToClose)
-                        // {
-                        //     settingsMenu.SetBlurImage();
-                        // }
-                        // GC.Collect();
                         RearrangeTiles();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
@@ -194,7 +189,6 @@ namespace GameplayTimeTracker
                     }
 
                     tileContainer.AddTile(newTile, newlyAdded: true);
-                    GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
                     MessageBox.Show($"Selected file: {filePath}");
