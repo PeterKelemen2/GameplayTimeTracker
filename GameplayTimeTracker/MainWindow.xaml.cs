@@ -61,6 +61,7 @@ namespace GameplayTimeTracker
             notificationHandler.SetupNotifyIcon();
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
+            settingsMenu = new SettingsMenu(ContainerGrid);
             UpdateStackPane();
         }
 
@@ -92,13 +93,14 @@ namespace GameplayTimeTracker
             InitializeComponent();
 
             notificationHandler = new NotificationHandler();
-            settingsMenu = new SettingsMenu(ContainerGrid);
+
             settings = handler.GetSettingsFromFile();
 
             themesList = settings.ThemeList;
             LoadTheme("default");
 
             handler.InitializeContainer(tileContainer);
+            
             // tilesList = tileContainer.tilesList;
 
             // CustomButton testButton =
@@ -137,10 +139,10 @@ namespace GameplayTimeTracker
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
-                        if (!settingsMenu.ToClose)
-                        {
-                            settingsMenu.SetBlurImage();
-                        }
+                        // if (!settingsMenu.ToClose)
+                        // {
+                        //     settingsMenu.SetBlurImage();
+                        // }
 
                         RearrangeTiles();
 
@@ -267,7 +269,6 @@ namespace GameplayTimeTracker
                                         // Reset the transform to clear offset
                                         t.RenderTransform = null;
                                     }
-
                                 }), DispatcherPriority.Background);
                             }
                         };
@@ -352,6 +353,7 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
+            // settingsMenu = new SettingsMenu(ContainerGrid);
             settingsMenu.OpenSettingsWindow(sender, e);
         }
     }

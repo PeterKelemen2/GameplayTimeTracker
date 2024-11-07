@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -12,18 +12,62 @@ using System.Windows.Threading;
 
 namespace GameplayTimeTracker;
 
-public class SettingsMenu : UserControl
+public class PopupMenu : UserControl
 {
-    public SettingsMenu(Grid containerGrid, bool isToggled = false)
+    public double WinWidth { get; set; }
+
+    public double WinHeight { get; set; }
+
+    public double W { get; set; }
+    public double H { get; set; }
+
+    public bool IsToggled { get; set; }
+    public bool IsImageSet { get; set; }
+    public bool ToClose { get; set; }
+
+    public string MenuText { get; set; }
+    public string Type { get; set; }
+
+    private readonly RoutedEventHandler ButtonAction;
+    private DispatcherTimer blurUpdateTimer;
+
+    public Grid ContainerGrid { get; set; }
+    public Grid MenuContainerGrid { get; set; }
+
+    private DoubleAnimation fadeInAnimation;
+    private DoubleAnimation fadeOutAnimation;
+    private DoubleAnimation zoomInAnimation;
+    private DoubleAnimation zoomOutAnimation;
+    private DoubleAnimation blurInAnimation;
+    private DoubleAnimation blurOutAnimation;
+    private ThicknessAnimation rollInAnimation;
+    private ThicknessAnimation rollOutAnimation;
+    private ScaleTransform scaleTransform;
+
+    BitmapSource settingsBgBitmap;
+    BitmapSource extendedBitmap;
+
+    private double _zoomPercent = 1.07;
+    int bRadius = 10;
+
+    public Image bgImage;
+
+    public PopupMenu(string text = "", double w = 300, double h = 150, bool isToggled = false, string type = "yesNo",
+        RoutedEventHandler bAction = null)
     {
         Window mainWindow = Utils.GetMainWindow();
-        ContainerGrid = mainWindow.FindName("ContainerGrid") as Grid;
-        WinHeight = (int)mainWindow.RenderSize.Height;
-        WinWidth = (int)mainWindow.RenderSize.Width;
+        ContainerGrid = Utils.GetMainWindow().FindName("ContainerGrid") as Grid;
+        WinHeight = mainWindow.RenderSize.Height;
+        WinWidth = mainWindow.RenderSize.Width;
+        MenuText = text;
+        W = w;
+        H = h;
         IsToggled = isToggled;
+        Type = type;
+        if (bAction != null) ButtonAction = bAction;
         IsImageSet = false;
         ToClose = false;
-        
+
         blurUpdateTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
@@ -97,75 +141,70 @@ public class SettingsMenu : UserControl
         };
     }
 
-    public int WinWidth { get; set; }
-
-    public int WinHeight { get; set; }
-
-    public bool IsToggled { get; set; }
-    public bool IsImageSet { get; set; }
-    public bool ToClose { get; set; }
-
-    public Grid ContainerGrid { get; set; }
-    public Grid settingsContainerGrid { get; set; }
-
-    private DoubleAnimation fadeInAnimation;
-    private DoubleAnimation fadeOutAnimation;
-    private DoubleAnimation zoomInAnimation;
-    private DoubleAnimation zoomOutAnimation;
-    private DoubleAnimation blurInAnimation;
-    private DoubleAnimation blurOutAnimation;
-    private ThicknessAnimation rollInAnimation;
-    private ThicknessAnimation rollOutAnimation;
-    private ScaleTransform scaleTransform;
-    
-    private DispatcherTimer blurUpdateTimer;
-
-    BitmapSource settingsBgBitmap;
-    BitmapSource extendedBitmap;
-
-    private double _zoomPercent = 1.07;
-    int bRadius = 10;
-
-    public Image bgImage;
-
-
-    private void UpdateDims()
+    public void OpenMenu()
     {
-        Window mainWindow = Utils.GetMainWindow();
-        WinHeight = (int)mainWindow.RenderSize.Height;
-        WinWidth = (int)mainWindow.RenderSize.Width;
-    }
+        Console.WriteLine("Opening Menu...");
 
-    public void OpenSettingsWindow(object sender, RoutedEventArgs e)
-    {
-        Console.WriteLine("Opening Settings Window...");
-        UpdateDims();
         CreateBlurOverlay();
 
-        settingsContainerGrid = new Grid();
-        settingsContainerGrid.Margin = new Thickness(0, 0, 0, 0);
+        MenuContainerGrid = new Grid();
+        MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
 
         Rectangle settingsRect = new Rectangle
         {
-            Width = WinWidth / 2,
-            Height = WinHeight / 2,
+            Width = W,
+            Height = H,
             Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
             RadiusX = Utils.SettingsRadius,
             RadiusY = Utils.SettingsRadius,
             Effect = Utils.dropShadowRectangle
         };
-        settingsContainerGrid.Children.Add(settingsRect);
-        Button closeButton = new Button
+        MenuContainerGrid.Children.Add(settingsRect);
+
+        switch (Type)
         {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Content = "Close",
-            Width = 80,
-            Height = 30,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Margin = new Thickness(0, 0, 0, WinHeight * 0.25),
-        };
-        closeButton.Click += CloseSettingsWindow;
-        settingsContainerGrid.Children.Add(closeButton);
+            case "yesNo":
+                Button yesButton = new Button
+                {
+                    Style = (Style)Application.Current.FindResource("RoundedButton"),
+                    Content = "Yes",
+                    Width = 80,
+                    Height = 30,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(-100, 0, 0, 0),
+                };
+                Button noButton = new Button
+                {
+                    Style = (Style)Application.Current.FindResource("RoundedButton"),
+                    Content = "No",
+                    Width = 80,
+                    Height = 30,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(100, 0, 0, 0),
+                };
+                yesButton.Click += ButtonAction;
+                yesButton.Click += CloseMenu;
+                noButton.Click += CloseMenu;
+                MenuContainerGrid.Children.Add(yesButton);
+                MenuContainerGrid.Children.Add(noButton);
+                break;
+            default:
+                Button closeButton = new Button
+                {
+                    Style = (Style)Application.Current.FindResource("RoundedButton"),
+                    Content = "OK",
+                    Width = 80,
+                    Height = 30,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 0, 0, WinHeight * 0.25),
+                };
+                closeButton.Click += CloseMenu;
+                MenuContainerGrid.Children.Add(closeButton);
+                break;
+        }
 
         TextBlock settingsTitle = new TextBlock
         {
@@ -176,33 +215,23 @@ public class SettingsMenu : UserControl
             FontSize = 20,
             FontWeight = FontWeights.Bold,
         };
-        settingsTitle.Margin = new Thickness(0, 0, 0, WinHeight * 0.25 + 110);
-        settingsContainerGrid.Children.Add(settingsTitle);
+        settingsTitle.Margin = new Thickness(0, 0, 0, 0);
+        MenuContainerGrid.Children.Add(settingsTitle);
 
-        TextBlock placeholderText = new TextBlock
-        {
-            Text = "Work in progress!",
-            Foreground = new SolidColorBrush(Utils.FontColor),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            FontSize = 15,
-            FontWeight = FontWeights.Bold,
-        };
-        placeholderText.Margin = new Thickness(0, 0, 0, WinHeight * 0.25 + 50);
-        settingsContainerGrid.Children.Add(placeholderText);
-
-        ContainerGrid.Children.Add(settingsContainerGrid);
-        settingsContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
+        ContainerGrid.Children.Add(MenuContainerGrid);
+        MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
+        
         blurUpdateTimer.Start();
+        
         IsToggled = true;
     }
 
-    public void CloseSettingsWindow(object sender, RoutedEventArgs e)
+    public void CloseMenu(object sender, RoutedEventArgs e)
     {
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();
-
+        
         Console.WriteLine("Closing Settings Window...");
         // Zoom-out animation on bgImage
         zoomOutAnimation.Completed += (s, args) =>
@@ -230,7 +259,7 @@ public class SettingsMenu : UserControl
         IsToggled = false;
         IsImageSet = false;
         ToClose = false;
-        settingsContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
+        MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
 
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);

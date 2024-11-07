@@ -38,6 +38,11 @@ public class Utils
 
     public static System.Windows.Window mainWindow = Application.Current.MainWindow;
 
+    public static Window GetMainWindow()
+    {
+        return mainWindow;
+    }
+
     public static void SetColors(Dictionary<string, string> colors)
     {
         try

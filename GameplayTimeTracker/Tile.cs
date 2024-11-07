@@ -462,17 +462,24 @@ public class Tile : UserControl
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
-        MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {GameName} from the library?",
-            "Delete Confirmation",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
+        PopupMenu deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", bAction: TestAction);
+        deleteMenu.OpenMenu();
+        // MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {GameName} from the library?",
+        //     "Delete Confirmation",
+        //     MessageBoxButton.YesNo,
+        //     MessageBoxImage.Question);
+        //
+        // if (result == MessageBoxResult.Yes)
+        // {
+        //     DeleteTile();
+        //     _tileContainer.InitSave();
+        //     _tileContainer.ListTiles();
+        // }
+    }
 
-        if (result == MessageBoxResult.Yes)
-        {
-            DeleteTile();
-            _tileContainer.InitSave();
-            _tileContainer.ListTiles();
-        }
+    private void TestAction(object sender, RoutedEventArgs e)
+    {
+        Console.WriteLine($"{GameName} to be deleted!");
     }
 
     public void DeleteTile()
