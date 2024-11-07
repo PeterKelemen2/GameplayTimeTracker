@@ -461,16 +461,16 @@ public class Tile : UserControl
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
-        PopupMenu deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", bAction: TestAction);
+        PopupMenu deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", bAction: DeleteTile);
         deleteMenu.OpenMenu();
     }
 
-    private void TestAction(object sender, RoutedEventArgs e)
-    {
-        Console.WriteLine($"{GameName} to be deleted!");
-    }
+    // private void TestAction(object sender, RoutedEventArgs e)
+    // {
+    //     Console.WriteLine($"{GameName} to be deleted!");
+    // }
 
-    public void DeleteTile()
+    public void DeleteTile(object sender, RoutedEventArgs e)
     {
         double animationDuration = 0.2;
 
