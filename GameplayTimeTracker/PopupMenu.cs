@@ -9,6 +9,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MonoMac.CoreImage;
 
 namespace GameplayTimeTracker;
 
@@ -28,41 +29,49 @@ public class PopupMenu : UserControl
     public string MenuText { get; set; }
     public string Type { get; set; }
 
-    private readonly RoutedEventHandler ButtonAction;
+    private readonly RoutedEventHandler ButtonAction1;
+    private readonly RoutedEventHandler ButtonAction2;
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid { get; set; }
     public Grid MenuContainerGrid { get; set; }
 
-    private DoubleAnimation fadeInAnimation;
-    private DoubleAnimation otherFadeInAnimation;
-    private DoubleAnimation fadeOutAnimation;
-    private DoubleAnimation otherFadeOutAnimation;
-    private DoubleAnimation zoomInAnimation;
-    private DoubleAnimation zoomOutAnimation;
-    private DoubleAnimation blurInAnimation;
-    private DoubleAnimation blurOutAnimation;
-    private ThicknessAnimation rollInAnimation;
-    private ThicknessAnimation rollOutAnimation;
-    private ScaleTransform scaleTransform;
+    private DoubleAnimation fadeInAnimation = new();
+    private DoubleAnimation otherFadeInAnimation = new();
+    private DoubleAnimation fadeOutAnimation = new();
+    private DoubleAnimation otherFadeOutAnimation = new();
+    private DoubleAnimation zoomInAnimation = new();
+    private DoubleAnimation zoomOutAnimation = new();
+    private DoubleAnimation blurInAnimation = new();
+    private DoubleAnimation blurOutAnimation = new();
+    private ThicknessAnimation rollInAnimation = new();
+    private ThicknessAnimation rollOutAnimation = new();
+    private ScaleTransform scaleTransform = new();
 
-    private Button yesButton;
-    private Button noButton;
+    private Button yesButton = new();
+    private Button noButton = new();
 
-    BitmapSource settingsBgBitmap;
+    BitmapSource menuBgBitmap;
     BitmapSource extendedBitmap;
 
-    private TextBlock menuTitle;
+    private TextBlock menuTitle = new();
+
+    private Window mainWindow;
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
 
     public Image bgImage;
 
-    public PopupMenu(string text = "", double w = 350, double h = 150, bool isToggled = false, string type = "yesNo",
-        RoutedEventHandler bAction = null)
+    public PopupMenu()
     {
-        Window mainWindow = Utils.GetMainWindow();
+    }
+
+    public PopupMenu(string text = "", double w = 350, double h = 150, bool isToggled = false,
+        string type = "yesNo",
+        RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
+    {
+        mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
         ContainerGrid = Utils.GetMainWindow().FindName("ContainerGrid") as Grid;
         WinHeight = mainWindow.RenderSize.Height;
@@ -72,7 +81,10 @@ public class PopupMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
-        if (bAction != null) ButtonAction = bAction;
+
+        if (routedEvent1 != null) ButtonAction1 = routedEvent1;
+        if (routedEvent2 != null) ButtonAction2 = routedEvent2;
+        
         IsImageSet = false;
         ToClose = false;
 
@@ -147,7 +159,7 @@ public class PopupMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.05)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
-        
+
         otherFadeInAnimation = new DoubleAnimation
         {
             From = 0,
@@ -265,9 +277,14 @@ public class PopupMenu : UserControl
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2),
                 };
-                yesButton.Click += ButtonAction;
+                yesButton.Click += ButtonAction1;
                 yesButton.Click += CloseMenu;
                 noButton.Click += CloseMenu;
+                if (ButtonAction2 != null)
+                {
+                    noButton.Click += ButtonAction2;
+                }
+
                 MenuContainerGrid.Children.Add(yesButton);
                 MenuContainerGrid.Children.Add(noButton);
                 break;
@@ -299,6 +316,7 @@ public class PopupMenu : UserControl
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();
+        blurUpdateTimer.Tick -= (s, ev) => SetBlurImage(); // Unsubscribe timer event
 
         Console.WriteLine("Closing Menu...");
         // Zoom-out animation on bgImage
@@ -321,7 +339,6 @@ public class PopupMenu : UserControl
                 ContainerGrid.Children.Remove(child);
             }
 
-
             bgImage.BeginAnimation(OpacityProperty, fadeOutAnimation);
         };
         IsToggled = false;
@@ -332,30 +349,43 @@ public class PopupMenu : UserControl
         menuTitle.BeginAnimation(OpacityProperty, otherFadeOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
-    }
 
+        MenuContainerGrid.Children.Clear();
+        mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
+    }
 
     public void SetBlurImage(bool toCapFullSize = false)
     {
         if (IsToggled)
         {
-            settingsBgBitmap = ToClose
-                ? Utils.CaptureContainerGrid(1.0)
-                : Utils.CaptureContainerGrid();
+            // Capture a new bitmap only when needed
+            var newBitmap = ToClose
+                ? Utils.CaptureContainerGrid(1.0) // Full size capture
+                : Utils.CaptureContainerGrid(); // Partial capture with scaling
+
+            // Only update if the new bitmap is different or needs updating
+            if (menuBgBitmap != newBitmap)
+            {
+                // Optionally, dispose of the old bitmap reference if you don't need it anymore
+                menuBgBitmap = newBitmap;
+
+                // Update the image source with the new bitmap
+                bgImage.Source = menuBgBitmap;
+            }
+
+            // Ensure image dimensions are updated
             bgImage.Width = WinWidth;
             bgImage.Height = WinHeight;
-
-            bgImage.Source = settingsBgBitmap;
         }
     }
 
     private void CreateBlurOverlay()
     {
-        settingsBgBitmap = Utils.CaptureContainerGrid();
-        // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
+        menuBgBitmap = Utils.CaptureContainerGrid();
+
         bgImage = new Image
         {
-            Source = settingsBgBitmap,
+            Source = menuBgBitmap,
             Width = WinWidth,
             Height = WinHeight,
             Stretch = Stretch.Fill,

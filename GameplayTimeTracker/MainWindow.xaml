@@ -243,6 +243,15 @@
                     </Button.Effect>
                 </Button>
 
+                <TextBlock x:Name="GamesLoaded"
+                           Text="Games managed: 0"
+                           Foreground="Black"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="340,0,20,0"
+                           FontSize="16"
+                           FontWeight="Bold" />
+                
                 <TextBlock x:Name="TotalPlaytimeTextBlock"
                            Text="Total Playtime: 0 hours"
                            Foreground="Black"

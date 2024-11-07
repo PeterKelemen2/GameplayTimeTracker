@@ -63,6 +63,7 @@ namespace GameplayTimeTracker
             tracker.InitializeProcessTracker(tileContainer);
             settingsMenu = new SettingsMenu(ContainerGrid);
             UpdateStackPane();
+            GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
         }
 
         private void LoadTheme(string themeName)
@@ -143,7 +144,7 @@ namespace GameplayTimeTracker
                         // {
                         //     settingsMenu.SetBlurImage();
                         // }
-
+                        // GC.Collect();
                         RearrangeTiles();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
@@ -195,10 +196,10 @@ namespace GameplayTimeTracker
                     }
 
                     tileContainer.AddTile(newTile, newlyAdded: true);
-                    // tilesList = tileContainer.GetTiles();
+                    GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
                     tileContainer.ListTiles();
                     ShowTilesOnCanvas();
-                    MessageBox.Show($"Selected file: {fileName}");
+                    MessageBox.Show($"Selected file: {filePath}");
                 }
                 else
                 {
@@ -317,7 +318,7 @@ namespace GameplayTimeTracker
 
                 PopupMenu exitPopup = new PopupMenu(
                     text: "Are you sure you want to exit?",
-                    bAction: ExitButton_Click);
+                    routedEvent1: ExitButton_Click);
                 exitPopup.OpenMenu();
 
                 // Reinitialize NotifyIcon if it's null

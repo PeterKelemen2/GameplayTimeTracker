@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace GameplayTimeTracker;
 
@@ -14,7 +15,9 @@ public class TileContainer
     public double TileWidth { get; set; }
 
     public List<Theme> themes { get; set; } = new();
+
     public List<Tile> tilesList { get; set; } = new();
+
     // public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
 
@@ -23,11 +26,6 @@ public class TileContainer
     public TileContainer()
     {
     }
-
-    // public List<Tile> GetTiles()
-    // {
-    //     return tilesList;
-    // }
 
     public List<string> GetTilesExePath()
     {
@@ -50,7 +48,6 @@ public class TileContainer
         Console.WriteLine(" ==== Saved! ====");
     }
 
-    
 
     public bool IsListEqual(List<Tile> newList)
     {
@@ -142,6 +139,7 @@ public class TileContainer
             {
                 tile.TotalPlaytimePercent = Math.Round(tile.TotalPlaytime / auxPlaytime, 2);
                 tile.InitializeTile();
+                tile.ToggleBgImageColor(tile.IsRunning);
             }
 
             Console.WriteLine($"Tile added to TileContainer!");
@@ -186,6 +184,8 @@ public class TileContainer
                 {
                     tilesList.Remove(tile);
                     isRemoved = true;
+                    TextBlock totalText = _mainWindow.FindName("GamesLoaded") as TextBlock;
+                    totalText.Text = $"Games managed: {tilesList.Count}";
                 }
             }
         }

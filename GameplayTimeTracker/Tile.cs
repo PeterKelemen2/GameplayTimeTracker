@@ -69,6 +69,7 @@ public class Tile : UserControl
     public GradientBar lastTimeGradientBar;
     public BitmapSource bgImageGray;
     public BitmapSource bgImageColor;
+    private PopupMenu deleteMenu;
     private string absoluteIconPath;
 
     List<UIElement> editElements = new List<UIElement>();
@@ -113,11 +114,6 @@ public class Tile : UserControl
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
-
-    private void ClickableRect_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        Console.WriteLine("Clicked rect!!");
-    }
 
     public void ToggleEdit()
     {
@@ -461,13 +457,13 @@ public class Tile : UserControl
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
-        PopupMenu deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", bAction: DeleteTile);
+        deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", routedEvent1: DeleteTile);
         deleteMenu.OpenMenu();
     }
 
-    // private void TestAction(object sender, RoutedEventArgs e)
+    // public void ClearDeleteMenu(object sender, RoutedEventArgs e)
     // {
-    //     Console.WriteLine($"{GameName} to be deleted!");
+    //     deleteMenu = null;
     // }
 
     public void DeleteTile(object sender, RoutedEventArgs e)
@@ -498,6 +494,8 @@ public class Tile : UserControl
             {
                 panel.Children.Remove(this);
             }
+
+            deleteMenu = null;
         };
 
         // Apply the animations to the tile
@@ -675,8 +673,8 @@ public class Tile : UserControl
         LastPlaytime = lastPlayedTime;
         // Percent = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         // LastPlaytime = 0;
+        TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
-        // LastPlaytimePercent = 0;
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath))
@@ -692,6 +690,19 @@ public class Tile : UserControl
         SetupIconVars();
 
         // InitializeTile();
+    }
+
+    public void SetTimePercent(double globalTotal)
+    {
+        TotalPlaytimePercent = Math.Round(TotalPlaytime / globalTotal, 2);
+        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
+        Console.WriteLine($"Total playtime of {GameName}: {TotalPlaytimePercent} | {LastPlaytimePercent}");
+        SetPlaytimeBars();
+    }
+
+    public void CalculateLastPlaytimePercent()
+    {
+        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
     }
 
     public void InitializeTile()
@@ -713,7 +724,6 @@ public class Tile : UserControl
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();
         sampleTextBlock = Utils.NewTextBlock();
-
 
         sampleTextBox = Utils.NewTextBoxEdit();
         sampleTextBox.Style = (Style)Application.Current.FindResource("RoundedTextBox");
@@ -835,7 +845,6 @@ public class Tile : UserControl
         // newTestButton.MouseDown += ClickableRect_MouseDown;
         // Panel.SetZIndex(newTestButton, 10);
 
-        //TODO: Fix animation
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
@@ -1063,15 +1072,17 @@ public class Tile : UserControl
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
-        totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin =
-                new Thickness(Utils.TextMargin + TileHeight + 20,
-                    TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
-            Effect = Utils.dropShadowText,
-        };
+        // totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
+        // {
+        //     HorizontalAlignment = HorizontalAlignment.Left,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     Margin =
+        //         new Thickness(Utils.TextMargin + TileHeight + 20,
+        //             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+        //     Effect = Utils.dropShadowText,
+        // };
+
+        SetPlaytimeBars();
 
         lastPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlaytimeTitle.Text = "Last Playtime:";
@@ -1108,6 +1119,36 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
+    }
+
+    public void UpdatePlaytimeBars()
+    {
+        totalTimeGradientBar.Percent = TotalPlaytimePercent;
+        totalTimeGradientBar.UpdateBar();
+        // lastTimeGradientBar.Percent = LastPlaytimePercent;
+        // lastTimeGradientBar.UpdateBar();
+    }
+
+    public void SetPlaytimeBars()
+    {
+        totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin =
+                new Thickness(Utils.TextMargin + TileHeight + 20,
+                    TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+            Effect = Utils.dropShadowText,
+        };
+
+        lastTimeGradientBar = new GradientBar(percent: LastPlaytimePercent)
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
+                TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+            Effect = Utils.dropShadowText,
+        };
     }
 
     private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
