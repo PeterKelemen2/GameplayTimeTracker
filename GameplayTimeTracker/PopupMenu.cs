@@ -150,6 +150,9 @@ public class PopupMenu : UserControl
         // Update WinWidth and WinHeight
         WinWidth = e.NewSize.Width;
         WinHeight = e.NewSize.Height;
+
+        rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
+        rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth);
         SetBlurImage();
         // Adjust the height of the rectangle dynamically
         // H = WinHeight * 0.25; // For example, make the height 25% of the window height
