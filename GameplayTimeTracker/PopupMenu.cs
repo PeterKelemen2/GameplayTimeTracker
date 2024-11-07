@@ -44,6 +44,9 @@ public class PopupMenu : UserControl
     private ThicknessAnimation rollOutAnimation;
     private ScaleTransform scaleTransform;
 
+    private Button yesButton;
+    private Button noButton;
+
     BitmapSource settingsBgBitmap;
     BitmapSource extendedBitmap;
 
@@ -52,16 +55,17 @@ public class PopupMenu : UserControl
 
     public Image bgImage;
 
-    public PopupMenu(string text = "", double w = 300, double h = 150, bool isToggled = false, string type = "yesNo",
+    public PopupMenu(string text = "", double w = 350, double h = 150, bool isToggled = false, string type = "yesNo",
         RoutedEventHandler bAction = null)
     {
         Window mainWindow = Utils.GetMainWindow();
+        mainWindow.SizeChanged += MainWindow_SizeChanged;
         ContainerGrid = Utils.GetMainWindow().FindName("ContainerGrid") as Grid;
         WinHeight = mainWindow.RenderSize.Height;
         WinWidth = mainWindow.RenderSize.Width;
         MenuText = text;
         W = w;
-        H = h;
+        H = WinHeight * 0.25;
         IsToggled = isToggled;
         Type = type;
         if (bAction != null) ButtonAction = bAction;
@@ -141,16 +145,57 @@ public class PopupMenu : UserControl
         };
     }
 
+    private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        // Update WinWidth and WinHeight
+        WinWidth = e.NewSize.Width;
+        WinHeight = e.NewSize.Height;
+
+        // Adjust the height of the rectangle dynamically
+        H = WinHeight * 0.25; // For example, make the height 25% of the window height
+
+        // Update the height of the menuRect if it has been created already
+        if (MenuContainerGrid != null)
+        {
+            foreach (UIElement child in MenuContainerGrid.Children)
+            {
+                if (child is Rectangle menuRect)
+                {
+                    menuRect.Height = H;
+                }
+            }
+
+            foreach (UIElement child in MenuContainerGrid.Children)
+            {
+                if (child is TextBlock menuTitle)
+                {
+                    menuTitle.Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0);
+                }
+
+                if (child is Button yesButton)
+                {
+                    yesButton.Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2);
+                }
+
+                if (child is Button noButton)
+                {
+                    noButton.Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2);
+                }
+            }
+        }
+    }
+
+
     public void OpenMenu()
     {
         Console.WriteLine("Opening Menu...");
-
+        double padding = 10;
         CreateBlurOverlay();
 
         MenuContainerGrid = new Grid();
         MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
 
-        Rectangle settingsRect = new Rectangle
+        Rectangle menuRect = new Rectangle
         {
             Width = W,
             Height = H,
@@ -159,30 +204,46 @@ public class PopupMenu : UserControl
             RadiusY = Utils.SettingsRadius,
             Effect = Utils.dropShadowRectangle
         };
-        MenuContainerGrid.Children.Add(settingsRect);
+        MenuContainerGrid.Children.Add(menuRect);
+
+        TextBlock menuTitle = new TextBlock
+        {
+            Text = MenuText,
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
+            FontSize = 20,
+            FontWeight = FontWeights.Bold,
+            TextWrapping = TextWrapping.Wrap,
+            Width = W - 2 * padding,
+            TextAlignment = TextAlignment.Center,
+            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
+        };
+
+        MenuContainerGrid.Children.Add(menuTitle);
 
         switch (Type)
         {
             case "yesNo":
-                Button yesButton = new Button
+                yesButton = new Button
                 {
                     Style = (Style)Application.Current.FindResource("RoundedButton"),
                     Content = "Yes",
                     Width = 80,
                     Height = 30,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(-100, 0, 0, 0),
+                    Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2),
                 };
-                Button noButton = new Button
+                noButton = new Button
                 {
                     Style = (Style)Application.Current.FindResource("RoundedButton"),
                     Content = "No",
                     Width = 80,
                     Height = 30,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(100, 0, 0, 0),
+                    Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2),
                 };
                 yesButton.Click += ButtonAction;
                 yesButton.Click += CloseMenu;
@@ -206,23 +267,10 @@ public class PopupMenu : UserControl
                 break;
         }
 
-        TextBlock settingsTitle = new TextBlock
-        {
-            Text = "Settings",
-            Foreground = new SolidColorBrush(Utils.FontColor),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            FontSize = 20,
-            FontWeight = FontWeights.Bold,
-        };
-        settingsTitle.Margin = new Thickness(0, 0, 0, 0);
-        MenuContainerGrid.Children.Add(settingsTitle);
-
         ContainerGrid.Children.Add(MenuContainerGrid);
+
         MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
-        
         blurUpdateTimer.Start();
-        
         IsToggled = true;
     }
 
@@ -231,7 +279,7 @@ public class PopupMenu : UserControl
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();
-        
+
         Console.WriteLine("Closing Settings Window...");
         // Zoom-out animation on bgImage
         zoomOutAnimation.Completed += (s, args) =>
