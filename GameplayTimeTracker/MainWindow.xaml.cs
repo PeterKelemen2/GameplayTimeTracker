@@ -100,7 +100,7 @@ namespace GameplayTimeTracker
             LoadTheme("default");
 
             handler.InitializeContainer(tileContainer);
-            
+
             // tilesList = tileContainer.tilesList;
 
             // CustomButton testButton =
@@ -312,28 +312,31 @@ namespace GameplayTimeTracker
         {
             try
             {
-                if (MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButton.YesNo) ==
-                    MessageBoxResult.No)
+                e.Cancel = true;
+                
+                PopupMenu exitPopup = new PopupMenu(
+                    text: "Are you sure you want to exit?",
+                    bAction: ExitButton_Click);
+                exitPopup.OpenMenu();
+                
+                // Reinitialize NotifyIcon if it's null
+                if (notificationHandler.m_notifyIcon == null)
                 {
-                    e.Cancel = true;
-
-                    // Reinitialize NotifyIcon if it's null
-                    if (notificationHandler.m_notifyIcon == null)
-                    {
-                        notificationHandler.InitializeNotifyIcon();
-                    }
-
-                    return;
+                    notificationHandler.InitializeNotifyIcon();
                 }
-
-                // If the user confirmed the exit, proceed with the save logic
-                tileContainer?.InitSave();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred: " + ex.Message);
                 e.Cancel = true; // Cancel closing in case of an error
             }
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            tileContainer?.InitSave();
+            // Close the application if Yes is clicked
+            Application.Current.Shutdown();
         }
 
         private void OnCloseNotify(object? sender, CancelEventArgs e)

@@ -300,7 +300,7 @@ public class PopupMenu : UserControl
         SetBlurImage(true);
         blurUpdateTimer.Stop();
 
-        Console.WriteLine("Closing Settings Window...");
+        Console.WriteLine("Closing Menu...");
         // Zoom-out animation on bgImage
         zoomOutAnimation.Completed += (s, args) =>
         {
