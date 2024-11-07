@@ -172,7 +172,8 @@ namespace GameplayTimeTracker
                 fileName = fileName.Substring(0, fileName.Length - 4);
 
                 string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-                string? iconPath = $"assets/{uniqueFileName}";
+                // string? iconPath = $"assets/{uniqueFileName}";
+                string iconPath = Path.Combine(handler.SavedIconsPath, uniqueFileName);
 
                 Utils.PrepIcon(filePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
@@ -313,12 +314,12 @@ namespace GameplayTimeTracker
             try
             {
                 e.Cancel = true;
-                
+
                 PopupMenu exitPopup = new PopupMenu(
                     text: "Are you sure you want to exit?",
                     bAction: ExitButton_Click);
                 exitPopup.OpenMenu();
-                
+
                 // Reinitialize NotifyIcon if it's null
                 if (notificationHandler.m_notifyIcon == null)
                 {

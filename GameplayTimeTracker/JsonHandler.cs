@@ -15,13 +15,15 @@ public class JsonHandler
     private const string SampleImagePath = "assets/no_icon.png";
     private const string SettingsFileName = "settings.json";
     private const string DataFileName = "data.json";
+    private const string SavedIconsFolderName = "Saved Icons";
+
 
     public static string DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
         Assembly.GetExecutingAssembly().GetName().Name);
 
-    public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
-    public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
-
+    public string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
+    public string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
+    public string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
 
     public string DefaultSettings =
         "{\n  \"startWithSystem\": true,\n  \"themeList\": [\n    {\n      \"themeName\": \"default\",\n      \"colors\": {\n        \"bgColor\": \"#1E2030\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#414769\",\n        \"tileColor2\": \"#2E324A\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    },\n    {\n      \"themeName\": \"pink\",\n      \"colors\": {\n        \"bgColor\": \"#45092b\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#db1484\",\n        \"tileColor2\": \"#7d2055\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    }\n  ]\n}\n";
@@ -136,6 +138,11 @@ public class JsonHandler
                 AccessControlType.Allow));
 
             directoryInfo.SetAccessControl(security);
+        }
+
+        if (!Directory.Exists(SavedIconsPath))
+        {
+            Directory.CreateDirectory(SavedIconsPath);
         }
     }
 
