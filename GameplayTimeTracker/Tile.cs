@@ -697,7 +697,7 @@ public class Tile : UserControl
         TotalPlaytimePercent = Math.Round(TotalPlaytime / globalTotal, 2);
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         Console.WriteLine($"Total playtime of {GameName}: {TotalPlaytimePercent} | {LastPlaytimePercent}");
-        SetPlaytimeBars();
+        // SetPlaytimeBars();
     }
 
     public void CalculateLastPlaytimePercent()
@@ -1119,14 +1119,6 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
-    }
-
-    public void UpdatePlaytimeBars()
-    {
-        totalTimeGradientBar.Percent = TotalPlaytimePercent;
-        totalTimeGradientBar.UpdateBar();
-        // lastTimeGradientBar.Percent = LastPlaytimePercent;
-        // lastTimeGradientBar.UpdateBar();
     }
 
     public void SetPlaytimeBars()

@@ -64,6 +64,7 @@ namespace GameplayTimeTracker
             settingsMenu = new SettingsMenu(ContainerGrid);
             UpdateStackPane();
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
+            
         }
 
         private void LoadTheme(string themeName)
@@ -94,12 +95,9 @@ namespace GameplayTimeTracker
             InitializeComponent();
 
             notificationHandler = new NotificationHandler();
-
             settings = handler.GetSettingsFromFile();
-
             themesList = settings.ThemeList;
             LoadTheme("default");
-
             handler.InitializeContainer(tileContainer);
 
             // tilesList = tileContainer.tilesList;

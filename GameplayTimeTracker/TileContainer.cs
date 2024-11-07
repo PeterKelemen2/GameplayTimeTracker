@@ -132,15 +132,12 @@ public class TileContainer
 
             newTile.Index = tilesList.Count;
             tilesList.Add(newTile);
-
+            newTile.InitializeTile();
+            
             // This accounts for change in percentages when adding new tile
-            double auxPlaytime = CalculateTotalPlaytime();
-            foreach (var tile in tilesList)
-            {
-                tile.TotalPlaytimePercent = Math.Round(tile.TotalPlaytime / auxPlaytime, 2);
-                tile.InitializeTile();
-                tile.ToggleBgImageColor(tile.IsRunning);
-            }
+            UpdatePlaytimeBars();
+            
+            newTile.ToggleBgImageColor(newTile.IsRunning);
 
             Console.WriteLine($"Tile added to TileContainer!");
         }
@@ -149,7 +146,6 @@ public class TileContainer
             Console.WriteLine($"Something went wrong adding new Tile to container! ({e})");
         }
     }
-
 
     public void ListTiles()
     {
