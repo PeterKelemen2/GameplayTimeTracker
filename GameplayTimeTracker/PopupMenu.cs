@@ -163,24 +163,21 @@ public class PopupMenu : UserControl
                 {
                     menuRect.Height = H;
                 }
-            }
 
-            foreach (UIElement child in MenuContainerGrid.Children)
-            {
                 if (child is TextBlock menuTitle)
                 {
                     menuTitle.Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0);
                 }
+            }
 
-                if (child is Button yesButton)
-                {
-                    yesButton.Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2);
-                }
+            if (yesButton != null)
+            {
+                yesButton.Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2);
+            }
 
-                if (child is Button noButton)
-                {
-                    noButton.Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2);
-                }
+            if (noButton != null)
+            {
+                noButton.Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2);
             }
         }
     }
