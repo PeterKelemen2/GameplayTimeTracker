@@ -82,7 +82,6 @@ public class Tile : UserControl
     private double currentPlaytime;
 
     private const string? SampleImagePath = "assets/no_icon.png";
-    private const string? AssetsFolder = "assets";
 
     public int Id { get; set; }
     public int Index { get; set; }

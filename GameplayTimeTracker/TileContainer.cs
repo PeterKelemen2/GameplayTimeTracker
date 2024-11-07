@@ -9,10 +9,7 @@ namespace GameplayTimeTracker;
 
 public class TileContainer
 {
-    // private List<Tile> tilesList = new();
-    // private List<Tile> toMoveList = new();
     private JsonHandler handler = new JsonHandler();
-    private const string jsonFilePath = "data.json";
 
     public double TileWidth { get; set; }
 
