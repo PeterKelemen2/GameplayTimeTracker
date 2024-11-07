@@ -65,7 +65,7 @@ public class PopupMenu : UserControl
         WinWidth = mainWindow.RenderSize.Width;
         MenuText = text;
         W = w;
-        H = WinHeight * 0.25;
+        H = h;
         IsToggled = isToggled;
         Type = type;
         if (bAction != null) ButtonAction = bAction;
@@ -150,9 +150,9 @@ public class PopupMenu : UserControl
         // Update WinWidth and WinHeight
         WinWidth = e.NewSize.Width;
         WinHeight = e.NewSize.Height;
-
+        SetBlurImage();
         // Adjust the height of the rectangle dynamically
-        H = WinHeight * 0.25; // For example, make the height 25% of the window height
+        // H = WinHeight * 0.25; // For example, make the height 25% of the window height
 
         // Update the height of the menuRect if it has been created already
         if (MenuContainerGrid != null)
@@ -319,7 +319,9 @@ public class PopupMenu : UserControl
             settingsBgBitmap = ToClose
                 ? Utils.CaptureContainerGrid(1.0)
                 : Utils.CaptureContainerGrid();
-            // extendedBitmap = Utils.ExtendEdgesLeftRight(settingsBgBitmap, bRadius);
+            bgImage.Width = WinWidth;
+            bgImage.Height = WinHeight;
+
             bgImage.Source = settingsBgBitmap;
         }
     }
