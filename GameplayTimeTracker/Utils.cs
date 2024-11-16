@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
 using Toolbelt.Drawing;
@@ -176,6 +177,17 @@ public class Utils
     //         encoder.Save(fileStream);
     //     }
     // }
+
+    public static ThicknessAnimation GetMarginTopBottomAnimation(FrameworkElement uiElement)
+    {
+        Thickness m = uiElement.Margin;
+        return new ThicknessAnimation
+        {
+            From = new Thickness(m.Left, m.Top, m.Right, m.Bottom),
+            To = new Thickness(m.Left, 0, m.Right, 0),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+    }
 
     public static BitmapSource CropTransparentAreas(BitmapSource bitmap)
     {

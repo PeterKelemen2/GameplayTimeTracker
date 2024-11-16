@@ -188,7 +188,7 @@ namespace GameplayTimeTracker
                 tileContainer.ListTiles();
                 ShowTilesOnCanvas();
                 handler.WriteContentToFile(tileContainer);
-                MessageBox.Show($"Selected file: {filePath}");
+                // MessageBox.Show($"Selected file: {filePath}");
             }
         }
 

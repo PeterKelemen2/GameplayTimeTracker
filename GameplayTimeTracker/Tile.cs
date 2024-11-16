@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -462,44 +463,47 @@ public class Tile : UserControl
     {
         deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", routedEvent1: DeleteTile);
         deleteMenu.OpenMenu();
+        // DeleteTile(sender, e);
     }
 
     // Handles deletion of the instance
-    public void DeleteTile(object sender, RoutedEventArgs e)
+    public async void DeleteTile(object sender, RoutedEventArgs e)
     {
-        double animationDuration = 0.2;
+        // Delay for delete menu closing
+        await Task.Delay(500);
+        
+        double animationDuration = 1.0; // Duration for the animations
 
+        // Create the height animation for shrinking the tile
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
-            From = TileHeight,
+            From = TileHeight * 2,
             To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
 
-        DoubleAnimation opacityAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
-        };
-
+        // Event handler for when the animations complete
         heightAnimation.Completed += (s, a) =>
         {
-            // Remove the tile from the container and the parent after the animation completes
+            // Remove the tile from the container and the parent after the animations
             _tileContainer.RemoveTileById(Id);
             Console.WriteLine("Updating bars from Tile - Delete");
             _tileContainer.UpdatePlaytimeBars();
+
+            // If the tile's parent is a Panel, remove the tile from the panel's children
             if (Parent is Panel panel)
             {
                 panel.Children.Remove(this);
             }
-
-            deleteMenu = null;
         };
 
         // Apply the animations to the tile
-        BeginAnimation(HeightProperty, heightAnimation);
-        BeginAnimation(OpacityProperty, opacityAnimation);
+        editButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(editButton));
+        removeButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(removeButton));
+        launchButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(launchButton));
+        BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(this));
+        grid.BeginAnimation(MaxHeightProperty, heightAnimation);
     }
 
     public string GameName
@@ -507,7 +511,7 @@ public class Tile : UserControl
         get { return (string)GetValue(GameNameProperty); }
         set { SetValue(GameNameProperty, value); }
     }
-    
+
     // Changes all the icon associated variables when updating icon
     public void UpdateIcons(object sender, RoutedEventArgs e)
     {
@@ -565,7 +569,7 @@ public class Tile : UserControl
         bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
-    
+
     private void UpdateImageVars()
     {
         SetupIconVars();
@@ -830,7 +834,7 @@ public class Tile : UserControl
             Effect = Utils.dropShadowLightArea
         };
         changeIconButton.Click += UpdateIcons;
-        
+
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
@@ -1086,7 +1090,7 @@ public class Tile : UserControl
         // Set the Grid as the content of the UserControl
         Content = grid;
     }
-    
+
     // Creates the custom playtime bars
     public void SetPlaytimeBars()
     {
@@ -1119,7 +1123,7 @@ public class Tile : UserControl
             e.Handled = true; // Optional, prevents the beep sound
         }
     }
-    
+
     // Toggles between the two states oif the background image. Color for running, gray for not running
     public void ToggleBgImageColor(bool runningBool)
     {

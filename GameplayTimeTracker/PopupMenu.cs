@@ -51,7 +51,7 @@ public class PopupMenu : UserControl
     private Button yesButton = new();
     private Button noButton = new();
 
-    BitmapSource menuBgBitmap;
+    public BitmapSource menuBgBitmap;
     BitmapSource extendedBitmap;
 
     private TextBlock menuTitle = new();
