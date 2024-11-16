@@ -194,24 +194,32 @@
           DragOver="Grid_DragOver"
           DragLeave="Grid_DragLeave"
           Drop="Grid_Drop">
-        <StackPanel x:Name="DragDropPanel" Panel.ZIndex="99" Visibility="Visible">
+        <Grid x:Name="DragDropGrid" Panel.ZIndex="99" Visibility="Collapsed">
             <Rectangle x:Name="DragOverBg"
-                       Fill="Black"
-                       Visibility="Visible"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch"
-                       Opacity="0.6"/>
+                       Opacity="0.6" />
             <Rectangle x:Name="DragOverRectangle"
-                       Fill="Transparent"
-                       Visibility="Visible"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch"
                        RadiusX="30"
                        RadiusY="30"
-                       Stroke="White"
                        StrokeThickness="5"
-                       StrokeDashArray="10,10" />
-        </StackPanel>
+                       StrokeDashArray="10,10">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Gray" Opacity="0.2"/>
+                </Rectangle.Fill>
+                <Rectangle.Stroke>
+                    <SolidColorBrush Color="White" Opacity="1" />
+                </Rectangle.Stroke>
+            </Rectangle>
+            <TextBlock
+                Text="Drop a file here!"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="30"
+                Foreground="White" />
+        </Grid>
 
         <Grid x:Name="Grid">
             <!-- Define row definitions for the Grid -->

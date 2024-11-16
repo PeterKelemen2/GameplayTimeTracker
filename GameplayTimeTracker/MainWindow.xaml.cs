@@ -359,13 +359,10 @@ namespace GameplayTimeTracker
         private void Grid_DragEnter(object sender, DragEventArgs e)
         {
             // Show the rectangle when the drag operation enters the grid
-            DragDropPanel.Visibility = Visibility.Visible;
+            DragDropGrid.Visibility = Visibility.Visible;
 
             // Update layout immediately after making it visible
-            Dispatcher.BeginInvoke(new Action(() => 
-            {
-                DragDropPanel.UpdateLayout();
-            }));
+            Dispatcher.BeginInvoke(new Action(() => { DragDropGrid.UpdateLayout(); }));
 
             e.Handled = true; // Marks event as handled
         }
@@ -377,13 +374,16 @@ namespace GameplayTimeTracker
             if (grid != null)
             {
                 var position = e.GetPosition(grid);
-                DragDropPanel.Width = grid.ActualWidth;
-                DragDropPanel.Height = grid.ActualHeight;
 
-                // Set the size of the rectangle to be slightly smaller than the container
+                DragDropGrid.Width = grid.ActualWidth;
+                DragDropGrid.Height = grid.ActualHeight;
+
                 DragOverBg.Width = grid.ActualWidth;
                 DragOverBg.Height = grid.ActualHeight;
+                DragOverBg.Fill = new SolidColorBrush(Utils.DarkColor);
+                DragOverBg.Opacity = 0.5;
 
+                DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor){Opacity = 0.3};
                 DragOverRectangle.Width = grid.ActualWidth - 50;
                 DragOverRectangle.Height = grid.ActualHeight - 50;
             }
@@ -394,7 +394,7 @@ namespace GameplayTimeTracker
         private void Grid_DragLeave(object sender, DragEventArgs e)
         {
             // Hide the rectangle when the drag leaves the grid
-            DragDropPanel.Visibility = Visibility.Collapsed;
+            DragDropGrid.Visibility = Visibility.Collapsed;
 
             e.Handled = true; // Marks event as handled
         }
@@ -402,7 +402,7 @@ namespace GameplayTimeTracker
         private void Grid_Drop(object sender, DragEventArgs e)
         {
             // Hide the rectangle after a successful drop
-            DragDropPanel.Visibility = Visibility.Collapsed;
+            DragDropGrid.Visibility = Visibility.Collapsed;
 
             // Handle the dropped data here (e.g., process the file)
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
