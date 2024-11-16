@@ -403,13 +403,14 @@ namespace GameplayTimeTracker
 
             e.Handled = true; // Marks event as handled
         }
-
+        
+        // TODO: Fix this shit; Breaks over any PopupMenu opening
         private void Grid_DragOver(object sender, DragEventArgs e)
         {
             var grid = sender as Grid;
             if (grid != null)
             {
-                grid.UpdateLayout();
+                // grid.UpdateLayout();
                 var position = e.GetPosition(grid);
 
                 DragDropGrid.Width = grid.ActualWidth;
@@ -428,7 +429,7 @@ namespace GameplayTimeTracker
                 DropText.Foreground = new SolidColorBrush(Utils.FontColor);
                 DropText.Effect = Utils.dropShadowRectangle;
 
-                Panel.SetZIndex(DragDropGrid, 97);
+                // Panel.SetZIndex(DragDropGrid, 97);
 
                 DragDropGrid.UpdateLayout();
             }

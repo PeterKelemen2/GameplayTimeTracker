@@ -92,7 +92,7 @@ public class PopupMenu : UserControl
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-        blurUpdateTimer.Tick += (s, e) => SetBlurImage();
+        // blurUpdateTimer.Tick += (s, e) => SetBlurImage();
 
         rollInAnimation = new ThicknessAnimation
         {
@@ -352,9 +352,9 @@ public class PopupMenu : UserControl
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
 
-        MenuContainerGrid.Children.Clear();
-        ContainerGrid.Children.Remove(MenuContainerGrid);
-        mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
+        // MenuContainerGrid.Children.Clear();
+        // ContainerGrid.Children.Remove(MenuContainerGrid);
+        // mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
     }
 
     // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
@@ -366,17 +366,17 @@ public class PopupMenu : UserControl
             var newBitmap = ToClose
                 ? Utils.CaptureContainerGrid(1.0) // Full size capture
                 : Utils.CaptureContainerGrid(); // Partial capture with scaling
-
+        
             // Only update if the new bitmap is different or needs updating
             if (menuBgBitmap != newBitmap)
             {
                 // Optionally, dispose of the old bitmap reference if you don't need it anymore
                 menuBgBitmap = newBitmap;
-
+        
                 // Update the image source with the new bitmap
                 bgImage.Source = menuBgBitmap;
             }
-
+        
             // Ensure image dimensions are updated
             bgImage.Width = WinWidth;
             bgImage.Height = WinHeight;
