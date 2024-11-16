@@ -156,52 +156,89 @@ namespace GameplayTimeTracker
             });
         }
 
+        private void AddEntry(string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+            fileName = fileName.Substring(0, fileName.Length - 4);
+
+            string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
+            // string? iconPath = $"assets/{uniqueFileName}";
+            string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
+
+            Utils.PrepIcon(filePath, iconPath);
+            iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+
+            Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
+            newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+
+            if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+                  Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+            {
+                // Closing all opened edit menus and reseting them to avoid graphical glitch
+                foreach (var tile in tileContainer.tilesList)
+                {
+                    if (tile.IsMenuToggled)
+                    {
+                        tile.ToggleEdit();
+                        tile.WasOpened = false;
+                    }
+                }
+
+                tileContainer.AddTile(newTile, newlyAdded: true);
+                tileContainer.ListTiles();
+                ShowTilesOnCanvas();
+                handler.WriteContentToFile(tileContainer);
+                MessageBox.Show($"Selected file: {filePath}");
+            }
+        }
+
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                // Handle the selected file
-                string filePath = openFileDialog.FileName;
-                string fileName = Path.GetFileName(filePath);
-                fileName = fileName.Substring(0, fileName.Length - 4);
-
-                string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-                // string? iconPath = $"assets/{uniqueFileName}";
-                string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
-
-                Utils.PrepIcon(filePath, iconPath);
-                iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-
-                Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
-                newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-
-                if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
-                      Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
-                {
-                    // Closing all opened edit menus and reseting them to avoid graphical glitch
-                    foreach (var tile in tileContainer.tilesList)
-                    {
-                        if (tile.IsMenuToggled)
-                        {
-                            tile.ToggleEdit();
-                            tile.WasOpened = false;
-                        }
-                    }
-
-                    tileContainer.AddTile(newTile, newlyAdded: true);
-                    tileContainer.ListTiles();
-                    ShowTilesOnCanvas();
-                    MessageBox.Show($"Selected file: {filePath}");
-                }
-                else
-                {
-                    MessageBox.Show("Sorry, I can't keep tabs on myself.", "Existential crisis", MessageBoxButton.OK);
-                }
+                AddEntry(openFileDialog.FileName);
+                // // Handle the selected file
+                // string filePath = openFileDialog.FileName;
+                // string fileName = Path.GetFileName(filePath);
+                // fileName = fileName.Substring(0, fileName.Length - 4);
+                //
+                // string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
+                // // string? iconPath = $"assets/{uniqueFileName}";
+                // string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
+                //
+                // Utils.PrepIcon(filePath, iconPath);
+                // iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+                //
+                // Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
+                // newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+                //
+                // if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+                //       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+                // {
+                //     // Closing all opened edit menus and reseting them to avoid graphical glitch
+                //     foreach (var tile in tileContainer.tilesList)
+                //     {
+                //         if (tile.IsMenuToggled)
+                //         {
+                //             tile.ToggleEdit();
+                //             tile.WasOpened = false;
+                //         }
+                //     }
+                //
+                //     tileContainer.AddTile(newTile, newlyAdded: true);
+                //     tileContainer.ListTiles();
+                //     ShowTilesOnCanvas();
+                //     MessageBox.Show($"Selected file: {filePath}");
+                // }
+                // else
+                // {
+                //     MessageBox.Show("Sorry, I can't keep tabs on myself.", "Existential crisis", MessageBoxButton.OK);
+                // }
             }
 
-            handler.WriteContentToFile(tileContainer);
+            // handler.WriteContentToFile(tileContainer);
         }
 
         private void UpdateTileIndexes()
@@ -415,6 +452,10 @@ namespace GameplayTimeTracker
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    AddEntry(file);
+                }
             }
 
             e.Handled = true; // Marks event as handled
