@@ -84,7 +84,7 @@ public class PopupMenu : UserControl
 
         if (routedEvent1 != null) ButtonAction1 = routedEvent1;
         if (routedEvent2 != null) ButtonAction2 = routedEvent2;
-        
+
         IsImageSet = false;
         ToClose = false;
 
@@ -311,7 +311,7 @@ public class PopupMenu : UserControl
         blurUpdateTimer.Start();
         IsToggled = true;
     }
-    
+
     // Handles the removal of the elements from any parent
     public void CloseMenu(object sender, RoutedEventArgs e)
     {
@@ -353,9 +353,10 @@ public class PopupMenu : UserControl
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
 
         MenuContainerGrid.Children.Clear();
+        ContainerGrid.Children.Remove(MenuContainerGrid);
         mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
     }
-    
+
     // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
     public void SetBlurImage(bool toCapFullSize = false)
     {

@@ -369,10 +369,10 @@ namespace GameplayTimeTracker
 
         private void Grid_DragOver(object sender, DragEventArgs e)
         {
-            // Update the layout if needed (this is optional, depending on how you want to position the rectangle)
             var grid = sender as Grid;
             if (grid != null)
             {
+                grid.UpdateLayout();
                 var position = e.GetPosition(grid);
 
                 DragDropGrid.Width = grid.ActualWidth;
@@ -390,6 +390,10 @@ namespace GameplayTimeTracker
 
                 DropText.Foreground = new SolidColorBrush(Utils.FontColor);
                 DropText.Effect = Utils.dropShadowRectangle;
+
+                Panel.SetZIndex(DragDropGrid, 97);
+
+                DragDropGrid.UpdateLayout();
             }
 
             e.Handled = true; // Marks event as handled
@@ -399,7 +403,6 @@ namespace GameplayTimeTracker
         {
             // Hide the rectangle when the drag leaves the grid
             DragDropGrid.Visibility = Visibility.Collapsed;
-
             e.Handled = true; // Marks event as handled
         }
 
@@ -412,13 +415,6 @@ namespace GameplayTimeTracker
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                // Process the dropped files
-                foreach (var file in files)
-                {
-                    // MessageBox.Show($"File dropped: {file}");
-                    PopupMenu dropPopup = new PopupMenu(text: $"Dropped {file}", type: "ok");
-                    dropPopup.OpenMenu();
-                }
             }
 
             e.Handled = true; // Marks event as handled
