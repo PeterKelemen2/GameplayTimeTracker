@@ -296,9 +296,9 @@ public class PopupMenu : UserControl
                     Content = "OK",
                     Width = 80,
                     Height = 30,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 0, 0, WinHeight * 0.25),
+                    Margin = new Thickness(0, 0, 0, WinHeight / 2 - H / 2),
                 };
                 closeButton.Click += CloseMenu;
                 MenuContainerGrid.Children.Add(closeButton);

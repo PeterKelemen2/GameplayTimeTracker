@@ -213,7 +213,7 @@
                     <SolidColorBrush Color="White" Opacity="1" />
                 </Rectangle.Stroke>
             </Rectangle>
-            <TextBlock
+            <TextBlock x:Name="DropText"
                 Text="Drop a file here!"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

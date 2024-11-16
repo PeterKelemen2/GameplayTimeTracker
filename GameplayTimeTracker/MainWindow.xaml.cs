@@ -383,9 +383,13 @@ namespace GameplayTimeTracker
                 DragOverBg.Fill = new SolidColorBrush(Utils.DarkColor);
                 DragOverBg.Opacity = 0.5;
 
-                DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor){Opacity = 0.3};
+                DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor) { Opacity = 0.3 };
                 DragOverRectangle.Width = grid.ActualWidth - 50;
                 DragOverRectangle.Height = grid.ActualHeight - 50;
+                DragOverRectangle.Effect = Utils.dropShadowRectangle;
+
+                DropText.Foreground = new SolidColorBrush(Utils.FontColor);
+                DropText.Effect = Utils.dropShadowRectangle;
             }
 
             e.Handled = true; // Marks event as handled
@@ -411,7 +415,9 @@ namespace GameplayTimeTracker
                 // Process the dropped files
                 foreach (var file in files)
                 {
-                    MessageBox.Show($"File dropped: {file}");
+                    // MessageBox.Show($"File dropped: {file}");
+                    PopupMenu dropPopup = new PopupMenu(text: $"Dropped {file}", type: "ok");
+                    dropPopup.OpenMenu();
                 }
             }
 
