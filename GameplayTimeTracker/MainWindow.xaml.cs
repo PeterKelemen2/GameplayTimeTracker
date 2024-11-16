@@ -46,6 +46,8 @@ namespace GameplayTimeTracker
         private NotificationHandler notificationHandler = new();
 
         private SettingsMenu settingsMenu;
+
+        // private Rectangle dragDropRectangle;
         // private System.Windows.Forms.NotifyIcon m_notifyIcon;
 
         public Grid GetContainerGrid()
@@ -352,6 +354,68 @@ namespace GameplayTimeTracker
         {
             // settingsMenu = new SettingsMenu(ContainerGrid);
             settingsMenu.OpenSettingsWindow(sender, e);
+        }
+
+        private void Grid_DragEnter(object sender, DragEventArgs e)
+        {
+            // Show the rectangle when the drag operation enters the grid
+            DragDropPanel.Visibility = Visibility.Visible;
+
+            // Update layout immediately after making it visible
+            Dispatcher.BeginInvoke(new Action(() => 
+            {
+                DragDropPanel.UpdateLayout();
+            }));
+
+            e.Handled = true; // Marks event as handled
+        }
+
+        private void Grid_DragOver(object sender, DragEventArgs e)
+        {
+            // Update the layout if needed (this is optional, depending on how you want to position the rectangle)
+            var grid = sender as Grid;
+            if (grid != null)
+            {
+                var position = e.GetPosition(grid);
+                DragDropPanel.Width = grid.ActualWidth;
+                DragDropPanel.Height = grid.ActualHeight;
+
+                // Set the size of the rectangle to be slightly smaller than the container
+                DragOverBg.Width = grid.ActualWidth;
+                DragOverBg.Height = grid.ActualHeight;
+
+                DragOverRectangle.Width = grid.ActualWidth - 50;
+                DragOverRectangle.Height = grid.ActualHeight - 50;
+            }
+
+            e.Handled = true; // Marks event as handled
+        }
+
+        private void Grid_DragLeave(object sender, DragEventArgs e)
+        {
+            // Hide the rectangle when the drag leaves the grid
+            DragDropPanel.Visibility = Visibility.Collapsed;
+
+            e.Handled = true; // Marks event as handled
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            // Hide the rectangle after a successful drop
+            DragDropPanel.Visibility = Visibility.Collapsed;
+
+            // Handle the dropped data here (e.g., process the file)
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                // Process the dropped files
+                foreach (var file in files)
+                {
+                    MessageBox.Show($"File dropped: {file}");
+                }
+            }
+
+            e.Handled = true; // Marks event as handled
         }
     }
 }

@@ -190,7 +190,29 @@
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Grid x:Name="ContainerGrid">
+    <Grid x:Name="ContainerGrid" AllowDrop="True" DragEnter="Grid_DragEnter"
+          DragOver="Grid_DragOver"
+          DragLeave="Grid_DragLeave"
+          Drop="Grid_Drop">
+        <StackPanel x:Name="DragDropPanel" Panel.ZIndex="99" Visibility="Visible">
+            <Rectangle x:Name="DragOverBg"
+                       Fill="Black"
+                       Visibility="Visible"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       Opacity="0.6"/>
+            <Rectangle x:Name="DragOverRectangle"
+                       Fill="Transparent"
+                       Visibility="Visible"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       RadiusX="30"
+                       RadiusY="30"
+                       Stroke="White"
+                       StrokeThickness="5"
+                       StrokeDashArray="10,10" />
+        </StackPanel>
+
         <Grid x:Name="Grid">
             <!-- Define row definitions for the Grid -->
             <Grid.RowDefinitions>
@@ -251,7 +273,7 @@
                            Margin="340,0,20,0"
                            FontSize="16"
                            FontWeight="Bold" />
-                
+
                 <TextBlock x:Name="TotalPlaytimeTextBlock"
                            Text="Total Playtime: 0 hours"
                            Foreground="Black"
