@@ -8,6 +8,7 @@ public class Params
     {
     }
 
+    // Parameters needed for creating a tile instance
     public Params(string tileGameName, double tileTotalTime, double tileLastPlaytime, string? iconImagePath,
         string tileExePath)
     {

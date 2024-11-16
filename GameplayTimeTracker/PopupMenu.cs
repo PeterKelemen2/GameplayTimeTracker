@@ -177,6 +177,7 @@ public class PopupMenu : UserControl
         };
     }
 
+    // Recalculating dimensions when window size is changing 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         // Update WinWidth and WinHeight
@@ -217,7 +218,7 @@ public class PopupMenu : UserControl
         }
     }
 
-
+    // Opens the menu, creates prompt based on the type of menu it is
     public void OpenMenu()
     {
         Console.WriteLine("Opening Menu...");
@@ -310,7 +311,8 @@ public class PopupMenu : UserControl
         blurUpdateTimer.Start();
         IsToggled = true;
     }
-
+    
+    // Handles the removal of the elements from any parent
     public void CloseMenu(object sender, RoutedEventArgs e)
     {
         ToClose = true;
@@ -353,7 +355,8 @@ public class PopupMenu : UserControl
         MenuContainerGrid.Children.Clear();
         mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
     }
-
+    
+    // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
     public void SetBlurImage(bool toCapFullSize = false)
     {
         if (IsToggled)

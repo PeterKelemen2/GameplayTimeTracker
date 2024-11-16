@@ -22,6 +22,7 @@ public class ProcessTracker
     {
     }
 
+    // Creates a dictionary with the name and running state of each tile to track
     public void InitializeExeDictionary()
     {
         foreach (var tile in _tileContainer.tilesList)
@@ -39,6 +40,7 @@ public class ProcessTracker
         IsDictSet = true;
     }
 
+    // Sets up process tracker from the tile container
     public void InitializeProcessTracker(TileContainer tileContainer)
     {
         _tileContainer = tileContainer;
@@ -51,6 +53,7 @@ public class ProcessTracker
         }
     }
 
+    // Checks if a tile is running and sets values accordingly
     public void HandleProcesses()
     {
         var runningProcesses = Process.GetProcesses();

@@ -58,20 +58,17 @@ public class GradientBar : UserControl
         return (GWidth - 2 * GPadding) * Percent;
     }
 
+    // Calculates new width needed for bar. If I change any of this, it's not working for some reason 
     public void UpdateBar()
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
         Console.WriteLine("Changing bar size to " + Percent);
         double newWidth = CalculateWidth();
         barForeground.Width = newWidth;
-        stopwatch.Stop();
-        // Console.WriteLine($"Updating GB took {stopwatch.Elapsed}");
     }
-
+    
+    // Sets up bar with initial values
     public void InitializeBar()
     {
-        // Grid grid = new Grid();
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
         barBackground = new Rectangle

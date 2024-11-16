@@ -34,14 +34,17 @@ public class TileContainer
         return tilesList.Select(x => x.ExePath).ToList();
     }
 
+    public List<string?> GetExecutableNames()
+    {
+        return tilesList
+            .Where(x => !string.IsNullOrEmpty(x.ExePath) && File.Exists(x.ExePath))
+            .Select(x => FileVersionInfo.GetVersionInfo(x.ExePath).FileDescription)
+            .ToList();
+    }
+
     public void SetTilesList(List<Tile> newList)
     {
         tilesList = newList;
-    }
-
-    public void OverwriteTiles(List<Tile> newTiles)
-    {
-        tilesList = newTiles;
     }
 
     public void InitSave()
@@ -50,18 +53,7 @@ public class TileContainer
         Console.WriteLine(" ==== Saved! ====");
     }
 
-
-    public bool IsListEqual(List<Tile> newList)
-    {
-        if (tilesList.Count != newList.Count) return false;
-        for (int i = 0; i < tilesList.Count; i++)
-        {
-            if (!tilesList[i].Equals(newList[i])) return false;
-        }
-
-        return true;
-    }
-
+    // Sorts content of the tile list by a certain property in ascending or descending order.
     public List<Tile> SortedByProperty(string propertyName = "", bool ascending = true)
     {
         // Check if the property name is valid
@@ -90,26 +82,11 @@ public class TileContainer
         return sortedTilesList;
     }
 
-    public List<String> GetExecutableNames()
-    {
-        List<String> executableNames = new();
-        foreach (Tile tile in tilesList)
-        {
-            if (tile.ExePath is not "")
-            {
-                if (Path.Exists(tile.ExePath))
-                {
-                    FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(tile.ExePath);
-                    executableNames.Add(Path.GetFileName(tile.ExePath));
-                    Console.WriteLine(fileInfo.FileDescription);
-                    Console.WriteLine(executableNames[executableNames.Count - 1]);
-                }
-            }
-        }
-
-        return executableNames;
-    }
-
+    /*
+     * Adds a new tile to the tile list with a unique ID.
+     * If it's a newly added entry, it gets the game from the exe file description.
+     * Updates all bars for tiles.
+     */
     public void AddTile(Tile newTile, bool newlyAdded = false)
     {
         try
@@ -149,6 +126,7 @@ public class TileContainer
         }
     }
 
+    // Prints content of tilesList to the console
     public void ListTiles()
     {
         try
@@ -171,6 +149,7 @@ public class TileContainer
         }
     }
 
+    // Looks for the tile with a specific ID and removes it from the list
     public void RemoveTileById(int id)
     {
         bool isRemoved = false;
@@ -200,34 +179,7 @@ public class TileContainer
         }
     }
 
-    public void UpdateTileById(int id, string propertyName, object newValue)
-    {
-        foreach (var tile in tilesList)
-        {
-            if (tile.Id.Equals(id))
-            {
-                var property = tile.GetType().GetProperty(propertyName);
-                if (property != null && property.CanWrite)
-                {
-                    property.SetValue(tile, newValue);
-                }
-            }
-        }
-    }
-
-    public void UpdateTileNameById(int id, string newValue)
-    {
-        foreach (var tile in tilesList)
-        {
-            if (tile.Id.Equals(id))
-            {
-                tile.GameName = newValue;
-                tile.InitializeTile();
-            }
-        }
-    }
-
-
+    // Returns a tile with a certain ID
     public Tile GetTileById(int id)
     {
         foreach (var tile in tilesList)
@@ -241,6 +193,7 @@ public class TileContainer
         return null;
     }
 
+    // Return the total number of minutes played across all entries in tilesList
     public double CalculateTotalPlaytime()
     {
         return tilesList.Sum(tile => tile.TotalPlaytime);
@@ -254,20 +207,15 @@ public class TileContainer
 
     public void UpdateLastPlaytimeBarOfTile(int tileId)
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
         var tileToUpdate = GetTileById(tileId);
         tileToUpdate.lastTimeGradientBar.Percent =
             Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
 
         Console.WriteLine($"Updating last gradient bar {tileToUpdate.GameName}");
         tileToUpdate.lastTimeGradientBar.UpdateBar();
-        // tileToUpdate.lastTimeGradientBar.InitializeBar();
-
-        stopwatch.Stop();
-        Console.WriteLine($"Updating LAST playtime bar took: {stopwatch.Elapsed}");
     }
 
+    // Updates the width of all tiles based on the parameter
     public void UpdateTilesWidth(double newWidth)
     {
         foreach (var tile in tilesList)
@@ -287,43 +235,23 @@ public class TileContainer
             }
         }
     }
-
+    
+    // Calculates playtime and updates playtime bars accordingly
     public void UpdatePlaytimeBars()
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
-        // if (tilesList.Count == 1)
-        // {
-        //     globalTotalPlaytime = 1;
-        // }
 
         Console.WriteLine("Global: " + globalTotalPlaytime);
         foreach (var tile in tilesList)
         {
             tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
 
-            // if (tilesList.Count == 1)
-            // {
-            //     tile.totalTimeGradientBar.Percent = 1;
-            // }
-
             Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
-            // Console.WriteLine(Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2));
 
             var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
-            // switch (newPercent)
-            // {
-            //     case < 0:
-            //         Console.WriteLine("Percent is smaller than 0");
-            //         newPercent = 0;
-            //         break;
-            //     case > 1:
-            //         Console.WriteLine("Percent is bigger than 1");
-            //         newPercent = 1;
-            //         break;
-            // }
 
             tile.lastTimeGradientBar.Percent = newPercent;
 

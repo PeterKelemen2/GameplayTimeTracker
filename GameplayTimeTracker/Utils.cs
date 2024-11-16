@@ -111,7 +111,7 @@ public class Utils
     public const int EditColTop = 10;
     public const int SettingsRadius = 20;
 
-
+    // Effects for global usage
     public static BlurEffect fakeShadow = new BlurEffect
     {
         Radius = 8,
@@ -245,6 +245,7 @@ public class Utils
         return croppedBitmap;
     }
 
+    // Returns a render of the main window
     public static BitmapSource CaptureCurrentWindow()
     {
         // Define the width and height of the bitmap, matching the element's size
@@ -261,6 +262,7 @@ public class Utils
         return renderBitmap;
     }
 
+    // Returns a render of the container grid
     public static BitmapSource CaptureContainerGrid(double scaleFactor = 0.35)
     {
         Stopwatch stopwatch = new Stopwatch();
@@ -280,6 +282,7 @@ public class Utils
         return renderBitmap;
     }
 
+    // Regex handling of the edited time textfield
     public static (double, double) DecodeTimeString(string timeString, double prevH, double prevM)
     {
         if (string.IsNullOrWhiteSpace(timeString))
@@ -319,6 +322,7 @@ public class Utils
         }
     }
 
+    // Check if an image is available for usage
     public static bool IsValidImage(string imagePath)
     {
         try
@@ -359,11 +363,15 @@ public class Utils
                extension == ".gif";
     }
 
+    /*
+     * If the output image path doesn't exist decide whether the filepath if an executable of image file.
+     * This is used for both extracting images from the exe and updating bg image later on.
+     */
     public static void PrepIcon(string filePath, string? outputImagePath)
     {
         try
         {
-            if (!(File.Exists(outputImagePath) && IsValidImage(outputImagePath)))
+            if (!File.Exists(outputImagePath)) //  && IsValidImage(outputImagePath)
             {
                 if (IsExecutable(filePath))
                 {
@@ -383,6 +391,7 @@ public class Utils
         }
     }
 
+    // Template     
     public static TextBlock NewTextBlock()
     {
         var sampleTextBlock = new TextBlock

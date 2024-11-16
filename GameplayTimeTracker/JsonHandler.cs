@@ -20,6 +20,7 @@ public class JsonHandler
     //     return File.Exists(filePath) ? filePath : SampleImagePath;
     // }
 
+    // If there is no settings file, it creates one with the default configuration.
     public void InitializeSettings()
     {
         CheckForDataDirectory();
@@ -29,6 +30,7 @@ public class JsonHandler
         }
     }
 
+    // Creates a Settings instance from the settings.json
     public Settings GetSettingsFromFile()
     {
         InitializeSettings();
@@ -47,16 +49,8 @@ public class JsonHandler
             {
                 RemoveShortcutForStartup();
             }
-
+            
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
-            foreach (var theme in settings.ThemeList)
-            {
-                Console.WriteLine($"Theme: {theme.ThemeName}");
-                foreach (var color in theme.Colors)
-                {
-                    Console.WriteLine($"{theme.ThemeName}: {color.Key} - {color.Value}");
-                }
-            }
         }
 
         return settings;
@@ -86,6 +80,7 @@ public class JsonHandler
         }
     }
 
+    // Puts a shortcut for the app in the directory for it to be able to start with the system.
     public void CreateShortcutForStartup()
     {
         string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
@@ -133,6 +128,7 @@ public class JsonHandler
         }
     }
 
+    // Creates a list of parameters used for creating tiles in the container.
     public void InitializeContainer(TileContainer container)
     {
         CheckForDataDirectory();
@@ -161,6 +157,7 @@ public class JsonHandler
         }
     }
 
+    // By using a list of parameters from the container, it writes the data to the file
     public void WriteContentToFile(TileContainer container)
     {
         List<Params> paramsList = new List<Params>();

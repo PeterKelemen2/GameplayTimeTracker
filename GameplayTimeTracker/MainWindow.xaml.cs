@@ -58,7 +58,7 @@ namespace GameplayTimeTracker
             // ShowTilesOnCanvas();
             // tileContainer.ListTiles();
             // handler.WriteContentToFile(tileContainer, jsonFilePath);
-            notificationHandler.SetupNotifyIcon();
+            // notificationHandler.SetupNotifyIcon();
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
             settingsMenu = new SettingsMenu(ContainerGrid);

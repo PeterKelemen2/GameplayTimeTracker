@@ -115,6 +115,7 @@ public class Tile : UserControl
     private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
 
+    // Sets the margin of the edit menu elements and plays an animation to bring them down from under the tile
     public void ToggleEdit()
     {
         isMenuOpen = !isMenuOpen;
@@ -338,6 +339,7 @@ public class Tile : UserControl
         SaveEditedData();
     }
 
+    // Updates elements of the tile if there is change. Has a failsafe if new time values would cause a crash
     public void SaveEditedData()
     {
         titleTextBlock.Text = editNameBox.Text;
@@ -379,6 +381,7 @@ public class Tile : UserControl
         Console.WriteLine("File Saved !!!");
     }
 
+    // Sets new path for the exe chosen by the user
     public void UpdateExe(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -461,11 +464,7 @@ public class Tile : UserControl
         deleteMenu.OpenMenu();
     }
 
-    // public void ClearDeleteMenu(object sender, RoutedEventArgs e)
-    // {
-    //     deleteMenu = null;
-    // }
-
+    // Handles deletion of the instance
     public void DeleteTile(object sender, RoutedEventArgs e)
     {
         double animationDuration = 0.2;
@@ -508,7 +507,8 @@ public class Tile : UserControl
         get { return (string)GetValue(GameNameProperty); }
         set { SetValue(GameNameProperty, value); }
     }
-
+    
+    // Changes all the icon associated variables when updating icon
     public void UpdateIcons(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -565,8 +565,7 @@ public class Tile : UserControl
         bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
-
-
+    
     private void UpdateImageVars()
     {
         SetupIconVars();
@@ -590,9 +589,15 @@ public class Tile : UserControl
     {
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         lastPlaytime.Text = IsRunning ? $"{hLast}h {mLast}m {CurrentPlaytime}s" : $"{hLast}h {mLast}m";
-        // lastPlaytime.Text = $"{hLast}h {mLast}m {CurrentPlaytime}s";
     }
 
+    /*
+     * Calculates last and total hour and minute values based on the sec parameter.
+     * It never goes over 59 seconds, since that is the point where the minute turns.
+     * Same with the minutes-hour relation.
+     * After calculating the new values, total and last playtime is updated, along with the text and bars.
+     * The current seconds counter is being reset to 0.
+     */
     public void CalculatePlaytimeFromSec(double sec)
     {
         int customHour = 60 - 1;
@@ -630,6 +635,7 @@ public class Tile : UserControl
         Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");
     }
 
+    // Resets all the values associated with an ongoing playtime calculation.
     public void ResetLastPlaytime()
     {
         mLast = 0;
@@ -692,6 +698,7 @@ public class Tile : UserControl
         // InitializeTile();
     }
 
+    // Sets up elements of the tile with the default values
     public void InitializeTile()
     {
         LinearGradientBrush gradientBrush = new LinearGradientBrush();
@@ -823,22 +830,13 @@ public class Tile : UserControl
             Effect = Utils.dropShadowLightArea
         };
         changeIconButton.Click += UpdateIcons;
-
-
-        // newTestButton = new CustomButton(height: 0, text: "EditB");
-        // newTestButton.HorizontalAlignment = HorizontalAlignment.Left;
-        // newTestButton.VerticalAlignment = VerticalAlignment.Top;
-        // // newTestButton.Margin = new Thickness(0, 150, 0, 0);
-        // newTestButton.MouseDown += ClickableRect_MouseDown;
-        // Panel.SetZIndex(newTestButton, 10);
-
+        
         editElements.AddRange(new UIElement[]
         {
             menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
             editSaveButton, changeIconButton,
             editPlaytimeBox,
             editExePathTitle, editExePathBox, editExePathButton,
-            // newTestButton
         });
         foreach (var elem in editElements)
         {
@@ -897,24 +895,16 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
-        // CustomButton tileButton = new CustomButton(text: "TestWauu");
-        // tileButton.HorizontalAlignment = HorizontalAlignment.Left;
-        // tileButton.VerticalAlignment = VerticalAlignment.Top;
-        // tileButton.MouseDown += ClickableRect_MouseDown;
-        // Panel.SetZIndex(tileButton, 10);
-
         mainElements.AddRange(new UIElement[] { container, editButton, removeButton, launchButton });
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
-        // Grid.SetRow(tileButton, 0);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
-        // grid.Children.Add(tileButton);
 
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
@@ -1046,7 +1036,6 @@ public class Tile : UserControl
         grid.Children.Add(iconContainerGrid);
         // Add playtime elements
 
-
         double[] fColMarg =
             { Utils.TextMargin + TileHeight + 20, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         totalPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock);
@@ -1058,16 +1047,6 @@ public class Tile : UserControl
         totalPlaytime.Text = $"{hTotal}h {mTotal}m";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
-
-        // totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
-        // {
-        //     HorizontalAlignment = HorizontalAlignment.Left,
-        //     VerticalAlignment = VerticalAlignment.Top,
-        //     Margin =
-        //         new Thickness(Utils.TextMargin + TileHeight + 20,
-        //             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
-        //     Effect = Utils.dropShadowText,
-        // };
 
         SetPlaytimeBars();
 
@@ -1107,7 +1086,8 @@ public class Tile : UserControl
         // Set the Grid as the content of the UserControl
         Content = grid;
     }
-
+    
+    // Creates the custom playtime bars
     public void SetPlaytimeBars()
     {
         totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
@@ -1139,7 +1119,8 @@ public class Tile : UserControl
             e.Handled = true; // Optional, prevents the beep sound
         }
     }
-
+    
+    // Toggles between the two states oif the background image. Color for running, gray for not running
     public void ToggleBgImageColor(bool runningBool)
     {
         // Create the fade-in animation

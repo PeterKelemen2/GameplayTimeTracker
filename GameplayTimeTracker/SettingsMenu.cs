@@ -136,6 +136,7 @@ public class SettingsMenu : UserControl
         WinWidth = (int)mainWindow.RenderSize.Width;
     }
 
+    // Sets up and opens settings menu
     public void OpenSettingsWindow(object sender, RoutedEventArgs e)
     {
         Console.WriteLine("Opening Settings Window...");
@@ -196,7 +197,8 @@ public class SettingsMenu : UserControl
         blurUpdateTimer.Start();
         IsToggled = true;
     }
-
+    
+    // Removal of the elements from any parents
     public void CloseSettingsWindow(object sender, RoutedEventArgs e)
     {
         ToClose = true;
@@ -237,7 +239,7 @@ public class SettingsMenu : UserControl
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
     }
 
-
+    // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
     public void SetBlurImage(bool toCapFullSize = false)
     {
         if (IsToggled)
