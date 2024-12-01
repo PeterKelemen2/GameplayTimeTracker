@@ -190,11 +190,13 @@
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Grid x:Name="ContainerGrid" AllowDrop="True" DragEnter="Grid_DragEnter"
-          DragOver="Grid_DragOver"
+    <Grid x:Name="ContainerGrid"
+          AllowDrop="True"
+          DragEnter="Grid_DragEnter"
+          
           DragLeave="Grid_DragLeave"
           Drop="Grid_Drop">
-        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Visible">
+        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
         </Grid>
 
         <Grid x:Name="Grid">
@@ -269,5 +271,4 @@
             </Grid>
         </Grid>
     </Grid>
-
 </Window>

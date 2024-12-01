@@ -9,16 +9,15 @@ namespace GameplayTimeTracker;
 public class DragDropOverlay : UserControl
 {
     private Grid DragDropGrid;
-
-    private Rectangle DragOverBg; // Black, with 0.6 opacity
-    private Rectangle DragOverRect; // 30 Border Radius, 5 stroke, 10,10 stroke dash array
+    private Rectangle DragOverBg;
+    private Rectangle DragOverRect;
     private TextBlock DropText;
 
     public DragDropOverlay()
     {
         DragDropGrid = new Grid();
-        DragDropGrid.Width = Utils.mainWindow.Width;
-        DragDropGrid.Height = Utils.mainWindow.Height;
+        DragDropGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+        DragDropGrid.VerticalAlignment = VerticalAlignment.Stretch;
 
         DragOverBg = new Rectangle
         {
@@ -31,8 +30,8 @@ public class DragDropOverlay : UserControl
 
         DragOverRect = new Rectangle
         {
-            Width = Utils.mainWindow.Width - 50,
-            Height = Utils.mainWindow.Height - 50,
+            Width = Utils.mainWindow.Width - 80,
+            Height = Utils.mainWindow.Height - 80,
             RadiusX = 30,
             RadiusY = 30,
             Fill = new SolidColorBrush(Utils.ButtonColor) { Opacity = 0.3 }, // Only the Fill's opacity is affected
@@ -58,4 +57,14 @@ public class DragDropOverlay : UserControl
 
         Content = DragDropGrid;
     }
+
+    public void UpdateSize()
+    {
+        DragOverBg.Height = Utils.mainWindow.Height;
+        DragOverBg.Width = Utils.mainWindow.Width;
+        DragOverRect.Height = Utils.mainWindow.Height - 80;
+        DragOverRect.Width = Utils.mainWindow.Width - 80;
+    }
+    
+    
 }

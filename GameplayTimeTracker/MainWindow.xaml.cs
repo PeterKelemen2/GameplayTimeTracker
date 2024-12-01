@@ -58,18 +58,12 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // ShowTilesOnCanvas();
-            // tileContainer.ListTiles();
-            // handler.WriteContentToFile(tileContainer, jsonFilePath);
-            // notificationHandler.SetupNotifyIcon();
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
             settingsMenu = new SettingsMenu(ContainerGrid);
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
-            DragDropGrid.Visibility = Visibility.Visible;
-            dragDropOverlay = new DragDropOverlay();
         }
 
         private void LoadTheme(string themeName)
@@ -105,16 +99,7 @@ namespace GameplayTimeTracker
             LoadTheme("default");
             handler.InitializeContainer(tileContainer);
             dragDropOverlay = new DragDropOverlay();
-
-            // tilesList = tileContainer.tilesList;
-
-            // CustomButton testButton =
-            //     new CustomButton(text: "Test", isBold: true, buttonImagePath: "assets/edit.png");
-            // testButton.Margin = new Thickness(250, 0, 0, 0);
-            // testButton.Height = 0;
-            // Footer.Children.Add(testButton);
-            // testButton.Height = 40;
-            // testButton.Grid.MouseDown += ClickableRect_MouseDown;
+            DragDropGrid.Children.Add(dragDropOverlay);
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
@@ -129,7 +114,6 @@ namespace GameplayTimeTracker
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             ShowTilesOnCanvas();
-            DragDropGrid.Children.Add(dragDropOverlay);
         }
 
         private async void UpdateStackPane()
@@ -204,46 +188,7 @@ namespace GameplayTimeTracker
             if (openFileDialog.ShowDialog() == true)
             {
                 AddEntry(openFileDialog.FileName);
-                // // Handle the selected file
-                // string filePath = openFileDialog.FileName;
-                // string fileName = Path.GetFileName(filePath);
-                // fileName = fileName.Substring(0, fileName.Length - 4);
-                //
-                // string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-                // // string? iconPath = $"assets/{uniqueFileName}";
-                // string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
-                //
-                // Utils.PrepIcon(filePath, iconPath);
-                // iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-                //
-                // Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
-                // newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-                //
-                // if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
-                //       Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
-                // {
-                //     // Closing all opened edit menus and reseting them to avoid graphical glitch
-                //     foreach (var tile in tileContainer.tilesList)
-                //     {
-                //         if (tile.IsMenuToggled)
-                //         {
-                //             tile.ToggleEdit();
-                //             tile.WasOpened = false;
-                //         }
-                //     }
-                //
-                //     tileContainer.AddTile(newTile, newlyAdded: true);
-                //     tileContainer.ListTiles();
-                //     ShowTilesOnCanvas();
-                //     MessageBox.Show($"Selected file: {filePath}");
-                // }
-                // else
-                // {
-                //     MessageBox.Show("Sorry, I can't keep tabs on myself.", "Existential crisis", MessageBoxButton.OK);
-                // }
             }
-
-            // handler.WriteContentToFile(tileContainer);
         }
 
         private void UpdateTileIndexes()
@@ -321,7 +266,6 @@ namespace GameplayTimeTracker
         private void ShowTilesOnCanvas()
         {
             MainStackPanel.Children.Clear();
-            // var tilesList = tileContainer.GetTiles();
             foreach (var tile in tileContainer.tilesList)
             {
                 tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
@@ -339,6 +283,8 @@ namespace GameplayTimeTracker
             OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+            OverlayTop.Width = scrollViewer.ViewportWidth;
+            OverlayBottom.Width = scrollViewer.ViewportWidth;
 
             double newWidth = isVerticalScrollVisible
                 ? Width - 2 * Utils.TileLeftMargin - 2 * SystemParameters.VerticalScrollBarWidth
@@ -400,58 +346,20 @@ namespace GameplayTimeTracker
 
         private void Grid_DragEnter(object sender, DragEventArgs e)
         {
-            // Show the rectangle when the drag operation enters the grid
             DragDropGrid.Visibility = Visibility.Visible;
-
-            // Update layout immediately after making it visible
-            Dispatcher.BeginInvoke(new Action(() => { DragDropGrid.UpdateLayout(); }));
-
-            e.Handled = true; // Marks event as handled
-        }
-
-        // TODO: Fix this shit; Breaks over any PopupMenu opening
-        private void Grid_DragOver(object sender, DragEventArgs e)
-        {
-            var grid = sender as Grid;
-            if (grid != null)
-            {
-                // grid.UpdateLayout();
-                var position = e.GetPosition(grid);
-                DragDropGrid.Visibility = Visibility.Visible;
-                DragDropGrid.Width = grid.ActualWidth;
-                DragDropGrid.Height = grid.ActualHeight;
-
-                // DragOverBg.Width = grid.ActualWidth;
-                // DragOverBg.Height = grid.ActualHeight;
-                // DragOverBg.Fill = new SolidColorBrush(Utils.DarkColor);
-                // DragOverBg.Opacity = 0.5;
-                //
-                // DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor) { Opacity = 0.3 };
-                // DragOverRectangle.Width = grid.ActualWidth - 50;
-                // DragOverRectangle.Height = grid.ActualHeight - 50;
-                // DragOverRectangle.Effect = Utils.dropShadowRectangle;
-                //
-                // DropText.Foreground = new SolidColorBrush(Utils.FontColor);
-                // DropText.Effect = Utils.dropShadowRectangle;
-
-                // Panel.SetZIndex(DragDropGrid, 97);
-
-                DragDropGrid.UpdateLayout();
-            }
-
+            Console.WriteLine(DragDropGrid.Children);
             e.Handled = true; // Marks event as handled
         }
 
         private void Grid_DragLeave(object sender, DragEventArgs e)
         {
-            // Hide the rectangle when the drag leaves the grid
             DragDropGrid.Visibility = Visibility.Collapsed;
             e.Handled = true; // Marks event as handled
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
-            // Hide the rectangle after a successful drop
+            // Clear the overlay
             DragDropGrid.Visibility = Visibility.Collapsed;
 
             // Handle the dropped data here (e.g., process the file)
