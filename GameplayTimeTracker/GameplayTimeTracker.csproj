@@ -10,62 +10,64 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="assets\fallout3.png" />
-      <None Remove="assets\remove.png" />
-      <Content Include="assets\remove.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="assets\save.png" />
-      <Content Include="assets\save.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="assets\save_small.png" />
-      <Content Include="assets\save_small.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="data.json" />
-      <None Remove="assets\farcry3.png" />
-      <None Remove="assets\no_icon.png" />
-      <Content Include="assets\no_icon.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Update="Effects\SaturationEffect.fx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Effects\SaturationEffect.ps" />
-      <None Remove="assets\appicon.png" />
-      <None Remove="assets\appicon.ico" />
-      <None Remove="assets\MyAppIcon.ico" />
-      <Content Include="assets\MyAppIcon.ico">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="assets\editImage.png" />
-      <None Remove="settings.json" />
-      <Content Include="settings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <None Remove="assets\fallout3.png"/>
+        <None Remove="assets\remove.png"/>
+        <Content Include="assets\remove.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="assets\save.png"/>
+        <Content Include="assets\save.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="assets\save_small.png"/>
+        <Content Include="assets\save_small.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="data.json"/>
+        <None Remove="assets\farcry3.png"/>
+        <None Remove="assets\no_icon.png"/>
+        <Content Include="assets\no_icon.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="Effects\SaturationEffect.fx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Effects\SaturationEffect.ps"/>
+        <None Remove="assets\appicon.png"/>
+        <None Remove="assets\appicon.ico"/>
+        <None Remove="assets\MyAppIcon.ico"/>
+        <Content Include="assets\MyAppIcon.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="assets\editImage.png"/>
+        <None Remove="settings.json"/>
+        <Content Include="settings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="assets\edit.png" />
-      <Content Include="assets\edit.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <None Remove="assets\edit.png"/>
+        <Content Include="assets\edit.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="IconExtractor" Version="1.0.1" />
-      <PackageReference Include="IconUtilities" Version="1.0.2" />
-      <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="NotifyIcon" Version="1.23.10209.11223" />
-      <PackageReference Include="NotifyIcon.Base" Version="1.23.10209.11223" />
-      <PackageReference Include="NotifyIcon.Windows" Version="1.23.10209.11223" />
-      <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
-      <PackageReference Include="System.Windows.Forms" Version="4.0.0" />
-      <PackageReference Include="WindowsShortcutFactory" Version="1.2.0" />
+        <PackageReference Include="IconExtractor" Version="1.0.1"/>
+        <PackageReference Include="IconUtilities" Version="1.0.2"/>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NotifyIcon" Version="1.23.10209.11223"/>
+        <PackageReference Include="NotifyIcon.Base" Version="1.23.10209.11223"/>
+        <PackageReference Include="NotifyIcon.Windows" Version="1.23.10209.11223"/>
+        <PackageReference Include="System.Drawing.Common" Version="8.0.10"/>
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1"/>
+        <PackageReference Include="Gu.Wpf.Geometry" Version="2.2.8" />
+        <PackageReference Include="System.Windows.Forms" Version="4.0.0"/>
+        <PackageReference Include="WindowsShortcutFactory" Version="1.2.0"/>
     </ItemGroup>
 
 </Project>

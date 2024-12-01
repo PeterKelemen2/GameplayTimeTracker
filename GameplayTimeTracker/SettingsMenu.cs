@@ -35,7 +35,9 @@ public class SettingsMenu : UserControl
     public Grid ContainerGrid;
     public Grid MenuContainerGrid { get; set; }
     public Grid SettingsGrid { get; set; }
-    
+    public Settings Settings { get; set; }
+    public List<Theme> Themes { get; set; }
+
 
     private DoubleAnimation fadeInAnimation = new();
     private DoubleAnimation otherFadeInAnimation = new();
@@ -75,7 +77,7 @@ public class SettingsMenu : UserControl
         Console.WriteLine("Dummy method called!");
     }
 
-    public SettingsMenu(Grid containerGrid, Grid menuGrid, double w = 350, double h = 400,
+    public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
         RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
@@ -84,6 +86,8 @@ public class SettingsMenu : UserControl
         mainWindow.SizeChanged += MainWindow_SizeChanged;
         ContainerGrid = containerGrid;
         SettingsGrid = menuGrid;
+        Settings = settings;
+        Themes = settings.ThemeList;
         WinHeight = mainWindow.RenderSize.Height;
         WinWidth = mainWindow.RenderSize.Width;
         W = w;
@@ -96,6 +100,8 @@ public class SettingsMenu : UserControl
         wasSet = false;
         IsImageSet = false;
         ToClose = false;
+
+        ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes);
 
         blurUpdateTimer = new DispatcherTimer
         {
@@ -205,8 +211,6 @@ public class SettingsMenu : UserControl
         rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
         rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
         SetBlurImage();
-        // Adjust the height of the rectangle dynamically
-        // H = WinHeight * 0.25; // For example, make the height 25% of the window height
 
         // Update the height of the menuRect if it has been created already
         if (MenuContainerGrid != null)
@@ -243,7 +247,7 @@ public class SettingsMenu : UserControl
         CreateBlurOverlay();
 
         SettingsGrid.Visibility = Visibility.Visible;
-
+        Console.WriteLine();
         SettingsGrid.BeginAnimation(MarginProperty, rollInAnimation);
         blurUpdateTimer.Start();
         IsToggled = true;

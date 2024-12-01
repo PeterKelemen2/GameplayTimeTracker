@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "mkHqHmI/i5c=",
+  "dgSpecHash": "/JHZ38LM37g=",
   "success": true,
   "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Peti\\.nuget\\packages\\atksharp\\3.24.24.38\\atksharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\cairosharp\\3.24.24.38\\cairosharp.3.24.24.38.nupkg.sha512",
+    "C:\\Users\\Peti\\.nuget\\packages\\extended.wpf.toolkit\\4.6.1\\extended.wpf.toolkit.4.6.1.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\gdksharp\\3.24.24.38\\gdksharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\giosharp\\3.24.24.38\\giosharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\glibsharp\\3.24.24.38\\glibsharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\gtksharp\\3.24.24.38\\gtksharp.3.24.24.38.nupkg.sha512",
+    "C:\\Users\\Peti\\.nuget\\packages\\gu.wpf.geometry\\2.2.8\\gu.wpf.geometry.2.2.8.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\iconextractor\\1.0.1\\iconextractor.1.0.1.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\iconutilities\\1.0.2\\iconutilities.1.0.2.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
