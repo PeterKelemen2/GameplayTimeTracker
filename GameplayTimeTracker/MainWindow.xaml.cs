@@ -49,14 +49,6 @@ namespace GameplayTimeTracker
         private SettingsMenu settingsMenu;
         private DragDropOverlay dragDropOverlay;
 
-        // private Rectangle dragDropRectangle;
-        // private System.Windows.Forms.NotifyIcon m_notifyIcon;
-
-        public Grid GetContainerGrid()
-        {
-            return ContainerGrid;
-        }
-
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
@@ -342,7 +334,7 @@ namespace GameplayTimeTracker
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
             // settingsMenu = new SettingsMenu(ContainerGrid);
-            settingsMenu.OpenSettingsWindow(sender, e);
+            settingsMenu.OpenMenu();
         }
 
         private void Grid_DragEnter(object sender, DragEventArgs e)
