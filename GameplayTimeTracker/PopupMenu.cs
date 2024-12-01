@@ -9,6 +9,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+
 // using MonoMac.CoreImage;
 
 namespace GameplayTimeTracker;
@@ -42,6 +43,7 @@ public class PopupMenu : UserControl
     private DoubleAnimation otherFadeOutAnimation = new();
     private DoubleAnimation zoomInAnimation = new();
     private DoubleAnimation zoomOutAnimation = new();
+    private DoubleAnimation zoomOutAnimation2 = new();
     private DoubleAnimation blurInAnimation = new();
     private DoubleAnimation blurOutAnimation = new();
     private ThicknessAnimation rollInAnimation = new();
@@ -127,7 +129,15 @@ public class PopupMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.5)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
-
+        
+        zoomOutAnimation2 = new DoubleAnimation
+        {
+            From = _zoomPercent,
+            To = 1.0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        
         blurInAnimation = new DoubleAnimation
         {
             From = 0, // Start with no blur
@@ -223,7 +233,7 @@ public class PopupMenu : UserControl
     {
         Console.WriteLine("Opening Menu...");
         double padding = 10;
-        // CreateBlurOverlay();
+        CreateBlurOverlay();
 
         MenuContainerGrid = new Grid();
         MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
@@ -308,7 +318,7 @@ public class PopupMenu : UserControl
         ContainerGrid.Children.Add(MenuContainerGrid);
         menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);
         MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
-        // blurUpdateTimer.Start();
+        blurUpdateTimer.Start();
         IsToggled = true;
     }
 
@@ -316,50 +326,33 @@ public class PopupMenu : UserControl
     public void CloseMenu(object sender, RoutedEventArgs e)
     {
         ToClose = true;
-        // SetBlurImage(true);
-        // blurUpdateTimer.Stop();
-        // blurUpdateTimer.Tick -= (s, ev) => SetBlurImage(); // Unsubscribe timer event
+        SetBlurImage(true);
+        blurUpdateTimer.Stop();
+        blurUpdateTimer.Tick -= (s, ev) => SetBlurImage(); // Unsubscribe timer event
 
         Console.WriteLine("Closing Menu...");
         // Zoom-out animation on bgImage
-        zoomOutAnimation.Completed += (s, args) =>
+        zoomOutAnimation2.Completed += (s, args) =>
         {
-            // Create a list to store children that need to be removed after the animation
-            List<UIElement> childrenToRemove = new List<UIElement>();
-
-            foreach (UIElement child in ContainerGrid.Children)
-            {
-                if (child is FrameworkElement frameworkElement && frameworkElement.Name != "Grid")
-                {
-                    childrenToRemove.Add(child); // Mark for removal
-                }
-            }
-
-            // Remove the marked children after the zoom-out animation completes
-            foreach (UIElement child in childrenToRemove)
-            {
-                ContainerGrid.Children.Remove(child);
-            }
-
-            // bgImage.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            bgImage.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            MenuContainerGrid.Children.Clear();
+            ContainerGrid.Children.Remove(MenuContainerGrid);
+            Console.WriteLine("Menu closed!");
         };
         IsToggled = false;
         IsImageSet = false;
         ToClose = false;
         MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
-        // bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
+        bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
         menuTitle.BeginAnimation(OpacityProperty, otherFadeOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
-        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation2);
 
-        // MenuContainerGrid.Children.Clear();
-        // ContainerGrid.Children.Remove(MenuContainerGrid);
-        // mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
-        // if (mainWindow != null)
-        // {
-        //     mainWindow.SizeChanged -= MainWindow_SizeChanged;
-        // }
-        
+        mainWindow.SizeChanged -= MainWindow_SizeChanged; // Unsubscribe from events
+        if (mainWindow != null)
+        {
+            mainWindow.SizeChanged -= MainWindow_SizeChanged;
+        }
     }
 
     // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
@@ -371,17 +364,17 @@ public class PopupMenu : UserControl
             var newBitmap = ToClose
                 ? Utils.CaptureContainerGrid(1.0) // Full size capture
                 : Utils.CaptureContainerGrid(); // Partial capture with scaling
-        
+
             // Only update if the new bitmap is different or needs updating
             if (menuBgBitmap != newBitmap)
             {
                 // Optionally, dispose of the old bitmap reference if you don't need it anymore
                 menuBgBitmap = newBitmap;
-        
+
                 // Update the image source with the new bitmap
                 bgImage.Source = menuBgBitmap;
             }
-        
+
             // Ensure image dimensions are updated
             bgImage.Width = WinWidth;
             bgImage.Height = WinHeight;

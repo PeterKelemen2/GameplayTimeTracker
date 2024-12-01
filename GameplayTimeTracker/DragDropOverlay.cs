@@ -40,7 +40,8 @@ public class DragDropOverlay : UserControl
             Stroke = Brushes.White, // Fully opaque stroke
             StrokeThickness = 5,
             StrokeDashArray = new DoubleCollection { 10, 10 },
-            Opacity = 1 // Ensure the rectangle itself does not reduce the stroke's opacity
+            Opacity = 1, // Ensure the rectangle itself does not reduce the stroke's opacity
+            Effect = Utils.dropShadowRectangle
         };
 
         DragDropGrid.Children.Add(DragOverRect);
@@ -65,6 +66,4 @@ public class DragDropOverlay : UserControl
         DragOverRect.Height = Utils.mainWindow.Height - 80;
         DragOverRect.Width = Utils.mainWindow.Width - 80;
     }
-    
-    
 }
