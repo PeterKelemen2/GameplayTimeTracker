@@ -90,7 +90,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -102,6 +101,21 @@
                         <Border CornerRadius="4" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Width="8"
                                 Margin="2,0,0,0" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumbHorizontal" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Width="Auto"
+                                Margin="5,0,5,0" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -138,11 +152,11 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition MaxWidth="0" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300" />
                     <ColumnDefinition MaxWidth="0" />
                 </Grid.ColumnDefinitions>
         
-                <Border Grid.ColumnSpan="3" CornerRadius="2" Background="Red" />
+                <Border Grid.ColumnSpan="3" CornerRadius="2" Background="Transparent" />
         
                 <!-- Left Arrow (Scroll Line Left Command) -->
                 <RepeatButton Grid.Column="0" Style="{StaticResource ScrollBarLineButton}" Width="18"
@@ -156,7 +170,7 @@
         
                     <!-- Thumb -->
                     <Track.Thumb>
-                        <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,0,0,0"
+                        <Thumb Style="{StaticResource ScrollBarThumbHorizontal}" Margin="2"
                                Background="{StaticResource NormalBrush}"
                                BorderBrush="{StaticResource NormalBorderBrush}" />
                     </Track.Thumb>
@@ -179,7 +193,7 @@
             <Style.Triggers>
                 <Trigger Property="Orientation" Value="Horizontal">
                     <Setter Property="Width" Value="Auto" />
-                    <Setter Property="Height" Value="18" />
+                    <Setter Property="Height" Value="14" />
                     <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                 </Trigger>
                 <Trigger Property="Orientation" Value="Vertical">
@@ -212,19 +226,23 @@
         </Grid>
 
         <Grid x:Name="SettingsGrid" Panel.ZIndex="97" Visibility="Visible">
-            <Rectangle x:Name="BgRect" Fill="#1E4030" Width="300" Height="400" RadiusX="10" RadiusY="10"></Rectangle>
+            <Grid.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="20"/>
+            </Grid.Effect>
+            <Rectangle x:Name="BgRect" Fill="#1D2640" Width="300" Height="400" RadiusX="10" RadiusY="10"></Rectangle>
             <Grid Width="300" Height="400">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Preferences" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
-                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
-                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
-                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
-                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                        <TextBlock Text="Preferences" FontSize="14" Margin="10" FontWeight="Bold" Foreground="White">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="Red" ShadowDepth="0" BlurRadius="20"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <TextBlock Text="Themes" FontSize="14" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
