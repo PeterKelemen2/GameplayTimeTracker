@@ -352,20 +352,9 @@ namespace GameplayTimeTracker
                 DragDropGrid.Visibility = Visibility.Visible;
                 isAnimating = true; // Prevent further animations while one is in progress
 
-                DoubleAnimation fadeInAnimation = new DoubleAnimation
-                {
-                    From = 0,
-                    To = 1,
-                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-                };
+                Utils.dragFadeInAnimation.Completed += (s, o) => { isAnimating = false; };
 
-                fadeInAnimation.Completed += (s, o) =>
-                {
-                    isAnimating = false; // Allow new animations after this one completes
-                };
-
-                DragDropGrid.BeginAnimation(OpacityProperty, fadeInAnimation);
+                DragDropGrid.BeginAnimation(OpacityProperty, Utils.dragFadeInAnimation);
             }
 
             e.Handled = true; // Marks event as handled
@@ -375,21 +364,13 @@ namespace GameplayTimeTracker
         {
             if (!isAnimating)
             {
-                DoubleAnimation fadeOutAnimation = new DoubleAnimation
-                {
-                    From = 1,
-                    To = 0,
-                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                fadeOutAnimation.Completed += (s, o) =>
+                Utils.dragFadeOutAnimation.Completed += (s, o) =>
                 {
                     DragDropGrid.Visibility = Visibility.Collapsed;
                     isAnimating = false; // Allow new animations after this one completes
                 };
 
-                DragDropGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                DragDropGrid.BeginAnimation(OpacityProperty, Utils.dragFadeOutAnimation);
                 isAnimating = true; // Prevent further animations while one is in progress
             }
 
@@ -400,22 +381,13 @@ namespace GameplayTimeTracker
         {
             if (!isAnimating)
             {
-                // Clear the overlay
-                DoubleAnimation fadeOutAnimation = new DoubleAnimation
-                {
-                    From = 1,
-                    To = 0,
-                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                fadeOutAnimation.Completed += (s, o) =>
+                Utils.dragFadeOutAnimation.Completed += (s, o) =>
                 {
                     DragDropGrid.Visibility = Visibility.Collapsed;
                     isAnimating = false; // Allow new animations after this one completes
                 };
 
-                DragDropGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                DragDropGrid.BeginAnimation(OpacityProperty, Utils.dragFadeOutAnimation);
                 isAnimating = true; // Prevent further animations while one is in progress
             }
 
