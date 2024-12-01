@@ -33,6 +33,7 @@ namespace GameplayTimeTracker
         private const string? SampleImagePath = "assets/no_icon.png";
         private const string? AppIcon = "assets/MyAppIcon.ico";
         private bool isBlurToggled = false;
+        private bool isAnimating = false;
 
         TileContainer tileContainer = new();
         List<Tile> tilesList = new List<Tile>();
@@ -346,21 +347,77 @@ namespace GameplayTimeTracker
 
         private void Grid_DragEnter(object sender, DragEventArgs e)
         {
-            DragDropGrid.Visibility = Visibility.Visible;
-            Console.WriteLine(DragDropGrid.Children);
+            if (!isAnimating)
+            {
+                DragDropGrid.Visibility = Visibility.Visible;
+                isAnimating = true; // Prevent further animations while one is in progress
+
+                DoubleAnimation fadeInAnimation = new DoubleAnimation
+                {
+                    From = 0,
+                    To = 1,
+                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                fadeInAnimation.Completed += (s, o) =>
+                {
+                    isAnimating = false; // Allow new animations after this one completes
+                };
+
+                DragDropGrid.BeginAnimation(OpacityProperty, fadeInAnimation);
+            }
+
             e.Handled = true; // Marks event as handled
         }
 
         private void Grid_DragLeave(object sender, DragEventArgs e)
         {
-            DragDropGrid.Visibility = Visibility.Collapsed;
+            if (!isAnimating)
+            {
+                DoubleAnimation fadeOutAnimation = new DoubleAnimation
+                {
+                    From = 1,
+                    To = 0,
+                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                fadeOutAnimation.Completed += (s, o) =>
+                {
+                    DragDropGrid.Visibility = Visibility.Collapsed;
+                    isAnimating = false; // Allow new animations after this one completes
+                };
+
+                DragDropGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                isAnimating = true; // Prevent further animations while one is in progress
+            }
+
             e.Handled = true; // Marks event as handled
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
-            // Clear the overlay
-            DragDropGrid.Visibility = Visibility.Collapsed;
+            if (!isAnimating)
+            {
+                // Clear the overlay
+                DoubleAnimation fadeOutAnimation = new DoubleAnimation
+                {
+                    From = 1,
+                    To = 0,
+                    Duration = new Duration(TimeSpan.FromSeconds(0.2)),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                fadeOutAnimation.Completed += (s, o) =>
+                {
+                    DragDropGrid.Visibility = Visibility.Collapsed;
+                    isAnimating = false; // Allow new animations after this one completes
+                };
+
+                DragDropGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                isAnimating = true; // Prevent further animations while one is in progress
+            }
 
             // Handle the dropped data here (e.g., process the file)
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
