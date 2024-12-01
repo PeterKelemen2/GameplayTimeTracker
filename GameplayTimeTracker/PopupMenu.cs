@@ -393,6 +393,8 @@ public class PopupMenu : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 0, 0, 0)
         };
+        bgImage.MouseDown += CloseMenu;
+        
         // Create a BlurEffect and set its initial Radius to 0 (no blur)
         BlurEffect blurEffect = new BlurEffect { Radius = 0 };
         bgImage.Effect = blurEffect;

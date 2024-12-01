@@ -23,9 +23,9 @@ public class SettingsMenu : UserControl
 
     public bool IsToggled { get; set; }
     public bool IsImageSet { get; set; }
+    public bool wasSet { get; set; }
     public bool ToClose { get; set; }
 
-    public string MenuText { get; set; }
     public string Type { get; set; }
 
     private RoutedEventHandler ButtonAction1;
@@ -35,13 +35,7 @@ public class SettingsMenu : UserControl
     public Grid ContainerGrid;
     public Grid MenuContainerGrid { get; set; }
     public Grid SettingsGrid { get; set; }
-
-    private TextBlock MenuContainerText { get; set; }
-
-    public Grid PreferencesGrid { get; set; }
-    private TextBlock PreferencesText { get; set; }
-
-    public Grid ThemeGrid { get; set; }
+    
 
     private DoubleAnimation fadeInAnimation = new();
     private DoubleAnimation otherFadeInAnimation = new();
@@ -81,7 +75,7 @@ public class SettingsMenu : UserControl
         Console.WriteLine("Dummy method called!");
     }
 
-    public SettingsMenu(Grid containerGrid, Grid menuGrid, string text = "Settings", double w = 350, double h = 400,
+    public SettingsMenu(Grid containerGrid, Grid menuGrid, double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
         RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
@@ -92,7 +86,6 @@ public class SettingsMenu : UserControl
         SettingsGrid = menuGrid;
         WinHeight = mainWindow.RenderSize.Height;
         WinWidth = mainWindow.RenderSize.Width;
-        MenuText = text;
         W = w;
         H = h;
         IsToggled = isToggled;
@@ -100,6 +93,7 @@ public class SettingsMenu : UserControl
         ButtonAction1 = routedEvent1 == null ? Dummy : routedEvent1;
         ButtonAction2 = routedEvent2 == null ? Dummy : routedEvent2;
 
+        wasSet = false;
         IsImageSet = false;
         ToClose = false;
 
@@ -242,57 +236,15 @@ public class SettingsMenu : UserControl
         }
     }
 
-    // Opens the menu, creates prompt based on the type of menu it is
     public void OpenMenu()
     {
         Console.WriteLine("Opening Menu...");
         double padding = 10;
         CreateBlurOverlay();
 
-        MenuContainerGrid = new Grid();
-        // MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
-
-        Rectangle menuRect = new Rectangle
-        {
-            Width = W,
-            Height = H,
-            Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
-            RadiusX = Utils.SettingsRadius,
-            RadiusY = Utils.SettingsRadius,
-            Effect = Utils.dropShadowRectangle
-        };
-        MenuContainerGrid.Children.Add(menuRect);
-
-        menuTitle = new TextBlock
-        {
-            Text = MenuText,
-            Foreground = new SolidColorBrush(Utils.FontColor),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Top,
-            FontSize = 20,
-            FontWeight = FontWeights.Bold,
-            TextWrapping = TextWrapping.Wrap,
-            Width = W - 2 * padding,
-            TextAlignment = TextAlignment.Center,
-            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
-        };
-        // MenuContainerGrid.Children.Add(menuTitle);
-
-        PreferencesText = new TextBlock
-        {
-            Text = "Preferences",
-            FontSize = 16,
-            Foreground = new SolidColorBrush(Utils.FontColor),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0)
-        };
-        MenuContainerGrid.Children.Add(PreferencesText);
-
         SettingsGrid.Visibility = Visibility.Visible;
-        // ContainerGrid.Children.Add(MenuContainerGrid);
-        menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);
-        MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
+
+        SettingsGrid.BeginAnimation(MarginProperty, rollInAnimation);
         blurUpdateTimer.Start();
         IsToggled = true;
     }
@@ -309,15 +261,14 @@ public class SettingsMenu : UserControl
 
         zoomOutAnimation2.Completed += (s, ev) =>
         {
-            MenuContainerGrid.Children.Clear();
+            // MenuContainerGrid.Children.Clear();
             SettingsGrid.Visibility = Visibility.Collapsed;
             bgImage.Source = null;
             Console.WriteLine("Menu Closed!");
         };
 
-        MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
+        SettingsGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
-        menuTitle.BeginAnimation(OpacityProperty, otherFadeOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation2);
 
@@ -369,6 +320,8 @@ public class SettingsMenu : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 0, 0, 0)
         };
+        bgImage.MouseDown += CloseMenu;
+
         // Create a BlurEffect and set its initial Radius to 0 (no blur)
         BlurEffect blurEffect = new BlurEffect { Radius = 0 };
         bgImage.Effect = blurEffect;
