@@ -34,6 +34,12 @@ public class SettingsMenu : UserControl
 
     public Grid ContainerGrid;
     public Grid MenuContainerGrid { get; set; }
+    private TextBlock MenuContainerText { get; set; }
+
+    public Grid PreferencesGrid { get; set; }
+    private TextBlock PreferencesText { get; set; }
+
+    public Grid ThemeGrid { get; set; }
 
     private DoubleAnimation fadeInAnimation = new();
     private DoubleAnimation otherFadeInAnimation = new();
@@ -73,7 +79,8 @@ public class SettingsMenu : UserControl
         Console.WriteLine("Dummy method called!");
     }
 
-    public SettingsMenu(Grid containerGrid, string text = "", double w = 350, double h = 150, bool isToggled = false,
+    public SettingsMenu(Grid containerGrid, string text = "Settings", double w = 350, double h = 400,
+        bool isToggled = false,
         string type = "yesNo",
         RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
     {
@@ -87,7 +94,6 @@ public class SettingsMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
-        
         ButtonAction1 = routedEvent1 == null ? Dummy : routedEvent1;
         ButtonAction2 = routedEvent2 == null ? Dummy : routedEvent2;
 
@@ -241,7 +247,7 @@ public class SettingsMenu : UserControl
         CreateBlurOverlay();
 
         MenuContainerGrid = new Grid();
-        MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
+        // MenuContainerGrid.Margin = new Thickness(0, 0, 0, 0);
 
         Rectangle menuRect = new Rectangle
         {
@@ -267,58 +273,18 @@ public class SettingsMenu : UserControl
             TextAlignment = TextAlignment.Center,
             Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
         };
+        // MenuContainerGrid.Children.Add(menuTitle);
 
-        MenuContainerGrid.Children.Add(menuTitle);
-
-        switch (Type)
+        PreferencesText = new TextBlock
         {
-            case "yesNo":
-                yesButton = new Button
-                {
-                    Style = (Style)Application.Current.FindResource("RoundedButton"),
-                    Content = "Yes",
-                    Width = 80,
-                    Height = 30,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2),
-                };
-                noButton = new Button
-                {
-                    Style = (Style)Application.Current.FindResource("RoundedButton"),
-                    Content = "No",
-                    Width = 80,
-                    Height = 30,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2),
-                };
-                yesButton.Click += ButtonAction1;
-                yesButton.Click += CloseMenu;
-                noButton.Click += CloseMenu;
-                if (ButtonAction2 != null)
-                {
-                    noButton.Click += ButtonAction2;
-                }
-
-                MenuContainerGrid.Children.Add(yesButton);
-                MenuContainerGrid.Children.Add(noButton);
-                break;
-            default:
-                Button closeButton = new Button
-                {
-                    Style = (Style)Application.Current.FindResource("RoundedButton"),
-                    Content = "OK",
-                    Width = 80,
-                    Height = 30,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 0, 0, WinHeight / 2 - H / 2),
-                };
-                closeButton.Click += CloseMenu;
-                MenuContainerGrid.Children.Add(closeButton);
-                break;
-        }
+            Text = "Preferences",
+            FontSize = 16,
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0)
+        };
+        MenuContainerGrid.Children.Add(PreferencesText);
 
         ContainerGrid.Children.Add(MenuContainerGrid);
         menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);

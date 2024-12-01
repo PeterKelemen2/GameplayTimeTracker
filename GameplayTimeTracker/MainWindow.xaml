@@ -137,30 +137,42 @@
         <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MaxWidth="18" />
-                    <ColumnDefinition Width="0.00001*" />
-                    <ColumnDefinition MaxWidth="18" />
+                    <ColumnDefinition MaxWidth="0" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition MaxWidth="0" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="3" CornerRadius="2" Background="#F0F0F0" />
+        
+                <Border Grid.ColumnSpan="3" CornerRadius="2" Background="Red" />
+        
+                <!-- Left Arrow (Scroll Line Left Command) -->
                 <RepeatButton Grid.Column="0" Style="{StaticResource ScrollBarLineButton}" Width="18"
                               Command="ScrollBar.LineLeftCommand" Content="M 4 0 L 4 8 L 0 4 Z" />
-                <Track Name="PART_Track" Grid.Column="1" IsDirectionReversed="False">
+        
+                <!-- Track -->
+                <Track Name="PART_Track" Grid.Column="1" IsDirectionReversed="False" >
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageLeftCommand" />
                     </Track.DecreaseRepeatButton>
+        
+                    <!-- Thumb -->
                     <Track.Thumb>
-                        <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,1,0,1"
+                        <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,0,0,0"
                                Background="{StaticResource NormalBrush}"
                                BorderBrush="{StaticResource NormalBorderBrush}" />
                     </Track.Thumb>
+        
                     <Track.IncreaseRepeatButton>
                         <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageRightCommand" />
                     </Track.IncreaseRepeatButton>
                 </Track>
-                <RepeatButton Grid.Column="3" Style="{StaticResource ScrollBarLineButton}" Width="18"
+        
+                <!-- Right Arrow (Scroll Line Right Command) -->
+                <RepeatButton Grid.Column="2" Style="{StaticResource ScrollBarLineButton}" Width="18"
                               Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z" />
             </Grid>
         </ControlTemplate>
+
+
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -193,10 +205,29 @@
     <Grid x:Name="ContainerGrid"
           AllowDrop="True"
           DragEnter="Grid_DragEnter"
-          
+
           DragLeave="Grid_DragLeave"
           Drop="Grid_Drop">
         <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
+        </Grid>
+
+        <Grid x:Name="SettingsGrid" Panel.ZIndex="97" Visibility="Visible">
+            <Rectangle x:Name="BgRect" Fill="#1E4030" Width="300" Height="400" RadiusX="10" RadiusY="10"></Rectangle>
+            <Grid Width="300" Height="400">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Preferences" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                        <TextBlock Text="Themes" Margin="10" FontWeight="Bold" Foreground="White"></TextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
         </Grid>
 
         <Grid x:Name="Grid">
