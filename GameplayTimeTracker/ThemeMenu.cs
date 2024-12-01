@@ -25,20 +25,19 @@ public class ThemeMenu : UserControl
 
     private void CreateDropdown()
     {
-        Panel.Children.Clear();
-        comboBox = new();
-        comboBox.Width = 150;
-        comboBox.Height = 30;
-        comboBox.HorizontalContentAlignment = HorizontalAlignment.Center;
-        comboBox.VerticalContentAlignment = VerticalAlignment.Center;
-        comboBox.Margin = new Thickness(10);
+        Panel.Children.Clear(); // Clear all children first
+        comboBox = new ComboBox
+        {
+            Width = 150,
+            Height = 30,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(10)
+        };
 
         comboBox.SelectionChanged += (sender, e) =>
         {
-            string selectedItem = comboBox.SelectedItem.ToString();
-            Console.WriteLine($"You selected: {selectedItem}");
-
-            AddColorEntries();
+            AddColorEntries(); // Call the method to add color entries
         };
 
         foreach (var theme in Themes)
@@ -46,14 +45,26 @@ public class ThemeMenu : UserControl
             comboBox.Items.Add(theme.ThemeName);
         }
 
-        comboBox.SelectedIndex = 0;
+        comboBox.SelectedIndex = 0; // Set the default selection
         Panel.Children.Add(comboBox);
 
-        AddColorEntries();
+        AddColorEntries(); // Populate initial color entries based on the default selection
     }
-    
+
     private void AddColorEntries()
     {
+        // Remove all children except the first one (the ComboBox)
+        for (int i = Panel.Children.Count - 1; i >= 0; i--)
+        {
+            var child = Panel.Children[i];
+            if (child is not ComboBox) // If it's not a ComboBox, remove it
+            {
+                Console.WriteLine(child); // Log the child that is being removed
+                Panel.Children.RemoveAt(i);
+            }
+        }
+
+        // Add color entries for the selected theme
         foreach (var theme in Themes)
         {
             if (theme.ThemeName.Equals(comboBox.SelectedItem.ToString()))
