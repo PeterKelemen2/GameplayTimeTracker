@@ -46,6 +46,7 @@ namespace GameplayTimeTracker
         private NotificationHandler notificationHandler = new();
 
         private SettingsMenu settingsMenu;
+        private DragDropOverlay dragDropOverlay;
 
         // private Rectangle dragDropRectangle;
         // private System.Windows.Forms.NotifyIcon m_notifyIcon;
@@ -67,6 +68,8 @@ namespace GameplayTimeTracker
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
+            DragDropGrid.Visibility = Visibility.Visible;
+            dragDropOverlay = new DragDropOverlay();
         }
 
         private void LoadTheme(string themeName)
@@ -101,6 +104,7 @@ namespace GameplayTimeTracker
             themesList = settings.ThemeList;
             LoadTheme("default");
             handler.InitializeContainer(tileContainer);
+            dragDropOverlay = new DragDropOverlay();
 
             // tilesList = tileContainer.tilesList;
 
@@ -125,6 +129,7 @@ namespace GameplayTimeTracker
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             ShowTilesOnCanvas();
+            DragDropGrid.Children.Add(dragDropOverlay);
         }
 
         private async void UpdateStackPane()
@@ -403,7 +408,7 @@ namespace GameplayTimeTracker
 
             e.Handled = true; // Marks event as handled
         }
-        
+
         // TODO: Fix this shit; Breaks over any PopupMenu opening
         private void Grid_DragOver(object sender, DragEventArgs e)
         {
@@ -412,22 +417,22 @@ namespace GameplayTimeTracker
             {
                 // grid.UpdateLayout();
                 var position = e.GetPosition(grid);
-
+                DragDropGrid.Visibility = Visibility.Visible;
                 DragDropGrid.Width = grid.ActualWidth;
                 DragDropGrid.Height = grid.ActualHeight;
 
-                DragOverBg.Width = grid.ActualWidth;
-                DragOverBg.Height = grid.ActualHeight;
-                DragOverBg.Fill = new SolidColorBrush(Utils.DarkColor);
-                DragOverBg.Opacity = 0.5;
-
-                DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor) { Opacity = 0.3 };
-                DragOverRectangle.Width = grid.ActualWidth - 50;
-                DragOverRectangle.Height = grid.ActualHeight - 50;
-                DragOverRectangle.Effect = Utils.dropShadowRectangle;
-
-                DropText.Foreground = new SolidColorBrush(Utils.FontColor);
-                DropText.Effect = Utils.dropShadowRectangle;
+                // DragOverBg.Width = grid.ActualWidth;
+                // DragOverBg.Height = grid.ActualHeight;
+                // DragOverBg.Fill = new SolidColorBrush(Utils.DarkColor);
+                // DragOverBg.Opacity = 0.5;
+                //
+                // DragOverRectangle.Fill = new SolidColorBrush(Utils.LeftColor) { Opacity = 0.3 };
+                // DragOverRectangle.Width = grid.ActualWidth - 50;
+                // DragOverRectangle.Height = grid.ActualHeight - 50;
+                // DragOverRectangle.Effect = Utils.dropShadowRectangle;
+                //
+                // DropText.Foreground = new SolidColorBrush(Utils.FontColor);
+                // DropText.Effect = Utils.dropShadowRectangle;
 
                 // Panel.SetZIndex(DragDropGrid, 97);
 

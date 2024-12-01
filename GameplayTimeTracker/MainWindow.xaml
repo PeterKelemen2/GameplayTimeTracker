@@ -194,35 +194,7 @@
           DragOver="Grid_DragOver"
           DragLeave="Grid_DragLeave"
           Drop="Grid_Drop">
-        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
-            <Rectangle x:Name="DragOverBg"
-                       Fill="Transparent"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"
-                       Panel.ZIndex="1"
-                       Opacity="0.6" />
-            <Rectangle x:Name="DragOverRectangle"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"
-                       RadiusX="30"
-                       RadiusY="30"
-                       StrokeThickness="5"
-                       StrokeDashArray="10,10"
-                       Panel.ZIndex="2">
-                <Rectangle.Fill>
-                    <SolidColorBrush Color="Transparent" Opacity="0.2"/>
-                </Rectangle.Fill>
-                <Rectangle.Stroke>
-                    <SolidColorBrush Color="#DAE4FF" Opacity="1" />
-                </Rectangle.Stroke>
-            </Rectangle>
-            <TextBlock x:Name="DropText"
-                Text="Drop a file here!"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="30"
-                Foreground="White"
-                Panel.ZIndex="3"/>
+        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Visible">
         </Grid>
 
         <Grid x:Name="Grid">

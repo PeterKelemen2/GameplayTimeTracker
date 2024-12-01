@@ -27,6 +27,7 @@ public class TileContainer
 
     public TileContainer()
     {
+        Total = new TextBlock();
     }
 
     public List<string> GetTilesExePath()
@@ -235,7 +236,7 @@ public class TileContainer
             }
         }
     }
-    
+
     // Calculates playtime and updates playtime bars accordingly
     public void UpdatePlaytimeBars()
     {

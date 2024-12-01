@@ -2433,6 +2433,7 @@
       "packagesPath": "C:\\Users\\Peti\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\obj\\",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
         "C:\\Users\\Peti\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
@@ -2513,24 +2514,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -2539,7 +2522,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Peti\\.dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\Peti\\.dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   },

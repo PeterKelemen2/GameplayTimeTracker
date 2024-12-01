@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ZSghqqcCXBk=",
+  "dgSpecHash": "mkHqHmI/i5c=",
   "success": true,
   "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [
@@ -43,11 +43,7 @@
     "C:\\Users\\Peti\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.windows.forms\\4.0.0\\system.windows.forms.4.0.0.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\windowsshortcutfactory\\1.2.0\\windowsshortcutfactory.1.2.0.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.20\\microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.20\\microsoft.windowsdesktop.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.20\\microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.20\\microsoft.netcore.app.host.win-x64.7.0.20.nupkg.sha512"
+    "C:\\Users\\Peti\\.nuget\\packages\\windowsshortcutfactory\\1.2.0\\windowsshortcutfactory.1.2.0.nupkg.sha512"
   ],
   "logs": [
     {
