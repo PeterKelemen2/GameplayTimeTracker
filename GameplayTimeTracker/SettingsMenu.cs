@@ -34,6 +34,8 @@ public class SettingsMenu : UserControl
 
     public Grid ContainerGrid;
     public Grid MenuContainerGrid { get; set; }
+    public Grid SettingsGrid { get; set; }
+
     private TextBlock MenuContainerText { get; set; }
 
     public Grid PreferencesGrid { get; set; }
@@ -79,7 +81,7 @@ public class SettingsMenu : UserControl
         Console.WriteLine("Dummy method called!");
     }
 
-    public SettingsMenu(Grid containerGrid, string text = "Settings", double w = 350, double h = 400,
+    public SettingsMenu(Grid containerGrid, Grid menuGrid, string text = "Settings", double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
         RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
@@ -87,6 +89,7 @@ public class SettingsMenu : UserControl
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
         ContainerGrid = containerGrid;
+        SettingsGrid = menuGrid;
         WinHeight = mainWindow.RenderSize.Height;
         WinWidth = mainWindow.RenderSize.Width;
         MenuText = text;
@@ -286,7 +289,8 @@ public class SettingsMenu : UserControl
         };
         MenuContainerGrid.Children.Add(PreferencesText);
 
-        ContainerGrid.Children.Add(MenuContainerGrid);
+        SettingsGrid.Visibility = Visibility.Visible;
+        // ContainerGrid.Children.Add(MenuContainerGrid);
         menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);
         MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
         blurUpdateTimer.Start();
@@ -306,6 +310,7 @@ public class SettingsMenu : UserControl
         zoomOutAnimation2.Completed += (s, ev) =>
         {
             MenuContainerGrid.Children.Clear();
+            SettingsGrid.Visibility = Visibility.Collapsed;
             bgImage.Source = null;
             Console.WriteLine("Menu Closed!");
         };

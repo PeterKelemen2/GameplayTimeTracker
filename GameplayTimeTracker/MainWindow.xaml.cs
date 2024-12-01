@@ -53,7 +53,7 @@ namespace GameplayTimeTracker
         {
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
-            settingsMenu = new SettingsMenu(ContainerGrid);
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid);
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
