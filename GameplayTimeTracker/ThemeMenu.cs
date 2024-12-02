@@ -39,13 +39,16 @@ public class ThemeMenu : UserControl
         comboBox.SelectionChanged += (sender, e) =>
         {
             AddColorEntries(); // Call the method to add color entries
+            JsonHandler jsonHandler = new JsonHandler();
+            jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
+            Utils.toUpdate = true;
         };
 
         foreach (var theme in Themes)
         {
             comboBox.Items.Add(theme.ThemeName);
         }
-        
+
         comboBox.SelectedIndex = 0; // Set the default selection
         Panel.Children.Add(comboBox);
 

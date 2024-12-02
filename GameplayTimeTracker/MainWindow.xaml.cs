@@ -127,7 +127,7 @@ namespace GameplayTimeTracker
             ShowTilesOnCanvas();
 
             Console.WriteLine(" ######### Colors updated!!!");
-            Utils.wereColorsChanged = false;
+            Utils.toUpdate = false;
         }
 
         private async void UpdateStackPane()
@@ -142,7 +142,7 @@ namespace GameplayTimeTracker
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if (Utils.wereColorsChanged)
+                        if (Utils.toUpdate)
                         {
                             UpdateColors();
                         }

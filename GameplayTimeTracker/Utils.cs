@@ -47,7 +47,7 @@ public class Utils
 
     public static Color ButtonColor = (Color)ColorConverter.ConvertFromString("#3BC9E3");
 
-    public static bool wereColorsChanged = false;
+    public static bool toUpdate = false;
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
 
@@ -75,7 +75,7 @@ public class Utils
             ShadowColor = (Color)ColorConverter.ConvertFromString(colors["shadowColor"]);
             EditColor1 = (Color)ColorConverter.ConvertFromString(colors["editColor1"]);
             EditColor2 = (Color)ColorConverter.ConvertFromString(colors["editColor2"]);
-            wereColorsChanged = true;
+            toUpdate = true;
         }
         catch (Exception ex)
         {
