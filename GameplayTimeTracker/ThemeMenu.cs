@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Pango;
+using Color = System.Windows.Media.Color;
 
 namespace GameplayTimeTracker;
 
@@ -72,9 +73,49 @@ public class ThemeMenu : UserControl
                 Console.WriteLine($"You selected: {theme.ThemeName}");
                 foreach (var color in theme.Colors)
                 {
-                    Panel.Children.Add(new ColorEntry(color.Key, color.Value));
+                    ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value);
+                    newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
+                    {
+                        ColorPicker_SelectedColorChanged(sender, e, newColorEntry);
+                    };
+                    Panel.Children.Add(newColorEntry);
                     Console.WriteLine($"Name: {color.Key} - Value: {color.Value}");
                 }
+            }
+        }
+    }
+
+    private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e,
+        ColorEntry colorEntry)
+    {
+        var selectedColor = e.NewValue;
+
+        if (selectedColor.HasValue)
+        {
+            // Update the specific ColorEntry UI
+            Color color = selectedColor.Value;
+            colorEntry.colorPicker.Background = new SolidColorBrush(color);
+            colorEntry.valueBlock.Text = color.ToString();
+
+            SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.Name, colorEntry.valueBlock.Text);
+            Console.WriteLine(
+                $"Updated ColorEntry {colorEntry.Name}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
+        }
+        else
+        {
+            // Handle no selection
+            colorEntry.colorPicker.Background = new SolidColorBrush(Colors.Transparent);
+            Console.WriteLine($"No color selected for {colorEntry.Name}.");
+        }
+    }
+
+    private void SaveChangedColor(String tName, String cKey, String cValue)
+    {
+        foreach (var theme in Themes)
+        {
+            if (theme.ThemeName.Equals(tName))
+            {
+                theme.Colors[cKey] = cValue;
             }
         }
     }

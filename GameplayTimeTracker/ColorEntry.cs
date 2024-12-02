@@ -12,12 +12,12 @@ public class ColorEntry : UserControl
     public String ColorName { get; set; }
     public String ColorValue { get; set; }
     private TextBlock nameBlock;
-    private TextBlock valueBlock;
+    public TextBlock valueBlock;
     private Rectangle picker;
     private Rectangle pickerBg;
     private Rectangle bg;
     private Grid containerGrid;
-    private ColorPicker colorPicker;
+    public ColorPicker colorPicker;
     private int fontSize = 15;
 
     public ColorEntry(string colorName, string colorValue, double width = 250)
@@ -85,32 +85,8 @@ public class ColorEntry : UserControl
         colorPicker.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorValue));
         colorPicker.BorderThickness = new Thickness(0);
         colorPicker.BorderBrush = Brushes.Transparent;
-        colorPicker.SelectedColorChanged += ColorPicker_SelectedColorChanged;
         containerGrid.Children.Add(colorPicker);
 
         Content = containerGrid;
-    }
-
-    private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-    {
-        var selectedColor = e.NewValue;
-
-        // Check if the selected color is not null
-        if (selectedColor.HasValue)
-        {
-            // Get the selected color
-            Color color = selectedColor.Value;
-
-            colorPicker.Background = new SolidColorBrush(color);
-            valueBlock.Text = color.ToString();
-            // Print the color components (RGB and check for transparency)
-            Console.WriteLine($"Selected Color: {valueBlock.Text}");
-        }
-        else
-        {
-            // Handle the case where no color was selected (optional)
-            colorPicker.Background = new SolidColorBrush(Colors.Transparent); // Default color
-            Console.WriteLine("No color selected.");
-        }
     }
 }

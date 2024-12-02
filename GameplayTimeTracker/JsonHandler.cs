@@ -49,11 +49,16 @@ public class JsonHandler
             {
                 RemoveShortcutForStartup();
             }
-            
+
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
         }
 
         return settings;
+    }
+
+    public void WriteThemesToFile(List<Theme> themesList)
+    {
+        
     }
 
     private void RemoveShortcutForStartup()
