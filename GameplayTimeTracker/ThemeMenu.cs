@@ -45,7 +45,7 @@ public class ThemeMenu : UserControl
         {
             comboBox.Items.Add(theme.ThemeName);
         }
-
+        
         comboBox.SelectedIndex = 0; // Set the default selection
         Panel.Children.Add(comboBox);
 

@@ -8,7 +8,7 @@ public class Settings
     
     [JsonPropertyName("startWithSystem")] public bool StartWithSystem { get; set; }
 
-    [JsonPropertyName("themeList")] public List<Theme> ThemeList { get; set; }
+    [JsonPropertyName("selectedTheme")] public string SelectedTheme { get; set; }
     
-    // TODO: Add selected theme field
+    [JsonPropertyName("themeList")] public List<Theme> ThemeList { get; set; }
 }

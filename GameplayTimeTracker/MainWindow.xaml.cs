@@ -58,7 +58,14 @@ namespace GameplayTimeTracker
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
         }
-        
+
+        private void InitSettings()
+        {
+            settings = handler.GetSettingsFromFile();
+            themesList = settings.ThemeList;
+            LoadTheme(settings.SelectedTheme);
+        }
+
         private void LoadTheme(string themeName)
         {
             if (themesList.Count > 0)
@@ -87,11 +94,7 @@ namespace GameplayTimeTracker
             InitializeComponent();
 
             notificationHandler = new NotificationHandler();
-            settings = handler.GetSettingsFromFile();
-            themesList = settings.ThemeList;
-            
-            // TODO: Implement loading last set theme from settings
-            LoadTheme("default");
+            InitSettings();
             handler.InitializeContainer(tileContainer);
             dragDropOverlay = new DragDropOverlay();
             DragDropGrid.Children.Add(dragDropOverlay);
@@ -110,24 +113,23 @@ namespace GameplayTimeTracker
         {
             ShowTilesOnCanvas();
         }
-        
+
         // TODO: Do this properly
         private void UpdateColors()
         {
             Console.WriteLine(" ######### Updating colors!!!");
-            settings = handler.GetSettingsFromFile();
-            themesList = settings.ThemeList;
-            LoadTheme("default");
+            InitSettings();
             foreach (var tile in tileContainer.tilesList)
             {
                 tile.InitializeTile();
             }
+
             ShowTilesOnCanvas();
 
             Console.WriteLine(" ######### Colors updated!!!");
             Utils.wereColorsChanged = false;
         }
-        
+
         private async void UpdateStackPane()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -302,8 +304,8 @@ namespace GameplayTimeTracker
             OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
                 ? Visibility.Visible
                 : Visibility.Collapsed;
-            OverlayTop.Width = scrollViewer.ViewportWidth;
-            OverlayBottom.Width = scrollViewer.ViewportWidth;
+            OverlayTop.Width = scrollViewer.ViewportWidth * 2;
+            OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
 
             double newWidth = isVerticalScrollVisible
                 ? Width - 2 * Utils.TileLeftMargin - 2 * SystemParameters.VerticalScrollBarWidth

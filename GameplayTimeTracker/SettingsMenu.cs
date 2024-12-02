@@ -102,6 +102,14 @@ public class SettingsMenu : UserControl
         ToClose = false;
 
         ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes);
+        for (int i = 0; i < tm.comboBox.Items.Count; i++)
+        {
+            if (tm.comboBox.Items[i].ToString().Equals(settings.SelectedTheme))
+            {
+                tm.comboBox.SelectedIndex = i;
+                break;
+            }
+        }
 
         blurUpdateTimer = new DispatcherTimer
         {
