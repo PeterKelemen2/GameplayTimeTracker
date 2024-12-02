@@ -58,7 +58,7 @@ namespace GameplayTimeTracker
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
         }
-
+        
         private void LoadTheme(string themeName)
         {
             if (themesList.Count > 0)
@@ -89,6 +89,8 @@ namespace GameplayTimeTracker
             notificationHandler = new NotificationHandler();
             settings = handler.GetSettingsFromFile();
             themesList = settings.ThemeList;
+            
+            // TODO: Implement loading last set theme from settings
             LoadTheme("default");
             handler.InitializeContainer(tileContainer);
             dragDropOverlay = new DragDropOverlay();
@@ -108,12 +110,14 @@ namespace GameplayTimeTracker
         {
             ShowTilesOnCanvas();
         }
-
+        
+        // TODO: Do this properly
         private void UpdateColors()
         {
             Console.WriteLine(" ######### Updating colors!!!");
             settings = handler.GetSettingsFromFile();
             themesList = settings.ThemeList;
+            LoadTheme("default");
             foreach (var tile in tileContainer.tilesList)
             {
                 tile.InitializeTile();
