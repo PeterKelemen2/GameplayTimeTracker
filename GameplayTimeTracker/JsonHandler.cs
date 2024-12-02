@@ -58,8 +58,15 @@ public class JsonHandler
 
     public void WriteThemesToFile(List<Theme> themesList)
     {
-        
+        Settings currentSettings = GetSettingsFromFile();
+        currentSettings.ThemeList = themesList;
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(currentSettings, options);
+
+        File.WriteAllText(Utils.SettingsFilePath, jsonString);
     }
+
 
     private void RemoveShortcutForStartup()
     {

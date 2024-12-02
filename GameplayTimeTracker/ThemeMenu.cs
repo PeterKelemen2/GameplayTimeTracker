@@ -97,9 +97,9 @@ public class ThemeMenu : UserControl
             colorEntry.colorPicker.Background = new SolidColorBrush(color);
             colorEntry.valueBlock.Text = color.ToString();
 
-            SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.Name, colorEntry.valueBlock.Text);
+            SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.valueBlock.Text);
             Console.WriteLine(
-                $"Updated ColorEntry {colorEntry.Name}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
+                $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
         }
         else
         {
@@ -116,6 +116,8 @@ public class ThemeMenu : UserControl
             if (theme.ThemeName.Equals(tName))
             {
                 theme.Colors[cKey] = cValue;
+                JsonHandler jsonHandler = new JsonHandler();
+                jsonHandler.WriteThemesToFile(Themes);
             }
         }
     }
