@@ -109,6 +109,21 @@ namespace GameplayTimeTracker
             ShowTilesOnCanvas();
         }
 
+        private void UpdateColors()
+        {
+            Console.WriteLine(" ######### Updating colors!!!");
+            settings = handler.GetSettingsFromFile();
+            themesList = settings.ThemeList;
+            foreach (var tile in tileContainer.tilesList)
+            {
+                tile.InitializeTile();
+            }
+            ShowTilesOnCanvas();
+
+            Console.WriteLine(" ######### Colors updated!!!");
+            Utils.wereColorsChanged = false;
+        }
+        
         private async void UpdateStackPane()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -121,11 +136,18 @@ namespace GameplayTimeTracker
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
+                        if (Utils.wereColorsChanged)
+                        {
+                            UpdateColors();
+                        }
+
                         tracker.HandleProcesses();
                         RearrangeTiles();
 
                         TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
+
+
                     stopwatch.Stop();
                     Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
 

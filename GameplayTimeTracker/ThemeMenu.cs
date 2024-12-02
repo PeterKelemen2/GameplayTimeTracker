@@ -98,6 +98,7 @@ public class ThemeMenu : UserControl
             colorEntry.valueBlock.Text = color.ToString();
 
             SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.valueBlock.Text);
+            Utils.SetColors(GetColorDictionary(comboBox.SelectedItem.ToString()));
             Console.WriteLine(
                 $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
         }
@@ -120,5 +121,22 @@ public class ThemeMenu : UserControl
                 jsonHandler.WriteThemesToFile(Themes);
             }
         }
+    }
+
+    private Dictionary<string, string> GetColorDictionary(String tName)
+    {
+        Dictionary<string, string> colors = new Dictionary<string, string>();
+        foreach (var theme in Themes)
+        {
+            if (theme.ThemeName.Equals(tName))
+            {
+                foreach (var color in theme.Colors)
+                {
+                    colors.Add(color.Key, color.Value);
+                }
+            }
+        }
+
+        return colors;
     }
 }

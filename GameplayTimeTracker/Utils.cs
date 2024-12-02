@@ -46,6 +46,8 @@ public class Utils
     public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
 
     public static Color ButtonColor = (Color)ColorConverter.ConvertFromString("#3BC9E3");
+
+    public static bool wereColorsChanged = false;
     // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
     // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
 
@@ -60,7 +62,7 @@ public class Utils
     {
         try
         {
-            BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
+            // BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
             BgColor = (Color)ColorConverter.ConvertFromString(colors["footerColor"]);
             DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
             LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
@@ -73,6 +75,7 @@ public class Utils
             ShadowColor = (Color)ColorConverter.ConvertFromString(colors["shadowColor"]);
             EditColor1 = (Color)ColorConverter.ConvertFromString(colors["editColor1"]);
             EditColor2 = (Color)ColorConverter.ConvertFromString(colors["editColor2"]);
+            wereColorsChanged = true;
         }
         catch (Exception ex)
         {
@@ -164,7 +167,7 @@ public class Utils
         BlurRadius = 20,
         ShadowDepth = 0
     };
-    
+
     public static DoubleAnimation dragFadeInAnimation = new DoubleAnimation
     {
         From = 0,
@@ -172,7 +175,7 @@ public class Utils
         Duration = new Duration(TimeSpan.FromSeconds(0.2)),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
-    
+
     public static DoubleAnimation dragFadeOutAnimation = new DoubleAnimation
     {
         From = 1,
@@ -180,7 +183,7 @@ public class Utils
         Duration = new Duration(TimeSpan.FromSeconds(0.2)),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
-    
+
     // public static void SaveBitmapSourceToFile(BitmapSource bitmapSource, string filePath)
     // {
     //     // Create an encoder for the format you want to save (e.g., PNG)
