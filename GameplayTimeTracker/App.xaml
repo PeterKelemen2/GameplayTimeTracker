@@ -4,6 +4,21 @@
              xmlns:local="clr-namespace:GameplayTimeTracker"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <ControlTemplate x:Key="CustomCheckBoxTemplate" TargetType="CheckBox">
+            <StackPanel Orientation="Horizontal">
+                <Border Width="20" Height="20" BorderBrush="White" BorderThickness="2" CornerRadius="4"
+                        VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Rectangle x:Name="TickMark" Width="10" Height="10" Fill="Transparent"/>
+                </Border>
+                <ContentPresenter VerticalAlignment="Center" Margin="0,0,0,0" />
+            </StackPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="TickMark" Property="Fill" Value="White" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
         <Style x:Key="RoundedTextBox" TargetType="TextBox">
             <Setter Property="Template">
                 <Setter.Value>

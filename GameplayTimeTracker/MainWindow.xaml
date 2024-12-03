@@ -186,7 +186,8 @@
                               Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z" />
             </Grid>
         </ControlTemplate>
-
+        
+        
 
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="SnapsToDevicePixels" Value="True" />

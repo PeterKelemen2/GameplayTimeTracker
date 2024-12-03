@@ -32,7 +32,7 @@ public class PrefEntry : UserControl
         {
             Text = PrefName,
             Foreground = new SolidColorBrush(Utils.FontColor),
-            FontSize = 15,
+            FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(15, 0, 0, 0),
@@ -42,12 +42,14 @@ public class PrefEntry : UserControl
         checkBox = new CheckBox
         {
             IsChecked = PrefValue,
+            // Style = (Style)Application.Current.FindResource("CustomCheckBoxTemplate"),
+            FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Right,
             Margin = new Thickness(0, 0, 15, 0),
         };
-        // checkBox.Checked += (s, e) => PrefValue = true;
-        // checkBox.Unchecked += (s, e) => PrefValue = false;
+        checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
+
         containerGrid.Children.Add(checkBox);
 
         Content = containerGrid;
