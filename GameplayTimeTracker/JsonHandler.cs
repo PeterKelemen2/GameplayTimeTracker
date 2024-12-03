@@ -76,6 +76,15 @@ public class JsonHandler
         File.WriteAllText(Utils.SettingsFilePath, jsonString);
     }
 
+    public void WriteStartWithSystemToFile(bool value)
+    {
+        Settings currentSettings = GetSettingsFromFile();
+        currentSettings.StartWithSystem = value;
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(currentSettings, options);
+        File.WriteAllText(Utils.SettingsFilePath, jsonString);
+    }
+
 
     private void RemoveShortcutForStartup()
     {

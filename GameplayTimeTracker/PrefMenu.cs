@@ -12,25 +12,35 @@ public class PrefMenu : UserControl
     public StackPanel Panel { get; set; }
     public TextBlock Label { get; set; }
 
-    public PrefMenu(StackPanel stackPanel)
+    public Settings CurrentSettings { get; set; }
+    public bool StartWithSystem { get; set; }
+
+    public PrefMenu(StackPanel stackPanel, Settings settings)
     {
         Panel = stackPanel;
+        CurrentSettings = settings;
+        StartWithSystem = CurrentSettings.StartWithSystem;
         // CreateMenu();
     }
 
     public void CreateMenuMethod()
     {
         Panel.Children.Clear();
-        Label = new TextBlock
-        {
-            Text = "Work in progress!\nYou can change settings in \nDocuments/Gameplay Time Tracker/settings.json",
-            TextWrapping = TextWrapping.Wrap,
-            TextAlignment = TextAlignment.Center,
-            FontSize = 16,
-            Foreground = new SolidColorBrush(Utils.FontColor),
-        };
-        Panel.Children.Add(Label);
+
+        PrefEntry newEntry = new PrefEntry("Start with system", StartWithSystem);
+        newEntry.checkBox.Checked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
+        newEntry.checkBox.Unchecked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
+
+        Panel.Children.Add(newEntry);
     }
+
+    private void SaveToFile(bool value)
+    {
+        JsonHandler jsonHandler = new JsonHandler();
+        jsonHandler.WriteStartWithSystemToFile(value);
+        StartWithSystem = value;
+    }
+
 
     public void CreateMenu(object sender, MouseButtonEventArgs e)
     {

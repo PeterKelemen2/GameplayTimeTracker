@@ -121,7 +121,7 @@ public class SettingsMenu : UserControl
         ToClose = false;
 
         ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
-        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel);
+        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
