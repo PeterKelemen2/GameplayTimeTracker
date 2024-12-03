@@ -59,6 +59,7 @@ public class SettingsMenu : UserControl
     BitmapSource extendedBitmap;
 
     private TextBlock menuTitle = new();
+    private TextBlock _lastClickedTextBlock;
 
     private Window mainWindow;
 
@@ -76,6 +77,24 @@ public class SettingsMenu : UserControl
     {
         Console.WriteLine("Dummy method called!");
     }
+
+    private void UpdateUnderline(TextBlock clickedTextBlock)
+    {
+        // Remove underline from the previously clicked TextBlock
+        if (_lastClickedTextBlock != null)
+        {
+            _lastClickedTextBlock.FontWeight = FontWeights.Regular;
+            // _lastClickedTextBlock.TextDecorations = null;
+        }
+
+        // Add underline to the newly clicked TextBlock
+        // clickedTextBlock.TextDecorations = TextDecorations.Underline;
+        clickedTextBlock.FontWeight = FontWeights.Bold;
+
+        // Update the reference
+        _lastClickedTextBlock = clickedTextBlock;
+    }
+
 
     public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
         bool isToggled = false,
@@ -101,15 +120,27 @@ public class SettingsMenu : UserControl
         IsImageSet = false;
         ToClose = false;
 
-        ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes);
-        for (int i = 0; i < tm.comboBox.Items.Count; i++)
+        ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
+        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel);
+
+        StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
+
+        TextBlock PrefBlock = headerPanel.FindName("Pref") as TextBlock;
+        PrefBlock.MouseDown += (sender, e) =>
         {
-            if (tm.comboBox.Items[i].ToString().Equals(settings.SelectedTheme))
-            {
-                tm.comboBox.SelectedIndex = i;
-                break;
-            }
-        }
+            UpdateUnderline(PrefBlock);
+            pm.CreateMenu(sender, e);
+        };
+        
+        TextBlock ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
+        ThemesBlock.MouseDown += (sender, e) =>
+        {
+            UpdateUnderline(ThemesBlock);
+            tm.CreateMenu(sender, e);
+        };
+        
+        pm.CreateMenuMethod();
+        UpdateUnderline(PrefBlock);
 
         blurUpdateTimer = new DispatcherTimer
         {

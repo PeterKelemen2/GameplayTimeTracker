@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Pango;
@@ -15,16 +16,29 @@ public class ThemeMenu : UserControl
     public List<Theme> Themes { get; set; }
     public StackPanel Panel { get; set; }
     public ComboBox comboBox { get; set; }
+    public String SelectedThemeName { get; set; }
 
-    public ThemeMenu(StackPanel stackPanel, List<Theme> themes)
+    public ThemeMenu(StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
         Panel = stackPanel;
         Themes = themes;
-
-        CreateDropdown();
+        SelectedThemeName = selectedThemeName;
+        // CreateDropdown();
     }
 
-    private void CreateDropdown()
+    private void InitSelected()
+    {
+        for (int i = 0; i < comboBox.Items.Count; i++)
+        {
+            if (comboBox.Items[i].ToString().Equals(SelectedThemeName))
+            {
+                comboBox.SelectedIndex = i;
+                break;
+            }
+        }
+    }
+
+    public void CreateDropdown()
     {
         Panel.Children.Clear(); // Clear all children first
         comboBox = new ComboBox
@@ -39,6 +53,7 @@ public class ThemeMenu : UserControl
         comboBox.SelectionChanged += (sender, e) =>
         {
             AddColorEntries(); // Call the method to add color entries
+            SelectedThemeName = comboBox.SelectedItem.ToString();
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
             Utils.toUpdate = true;
@@ -49,7 +64,7 @@ public class ThemeMenu : UserControl
             comboBox.Items.Add(theme.ThemeName);
         }
 
-        comboBox.SelectedIndex = 0; // Set the default selection
+        InitSelected();
         Panel.Children.Add(comboBox);
 
         AddColorEntries(); // Populate initial color entries based on the default selection
@@ -141,5 +156,10 @@ public class ThemeMenu : UserControl
         }
 
         return colors;
+    }
+
+    public void CreateMenu(object sender, MouseButtonEventArgs e)
+    {
+        CreateDropdown();
     }
 }
