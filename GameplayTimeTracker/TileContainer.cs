@@ -273,4 +273,13 @@ public class TileContainer
         stopwatch.Stop();
         Console.WriteLine($"Updating ALL playtime bars took: {stopwatch.Elapsed}");
     }
+
+    public void UpdateTilesColors()
+    {
+        foreach (var tile in tilesList)
+        {
+            tile.UpdateTileColors();
+            tile.ToggleBgImageColor(tile.IsRunning);
+        }
+    }
 }

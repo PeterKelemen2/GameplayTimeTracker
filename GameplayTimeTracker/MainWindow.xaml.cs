@@ -117,20 +117,16 @@ namespace GameplayTimeTracker
         // TODO: Do this properly
         private void UpdateColors()
         {
-            Console.WriteLine(" ######### Updating colors!!!");
             InitSettings();
-            foreach (var tile in tileContainer.tilesList)
-            {
-                // tile.InitializeTile();
-                tile.UpdateTileColors();
-                // TODO: Needs a better approach 
-                // tile.UpdateImageVars(false);
-                tile.ToggleBgImageColor(tile.IsRunning);
-            }
+            // foreach (var tile in tileContainer.tilesList)
+            // {
+            //     tile.UpdateTileColors();
+            //     tile.ToggleBgImageColor(tile.IsRunning);
+            // }
 
+            tileContainer.UpdateTilesColors();
             ShowTilesOnCanvas();
 
-            Console.WriteLine(" ######### Colors updated!!!");
             Utils.toUpdate = false;
         }
 
