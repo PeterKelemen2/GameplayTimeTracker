@@ -11,8 +11,8 @@ public class ProcessTracker
     List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
-    private string currentlyRunningTimeString = "Current playtime:";
-    private string LastPlaytimeString = "Last playtime:";
+    private string currentlyRunningTimeString = "Current Playtime:";
+    private string LastPlaytimeString = "Last Playtime:";
     private string notRunningText = "";
     private Dictionary<string, bool> runningDictionary;
 
