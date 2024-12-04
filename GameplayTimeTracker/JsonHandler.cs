@@ -40,14 +40,25 @@ public class JsonHandler
 
         if (settings != null)
         {
-            Console.WriteLine($"Start With System: {settings.StartWithSystem}");
-            if (settings.StartWithSystem)
+            if (settings.StartWithSystem == null)
+            {
+                settings.StartWithSystem = true;
+                CreateShortcutForStartup();
+            }
+            else if (settings.StartWithSystem)
             {
                 CreateShortcutForStartup();
             }
             else
             {
                 RemoveShortcutForStartup();
+            }
+
+            Console.WriteLine($"Start With System: {settings.StartWithSystem}");
+
+            if (settings.SelectedTheme == null)
+            {
+                settings.SelectedTheme = "Default";
             }
 
             if (settings.ThemeList == null)
@@ -61,7 +72,6 @@ public class JsonHandler
                     settings.ThemeList.Add(theme);
                 }
             }
-            
 
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
         }
