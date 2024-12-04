@@ -72,7 +72,7 @@ public class Tile : UserControl
     public BitmapSource bgImageColor;
     private PopupMenu deleteMenu;
     private string absoluteIconPath;
-    
+
     LinearGradientBrush gradientBrush;
     LinearGradientBrush editGradientBrush;
 
@@ -573,14 +573,14 @@ public class Tile : UserControl
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
 
-    private void UpdateImageVars()
+    public void UpdateImageVars(bool toSave = true)
     {
         SetupIconVars();
         bgImage.Source = bgImageGray;
         bgImage2.Source = bgImageColor;
         image.Source = bgImageColor;
         ToggleBgImageColor(IsRunning);
-        _tileContainer.InitSave();
+        if (toSave) _tileContainer.InitSave();
         Console.WriteLine($"Icon for {GameName} changed to {absoluteIconPath}");
     }
 
@@ -669,9 +669,6 @@ public class Tile : UserControl
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-    public void UpdateTileColors()
-    {
-    }
 
     private LinearGradientBrush createLinGradBrush(Color c1, Color c2)
     {
@@ -718,6 +715,21 @@ public class Tile : UserControl
         SetupIconVars();
 
         // InitializeTile();
+    }
+
+    public void UpdateTileColors()
+    {
+        gradientBrush = createLinGradBrush(Utils.TileColor1, Utils.TileColor2);
+        editGradientBrush = createLinGradBrush(Utils.EditColor1, Utils.EditColor2);
+        menuRectangle.Fill = gradientBrush;
+        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
+        container.Fill = gradientBrush;
+        titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
+        runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+        totalPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
+        totalPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
+        lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
     }
 
     // Sets up elements of the tile with the default values

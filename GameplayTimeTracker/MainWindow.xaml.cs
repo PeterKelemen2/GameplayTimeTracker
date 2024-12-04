@@ -121,9 +121,10 @@ namespace GameplayTimeTracker
             InitSettings();
             foreach (var tile in tileContainer.tilesList)
             {
-                tile.InitializeTile();
+                // tile.InitializeTile();
+                tile.UpdateTileColors();
                 // TODO: Needs a better approach 
-                tile.ToggleBgImageColor(tile.IsRunning);
+                tile.UpdateImageVars(false);
             }
 
             ShowTilesOnCanvas();
