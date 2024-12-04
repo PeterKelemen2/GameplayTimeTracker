@@ -50,6 +50,19 @@ public class JsonHandler
                 RemoveShortcutForStartup();
             }
 
+            if (settings.ThemeList == null)
+            {
+                settings.ThemeList = new List<Theme>();
+                if (settings.ThemeList.Count == 0)
+                {
+                    Theme theme = new Theme();
+                    theme.ThemeName = "Default";
+                    theme.Colors = Utils.GetDefaultColors();
+                    settings.ThemeList.Add(theme);
+                }
+            }
+            
+
             Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
         }
 
