@@ -23,17 +23,19 @@ public class ThemeMenu : UserControl
         Panel = stackPanel;
         Themes = themes;
         SelectedThemeName = selectedThemeName;
-        // CreateDropdown();
     }
 
     private void InitSelected()
     {
-        for (int i = 0; i < comboBox.Items.Count; i++)
+        if (comboBox.Items.Count > 0)
         {
-            if (comboBox.Items[i].ToString().Equals(SelectedThemeName))
+            for (int i = 0; i < comboBox.Items.Count; i++)
             {
-                comboBox.SelectedIndex = i;
-                break;
+                if (comboBox.Items[i].ToString().Equals(SelectedThemeName))
+                {
+                    comboBox.SelectedIndex = i;
+                    break;
+                }
             }
         }
     }
@@ -49,6 +51,8 @@ public class ThemeMenu : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Margin = new Thickness(10)
         };
+
+        ThemeSecurity();
 
         comboBox.SelectionChanged += (sender, e) =>
         {
@@ -99,6 +103,29 @@ public class ThemeMenu : UserControl
                     Panel.Children.Add(newColorEntry);
                     Console.WriteLine($"Name: {color.Key} - Value: {color.Value}");
                 }
+            }
+        }
+    }
+
+    private void ThemeSecurity()
+    {
+        if (SelectedThemeName != null)
+        {
+            bool found = false;
+            foreach (var theme in Themes)
+            {
+                if (SelectedThemeName.Equals(theme.ThemeName))
+                {
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Theme defaultTheme = new Theme();
+                defaultTheme.ThemeName = SelectedThemeName;
+                defaultTheme.Colors = Utils.GetDefaultColors();
+                Themes.Add(defaultTheme);
             }
         }
     }

@@ -83,7 +83,6 @@ namespace GameplayTimeTracker
                         gridFooter.Background =
                             new SolidColorBrush((Color)ColorConverter.ConvertFromString(theme.Colors["footerColor"]));
                         Utils.SetColors(theme.Colors);
-                        return;
                     }
                 }
             }
