@@ -74,15 +74,26 @@ namespace GameplayTimeTracker
                 {
                     if (theme.ThemeName.Equals(themeName))
                     {
-                        SolidColorBrush scb =
-                            new SolidColorBrush((Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]));
-                        ScrollViewer.Background = scb;
-                        MainStackPanel.Background = scb;
-                        Grid.Background = scb;
-                        Grid gridFooter = (Grid)FindName("Footer");
-                        gridFooter.Background =
-                            new SolidColorBrush((Color)ColorConverter.ConvertFromString(theme.Colors["footerColor"]));
-                        Utils.SetColors(theme.Colors);
+                        try
+                        {
+                            theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
+
+                            SolidColorBrush scb = new SolidColorBrush(
+                                (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]));
+                            ScrollViewer.Background = scb;
+                            MainStackPanel.Background = scb;
+                            Grid.Background = scb;
+
+                            Grid gridFooter = (Grid)FindName("Footer");
+                            gridFooter.Background = new SolidColorBrush(
+                                (Color)ColorConverter.ConvertFromString(theme.Colors["footerColor"]));
+
+                            Utils.SetColors(theme.Colors);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Failed to load theme " + theme.ThemeName);
+                        }
                     }
                 }
             }

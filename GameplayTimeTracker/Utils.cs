@@ -76,8 +76,19 @@ public class Utils
             { "editColor1", "#7DD6EB" },
             { "editColor2", "#7DD6EB" }
         };
-        
+
         return colors;
+    }
+
+    public static Dictionary<String, String> CheckThemeIntegrity(Dictionary<String, String> theme)
+    {
+        var defaultColors = GetDefaultColors();
+        foreach (var key in defaultColors.Keys)
+        {
+            if (!theme.ContainsKey(key)) theme.Add(key, defaultColors[key]);
+        }
+
+        return theme;
     }
 
     public static void SetColors(Dictionary<string, string> colors)
