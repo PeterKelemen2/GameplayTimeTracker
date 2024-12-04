@@ -227,7 +227,7 @@
         <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
         </Grid>
 
-        <Grid x:Name="SettingsGrid" Panel.ZIndex="97" Visibility="Collapsed">
+        <Grid x:Name="SettingsGrid" Panel.ZIndex="10" Visibility="Collapsed">
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="20" />
             </Grid.Effect>

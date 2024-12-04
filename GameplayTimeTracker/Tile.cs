@@ -72,6 +72,9 @@ public class Tile : UserControl
     public BitmapSource bgImageColor;
     private PopupMenu deleteMenu;
     private string absoluteIconPath;
+    
+    LinearGradientBrush gradientBrush;
+    LinearGradientBrush editGradientBrush;
 
     List<UIElement> editElements = new List<UIElement>();
     List<UIElement> mainElements = new List<UIElement>();
@@ -471,7 +474,7 @@ public class Tile : UserControl
     {
         // Delay for delete menu closing
         await Task.Delay(500);
-        
+
         double animationDuration = 1.0; // Duration for the animations
 
         // Create the height animation for shrinking the tile
@@ -666,6 +669,21 @@ public class Tile : UserControl
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
+    public void UpdateTileColors()
+    {
+    }
+
+    private LinearGradientBrush createLinGradBrush(Color c1, Color c2)
+    {
+        LinearGradientBrush brush = new LinearGradientBrush();
+        brush.StartPoint = new Point(0, 0);
+        brush.EndPoint = new Point(0, 1);
+        brush.GradientStops.Add(new GradientStop(c1, 0.0));
+        brush.GradientStops.Add(new GradientStop(c2, 1.0));
+        // brush.Freeze();
+        return brush;
+    }
+
     public Tile()
     {
     }
@@ -705,19 +723,8 @@ public class Tile : UserControl
     // Sets up elements of the tile with the default values
     public void InitializeTile()
     {
-        LinearGradientBrush gradientBrush = new LinearGradientBrush();
-        gradientBrush.StartPoint = new Point(0, 0);
-        gradientBrush.EndPoint = new Point(0, 1);
-        gradientBrush.GradientStops.Add(new GradientStop(Utils.TileColor1, 0.0));
-        gradientBrush.GradientStops.Add(new GradientStop(Utils.TileColor2, 1.0));
-        gradientBrush.Freeze();
-
-        LinearGradientBrush editGradientBrush = new LinearGradientBrush();
-        editGradientBrush.StartPoint = new Point(0, 0);
-        editGradientBrush.EndPoint = new Point(0, 1);
-        editGradientBrush.GradientStops.Add(new GradientStop(Utils.EditColor1, 0.0));
-        editGradientBrush.GradientStops.Add(new GradientStop(Utils.EditColor2, 1.0));
-        editGradientBrush.Freeze();
+        gradientBrush = createLinGradBrush(Utils.TileColor1, Utils.TileColor2);
+        editGradientBrush = createLinGradBrush(Utils.EditColor1, Utils.EditColor2);
 
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();
