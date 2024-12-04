@@ -70,7 +70,7 @@ public class Tile : UserControl
     public GradientBar lastTimeGradientBar;
     public BitmapSource bgImageGray;
     public BitmapSource bgImageColor;
-    private PopupMenu deleteMenu;
+    public PopupMenu deleteMenu;
     private string absoluteIconPath;
 
     LinearGradientBrush gradientBrush;

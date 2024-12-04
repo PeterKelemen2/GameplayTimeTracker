@@ -237,6 +237,20 @@ public class TileContainer
         }
     }
 
+    public void CloseAllPopups()
+    {
+        foreach (var tile in tilesList)
+        {
+            if (tile.deleteMenu != null)
+            {
+                if (tile.deleteMenu.IsToggled)
+                {
+                    tile.deleteMenu.CloseMenuMethod();
+                }
+            }
+        }
+    }
+
     // Calculates playtime and updates playtime bars accordingly
     public void UpdatePlaytimeBars()
     {

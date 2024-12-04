@@ -312,12 +312,26 @@ namespace GameplayTimeTracker
             tileContainer.UpdateTilesWidth(newWidth);
         }
 
+        private void CloseSettingsMenu()
+        {
+            if (settingsMenu != null)
+            {
+                if (settingsMenu.IsToggled)
+                {
+                    settingsMenu.CloseMenuMethod();
+                }
+            }
+        }
+        
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
                 e.Cancel = true;
-
+                
+                tileContainer.CloseAllPopups();
+                CloseSettingsMenu();
+                
                 PopupMenu exitPopup = new PopupMenu(
                     text: "Are you sure you want to exit?",
                     routedEvent1: ExitButton_Click);
@@ -361,6 +375,7 @@ namespace GameplayTimeTracker
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
             // settingsMenu = new SettingsMenu(ContainerGrid);
+            // tileContainer.CloseAllPopups();
             settingsMenu.OpenMenu();
         }
 

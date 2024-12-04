@@ -293,7 +293,7 @@ public class SettingsMenu : UserControl
         IsToggled = true;
     }
 
-    public void CloseMenu(object sender, RoutedEventArgs e)
+    public void CloseMenuMethod()
     {
         ToClose = true;
         SetBlurImage(true);
@@ -322,6 +322,11 @@ public class SettingsMenu : UserControl
         ToClose = false;
 
         Console.WriteLine("Menu closed!");
+    }
+    
+    public void CloseMenu(object sender, RoutedEventArgs e)
+    {
+        CloseMenuMethod();
     }
 
     // Sets a blurred background for the menu. Parameter is used when fading in and out for maximum clarity.
