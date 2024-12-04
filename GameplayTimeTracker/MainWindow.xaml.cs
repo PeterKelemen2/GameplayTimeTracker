@@ -114,19 +114,11 @@ namespace GameplayTimeTracker
             ShowTilesOnCanvas();
         }
 
-        // TODO: Do this properly
         private void UpdateColors()
         {
             InitSettings();
-            // foreach (var tile in tileContainer.tilesList)
-            // {
-            //     tile.UpdateTileColors();
-            //     tile.ToggleBgImageColor(tile.IsRunning);
-            // }
-
             tileContainer.UpdateTilesColors();
             ShowTilesOnCanvas();
-
             Utils.toUpdate = false;
         }
 
@@ -142,17 +134,10 @@ namespace GameplayTimeTracker
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if (Utils.toUpdate)
-                        {
-                            UpdateColors();
-                        }
-
+                        if (Utils.toUpdate) UpdateColors();
                         tracker.HandleProcesses();
                         RearrangeTiles();
-
-                        TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
                     });
-
 
                     stopwatch.Stop();
                     Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");

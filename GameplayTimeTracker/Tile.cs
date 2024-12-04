@@ -380,6 +380,10 @@ public class Tile : UserControl
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
         Console.WriteLine("Updating bars from Tile - SaveEditedData");
         _tileContainer.UpdatePlaytimeBars();
+        
+        TextBlock mainTotalTimeBlock =  Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+        mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
+        
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
         Console.WriteLine("File Saved !!!");

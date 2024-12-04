@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace GameplayTimeTracker;
 
@@ -95,6 +96,8 @@ public class ProcessTracker
                 if (tile.CurrentPlaytime % 60 == 0)
                 {
                     _tileContainer.UpdatePlaytimeBars();
+                    TextBlock mainTotalTimeBlock =  Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+                    mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
                 }
             }
             else
