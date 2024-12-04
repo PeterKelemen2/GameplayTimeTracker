@@ -79,6 +79,28 @@ public class Utils
 
         return colors;
     }
+    
+    public static Dictionary<String, String> GetPinkColors()
+    {
+        Dictionary<String, String> colors = new Dictionary<string, string>
+        {
+            { "bgColor", "#45092b" },
+            { "footerColor", "#90EE90" },
+            { "darkColor", "#1E2030" },
+            { "lightColor", "#2E324A" },
+            { "fontColor", "#DAE4FF" },
+            { "runningColor", "#C3E88D" },
+            { "leftColor", "#89ACF2" },
+            { "rightColor", "#B7BDF8" },
+            { "tileColor1", "#db1484" },
+            { "tileColor2", "#7d2055" },
+            { "shadowColor", "#151515" },
+            { "editColor1", "#7DD6EB" },
+            { "editColor2", "#7DD6EB" }
+        };
+
+        return colors;
+    }
 
     public static Dictionary<String, String> CheckThemeIntegrity(Dictionary<String, String> theme)
     {
