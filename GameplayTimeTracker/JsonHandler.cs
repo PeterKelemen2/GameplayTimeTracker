@@ -36,8 +36,32 @@ public class JsonHandler
         InitializeSettings();
 
         string json = File.ReadAllText(Utils.SettingsFilePath);
-        Settings settings = JsonSerializer.Deserialize<Settings>(json);
+        Settings settings;
 
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            settings = new Settings();
+            
+            settings.StartWithSystem = true;
+            CreateShortcutForStartup();
+            
+            settings.SelectedTheme = "Default";
+            
+            Theme theme = new Theme();
+            theme.ThemeName = "Default";
+            theme.Colors = Utils.GetDefaultColors();
+
+            settings.ThemeList = new List<Theme>();
+            settings.ThemeList.Add(theme);
+            
+            string defaultJson = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(Utils.SettingsFilePath, defaultJson);
+        }
+        else
+        {
+            settings = JsonSerializer.Deserialize<Settings>(json);
+        }
+        
         if (settings != null)
         {
             if (settings.StartWithSystem == null)
