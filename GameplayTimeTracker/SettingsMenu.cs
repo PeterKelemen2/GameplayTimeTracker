@@ -65,6 +65,7 @@ public class SettingsMenu : UserControl
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
+    private double bgRefreshRate = 1.0;
 
     public Image bgImage;
 
@@ -144,7 +145,7 @@ public class SettingsMenu : UserControl
 
         blurUpdateTimer = new DispatcherTimer
         {
-            Interval = TimeSpan.FromSeconds(1)
+            Interval = TimeSpan.FromSeconds(bgRefreshRate)
         };
         blurUpdateTimer.Tick += (s, e) => SetBlurImage();
 

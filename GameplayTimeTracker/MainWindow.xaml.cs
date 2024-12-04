@@ -124,7 +124,8 @@ namespace GameplayTimeTracker
                 // tile.InitializeTile();
                 tile.UpdateTileColors();
                 // TODO: Needs a better approach 
-                tile.UpdateImageVars(false);
+                // tile.UpdateImageVars(false);
+                tile.ToggleBgImageColor(tile.IsRunning);
             }
 
             ShowTilesOnCanvas();

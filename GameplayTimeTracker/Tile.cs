@@ -1164,13 +1164,19 @@ public class Tile : UserControl
 
         if (runningBool)
         {
-            bgImage.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
-            bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+            if (bgImage.Opacity > 0.0)
+            {
+                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+            }
         }
         else
         {
-            bgImage.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-            bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+            if (bgImage2.Opacity > 0.0)
+            {
+                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+            }
         }
     }
 }
