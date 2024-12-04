@@ -80,6 +80,16 @@ public class JsonHandler
     {
         Settings currentSettings = GetSettingsFromFile();
         currentSettings.StartWithSystem = value;
+
+        if (value)
+        {
+            CreateShortcutForStartup();
+        }
+        else
+        {
+            RemoveShortcutForStartup();
+        }
+
         var options = new JsonSerializerOptions { WriteIndented = true };
         string jsonString = JsonSerializer.Serialize(currentSettings, options);
         File.WriteAllText(Utils.SettingsFilePath, jsonString);

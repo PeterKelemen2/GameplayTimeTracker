@@ -97,6 +97,10 @@ namespace GameplayTimeTracker
                     }
                 }
             }
+            else
+            {
+                Console.WriteLine("No theme found, adding default");
+            }
         }
 
         public MainWindow()
