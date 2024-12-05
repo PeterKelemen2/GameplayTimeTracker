@@ -58,10 +58,11 @@ public class ThemeMenu : UserControl
 
         comboBox.SelectionChanged += (sender, e) =>
         {
+            AddColorEntries(); 
             SelectedThemeName = comboBox.SelectedItem.ToString();
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
-            AddColorEntries(); // Call the method to add color entries
+            Themes = jsonHandler.GetSettingsFromFile().ThemeList;
             Utils.toUpdate = true;
         };
 
@@ -92,7 +93,7 @@ public class ThemeMenu : UserControl
         // Add color entries for the selected theme
         foreach (var theme in Themes)
         {
-            if (theme.ThemeName.Equals(comboBox.SelectedItem.ToString()))
+            if (theme.ThemeName.Equals(SelectedThemeName))
             {
                 Console.WriteLine($"You selected: {theme.ThemeName}");
                 foreach (var color in theme.Colors)

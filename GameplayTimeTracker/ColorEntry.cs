@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Xceed.Wpf.Toolkit;
 
 namespace GameplayTimeTracker;
@@ -80,5 +81,10 @@ public class ColorEntry : UserControl
         containerGrid.Children.Add(colorPicker);
         
         Content = containerGrid;
+    }
+
+    private void UpdateEntryColor()
+    {
+        bg.Fill = Utils.createLinGradBrushHor(Utils.TileColor2, Utils.TileColor1);
     }
 }

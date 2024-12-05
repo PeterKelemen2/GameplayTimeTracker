@@ -111,7 +111,8 @@ public class SettingsMenu : UserControl
         ButtonAction2 = routedEvent2 == null ? Dummy : routedEvent2;
 
         ToClose = false;
-
+        
+        // TODO: Fix color entries using the last theme color if menu open
         tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
