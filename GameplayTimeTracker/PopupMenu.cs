@@ -62,6 +62,7 @@ public class PopupMenu : UserControl
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
+    private bool isAnimating = false;
 
     public Image bgImage;
 
@@ -321,9 +322,16 @@ public class PopupMenu : UserControl
         blurUpdateTimer.Start();
         IsToggled = true;
     }
+    
+    
 
     public void CloseMenuMethod()
     {
+        if (isAnimating)
+            return;
+        
+        isAnimating = true;
+        
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();
@@ -337,6 +345,7 @@ public class PopupMenu : UserControl
             MenuContainerGrid.Children.Clear();
             bgImage.Source = null;
             Console.WriteLine("Menu Closed!");
+            isAnimating = false;
         };
 
         MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
@@ -352,7 +361,7 @@ public class PopupMenu : UserControl
 
         Console.WriteLine("Menu closed!");
     }
-    
+
     public void CloseMenu(object sender, RoutedEventArgs e)
     {
         CloseMenuMethod();
@@ -399,7 +408,7 @@ public class PopupMenu : UserControl
             Margin = new Thickness(0, 0, 0, 0)
         };
         bgImage.MouseDown += CloseMenu;
-        
+
         // Create a BlurEffect and set its initial Radius to 0 (no blur)
         BlurEffect blurEffect = new BlurEffect { Radius = 0 };
         bgImage.Effect = blurEffect;

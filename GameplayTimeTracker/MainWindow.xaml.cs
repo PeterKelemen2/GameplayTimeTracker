@@ -397,7 +397,6 @@ namespace GameplayTimeTracker
                 isAnimating = true; // Prevent further animations while one is in progress
 
                 Utils.dragFadeInAnimation.Completed += (s, o) => { isAnimating = false; };
-
                 DragDropGrid.BeginAnimation(OpacityProperty, Utils.dragFadeInAnimation);
             }
 

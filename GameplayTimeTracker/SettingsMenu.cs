@@ -59,6 +59,7 @@ public class SettingsMenu : UserControl
     private double _zoomPercent = 1.07;
     int bRadius = 10;
     private double bgRefreshRate = 1.0;
+    private bool isAnimating = false;
 
     public Image bgImage;
 
@@ -235,6 +236,11 @@ public class SettingsMenu : UserControl
 
     public void CloseMenuMethod()
     {
+        if (isAnimating)
+        {
+            return;
+        }
+        isAnimating = true;
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();
@@ -249,6 +255,7 @@ public class SettingsMenu : UserControl
             SettingsGrid.Visibility = Visibility.Collapsed;
             bgImage.Source = null;
             Console.WriteLine("Menu Closed!");
+            isAnimating = false;
         };
 
         SettingsGrid.BeginAnimation(MarginProperty, rollOutAnimation);
