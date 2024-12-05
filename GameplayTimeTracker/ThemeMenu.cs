@@ -80,53 +80,44 @@ public class ThemeMenu : UserControl
 
     private void AddColorEntries()
     {
-        // Remove all non-ComboBox children in a single pass
-        Panel.Children
-            .OfType<UIElement>()
-            .Where(child => child is not ComboBox)
-            .ToList()
-            .ForEach(child => Panel.Children.Remove(child));
-
-        // Find the selected theme quickly using LINQ
-        var selectedTheme = Themes.FirstOrDefault(theme => theme.ThemeName.Equals(SelectedThemeName));
-
-        if (selectedTheme == null)
+        // Remove all children except the first one (the ComboBox)
+        for (int i = Panel.Children.Count - 1; i >= 0; i--)
         {
-            Console.WriteLine($"Theme {SelectedThemeName} not found.");
-            return; // Exit if no matching theme is found
+            var child = Panel.Children[i];
+            if (child is not ComboBox) // If it's not a ComboBox, remove it
+            {
+                Console.WriteLine(child); // Log the child that is being removed
+                Panel.Children.RemoveAt(i);
+            }
         }
 
-        Console.WriteLine($"You selected: {selectedTheme.ThemeName}");
-
-        // Perform actions related to the selected theme
-        SettingsMenu.MainUpdateMethod();
-
-        Color tileColor1 = GetColorFromTheme(selectedTheme.Colors, "tileColor1");
-        Color tileColor2 = GetColorFromTheme(selectedTheme.Colors, "tileColor2");
-        Color fontColor = GetColorFromTheme(selectedTheme.Colors, "fontColor");
-        Color bgColor = GetColorFromTheme(selectedTheme.Colors, "bgColor");
-
-        SettingsMenu.SetColors(fontColor, bgColor);
-
-        // Add color entries dynamically
-        foreach (var (key, value) in selectedTheme.Colors)
+        // Add color entries for the selected theme
+        foreach (var theme in Themes)
         {
-            var newColorEntry = new ColorEntry(key, value, tileColor1, tileColor2);
+            if (theme.ThemeName.Equals(SelectedThemeName))
+            {
+                Console.WriteLine($"You selected: {theme.ThemeName}");
+                // SettingsMenu.CreateBlurOverlay();
+                Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
+                Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
+                Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
+                Color sBg = (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]);
+                SettingsMenu.SetColors(sFont, sBg);
 
-            newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
-                ColorPicker_SelectedColorChanged(sender, e, newColorEntry);
-
-            Panel.Children.Add(newColorEntry);
-            Console.WriteLine($"Name: {key} - Value: {value}");
+                foreach (var color in theme.Colors)
+                {
+                    ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value, c1, c2);
+                    newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
+                    {
+                        ColorPicker_SelectedColorChanged(sender, e, newColorEntry);
+                    };
+                    Panel.Children.Add(newColorEntry);
+                    Console.WriteLine($"Name: {color.Key} - Value: {color.Value}");
+                }
+                Utils.SetColors(theme.Colors);
+                SettingsMenu.MainUpdateMethod();
+            }
         }
-    }
-
-// Helper method to get a color from a theme dictionary
-    private Color GetColorFromTheme(Dictionary<string, string> colors, string key)
-    {
-        return colors.TryGetValue(key, out var colorString)
-            ? (Color)ColorConverter.ConvertFromString(colorString)
-            : Colors.Transparent; // Fallback to transparent if the key is missing
     }
 
     private void ThemeSecurity()
@@ -167,7 +158,7 @@ public class ThemeMenu : UserControl
 
             SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.ColorValue);
             Utils.SetColors(GetColorDictionary(comboBox.SelectedItem.ToString()));
-
+            SettingsMenu.MainUpdateMethod();
             Console.WriteLine(
                 $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.ColorValue} | Theme: {comboBox.SelectedItem}");
         }
