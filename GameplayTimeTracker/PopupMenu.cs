@@ -228,7 +228,7 @@ public class PopupMenu : UserControl
             }
         }
     }
-
+    
     // Opens the menu, creates prompt based on the type of menu it is
     public void OpenMenu()
     {
@@ -243,7 +243,7 @@ public class PopupMenu : UserControl
         {
             Width = W,
             Height = H,
-            Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E2030")),
+            Fill = new SolidColorBrush(Utils.BgColor),
             RadiusX = Utils.SettingsRadius,
             RadiusY = Utils.SettingsRadius,
             Effect = Utils.dropShadowRectangle
@@ -262,6 +262,7 @@ public class PopupMenu : UserControl
             Width = W - 2 * padding,
             TextAlignment = TextAlignment.Center,
             Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
+            Effect = Utils.dropShadowText
         };
 
         MenuContainerGrid.Children.Add(menuTitle);
@@ -278,6 +279,7 @@ public class PopupMenu : UserControl
                     VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2),
+                    Effect = Utils.dropShadowText
                 };
                 noButton = new Button
                 {
@@ -288,6 +290,7 @@ public class PopupMenu : UserControl
                     VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2),
+                    Effect = Utils.dropShadowText
                 };
                 yesButton.Click += ButtonAction1;
                 yesButton.Click += CloseMenu;
@@ -310,6 +313,7 @@ public class PopupMenu : UserControl
                     VerticalAlignment = VerticalAlignment.Bottom,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Margin = new Thickness(0, 0, 0, WinHeight / 2 - H / 2),
+                    Effect = Utils.dropShadowText
                 };
                 closeButton.Click += CloseMenu;
                 MenuContainerGrid.Children.Add(closeButton);

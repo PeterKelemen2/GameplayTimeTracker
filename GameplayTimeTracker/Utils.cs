@@ -117,8 +117,7 @@ public class Utils
     {
         try
         {
-            // BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
-            BgColor = (Color)ColorConverter.ConvertFromString(colors["footerColor"]);
+            BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
             DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
             LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
             FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);

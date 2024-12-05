@@ -22,8 +22,6 @@ public class SettingsMenu : UserControl
     public double H { get; set; }
 
     public bool IsToggled { get; set; }
-    public bool IsImageSet { get; set; }
-    public bool wasSet { get; set; }
     public bool ToClose { get; set; }
 
     public string Type { get; set; }
@@ -109,8 +107,6 @@ public class SettingsMenu : UserControl
         ButtonAction1 = routedEvent1 == null ? Dummy : routedEvent1;
         ButtonAction2 = routedEvent2 == null ? Dummy : routedEvent2;
 
-        wasSet = false;
-        IsImageSet = false;
         ToClose = false;
 
         ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
@@ -265,7 +261,6 @@ public class SettingsMenu : UserControl
 
         // Reset state flags
         IsToggled = false;
-        IsImageSet = false;
         ToClose = false;
 
         Console.WriteLine("Menu closed!");
