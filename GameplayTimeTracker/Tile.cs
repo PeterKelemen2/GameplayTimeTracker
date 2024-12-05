@@ -115,6 +115,9 @@ public class Tile : UserControl
     public bool WasOpened { get; set; }
     public bool WasMoved { get; set; }
 
+    private double[] fColMarg;
+
+
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
@@ -380,10 +383,10 @@ public class Tile : UserControl
         editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
         Console.WriteLine("Updating bars from Tile - SaveEditedData");
         _tileContainer.UpdatePlaytimeBars();
-        
-        TextBlock mainTotalTimeBlock =  Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+
+        TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
         mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
-        
+
         _tileContainer.InitSave();
         _tileContainer.ListTiles();
         Console.WriteLine("File Saved !!!");
@@ -591,6 +594,7 @@ public class Tile : UserControl
     public void UpdateTileWidth(double newWidth)
     {
         TileWidth = newWidth;
+        fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         container.Width = TileWidth;
         menuRectangle.Width = TileWidth - 30;
         shadowRectangle.Width = TileWidth - 20;
@@ -739,6 +743,8 @@ public class Tile : UserControl
     // Sets up elements of the tile with the default values
     public void InitializeTile()
     {
+        fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
+
         gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
         editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
 
@@ -1064,8 +1070,8 @@ public class Tile : UserControl
         grid.Children.Add(iconContainerGrid);
         // Add playtime elements
 
-        double[] fColMarg =
-            { Utils.TextMargin + TileHeight + 20, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
+        // double[] fColMarg =
+        //     { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         totalPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock);
         totalPlaytimeTitle.Text = "Total Playtime:";
         totalPlaytimeTitle.Margin =
@@ -1123,7 +1129,7 @@ public class Tile : UserControl
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin =
-                new Thickness(Utils.TextMargin + TileHeight + 20,
+                new Thickness(fColMarg[0] - 3,
                     TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
