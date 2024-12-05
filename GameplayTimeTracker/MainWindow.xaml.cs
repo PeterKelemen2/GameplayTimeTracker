@@ -342,6 +342,9 @@ namespace GameplayTimeTracker
                 {
                     if (!exitPopup.IsToggled)
                     {
+                        exitPopup = new PopupMenu(
+                            text: "Are you sure you want to exit?",
+                            routedEvent1: ExitButton_Click);
                         exitPopup.OpenMenu();
                     }
                 }
