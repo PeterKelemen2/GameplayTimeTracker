@@ -79,7 +79,7 @@ public class Utils
 
         return colors;
     }
-    
+
     public static Dictionary<String, String> GetPinkColors()
     {
         Dictionary<String, String> colors = new Dictionary<string, string>
@@ -122,7 +122,7 @@ public class Utils
         brush.GradientStops.Add(new GradientStop(c2, 1.0));
         return brush;
     }
-    
+
     public static LinearGradientBrush createLinGradBrushHor(Color c1, Color c2)
     {
         LinearGradientBrush brush = new LinearGradientBrush();
@@ -132,7 +132,7 @@ public class Utils
         brush.GradientStops.Add(new GradientStop(c2, 1.0));
         return brush;
     }
-    
+
     public static void SetColors(Dictionary<string, string> colors)
     {
         try
@@ -271,6 +271,20 @@ public class Utils
     //         encoder.Save(fileStream);
     //     }
     // }
+
+    public static String GetPrettyVarName(string variableName)
+    {
+        // Use Regex to split on uppercase letters
+        string result = Regex.Replace(variableName, "([a-z])([A-Z])", "$1 $2");
+
+        // Capitalize the first letter of the entire result
+        result = char.ToUpper(result[0]) + result.Substring(1);
+
+        // Replace 'Bg' with 'Background'
+        result = result.Replace("Bg", "Background");
+
+        return result;
+    }
 
     public static ThicknessAnimation GetMarginTopBottomAnimation(FrameworkElement uiElement)
     {

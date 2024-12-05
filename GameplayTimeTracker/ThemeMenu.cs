@@ -62,7 +62,7 @@ public class ThemeMenu : UserControl
             SelectedThemeName = comboBox.SelectedItem.ToString();
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
-            
+
             Utils.toUpdate = true;
         };
 
@@ -144,12 +144,13 @@ public class ThemeMenu : UserControl
             Color color = selectedColor.Value;
             colorEntry.colorPicker.Background = new SolidColorBrush(color);
             colorEntry.valueBlock.Text = color.ToString();
+            colorEntry.ColorValue = color.ToString();
 
-            SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.valueBlock.Text);
+            SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.ColorValue);
             Utils.SetColors(GetColorDictionary(comboBox.SelectedItem.ToString()));
-            
+
             Console.WriteLine(
-                $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
+                $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.ColorValue} | Theme: {comboBox.SelectedItem}");
         }
         else
         {

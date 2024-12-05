@@ -45,7 +45,7 @@ public class ColorEntry : UserControl
 
         nameBlock = new TextBlock
         {
-            Text = colorName,
+            Text = Utils.GetPrettyVarName(ColorName),
             FontSize = fontSize,
             FontWeight = FontWeights.Bold,
             Foreground = new SolidColorBrush(Colors.White),
