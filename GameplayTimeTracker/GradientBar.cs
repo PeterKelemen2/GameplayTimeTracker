@@ -25,15 +25,19 @@ public class GradientBar : UserControl
     private Rectangle barForeground;
     private LinearGradientBrush gradientBrush;
     private Grid grid = new();
+    private Tile TileParent;
 
-    public GradientBar(double percent,
+    public GradientBar(Tile tileParent,
+        double percent,
         double gWidth = 150,
         double gHeight = 30,
         double gPadding = 5,
         double radius = 10)
     {
         // Width = width;
-        GWidth = gWidth;
+        TileParent = tileParent;
+        GWidth = TileParent.TileWidth * 0.25;
+        // GWidth = gWidth;
         GHeight = gHeight;
         Percent = percent;
         Color1 = Utils.LeftColor;
@@ -65,7 +69,7 @@ public class GradientBar : UserControl
         double newWidth = CalculateWidth();
         barForeground.Width = newWidth;
     }
-    
+
     // Sets up bar with initial values
     public void InitializeBar()
     {

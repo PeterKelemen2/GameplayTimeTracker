@@ -595,6 +595,11 @@ public class Tile : UserControl
     {
         TileWidth = newWidth;
         fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
+        
+        totalPlaytimeTitle.Margin = new Thickness(fColMarg[0], totalPlaytimeTitle.Margin.Top,0,0);
+        totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top,0,0);
+        totalTimeGradientBar.Margin = new Thickness(fColMarg[0], totalTimeGradientBar.Margin.Top,0,0);
+        
         container.Width = TileWidth;
         menuRectangle.Width = TileWidth - 30;
         shadowRectangle.Width = TileWidth - 20;
@@ -1094,7 +1099,7 @@ public class Tile : UserControl
         lastPlaytime.Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 
-        lastTimeGradientBar = new GradientBar(percent: LastPlaytimePercent)
+        lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
@@ -1124,7 +1129,7 @@ public class Tile : UserControl
     // Creates the custom playtime bars
     public void SetPlaytimeBars()
     {
-        totalTimeGradientBar = new GradientBar(percent: TotalPlaytimePercent)
+        totalTimeGradientBar = new GradientBar(this, percent: TotalPlaytimePercent)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
@@ -1134,7 +1139,7 @@ public class Tile : UserControl
             Effect = Utils.dropShadowText,
         };
 
-        lastTimeGradientBar = new GradientBar(percent: LastPlaytimePercent)
+        lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
