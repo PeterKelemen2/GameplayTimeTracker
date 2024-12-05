@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="Gameplay Time Tracker" Height="650" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged"
+        Title="Gameplay Time Tracker" Height="800" Width="800" Closing="OnCloseNotify" StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
         Icon="pack://application:,,,/assets/MyAppIcon.ico">
     <Window.Resources>
