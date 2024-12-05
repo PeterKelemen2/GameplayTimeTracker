@@ -275,7 +275,6 @@ namespace GameplayTimeTracker
                                 }), DispatcherPriority.Background);
                             }
                         };
-
                         // Start the animation on the tile
                         transform.BeginAnimation(TranslateTransform.YProperty, animation);
                     }
@@ -306,9 +305,6 @@ namespace GameplayTimeTracker
                 : Visibility.Collapsed;
             OverlayTop.Width = scrollViewer.ViewportWidth * 2;
             OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
-
-            // double newWidth = Width - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
-            // tileContainer.UpdateTilesWidth(newWidth);
         }
 
         private void CloseSettingsMenu()
