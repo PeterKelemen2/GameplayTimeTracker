@@ -97,7 +97,7 @@ public class ThemeMenu : UserControl
             if (theme.ThemeName.Equals(SelectedThemeName))
             {
                 Console.WriteLine($"You selected: {theme.ThemeName}");
-                // SettingsMenu.CreateBlurOverlay();
+                SettingsMenu.SetBlurImage();
                 Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
                 Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
                 Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);

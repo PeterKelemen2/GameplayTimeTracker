@@ -278,9 +278,9 @@
             <ScrollViewer x:Name="ScrollViewer"
                           Grid.Row="0"
                           ScrollChanged="ShowScrollViewerOverlay"
-                          VerticalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Hidden"
                           HorizontalScrollBarVisibility="Disabled"
-                          Padding="-5,5,5,5" Background="#1E2030">
+                          Padding="-7,5,0,5" Background="#1E2030">
                 <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
             </ScrollViewer>
 

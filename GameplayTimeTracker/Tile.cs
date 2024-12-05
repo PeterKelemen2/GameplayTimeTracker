@@ -690,7 +690,7 @@ public class Tile : UserControl
     }
 
     public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
-        string? iconImagePath = SampleImagePath, string exePath = "", double width = 740)
+        string? iconImagePath = SampleImagePath, string exePath = "", double width = 760)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
@@ -880,7 +880,8 @@ public class Tile : UserControl
             RadiusY = CornerRadius,
             Fill = gradientBrush,
             Margin = new Thickness(Utils.TileLeftMargin, 0, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Left
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Effect = Utils.dropShadowIcon
         };
         int topMargin = -40;
 

@@ -288,7 +288,9 @@ namespace GameplayTimeTracker
             MainStackPanel.Children.Clear();
             foreach (var tile in tileContainer.tilesList)
             {
-                tile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+                double lm = (Width - tile.TileWidth) * 0.5 + ScrollViewer.Padding.Left - 1;
+                Console.WriteLine(lm);
+                tile.Margin = new Thickness(lm, 5, 0, 5);
 
                 MainStackPanel.Children.Add(tile);
             }
@@ -297,7 +299,6 @@ namespace GameplayTimeTracker
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
         {
             ScrollViewer scrollViewer = sender as ScrollViewer;
-            bool isVerticalScrollVisible = scrollViewer.ExtentHeight > scrollViewer.ViewportHeight;
 
             OverlayTop.Visibility = e.VerticalOffset > 0 ? Visibility.Visible : Visibility.Collapsed;
             OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
@@ -306,9 +307,7 @@ namespace GameplayTimeTracker
             OverlayTop.Width = scrollViewer.ViewportWidth * 2;
             OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
 
-            double newWidth = isVerticalScrollVisible
-                ? Width - 2 * Utils.TileLeftMargin - 2 * SystemParameters.VerticalScrollBarWidth
-                : Width - 5 * Utils.TileLeftMargin;
+            double newWidth = Width - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
             tileContainer.UpdateTilesWidth(newWidth);
         }
 
@@ -384,7 +383,7 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings, action:UpdateColors);
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings, action: UpdateColors);
             settingsMenu.OpenMenu();
         }
 
