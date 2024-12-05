@@ -51,6 +51,8 @@ public class SettingsMenu : UserControl
 
     private TextBlock menuTitle = new();
     private TextBlock _lastClickedTextBlock;
+    private TextBlock PrefBlock;
+    private TextBlock ThemesBlock;
 
     private Window mainWindow;
 
@@ -109,19 +111,20 @@ public class SettingsMenu : UserControl
 
         ToClose = false;
 
-        ThemeMenu tm = new ThemeMenu(mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
+        ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
-        TextBlock PrefBlock = headerPanel.FindName("Pref") as TextBlock;
+        PrefBlock = headerPanel.FindName("Pref") as TextBlock;
+
         PrefBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(PrefBlock);
             pm.CreateMenu(sender, e);
         };
 
-        TextBlock ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
+        ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
         ThemesBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(ThemesBlock);
@@ -223,11 +226,21 @@ public class SettingsMenu : UserControl
         double padding = 10;
         CreateBlurOverlay();
 
+        SetColors();
+
         SettingsGrid.Visibility = Visibility.Visible;
         Console.WriteLine();
         SettingsGrid.BeginAnimation(MarginProperty, rollInAnimation);
         blurUpdateTimer.Start();
         IsToggled = true;
+    }
+
+    public void SetColors()
+    {
+        Rectangle bgRect = mainWindow.FindName("SettingsBgRect") as Rectangle;
+        bgRect.Fill = new SolidColorBrush(Utils.BgColor);
+        PrefBlock.Foreground = new SolidColorBrush(Utils.FontColor);
+        ThemesBlock.Foreground = new SolidColorBrush(Utils.FontColor);
     }
 
     public void CloseMenuMethod()
@@ -236,6 +249,7 @@ public class SettingsMenu : UserControl
         {
             return;
         }
+
         isAnimating = true;
         ToClose = true;
         SetBlurImage(true);

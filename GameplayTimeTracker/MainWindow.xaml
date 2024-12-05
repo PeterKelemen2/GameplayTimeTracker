@@ -231,7 +231,7 @@
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="20" />
             </Grid.Effect>
-            <Rectangle x:Name="BgRect" Fill="#1D2640" Width="300" Height="400" RadiusX="10" RadiusY="10"></Rectangle>
+            <Rectangle x:Name="SettingsBgRect" Fill="#1D2640" Width="300" Height="400" RadiusX="10" RadiusY="10"></Rectangle>
             <Grid Width="300" Height="400">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />

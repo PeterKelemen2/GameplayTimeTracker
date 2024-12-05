@@ -17,9 +17,11 @@ public class ThemeMenu : UserControl
     public StackPanel Panel { get; set; }
     public ComboBox comboBox { get; set; }
     public String SelectedThemeName { get; set; }
+    public SettingsMenu SettingsMenu { get; set; }
 
-    public ThemeMenu(StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
+    public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
+        SettingsMenu = settingsMenu;
         Panel = stackPanel;
         Themes = themes;
         SelectedThemeName = selectedThemeName;
@@ -60,6 +62,7 @@ public class ThemeMenu : UserControl
             SelectedThemeName = comboBox.SelectedItem.ToString();
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
+            
             Utils.toUpdate = true;
         };
 
@@ -144,6 +147,7 @@ public class ThemeMenu : UserControl
 
             SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.valueBlock.Text);
             Utils.SetColors(GetColorDictionary(comboBox.SelectedItem.ToString()));
+            
             Console.WriteLine(
                 $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.valueBlock.Text} | Theme: {comboBox.SelectedItem}");
         }

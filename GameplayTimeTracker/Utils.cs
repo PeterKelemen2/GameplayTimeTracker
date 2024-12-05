@@ -113,11 +113,32 @@ public class Utils
         return theme;
     }
 
+    public static LinearGradientBrush createLinGradBrushVer(Color c1, Color c2)
+    {
+        LinearGradientBrush brush = new LinearGradientBrush();
+        brush.StartPoint = new Point(0, 0);
+        brush.EndPoint = new Point(0, 1);
+        brush.GradientStops.Add(new GradientStop(c1, 0.0));
+        brush.GradientStops.Add(new GradientStop(c2, 1.0));
+        return brush;
+    }
+    
+    public static LinearGradientBrush createLinGradBrushHor(Color c1, Color c2)
+    {
+        LinearGradientBrush brush = new LinearGradientBrush();
+        brush.StartPoint = new Point(0, 0);
+        brush.EndPoint = new Point(1, 0);
+        brush.GradientStops.Add(new GradientStop(c1, 0.0));
+        brush.GradientStops.Add(new GradientStop(c2, 1.0));
+        return brush;
+    }
+    
     public static void SetColors(Dictionary<string, string> colors)
     {
         try
         {
             BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
+            FooterColor = (Color)ColorConverter.ConvertFromString(colors["footerColor"]);
             DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
             LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
             FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);

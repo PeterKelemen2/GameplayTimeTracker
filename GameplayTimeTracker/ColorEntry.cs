@@ -35,11 +35,11 @@ public class ColorEntry : UserControl
 
         bg = new Rectangle
         {
-            Fill = new SolidColorBrush(Colors.Gray),
+            Fill = Utils.createLinGradBrushHor(Utils.TileColor2, Utils.TileColor1),
             Width = containerGrid.Width,
             Height = containerGrid.Height,
-            RadiusX = 10,
-            RadiusY = 10,
+            RadiusX = 5,
+            RadiusY = 5,
         };
         containerGrid.Children.Add(bg);
 
@@ -63,20 +63,10 @@ public class ColorEntry : UserControl
             Margin = new Thickness(10, 0, 0, 10),
         };
         containerGrid.Children.Add(valueBlock);
-
-        pickerBg = new Rectangle
-        {
-            Width = 30,
-            Height = 30,
-            Fill = new SolidColorBrush(Colors.White),
-            HorizontalAlignment = HorizontalAlignment.Right,
-            Margin = new Thickness(0, 0, 10, 0),
-        };
-        containerGrid.Children.Add(pickerBg);
-
+        
         colorPicker = new ColorPicker();
-        colorPicker.Width = 30;
-        colorPicker.Height = 30;
+        colorPicker.Width = 40;
+        colorPicker.Height = 40;
         colorPicker.ShowDropDownButton = false;
         colorPicker.HorizontalAlignment = HorizontalAlignment.Right;
         colorPicker.Margin = new Thickness(0, 0, 10, 0);
@@ -84,9 +74,11 @@ public class ColorEntry : UserControl
         colorPicker.UsingAlphaChannel = false;
         colorPicker.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorValue));
         colorPicker.BorderThickness = new Thickness(0);
-        colorPicker.BorderBrush = Brushes.Transparent;
+        colorPicker.BorderBrush = new SolidColorBrush(Utils.FontColor);
+        colorPicker.Padding = new Thickness(0, colorPicker.Height, 0, 0);
+        colorPicker.Effect = Utils.dropShadowText;
         containerGrid.Children.Add(colorPicker);
-
+        
         Content = containerGrid;
     }
 }

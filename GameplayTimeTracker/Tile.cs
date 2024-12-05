@@ -674,16 +674,16 @@ public class Tile : UserControl
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
 
-    private LinearGradientBrush createLinGradBrush(Color c1, Color c2)
-    {
-        LinearGradientBrush brush = new LinearGradientBrush();
-        brush.StartPoint = new Point(0, 0);
-        brush.EndPoint = new Point(0, 1);
-        brush.GradientStops.Add(new GradientStop(c1, 0.0));
-        brush.GradientStops.Add(new GradientStop(c2, 1.0));
-        // brush.Freeze();
-        return brush;
-    }
+    // private LinearGradientBrush createLinGradBrush(Color c1, Color c2)
+    // {
+    //     LinearGradientBrush brush = new LinearGradientBrush();
+    //     brush.StartPoint = new Point(0, 0);
+    //     brush.EndPoint = new Point(0, 1);
+    //     brush.GradientStops.Add(new GradientStop(c1, 0.0));
+    //     brush.GradientStops.Add(new GradientStop(c2, 1.0));
+    //     // brush.Freeze();
+    //     return brush;
+    // }
 
     public Tile()
     {
@@ -723,8 +723,8 @@ public class Tile : UserControl
 
     public void UpdateTileColors()
     {
-        gradientBrush = createLinGradBrush(Utils.TileColor1, Utils.TileColor2);
-        editGradientBrush = createLinGradBrush(Utils.EditColor1, Utils.EditColor2);
+        gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
+        editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
         menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
         container.Fill = gradientBrush;
@@ -739,8 +739,8 @@ public class Tile : UserControl
     // Sets up elements of the tile with the default values
     public void InitializeTile()
     {
-        gradientBrush = createLinGradBrush(Utils.TileColor1, Utils.TileColor2);
-        editGradientBrush = createLinGradBrush(Utils.EditColor1, Utils.EditColor2);
+        gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
+        editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
 
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();
