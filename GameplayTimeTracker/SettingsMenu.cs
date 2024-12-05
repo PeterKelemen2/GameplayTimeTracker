@@ -53,6 +53,7 @@ public class SettingsMenu : UserControl
     private TextBlock _lastClickedTextBlock;
     private TextBlock PrefBlock;
     private TextBlock ThemesBlock;
+    private ThemeMenu tm;
 
     private Window mainWindow;
 
@@ -111,7 +112,7 @@ public class SettingsMenu : UserControl
 
         ToClose = false;
 
-        ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
+        tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
