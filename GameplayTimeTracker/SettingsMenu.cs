@@ -26,8 +26,7 @@ public class SettingsMenu : UserControl
 
     public string Type { get; set; }
 
-    public RoutedEventHandler MainUpdateMethod;
-    public Action updateMethod;
+    public Action MainUpdateMethod;
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
@@ -59,7 +58,7 @@ public class SettingsMenu : UserControl
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
-    private double bgRefreshRate = 1.0;
+    private double bgRefreshRate = 1;
     private bool isAnimating = false;
 
     public Image bgImage;
@@ -67,7 +66,6 @@ public class SettingsMenu : UserControl
     public SettingsMenu()
     {
     }
-
 
     private void Dummy()
     {
@@ -93,7 +91,7 @@ public class SettingsMenu : UserControl
     public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
-        Action routedEvent1 = null)
+        Action action = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -107,12 +105,10 @@ public class SettingsMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
-        updateMethod = routedEvent1 == null ? Dummy : routedEvent1;
-        // MainUpdateMethod = routedEvent1 == null ? Dummy : routedEvent1;
+        MainUpdateMethod = action == null ? Dummy : action;
 
         ToClose = false;
         
-        // TODO: Fix color entries using the last theme color if menu open
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
@@ -142,73 +138,8 @@ public class SettingsMenu : UserControl
         };
         blurUpdateTimer.Tick += (s, e) => SetBlurImage();
 
-        rollInAnimation = new ThicknessAnimation
-        {
-            From = new Thickness(0, 0, 0, -WinHeight),
-            To = new Thickness(0, 0, 0, 0),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        rollOutAnimation = new ThicknessAnimation
-        {
-            From = new Thickness(0, 0, 0, 0),
-            To = new Thickness(0, 0, 0, WinHeight),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        zoomInAnimation = new DoubleAnimation
-        {
-            From = 1.0, // Starting scale (normal size)
-            To = _zoomPercent, // Ending scale (7% zoom in)
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        zoomOutAnimation = new DoubleAnimation
-        {
-            From = _zoomPercent,
-            To = 1.0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        zoomOutAnimation2 = new DoubleAnimation
-        {
-            From = _zoomPercent,
-            To = 1.0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        blurInAnimation = new DoubleAnimation
-        {
-            From = 0, // Start with no blur
-            To = bRadius, // Increase to a blur radius of 20 (adjust as needed)
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        blurOutAnimation = new DoubleAnimation
-        {
-            From = bRadius, // Start with no blur
-            To = 0, // Increase to a blur radius of 20 (adjust as needed)
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        fadeInAnimation = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(0.05)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
+        CreateAnimations();
     }
-
 
     // Recalculating dimensions when window size is changing 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -293,7 +224,7 @@ public class SettingsMenu : UserControl
         if (IsToggled)
         {
             // Capture a new bitmap only when needed
-            var newBitmap = ToClose
+            var newBitmap = toCapFullSize
                 ? Utils.CaptureContainerGrid(1.0) // Full size capture
                 : Utils.CaptureContainerGrid(); // Partial capture with scaling
 
@@ -336,5 +267,74 @@ public class SettingsMenu : UserControl
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomInAnimation);
         // Add the final image to the container
         ContainerGrid.Children.Add(bgImage);
+    }
+
+    private void CreateAnimations()
+    {
+        rollInAnimation = new ThicknessAnimation
+        {
+            From = new Thickness(0, 0, 0, -WinHeight),
+            To = new Thickness(0, 0, 0, 0),
+            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        rollOutAnimation = new ThicknessAnimation
+        {
+            From = new Thickness(0, 0, 0, 0),
+            To = new Thickness(0, 0, 0, WinHeight),
+            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        zoomInAnimation = new DoubleAnimation
+        {
+            From = 1.0, // Starting scale (normal size)
+            To = _zoomPercent, // Ending scale (7% zoom in)
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        zoomOutAnimation = new DoubleAnimation
+        {
+            From = _zoomPercent,
+            To = 1.0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        zoomOutAnimation2 = new DoubleAnimation
+        {
+            From = _zoomPercent,
+            To = 1.0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        blurInAnimation = new DoubleAnimation
+        {
+            From = 0, // Start with no blur
+            To = bRadius, // Increase to a blur radius of 20 (adjust as needed)
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        blurOutAnimation = new DoubleAnimation
+        {
+            From = bRadius, // Start with no blur
+            To = 0, // Increase to a blur radius of 20 (adjust as needed)
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        fadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(0.05)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
     }
 }
