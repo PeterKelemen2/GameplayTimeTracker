@@ -116,6 +116,7 @@ public class Tile : UserControl
     public bool WasMoved { get; set; }
 
     private double[] fColMarg;
+    private double[] sColMarg;
 
 
     private Dictionary<UIElement, Thickness> originalMargins = new();
@@ -595,11 +596,18 @@ public class Tile : UserControl
     {
         TileWidth = newWidth;
         fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
-        
-        totalPlaytimeTitle.Margin = new Thickness(fColMarg[0], totalPlaytimeTitle.Margin.Top,0,0);
-        totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top,0,0);
-        totalTimeGradientBar.Margin = new Thickness(fColMarg[0], totalTimeGradientBar.Margin.Top,0,0);
-        
+        sColMarg = new[] { TileWidth * 0.545, 1 };
+
+        totalPlaytimeTitle.Margin = new Thickness(fColMarg[0], totalPlaytimeTitle.Margin.Top, 0, 0);
+        totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top, 0, 0);
+        totalTimeGradientBar.Margin = new Thickness(fColMarg[0], totalTimeGradientBar.Margin.Top, 0, 0);
+        totalTimeGradientBar.UpdateBarSizeWidth(TileWidth);
+
+        lastPlaytime.Margin = new Thickness(sColMarg[0], lastPlaytime.Margin.Top, 0, 0);
+        lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], lastPlaytimeTitle.Margin.Top, 0, 0);
+        lastTimeGradientBar.Margin = new Thickness(sColMarg[0], lastTimeGradientBar.Margin.Top, 0, 0);
+        lastTimeGradientBar.UpdateBarSizeWidth(TileWidth);
+
         container.Width = TileWidth;
         menuRectangle.Width = TileWidth - 30;
         shadowRectangle.Width = TileWidth - 20;
@@ -749,6 +757,7 @@ public class Tile : UserControl
     public void InitializeTile()
     {
         fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
+        sColMarg = new[] { TileWidth * 0.545, 1 };
 
         gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
         editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
@@ -1089,21 +1098,22 @@ public class Tile : UserControl
 
         SetPlaytimeBars();
 
+
         lastPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlaytimeTitle.Text = "Last Playtime:";
-        lastPlaytimeTitle.Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
+        lastPlaytimeTitle.Margin = new Thickness(sColMarg[0],
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 10, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         lastPlaytime.Text = $"{hLast}h {mLast}m";
-        lastPlaytime.Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
+        lastPlaytime.Margin = new Thickness(sColMarg[0],
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 
         lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
+            Margin = new Thickness(sColMarg[0],
                 TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
