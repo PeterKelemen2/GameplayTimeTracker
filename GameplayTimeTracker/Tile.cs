@@ -725,7 +725,7 @@ public class Tile : UserControl
     {
         gradientBrush = createLinGradBrush(Utils.TileColor1, Utils.TileColor2);
         editGradientBrush = createLinGradBrush(Utils.EditColor1, Utils.EditColor2);
-        menuRectangle.Fill = gradientBrush;
+        menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
         container.Fill = gradientBrush;
         titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
