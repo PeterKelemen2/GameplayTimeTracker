@@ -10,6 +10,7 @@
         Width="800" 
         MinWidth="790"
         Closing="OnCloseNotify" 
+        SizeChanged="OnSizeChanged"
         StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
         Icon="pack://application:,,,/assets/MyAppIcon.ico">

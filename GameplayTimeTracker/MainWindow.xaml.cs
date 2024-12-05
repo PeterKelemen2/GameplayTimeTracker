@@ -307,8 +307,8 @@ namespace GameplayTimeTracker
             OverlayTop.Width = scrollViewer.ViewportWidth * 2;
             OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
 
-            double newWidth = Width - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
-            tileContainer.UpdateTilesWidth(newWidth);
+            // double newWidth = Width - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
+            // tileContainer.UpdateTilesWidth(newWidth);
         }
 
         private void CloseSettingsMenu()
@@ -432,6 +432,13 @@ namespace GameplayTimeTracker
             }
 
             e.Handled = true; // Marks event as handled
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double newWidth = ActualWidth - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
+            Console.WriteLine(ActualWidth);
+            tileContainer.UpdateTilesWidth(newWidth);
         }
     }
 }
