@@ -21,7 +21,7 @@ public class ColorEntry : UserControl
     public ColorPicker colorPicker;
     private int fontSize = 15;
 
-    public ColorEntry(string colorName, string colorValue, double width = 250)
+    public ColorEntry(string colorName, string colorValue, Color c1, Color c2, double width = 250)
     {
         ColorName = colorName;
         ColorValue = colorValue;
@@ -36,7 +36,7 @@ public class ColorEntry : UserControl
 
         bg = new Rectangle
         {
-            Fill = Utils.createLinGradBrushHor(Utils.TileColor2, Utils.TileColor1),
+            Fill = Utils.createLinGradBrushHor(c1, c2),
             Width = containerGrid.Width,
             Height = containerGrid.Height,
             RadiusX = 5,

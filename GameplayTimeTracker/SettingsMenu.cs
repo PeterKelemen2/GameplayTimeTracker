@@ -53,7 +53,7 @@ public class SettingsMenu : UserControl
     private TextBlock _lastClickedTextBlock;
     private TextBlock PrefBlock;
     private TextBlock ThemesBlock;
-    private ThemeMenu tm;
+    // private ThemeMenu tm;
 
     private Window mainWindow;
 
@@ -113,7 +113,7 @@ public class SettingsMenu : UserControl
         ToClose = false;
         
         // TODO: Fix color entries using the last theme color if menu open
-        tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
+        ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
@@ -228,7 +228,7 @@ public class SettingsMenu : UserControl
         double padding = 10;
         CreateBlurOverlay();
 
-        SetColors();
+        SetColors(Utils.FontColor, Utils.BgColor);
 
         SettingsGrid.Visibility = Visibility.Visible;
         Console.WriteLine();
@@ -237,12 +237,12 @@ public class SettingsMenu : UserControl
         IsToggled = true;
     }
 
-    public void SetColors()
+    public void SetColors(Color font, Color bg)
     {
         Rectangle bgRect = mainWindow.FindName("SettingsBgRect") as Rectangle;
-        bgRect.Fill = new SolidColorBrush(Utils.BgColor);
-        PrefBlock.Foreground = new SolidColorBrush(Utils.FontColor);
-        ThemesBlock.Foreground = new SolidColorBrush(Utils.FontColor);
+        bgRect.Fill = new SolidColorBrush(bg);
+        PrefBlock.Foreground = new SolidColorBrush(font);
+        ThemesBlock.Foreground = new SolidColorBrush(font);
     }
 
     public void CloseMenuMethod()

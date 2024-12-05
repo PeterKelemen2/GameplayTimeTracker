@@ -133,7 +133,6 @@ namespace GameplayTimeTracker
         {
             InitSettings();
             tileContainer.UpdateTilesColors();
-            if (settingsMenu != null) settingsMenu.SetColors();
             ShowTilesOnCanvas();
             Utils.toUpdate = false;
         }

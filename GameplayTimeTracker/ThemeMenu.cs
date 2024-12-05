@@ -58,11 +58,11 @@ public class ThemeMenu : UserControl
 
         comboBox.SelectionChanged += (sender, e) =>
         {
-            AddColorEntries(); 
             SelectedThemeName = comboBox.SelectedItem.ToString();
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
-            Themes = jsonHandler.GetSettingsFromFile().ThemeList;
+            // Themes = jsonHandler.GetSettingsFromFile().ThemeList;
+            AddColorEntries();
             Utils.toUpdate = true;
         };
 
@@ -96,9 +96,16 @@ public class ThemeMenu : UserControl
             if (theme.ThemeName.Equals(SelectedThemeName))
             {
                 Console.WriteLine($"You selected: {theme.ThemeName}");
+                
+                Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
+                Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
+                Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
+                Color sBg = (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]);
+                SettingsMenu.SetBlurImage();
+                SettingsMenu.SetColors(sFont, sBg);
                 foreach (var color in theme.Colors)
                 {
-                    ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value);
+                    ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value, c1, c2);
                     newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
                     {
                         ColorPicker_SelectedColorChanged(sender, e, newColorEntry);
