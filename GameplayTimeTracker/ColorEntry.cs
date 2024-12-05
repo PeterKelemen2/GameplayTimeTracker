@@ -41,6 +41,7 @@ public class ColorEntry : UserControl
             Height = containerGrid.Height,
             RadiusX = 5,
             RadiusY = 5,
+            Effect = Utils.dropShadowText
         };
         containerGrid.Children.Add(bg);
 
