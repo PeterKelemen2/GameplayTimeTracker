@@ -3,14 +3,15 @@
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
 
-![Screenshot](https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png)
+<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png" height="400" style="display: block; margin: 0 auto;" />
+
 
 ## Configuration
 The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`
 There are two main parts that can be set by the user both on the user interface and in the configuration file.
 
 - **Preferences**
-	- `startWithSystem` , 
+	- `startWithSystem` ,
 		- Default value: `true`
 		- When set to `true`, the application will automatically start with the system by creating a shortcut in the startup directory.
 - **Themes**
@@ -23,10 +24,10 @@ There are two main parts that can be set by the user both on the user interface 
 			-   **Default**: A dark-themed design.
 			-   **Pink**: A vibrant pink-themed design.
 			-   **Custom**: A placeholder for user-defined customization.
-			
-	If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
-	Each theme contains the following customizable color properties:
-	
+
+  If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
+  Each theme contains the following customizable color properties:
+
 | Property       |Description                                     |Example Value     |
 |----------------|------------------------------------------------|------------------|
 | `bgColor`      | Background color of the application.           | `"#1E2030"`      | 
@@ -43,13 +44,13 @@ There are two main parts that can be set by the user both on the user interface 
 | `editColor1`   | First gradient color of and edit dropdown.     | `"#7DD6EB"`      | 
 | `editColor2`   | Second highlight color of and edit dropdown.   | `"#7DD6EB"`      |
 
-## Data 
-	
+## Data
+
 Each monitored application is tracked with the following properties:
-- `gameName` 
-	- String representation of the application's name. 
+- `gameName`
+	- String representation of the application's name.
 	- This is initially gathered from the _File Description_ of the executable, if available.
-- `totalTime` 
+- `totalTime`
 	- An integer representing the total time the application has been open, measured in minutes.
 - `lastPlayedTime`
 	- An integer representing the duration of the most recent session, measured in minutes.
@@ -59,8 +60,8 @@ Each monitored application is tracked with the following properties:
 	- If no icon is extracted or the path is invalid, a fallback image (`assets\no_icon.png`) is used.
 	- Icon images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Saved Icons\`.
 - `exePath`
-    - A string specifying the full path to the application's executable file.
-    
+	- A string specifying the full path to the application's executable file.
+
 ### Editing
 All properties except `lastPlayedTime` can be modified via the application's edit menu.
 	
