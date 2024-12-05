@@ -49,7 +49,7 @@ public class ColorEntry : UserControl
             Text = Utils.GetPrettyVarName(ColorName),
             FontSize = fontSize,
             FontWeight = FontWeights.Bold,
-            Foreground = new SolidColorBrush(Colors.White),
+            Foreground = new SolidColorBrush(Utils.FontColor),
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(10, 10, 0, 0),
         };
@@ -59,7 +59,7 @@ public class ColorEntry : UserControl
         {
             Text = colorValue,
             FontSize = fontSize,
-            Foreground = new SolidColorBrush(Colors.White),
+            Foreground = new SolidColorBrush(Utils.FontColor),
             VerticalAlignment = VerticalAlignment.Bottom,
             Margin = new Thickness(10, 0, 0, 10),
         };

@@ -149,7 +149,7 @@ namespace GameplayTimeTracker
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if (Utils.toUpdate) UpdateColors();
+                        // if (Utils.toUpdate) UpdateColors();
                         tracker.HandleProcesses();
                         RearrangeTiles();
                     });
@@ -385,7 +385,7 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings);
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings, routedEvent1:UpdateColors);
             settingsMenu.OpenMenu();
         }
 

@@ -97,12 +97,14 @@ public class ThemeMenu : UserControl
             {
                 Console.WriteLine($"You selected: {theme.ThemeName}");
                 
+                SettingsMenu.updateMethod();
                 Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
                 Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
                 Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
                 Color sBg = (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]);
-                SettingsMenu.SetBlurImage();
                 SettingsMenu.SetColors(sFont, sBg);
+                SettingsMenu.SetBlurImage();
+                
                 foreach (var color in theme.Colors)
                 {
                     ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value, c1, c2);

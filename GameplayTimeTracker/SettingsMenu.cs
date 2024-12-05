@@ -26,8 +26,8 @@ public class SettingsMenu : UserControl
 
     public string Type { get; set; }
 
-    private RoutedEventHandler ButtonAction1;
-    private RoutedEventHandler ButtonAction2;
+    public RoutedEventHandler MainUpdateMethod;
+    public Action updateMethod;
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
@@ -69,7 +69,7 @@ public class SettingsMenu : UserControl
     }
 
 
-    private void Dummy(object sender, RoutedEventArgs e)
+    private void Dummy()
     {
         Console.WriteLine("Dummy method called!");
     }
@@ -93,7 +93,7 @@ public class SettingsMenu : UserControl
     public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
-        RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
+        Action routedEvent1 = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -107,8 +107,8 @@ public class SettingsMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
-        ButtonAction1 = routedEvent1 == null ? Dummy : routedEvent1;
-        ButtonAction2 = routedEvent2 == null ? Dummy : routedEvent2;
+        updateMethod = routedEvent1 == null ? Dummy : routedEvent1;
+        // MainUpdateMethod = routedEvent1 == null ? Dummy : routedEvent1;
 
         ToClose = false;
         
@@ -306,7 +306,7 @@ public class SettingsMenu : UserControl
         }
     }
 
-    private void CreateBlurOverlay()
+    public void CreateBlurOverlay()
     {
         menuBgBitmap = Utils.CaptureContainerGrid();
 
