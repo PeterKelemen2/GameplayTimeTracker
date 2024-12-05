@@ -64,6 +64,11 @@ Each monitored application is tracked with the following properties:
 
 ### Editing
 All properties except `lastPlayedTime` can be modified via the application's edit menu.
-	
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).
+
+You are free to use, modify, and distribute this software under the terms of the GPL. See the [LICENSE](./LICENSE) file for full details.
 
 
