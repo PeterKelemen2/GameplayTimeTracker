@@ -2,9 +2,9 @@
 
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
-
-<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png" height="400" style="display: block; margin: 0 auto;" />
-
+<p align="center">
+	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png" height="400"/>
+</p>
 
 ## Configuration
 The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`
