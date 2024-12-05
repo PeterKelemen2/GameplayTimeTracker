@@ -24,6 +24,7 @@ public class Utils
         Assembly.GetExecutingAssembly().GetName().Name);
 
     private const string SampleImagePath = "assets/no_icon.png";
+    // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
     private const string DataFileName = "data.json";
     private const string SavedIconsFolderName = "Saved Icons";

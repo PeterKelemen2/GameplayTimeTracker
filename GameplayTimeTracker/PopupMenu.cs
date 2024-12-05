@@ -65,7 +65,12 @@ public class PopupMenu : UserControl
     private bool isAnimating = false;
 
     public Image bgImage;
-
+    
+    private void Dummy(object sender, EventArgs e)
+    {
+        Console.WriteLine("Dummy router event handler invoked.");
+    }
+    
     public PopupMenu()
     {
     }
@@ -85,8 +90,14 @@ public class PopupMenu : UserControl
         IsToggled = isToggled;
         Type = type;
 
-        if (routedEvent1 != null) ButtonAction1 = routedEvent1;
-        if (routedEvent2 != null) ButtonAction2 = routedEvent2;
+        if (routedEvent1 == null) ButtonAction1 = (s, e) => { };
+        else ButtonAction1 = routedEvent1;
+
+        if (routedEvent2 == null) ButtonAction2 = (s, e) => { };
+        else ButtonAction2 = routedEvent2;
+
+        // ButtonAction1 = routedEvent1 == null ? Dummy : ButtonAction1;
+        // ButtonAction2 = routedEvent2 == null ? Dummy : ButtonAction2;
 
         IsImageSet = false;
         ToClose = false;

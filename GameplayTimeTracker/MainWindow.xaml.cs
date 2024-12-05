@@ -31,7 +31,6 @@ namespace GameplayTimeTracker
     {
         private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
-        private const string? AppIcon = "assets/MyAppIcon.ico";
         private bool isBlurToggled = false;
         private bool isAnimating = false;
 
@@ -47,6 +46,7 @@ namespace GameplayTimeTracker
         private NotificationHandler notificationHandler = new();
 
         private PopupMenu exitPopup;
+        private PopupMenu selfPopup;
         private SettingsMenu settingsMenu;
         private DragDropOverlay dragDropOverlay;
 
@@ -198,6 +198,11 @@ namespace GameplayTimeTracker
                 ShowTilesOnCanvas();
                 handler.WriteContentToFile(tileContainer);
                 // MessageBox.Show($"Selected file: {filePath}");
+            }
+            else
+            {
+                selfPopup = new PopupMenu(text:"Tudod mi lesz tavasszal?");
+                selfPopup.OpenMenu();
             }
         }
 

@@ -1,13 +1,15 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
+using Toolbelt.Drawing;
 
 namespace GameplayTimeTracker;
 
 public class NotificationHandler
 {
     // private System.Windows.Forms.NotifyIcon m_notifyIcon;
-    private const string? AppIcon = "assets/MyAppIcon.ico";
+    // private const string? AppIcon = Utils.AppIconPath;
+
     // System.Windows.Window mainWindow = Application.Current.MainWindow;
     public System.Windows.Forms.NotifyIcon m_notifyIcon { get; set; }
 
@@ -16,7 +18,7 @@ public class NotificationHandler
         // SetupNotifyIcon();
         InitializeNotifyIcon();
     }
-    
+
     // Sets up initial values for notification icons
     public void InitializeNotifyIcon()
     {
@@ -24,11 +26,12 @@ public class NotificationHandler
         m_notifyIcon.BalloonTipText = "The app has been minimized. Click the tray icon to show.";
         m_notifyIcon.BalloonTipTitle = "Gameplay Time Tracker";
         m_notifyIcon.Text = "Gameplay Time Tracker";
-        m_notifyIcon.Icon =
-            new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
+        m_notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(
+            System.Reflection.Assembly.GetEntryAssembly().Location);
+        // new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppIcon));
         m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
     }
-    
+
     // Deletes notification from the memory when closing
     public void OnCloseNotify(object sender, CancelEventArgs args)
     {
@@ -41,7 +44,7 @@ public class NotificationHandler
     }
 
     private WindowState m_storedWindowState = WindowState.Normal;
-    
+
     public void OnStateChanged(object sender, EventArgs args)
     {
         if (Utils.mainWindow.WindowState == WindowState.Minimized)

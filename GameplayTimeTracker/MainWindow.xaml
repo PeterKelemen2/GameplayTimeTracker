@@ -13,7 +13,7 @@
         SizeChanged="OnSizeChanged"
         StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
-        Icon="pack://application:,,,/assets/MyAppIcon.ico">
+        Icon="pack://application:,,,/assets/GameplayTimeTracker.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
         <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Black" />

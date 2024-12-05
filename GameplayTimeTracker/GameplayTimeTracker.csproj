@@ -7,6 +7,7 @@
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
         <AssemblyName>Gameplay Time Tracker</AssemblyName>
+        <ApplicationIcon>assets\GameplayTimeTracker.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,14 +36,14 @@
         <None Remove="Effects\SaturationEffect.ps"/>
         <None Remove="assets\appicon.png"/>
         <None Remove="assets\appicon.ico"/>
-        <None Remove="assets\MyAppIcon.ico"/>
-        <Content Include="assets\MyAppIcon.ico">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="assets\editImage.png"/>
         <None Remove="settings.json"/>
         <Content Include="settings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="assets\GameplayTimeTracker.ico" />
+        <Content Include="assets\GameplayTimeTracker.ico">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
