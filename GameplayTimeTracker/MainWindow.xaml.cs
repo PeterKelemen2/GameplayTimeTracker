@@ -46,6 +46,7 @@ namespace GameplayTimeTracker
 
         private NotificationHandler notificationHandler = new();
 
+        private PopupMenu exitPopup;
         private SettingsMenu settingsMenu;
         private DragDropOverlay dragDropOverlay;
 
@@ -53,7 +54,7 @@ namespace GameplayTimeTracker
         {
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
-            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings);
+            // settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings);
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
@@ -322,20 +323,30 @@ namespace GameplayTimeTracker
                 }
             }
         }
-        
+
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
                 e.Cancel = true;
-                
+
                 tileContainer.CloseAllPopups();
                 CloseSettingsMenu();
-                
-                PopupMenu exitPopup = new PopupMenu(
-                    text: "Are you sure you want to exit?",
-                    routedEvent1: ExitButton_Click);
-                exitPopup.OpenMenu();
+
+                if (exitPopup == null)
+                {
+                    exitPopup = new PopupMenu(
+                        text: "Are you sure you want to exit?",
+                        routedEvent1: ExitButton_Click);
+                    exitPopup.OpenMenu();
+                }
+                else
+                {
+                    if (!exitPopup.IsToggled)
+                    {
+                        exitPopup.OpenMenu();
+                    }
+                }
 
                 // Reinitialize NotifyIcon if it's null
                 if (notificationHandler.m_notifyIcon == null)
@@ -374,8 +385,7 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            // settingsMenu = new SettingsMenu(ContainerGrid);
-            // tileContainer.CloseAllPopups();
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings);
             settingsMenu.OpenMenu();
         }
 

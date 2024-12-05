@@ -33,16 +33,12 @@ public class SettingsMenu : UserControl
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
-    public Grid MenuContainerGrid { get; set; }
     public Grid SettingsGrid { get; set; }
     public Settings Settings { get; set; }
     public List<Theme> Themes { get; set; }
 
 
     private DoubleAnimation fadeInAnimation = new();
-    private DoubleAnimation otherFadeInAnimation = new();
-    private DoubleAnimation fadeOutAnimation = new();
-    private DoubleAnimation otherFadeOutAnimation = new();
     private DoubleAnimation zoomInAnimation = new();
     private DoubleAnimation zoomOutAnimation = new();
     private DoubleAnimation zoomOutAnimation2 = new();
@@ -51,9 +47,6 @@ public class SettingsMenu : UserControl
     private ThicknessAnimation rollInAnimation = new();
     private ThicknessAnimation rollOutAnimation = new();
     private ScaleTransform scaleTransform = new();
-
-    private Button yesButton = new();
-    private Button noButton = new();
 
     public BitmapSource menuBgBitmap;
     BitmapSource extendedBitmap;
@@ -85,11 +78,9 @@ public class SettingsMenu : UserControl
         if (_lastClickedTextBlock != null)
         {
             _lastClickedTextBlock.FontWeight = FontWeights.Regular;
-            // _lastClickedTextBlock.TextDecorations = null;
         }
 
         // Add underline to the newly clicked TextBlock
-        // clickedTextBlock.TextDecorations = TextDecorations.Underline;
         clickedTextBlock.FontWeight = FontWeights.Bold;
 
         // Update the reference
@@ -132,14 +123,14 @@ public class SettingsMenu : UserControl
             UpdateUnderline(PrefBlock);
             pm.CreateMenu(sender, e);
         };
-        
+
         TextBlock ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
         ThemesBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(ThemesBlock);
             tm.CreateMenu(sender, e);
         };
-        
+
         pm.CreateMenuMethod();
         UpdateUnderline(PrefBlock);
 
@@ -214,30 +205,6 @@ public class SettingsMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.05)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
-
-        fadeOutAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        otherFadeInAnimation = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(1)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        otherFadeOutAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(1)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
     }
 
 
@@ -251,33 +218,6 @@ public class SettingsMenu : UserControl
         rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
         rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
         SetBlurImage();
-
-        // Update the height of the menuRect if it has been created already
-        if (MenuContainerGrid != null)
-        {
-            foreach (UIElement child in MenuContainerGrid.Children)
-            {
-                if (child is Rectangle menuRect)
-                {
-                    menuRect.Height = H;
-                }
-
-                if (child is TextBlock menuTitle)
-                {
-                    menuTitle.Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0);
-                }
-            }
-
-            if (yesButton != null)
-            {
-                yesButton.Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2);
-            }
-
-            if (noButton != null)
-            {
-                noButton.Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2);
-            }
-        }
     }
 
     public void OpenMenu()
@@ -323,7 +263,7 @@ public class SettingsMenu : UserControl
 
         Console.WriteLine("Menu closed!");
     }
-    
+
     public void CloseMenu(object sender, RoutedEventArgs e)
     {
         CloseMenuMethod();
@@ -339,19 +279,12 @@ public class SettingsMenu : UserControl
                 ? Utils.CaptureContainerGrid(1.0) // Full size capture
                 : Utils.CaptureContainerGrid(); // Partial capture with scaling
 
-            // Only update if the new bitmap is different or needs updating
-            if (menuBgBitmap != newBitmap)
+            if (bgImage != null)
             {
-                // Optionally, dispose of the old bitmap reference if you don't need it anymore
-                menuBgBitmap = newBitmap;
-
-                // Update the image source with the new bitmap
-                bgImage.Source = menuBgBitmap;
+                bgImage.Width = WinWidth;
+                bgImage.Height = WinHeight;
+                bgImage.Source = newBitmap;
             }
-
-            // Ensure image dimensions are updated
-            bgImage.Width = WinWidth;
-            bgImage.Height = WinHeight;
         }
     }
 
