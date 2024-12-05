@@ -12,22 +12,36 @@ namespace GameplayTimeTracker;
 
 public class JsonHandler
 {
-    public string DefaultSettings =
-        "{\n  \"startWithSystem\": true,\n  \"themeList\": [\n    {\n      \"themeName\": \"default\",\n      \"colors\": {\n        \"bgColor\": \"#1E2030\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#414769\",\n        \"tileColor2\": \"#2E324A\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    },\n    {\n      \"themeName\": \"pink\",\n      \"colors\": {\n        \"bgColor\": \"#45092b\",\n        \"footerColor\": \"#90EE90\",\n        \"darkColor\": \"#1E2030\",\n        \"lightColor\": \"#2E324A\",\n        \"fontColor\": \"#DAE4FF\",\n        \"runningColor\": \"#C3E88D\",\n        \"leftColor\": \"#89ACF2\",\n        \"rightColor\": \"#B7BDF8\",\n        \"tileColor1\": \"#db1484\",\n        \"tileColor2\": \"#7d2055\",\n        \"shadowColor\": \"#151515\",\n        \"editColor1\": \"#7DD6EB\",\n        \"editColor2\": \"#7DD6EB\"\n      }\n    }\n  ]\n}\n";
-
-    // private string CheckForFile(string filePath)
-    // {
-    //     return File.Exists(filePath) ? filePath : SampleImagePath;
-    // }
-
     // If there is no settings file, it creates one with the default configuration.
     public void InitializeSettings()
     {
         CheckForDataDirectory();
         if (!File.Exists(Utils.SettingsFilePath))
         {
-            File.WriteAllText(Utils.SettingsFilePath, DefaultSettings);
+            Settings settings = GetDefaultSettings();
+            WriteSettingsToFile(settings);
         }
+    }
+
+    private void WriteSettingsToFile(Settings settings)
+    {
+        string defaultJson = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Utils.SettingsFilePath, defaultJson);
+    }
+
+    private Settings GetDefaultSettings()
+    {
+        Settings settings = new Settings();
+
+        settings.StartWithSystem = true;
+        CreateShortcutForStartup();
+
+        settings.SelectedTheme = "Default";
+
+        settings.ThemeList = new List<Theme>();
+        FillMissingThemes(settings);
+        
+        return settings;
     }
 
     // Creates a Settings instance from the settings.json
@@ -40,32 +54,8 @@ public class JsonHandler
 
         if (string.IsNullOrWhiteSpace(json))
         {
-            settings = new Settings();
-
-            settings.StartWithSystem = true;
-            CreateShortcutForStartup();
-
-            settings.SelectedTheme = "Default";
-
-            Theme theme = new Theme();
-            theme.ThemeName = "Default";
-            theme.Colors = Utils.GetDefaultColors();
-
-            Theme pinkTheme = new Theme();
-            pinkTheme.ThemeName = "Pink";
-            pinkTheme.Colors = Utils.GetPinkColors();
-
-            Theme custom = new Theme();
-            custom.ThemeName = "Custom";
-            custom.Colors = Utils.GetDefaultColors();
-
-            settings.ThemeList = new List<Theme>();
-            settings.ThemeList.Add(theme);
-            settings.ThemeList.Add(pinkTheme);
-            settings.ThemeList.Add(custom);
-
-            string defaultJson = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(Utils.SettingsFilePath, defaultJson);
+            settings = GetDefaultSettings();
+            WriteSettingsToFile(settings);
         }
         else
         {
@@ -88,62 +78,44 @@ public class JsonHandler
                 RemoveShortcutForStartup();
             }
 
-            Console.WriteLine($"Start With System: {settings.StartWithSystem}");
+            if (settings.SelectedTheme == null) settings.SelectedTheme = "Default";
 
-            if (settings.SelectedTheme == null)
-            {
-                settings.SelectedTheme = "Default";
-            }
-
-            if (settings.ThemeList == null)
-            {
-                settings.ThemeList = new List<Theme>();
-                if (settings.ThemeList.Count == 0)
-                {
-                    Theme theme = new Theme();
-                    theme.ThemeName = "Default";
-                    theme.Colors = Utils.GetDefaultColors();
-                    settings.ThemeList.Add(theme);
-                }
-            }
-            else
-            {
-                bool containsDefault = settings.ThemeList.Any(theme => theme.ThemeName == "Default");
-                bool containsPink = settings.ThemeList.Any(theme => theme.ThemeName == "Pink");
-                bool containsCustom = settings.ThemeList.Any(theme => theme.ThemeName == "Custom");
-
-                if (!containsDefault)
-                {
-                    Theme theme = new Theme();
-                    theme.ThemeName = "Default";
-                    theme.Colors = Utils.GetDefaultColors();
-                    settings.ThemeList.Add(theme);
-                }
-                
-                if (!containsPink)
-                {
-                    Theme theme = new Theme();
-                    theme.ThemeName = "Pink";
-                    theme.Colors = Utils.GetPinkColors();
-                    settings.ThemeList.Add(theme);
-                }
-                
-                if (!containsCustom)
-                {
-                    Theme theme = new Theme();
-                    theme.ThemeName = "Custom";
-                    theme.Colors = Utils.GetPinkColors();
-                    settings.ThemeList.Add(theme);
-                }
-                
-                string defaultJson = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(Utils.SettingsFilePath, defaultJson);
-            }
-
-            Console.WriteLine($"Themes loaded from settings: {settings.ThemeList.Count}");
+            if (settings.ThemeList == null) settings.ThemeList = new List<Theme>();
+            FillMissingThemes(settings);
         }
 
         return settings;
+    }
+
+    private void FillMissingThemes(Settings settings)
+    {
+        bool containsDefault = settings.ThemeList.Any(theme => theme.ThemeName == "Default");
+        bool containsPink = settings.ThemeList.Any(theme => theme.ThemeName == "Pink");
+        bool containsCustom = settings.ThemeList.Any(theme => theme.ThemeName == "Custom");
+
+        if (!containsDefault)
+        {
+            Theme theme = new Theme();
+            theme.ThemeName = "Default";
+            theme.Colors = Utils.GetDefaultColors();
+            settings.ThemeList.Add(theme);
+        }
+
+        if (!containsPink)
+        {
+            Theme theme = new Theme();
+            theme.ThemeName = "Pink";
+            theme.Colors = Utils.GetPinkColors();
+            settings.ThemeList.Add(theme);
+        }
+
+        if (!containsCustom)
+        {
+            Theme theme = new Theme();
+            theme.ThemeName = "Custom";
+            theme.Colors = Utils.GetPinkColors();
+            settings.ThemeList.Add(theme);
+        }
     }
 
     public void WriteThemesToFile(List<Theme> themesList)
