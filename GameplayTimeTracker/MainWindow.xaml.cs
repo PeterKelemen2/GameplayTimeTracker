@@ -331,23 +331,9 @@ namespace GameplayTimeTracker
                 tileContainer.CloseAllPopups();
                 CloseSettingsMenu();
 
-                if (exitPopup == null)
-                {
-                    exitPopup = new PopupMenu(
-                        text: "Are you sure you want to exit?",
-                        routedEvent1: ExitButton_Click);
-                    exitPopup.OpenMenu();
-                }
-                else
-                {
-                    if (!exitPopup.IsToggled)
-                    {
-                        exitPopup = new PopupMenu(
-                            text: "Are you sure you want to exit?",
-                            routedEvent1: ExitButton_Click);
-                        exitPopup.OpenMenu();
-                    }
-                }
+                exitPopup = new PopupMenu(text: "Are you sure you want to exit?",
+                    routedEvent1: ExitButton_Click);
+                exitPopup.OpenMenu();
 
                 // Reinitialize NotifyIcon if it's null
                 if (notificationHandler.m_notifyIcon == null)
