@@ -48,31 +48,9 @@
               "target": "Package",
               "version": "[4.6.1, )"
             },
-            "Gu.Wpf.Geometry": {
-              "target": "Package",
-              "version": "[2.2.8, )"
-            },
             "IconExtractor": {
               "target": "Package",
               "version": "[1.0.1, )"
-            },
-            "IconUtilities": {
-              "target": "Package",
-              "version": "[1.0.2, )"
-            },
-            "Microsoft.NETFramework.ReferenceAssemblies": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[1.0.3, )"
-            },
-            "NotifyIcon": {
-              "target": "Package",
-              "version": "[1.23.10209.11223, )"
-            },
-            "NotifyIcon.Base": {
-              "target": "Package",
-              "version": "[1.23.10209.11223, )"
             },
             "NotifyIcon.Windows": {
               "target": "Package",
@@ -81,10 +59,6 @@
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[8.0.10, )"
-            },
-            "System.Windows.Forms": {
-              "target": "Package",
-              "version": "[4.0.0, )"
             },
             "WindowsShortcutFactory": {
               "target": "Package",

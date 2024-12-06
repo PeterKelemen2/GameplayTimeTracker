@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "S/lT67CCE88=",
+  "dgSpecHash": "JwcL7Gw8CVs=",
   "success": true,
   "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [
@@ -11,16 +11,11 @@
     "C:\\Users\\Peti\\.nuget\\packages\\giosharp\\3.24.24.38\\giosharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\glibsharp\\3.24.24.38\\glibsharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\gtksharp\\3.24.24.38\\gtksharp.3.24.24.38.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\gu.wpf.geometry\\2.2.8\\gu.wpf.geometry.2.2.8.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\iconextractor\\1.0.1\\iconextractor.1.0.1.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\iconutilities\\1.0.2\\iconutilities.1.0.2.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net461\\1.0.3\\microsoft.netframework.referenceassemblies.net461.1.0.3.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\monomac.netstandard\\0.0.4\\monomac.netstandard.0.0.4.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\notifyicon\\1.23.10209.11223\\notifyicon.1.23.10209.11223.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\notifyicon.base\\1.23.10209.11223\\notifyicon.base.1.23.10209.11223.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\notifyicon.windows\\1.23.10209.11223\\notifyicon.windows.1.23.10209.11223.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\pangosharp\\3.24.24.38\\pangosharp.3.24.24.38.nupkg.sha512",
@@ -44,19 +39,7 @@
     "C:\\Users\\Peti\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
-    "C:\\Users\\Peti\\.nuget\\packages\\system.windows.forms\\4.0.0\\system.windows.forms.4.0.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\windowsshortcutfactory\\1.2.0\\windowsshortcutfactory.1.2.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Windows.Forms 4.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "System.Windows.Forms",
-      "targetGraphs": [
-        "net7.0-windows7.0"
-      ]
-    }
-  ]
+  "logs": []
 }

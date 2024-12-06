@@ -191,7 +191,7 @@ namespace GameplayTimeTracker
             }
             else
             {
-                selfPopup = new PopupMenu(text:"Tudod mi lesz tavasszal?");
+                selfPopup = new PopupMenu(text:"Sorry, can't keep tabs on myself", type:"ok");
                 selfPopup.OpenMenu();
             }
         }
