@@ -6,10 +6,6 @@ namespace GameplayTimeTracker;
 
 public class NotificationHandler
 {
-    // private System.Windows.Forms.NotifyIcon m_notifyIcon;
-    // private const string? AppIcon = Utils.AppIconPath;
-
-    // System.Windows.Window mainWindow = Application.Current.MainWindow;
     public System.Windows.Forms.NotifyIcon m_notifyIcon { get; set; }
 
     public NotificationHandler()

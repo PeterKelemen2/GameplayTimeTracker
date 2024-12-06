@@ -22,13 +22,11 @@ namespace GameplayTimeTracker
 {
     public partial class MainWindow : System.Windows.Window
     {
-        private const string jsonFilePath = "data.json";
         private const string? SampleImagePath = "assets/no_icon.png";
         private bool isBlurToggled = false;
         private bool isAnimating = false;
 
         TileContainer tileContainer = new();
-        List<Tile> tilesList = new List<Tile>();
 
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
@@ -47,7 +45,6 @@ namespace GameplayTimeTracker
         {
             TotalPlaytimeTextBlock.Text = $"Total Playtime: {tileContainer.GetTotalPlaytimePretty()}";
             tracker.InitializeProcessTracker(tileContainer);
-            // settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings);
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";

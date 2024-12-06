@@ -61,8 +61,6 @@ public class Tile : UserControl
     private TextBox editExePathBox;
     private Button editExePathButton;
 
-    // private CustomButton newTestButton;
-
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
     public BitmapSource bgImageGray;

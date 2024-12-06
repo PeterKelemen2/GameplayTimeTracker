@@ -63,11 +63,6 @@ public class PopupMenu : UserControl
 
     public Image bgImage;
     
-    private void Dummy(object sender, EventArgs e)
-    {
-        Console.WriteLine("Dummy router event handler invoked.");
-    }
-    
     public PopupMenu()
     {
     }

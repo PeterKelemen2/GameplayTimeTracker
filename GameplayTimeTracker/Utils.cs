@@ -12,9 +12,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
 using Toolbelt.Drawing;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using MessageBox = System.Windows.MessageBox;
-using TextBox = System.Windows.Controls.TextBox;
+// using HorizontalAlignment = System.Windows.HorizontalAlignment;
+// using MessageBox = System.Windows.MessageBox;
+// using TextBox = System.Windows.Controls.TextBox;
 
 namespace GameplayTimeTracker;
 

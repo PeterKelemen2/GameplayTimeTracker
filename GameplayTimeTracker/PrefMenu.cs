@@ -5,9 +5,7 @@ namespace GameplayTimeTracker;
 
 public class PrefMenu : UserControl
 {
-    public Grid container { get; set; }
     public StackPanel Panel { get; set; }
-    public TextBlock Label { get; set; }
 
     public Settings CurrentSettings { get; set; }
     public bool StartWithSystem { get; set; }

@@ -4,13 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Color = System.Windows.Media.Color;
 
 namespace GameplayTimeTracker;
 
 public class ThemeMenu : UserControl
 {
-    public Grid container { get; set; }
     public List<Theme> Themes { get; set; }
     public StackPanel Panel { get; set; }
     public ComboBox comboBox { get; set; }
