@@ -30,7 +30,7 @@ public class ColorEntry : UserControl
         {
             Width = width,
             Height = 70,
-            Margin = new Thickness(15, 5, 5, 5),
+            Margin = new Thickness(0, 5, 0, 5),
             HorizontalAlignment = HorizontalAlignment.Left,
         };
 

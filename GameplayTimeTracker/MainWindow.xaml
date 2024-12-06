@@ -244,8 +244,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal" Width="{Binding ElementName=SettingsBgRect, Path=Width}">
                             <TextBlock x:Name="Pref" Text="Preferences" FontSize="14" Margin="10" FontWeight="Bold"
                                        Foreground="White" VerticalAlignment="Center">
                             </TextBlock>
@@ -257,7 +257,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                     <StackPanel x:Name="ContentPanel" HorizontalAlignment="Center"></StackPanel>
                 </ScrollViewer>
             </Grid>

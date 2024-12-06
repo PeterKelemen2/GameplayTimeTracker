@@ -8,23 +8,26 @@ namespace GameplayTimeTracker;
 
 public class PrefEntry : UserControl
 {
+    private StackPanel ParentPanel;
     private Grid containerGrid;
     private TextBlock textBlock;
     public CheckBox checkBox { get; set; }
 
     public String PrefName { get; set; }
     public bool PrefValue { get; set; }
+    private double padding = 15;
 
-    public PrefEntry(string prefName, bool prefValue)
+    public PrefEntry(StackPanel parent, string prefName, bool prefValue)
     {
+        ParentPanel = parent;
         PrefName = prefName;
         PrefValue = prefValue;
 
         containerGrid = new Grid
         {
-            Width = 200,
+            Width = 300,
             Height = 50,
-            Margin = new Thickness(5),
+            Margin = new Thickness(0),
             HorizontalAlignment = HorizontalAlignment.Left,
         };
 
@@ -35,7 +38,7 @@ public class PrefEntry : UserControl
             FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Left,
-            Margin = new Thickness(15, 0, 0, 0),
+            Margin = new Thickness(padding, 0, 0, 0),
         };
         containerGrid.Children.Add(textBlock);
 
@@ -46,7 +49,7 @@ public class PrefEntry : UserControl
             FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Right,
-            Margin = new Thickness(0, 0, 15, 0),
+            Margin = new Thickness(0, 0, padding, 0),
         };
         checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
 

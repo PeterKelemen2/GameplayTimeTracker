@@ -27,7 +27,7 @@ public class PrefMenu : UserControl
     {
         Panel.Children.Clear();
 
-        PrefEntry newEntry = new PrefEntry("Start with system", StartWithSystem);
+        PrefEntry newEntry = new PrefEntry(Panel, "Start with system", StartWithSystem);
         newEntry.checkBox.Checked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
         newEntry.checkBox.Unchecked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
 
