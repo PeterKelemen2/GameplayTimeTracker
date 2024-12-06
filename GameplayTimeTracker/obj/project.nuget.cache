@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/JHZ38LM37g=",
+  "dgSpecHash": "S/lT67CCE88=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTrackerWPF2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+  "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Peti\\.nuget\\packages\\atksharp\\3.24.24.38\\atksharp.3.24.24.38.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\cairosharp\\3.24.24.38\\cairosharp.3.24.24.38.nupkg.sha512",
