@@ -23,9 +23,9 @@ There are two main parts that can be set by the user both on the user interface 
 		- When set to `true`, the gradient brush of the Tile's edit menu will be in a horizontal orientation.
 		- When set to `false`, the orientation will be vertical.
 
-		<p align="left">
-			<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/574prefs.png" height="250"/>
-		</p>
+	<p align="left">
+		<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/574prefs.png" height="250"/>
+	</p>
 	
 - **Themes**
 	- `selectedTheme`
