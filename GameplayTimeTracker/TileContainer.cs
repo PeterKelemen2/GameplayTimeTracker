@@ -303,7 +303,7 @@ public class TileContainer
         {
             tile.HorizontalTileG = tileG;
             tile.HorizontalEditG = editG;
-            tile.SetGradients();
+            tile.SetGradients(true);
         }
     }
 }

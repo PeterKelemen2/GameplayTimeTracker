@@ -748,9 +748,9 @@ public class Tile : UserControl
         SetGradients();
         // gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
         // editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+        container.Fill = gradientBrush;
         menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
-        container.Fill = gradientBrush;
         titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
         totalPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
@@ -759,7 +759,7 @@ public class Tile : UserControl
         lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
     }
 
-    public void SetGradients()
+    public void SetGradients(bool fromContainer = false)
     {
         gradientBrush = HorizontalTileG
             ? Utils.createLinGradBrushHor(Utils.TileColor1, Utils.TileColor2)
@@ -768,6 +768,11 @@ public class Tile : UserControl
         editGradientBrush = HorizontalEditG
             ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
             : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+        if (fromContainer)
+        {
+            container.Fill = gradientBrush;
+            menuRectangle.Fill = editGradientBrush;
+        }
     }
 
     // Sets up elements of the tile with the default values

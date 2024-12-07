@@ -48,6 +48,7 @@ public class PrefMenu : UserControl
     private void UpdatePrefs(String key, bool value)
     {
         if (Prefs.ContainsKey(key)) Prefs[key] = value;
+        TileGradUpdateMethod(Prefs["Horizontal Tile Gradient"], Prefs["Horizontal Edit Gradient"]);
         SaveToFile(Prefs);
     }
 
