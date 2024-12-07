@@ -23,9 +23,6 @@ There are two main parts that can be set by the user both on the user interface 
 		- When set to `true`, the gradient brush of the Tile's edit menu will be in a horizontal orientation.
 		- When set to `false`, the orientation will be vertical.
 
-	<p align="left">
-		<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/574prefs.png" height="250"/>
-	</p>
 	
 - **Themes**
 	- `selectedTheme`
@@ -38,9 +35,10 @@ There are two main parts that can be set by the user both on the user interface 
 			-   **Pink**: A vibrant pink-themed design.
 			-   **Custom**: A placeholder for user-defined customization.
 
- 	<p align="left">
-  		<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/959themes.png" height="250"/>
-  	</p>
+<p align="center">
+	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/959themes.png" height="250" style="margin-right: 20px;"/>
+	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/574prefs.png" height="250"/>
+</p>
 
   If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
   Each theme contains the following customizable color properties:
