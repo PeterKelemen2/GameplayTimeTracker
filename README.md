@@ -3,7 +3,7 @@
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
 <p align="center">
-	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png" height="400"/>
+	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/05/284app_screenshot2.png" width="400"/>
 </p>
 
 ## Configuration
@@ -14,6 +14,14 @@ There are two main parts that can be set by the user both on the user interface 
 	- `startWithSystem` ,
 		- Default value: `true`
 		- When set to `true`, the application will automatically start with the system by creating a shortcut in the startup directory.
+	- `horizontalTileGradient` ,
+		- Default value: `true`
+		- When set to `true`, the gradient brush of the Tile entries will be in a horizontal orientation.
+        - When set to `false`, the orientation will be vertical.
+	- `horizontalEditGradient` ,
+		- Default value: `true`
+		- When set to `true`, the gradient brush of the Tile's edit menu will be in a horizontal orientation.
+		- When set to `false`, the orientation will be vertical.
 - **Themes**
 	- `selectedTheme`
 		- Default value: `Default`
