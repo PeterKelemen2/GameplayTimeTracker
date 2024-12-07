@@ -44,7 +44,6 @@ public class PrefEntry : UserControl
         checkBox = new CheckBox
         {
             IsChecked = PrefValue,
-            // Style = (Style)Application.Current.FindResource("CustomCheckBoxTemplate"),
             FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Right,

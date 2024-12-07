@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace GameplayTimeTracker;
@@ -8,6 +11,8 @@ public class PrefMenu : UserControl
     public StackPanel Panel { get; set; }
 
     public Settings CurrentSettings { get; set; }
+
+    public Dictionary<string, bool> Prefs { get; set; }
     public bool StartWithSystem { get; set; }
 
     public PrefMenu(StackPanel stackPanel, Settings settings)
@@ -16,26 +21,42 @@ public class PrefMenu : UserControl
         CurrentSettings = settings;
         StartWithSystem = CurrentSettings.StartWithSystem;
         // CreateMenu();
+        Prefs = new Dictionary<string, bool>();
+        Prefs.Add("Start with system", CurrentSettings.StartWithSystem);
+        Prefs.Add("Horizontal Tile Gradient", CurrentSettings.HorizontalTileGradient);
+        Prefs.Add("Horizontal Edit Gradient", CurrentSettings.HorizontalEditGradient);
     }
 
     public void CreateMenuMethod()
     {
         Panel.Children.Clear();
-
-        PrefEntry newEntry = new PrefEntry(Panel, "Start with system", StartWithSystem);
-        newEntry.checkBox.Checked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
-        newEntry.checkBox.Unchecked += (sender, e) => SaveToFile(newEntry.checkBox.IsChecked ?? false);
-
-        Panel.Children.Add(newEntry);
+        
+        Panel.Children.Add(GetNewEntry("Start with system", CurrentSettings.StartWithSystem));
+        Panel.Children.Add(GetNewEntry("Horizontal Tile Gradient", CurrentSettings.HorizontalTileGradient));
+        Panel.Children.Add(GetNewEntry("Horizontal Edit Gradient", CurrentSettings.HorizontalEditGradient));
     }
 
-    private void SaveToFile(bool value)
+
+    private PrefEntry GetNewEntry(String prefName, bool value)
+    {
+        PrefEntry newEntry = new PrefEntry(Panel, prefName, value);
+        newEntry.checkBox.Checked += (sender, e) => UpdatePrefs(newEntry.PrefName, true);
+        newEntry.checkBox.Unchecked += (sender, e) => UpdatePrefs(newEntry.PrefName, false);
+        return newEntry;
+    }
+
+    private void UpdatePrefs(String key, bool value)
+    {
+        if (Prefs.ContainsKey(key)) Prefs[key] = value;
+        SaveToFile(Prefs);
+    }
+
+    private void SaveToFile(Dictionary<String, bool> prefs)
     {
         JsonHandler jsonHandler = new JsonHandler();
-        jsonHandler.WriteStartWithSystemToFile(value);
-        StartWithSystem = value;
+        jsonHandler.WritePrefsToFile(Prefs["Start with system"], Prefs["Horizontal Tile Gradient"],
+            Prefs["Horizontal Edit Gradient"]);
     }
-
 
     public void CreateMenu(object sender, MouseButtonEventArgs e)
     {

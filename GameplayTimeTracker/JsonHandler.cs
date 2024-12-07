@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text.Json;
+using MonoMac.CoreImage;
 using WindowsShortcutFactory;
 
 namespace GameplayTimeTracker;
@@ -158,6 +159,28 @@ public class JsonHandler
         var options = new JsonSerializerOptions { WriteIndented = true };
         string jsonString = JsonSerializer.Serialize(currentSettings, options);
         File.WriteAllText(Utils.SettingsFilePath, jsonString);
+    }
+
+    public void WritePrefsToFile(bool start, bool tileG, bool editG)
+    {
+        Settings currentSettings = GetSettingsFromFile();
+
+        currentSettings.StartWithSystem = start;
+        if (start)
+        {
+            CreateShortcutForStartup();
+        }
+        else
+        {
+            RemoveShortcutForStartup();
+        }
+
+        currentSettings.HorizontalTileGradient = tileG;
+        currentSettings.HorizontalEditGradient = editG;
+
+        Console.WriteLine($"************ {currentSettings.HorizontalTileGradient} {currentSettings.HorizontalEditGradient}");
+
+        WriteSettingsToFile(currentSettings);
     }
 
 
