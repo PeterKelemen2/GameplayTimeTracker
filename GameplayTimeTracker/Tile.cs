@@ -765,7 +765,7 @@ public class Tile : UserControl
             ? Utils.createLinGradBrushHor(Utils.TileColor1, Utils.TileColor2)
             : Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
 
-        editGradientBrush = HorizontalTileG
+        editGradientBrush = HorizontalEditG
             ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
             : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
     }
