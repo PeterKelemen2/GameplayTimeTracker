@@ -2,7 +2,6 @@
 
 public class Params
 {
-    
     // Parameterless constructor for serialization
     public Params()
     {

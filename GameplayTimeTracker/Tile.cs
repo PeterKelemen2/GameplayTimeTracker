@@ -97,6 +97,9 @@ public class Tile : UserControl
     public string ExePath { get; set; }
     public string ExePathName { get; set; }
 
+    public bool HorizontalTileG { get; set; }
+    public bool HorizontalEditG { get; set; }
+
     public double CurrentPlaytime { get; set; }
     public double HTotal { get; set; }
     public double HLast { get; set; }
@@ -701,7 +704,8 @@ public class Tile : UserControl
     {
     }
 
-    public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
+    public Tile(TileContainer tileContainer, string gameName, bool horizontalTile,
+        bool horizontalEdit, double totalTime = 20, double lastPlayedTime = 10,
         string? iconImagePath = SampleImagePath, string exePath = "", double width = 760)
     {
         _tileContainer = tileContainer;
@@ -725,6 +729,12 @@ public class Tile : UserControl
 
         ExePath = exePath;
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
+
+        HorizontalTileG = horizontalTile;
+        HorizontalEditG = horizontalEdit;
+
+        Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
+
         IsMenuToggled = false;
         WasMoved = false;
 
@@ -735,8 +745,9 @@ public class Tile : UserControl
 
     public void UpdateTileColors()
     {
-        gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
-        editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+        SetGradients();
+        // gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
+        // editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
         menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
         container.Fill = gradientBrush;
@@ -748,14 +759,27 @@ public class Tile : UserControl
         lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
     }
 
+    public void SetGradients()
+    {
+        gradientBrush = HorizontalTileG
+            ? Utils.createLinGradBrushHor(Utils.TileColor1, Utils.TileColor2)
+            : Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
+
+        editGradientBrush = HorizontalTileG
+            ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
+            : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+    }
+
     // Sets up elements of the tile with the default values
     public void InitializeTile()
     {
         fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         sColMarg = new[] { TileWidth * 0.545, 1 };
 
-        gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
-        editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+        // gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
+        // editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
+
+        SetGradients();
 
         editElements = new List<UIElement>();
         mainElements = new List<UIElement>();

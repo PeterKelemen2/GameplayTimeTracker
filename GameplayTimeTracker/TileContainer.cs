@@ -296,4 +296,14 @@ public class TileContainer
             tile.ToggleBgImageColor(tile.IsRunning);
         }
     }
+
+    public void UpdateTilesGradients(bool tileG, bool editG)
+    {
+        foreach (var tile in tilesList)
+        {
+            tile.HorizontalTileG = tileG;
+            tile.HorizontalEditG = editG;
+            tile.SetGradients();
+        }
+    }
 }

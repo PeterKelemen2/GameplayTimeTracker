@@ -36,11 +36,14 @@ public class JsonHandler
         settings.StartWithSystem = true;
         CreateShortcutForStartup();
 
+        settings.HorizontalTileGradient = true;
+        settings.HorizontalEditGradient = true;
+
         settings.SelectedTheme = "Default";
 
         settings.ThemeList = new List<Theme>();
         FillMissingThemes(settings);
-        
+
         return settings;
     }
 
@@ -231,7 +234,7 @@ public class JsonHandler
     }
 
     // Creates a list of parameters used for creating tiles in the container.
-    public void InitializeContainer(TileContainer container)
+    public void InitializeContainer(TileContainer container, Settings settings)
     {
         CheckForDataDirectory();
 
@@ -250,9 +253,10 @@ public class JsonHandler
                 container.AddTile(new Tile(
                     container,
                     param.gameName,
+                    settings.HorizontalTileGradient,
+                    settings.HorizontalEditGradient,
                     param.totalTime,
                     param.lastPlayedTime,
-                    // CheckForFile(param.iconPath),
                     param.iconPath,
                     param.exePath));
             }

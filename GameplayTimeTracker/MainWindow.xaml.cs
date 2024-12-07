@@ -100,7 +100,7 @@ namespace GameplayTimeTracker
 
             notificationHandler = new NotificationHandler();
             InitSettings();
-            handler.InitializeContainer(tileContainer);
+            handler.InitializeContainer(tileContainer, settings);
             dragDropOverlay = new DragDropOverlay();
             DragDropGrid.Children.Add(dragDropOverlay);
 
@@ -167,7 +167,9 @@ namespace GameplayTimeTracker
             Utils.PrepIcon(filePath, iconPath);
             iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
-            Tile newTile = new Tile(tileContainer, fileName, 0, 0, iconPath, exePath: filePath);
+            Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
+                settings.HorizontalEditGradient, iconImagePath: iconPath, exePath: filePath
+            );
             newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 
             if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
@@ -191,7 +193,7 @@ namespace GameplayTimeTracker
             }
             else
             {
-                selfPopup = new PopupMenu(text:"Sorry, can't keep tabs on myself", type:"ok");
+                selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
                 selfPopup.OpenMenu();
             }
         }
