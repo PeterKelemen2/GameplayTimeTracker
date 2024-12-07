@@ -26,6 +26,7 @@ public class SettingsMenu : UserControl
     public string Type { get; set; }
 
     public Action MainUpdateMethod;
+    public Action<bool, bool> TileGradMethod;
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
@@ -68,7 +69,10 @@ public class SettingsMenu : UserControl
 
     private void Dummy()
     {
-        Console.WriteLine("Dummy method called!");
+    }
+
+    private void Dummy(bool tileG, bool editG)
+    {
     }
 
     private void UpdateUnderline(TextBlock clickedTextBlock)
@@ -90,7 +94,8 @@ public class SettingsMenu : UserControl
     public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
         bool isToggled = false,
         string type = "yesNo",
-        Action action = null)
+        Action updateMethod = null,
+        Action<bool, bool> tileGradMethod = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -104,12 +109,14 @@ public class SettingsMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
-        MainUpdateMethod = action == null ? Dummy : action;
+        MainUpdateMethod = updateMethod == null ? Dummy : updateMethod;
+        TileGradMethod = tileGradMethod == null ? Dummy : tileGradMethod;
 
         ToClose = false;
-        
-        ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes, Settings.SelectedTheme);
-        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings);
+
+        ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
+            Settings.SelectedTheme);
+        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
@@ -118,6 +125,9 @@ public class SettingsMenu : UserControl
         PrefBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(PrefBlock);
+            JsonHandler jsonHandler = new JsonHandler();
+            Settings = jsonHandler.GetSettingsFromFile();
+            pm.CurrentSettings = Settings;
             pm.CreateMenu(sender, e);
         };
 

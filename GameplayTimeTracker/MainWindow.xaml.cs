@@ -365,7 +365,8 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, settings, action: UpdateColors);
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, handler.GetSettingsFromFile(), updateMethod: UpdateColors,
+                tileGradMethod: tileContainer.UpdateTilesGradients);
             settingsMenu.OpenMenu();
         }
 
