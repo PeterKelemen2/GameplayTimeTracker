@@ -38,6 +38,7 @@ public class ThemeMenu : UserControl
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
             Width = 150,
+            Margin = new Thickness(0, 5, 0, 5),
         };
     }
 
@@ -87,11 +88,12 @@ public class ThemeMenu : UserControl
         InitSelected();
         Panel.Children.Add(comboBox);
         Panel.Children.Add(SwitchTileColors);
+        Panel.Children.Add(SwitchEditColors);
 
         AddColorEntries(); // Populate initial color entries based on the default selection
     }
 
-    private void AddColorEntries()
+    private void AddColorEntries(bool switchTileColors = true, bool switchEditColors = false)
     {
         // Remove all children except the first one (the ComboBox)
         for (int i = Panel.Children.Count - 1; i >= 0; i--)
@@ -111,14 +113,23 @@ public class ThemeMenu : UserControl
             {
                 Console.WriteLine($"You selected: {theme.ThemeName}");
                 SettingsMenu.SetBlurImage();
-                Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
-                Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
+
+                Color c1 = switchTileColors
+                    ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"])
+                    : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
+                
+                Color c2 = switchTileColors
+                    ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"])
+                    : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
+                
+                // Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
+                // Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
                 Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
                 Color sBg = (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]);
                 SettingsMenu.SetColors(sFont, sBg);
 
                 foreach (var color in theme.Colors)
-                {
+                {   
                     ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value, c1, c2);
                     newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
                     {
@@ -155,6 +166,22 @@ public class ThemeMenu : UserControl
                 Themes.Add(defaultTheme);
             }
         }
+    }
+
+    private void SwitchColors(ColorEntry ce1, ColorEntry ce2)
+    {
+        ColorEntry temp = ce1;
+        ce1.ColorName = ce2.ColorName;
+        ce1.ColorValue = ce2.ColorValue;
+        ce1.colorPicker.Background = ce2.colorPicker.Background;
+        ce1.colorPicker.Foreground = ce2.colorPicker.Foreground;
+        ce1.colorPicker.SelectedColor = ce2.colorPicker.SelectedColor;
+        
+        ce2.ColorName = temp.ColorName;
+        ce2.ColorValue = temp.ColorValue;
+        ce2.colorPicker.Background = temp.colorPicker.Background;
+        ce2.colorPicker.Foreground = temp.colorPicker.Foreground;
+        ce2.colorPicker.SelectedColor = temp.colorPicker.SelectedColor;
     }
 
     private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e,
