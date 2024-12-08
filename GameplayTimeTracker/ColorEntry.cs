@@ -20,6 +20,11 @@ public class ColorEntry : UserControl
     public ColorPicker colorPicker;
     private int fontSize = 15;
 
+    public ColorEntry()
+    {
+        
+    }
+
     public ColorEntry(string colorName, string colorValue, Color c1, Color c2, double width = 250)
     {
         ColorName = colorName;

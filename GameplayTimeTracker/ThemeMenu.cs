@@ -15,8 +15,8 @@ public class ThemeMenu : UserControl
     public String SelectedThemeName { get; set; }
     public SettingsMenu SettingsMenu { get; set; }
 
-    public Button SwitchTileColors { get; set; }
-    public Button SwitchEditColors { get; set; }
+    public Button SwitchTileColorsButton { get; set; }
+    public Button SwitchEditColorsButton { get; set; }
 
     public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
@@ -25,14 +25,15 @@ public class ThemeMenu : UserControl
         Themes = themes;
         SelectedThemeName = selectedThemeName;
 
-        SwitchTileColors = new Button
+        SwitchTileColorsButton = new Button
         {
             Content = "Switch Tile Colors",
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
             Width = 150,
         };
-        SwitchEditColors = new Button
+        SwitchTileColorsButton.Click += SwitchTileColorsMethod;
+        SwitchEditColorsButton = new Button
         {
             Content = "Switch Edit Colors",
             Style = (Style)Application.Current.FindResource("RoundedButton"),
@@ -40,6 +41,26 @@ public class ThemeMenu : UserControl
             Width = 150,
             Margin = new Thickness(0, 5, 0, 5),
         };
+    }
+
+    private void SwitchTileColorsMethod(object sender, RoutedEventArgs e)
+    {
+        // mainWindow.FindName("ContentPanel") as StackPanel;
+        ColorEntry tc1 = new ColorEntry();
+        ColorEntry tc2 = new ColorEntry();
+        foreach (var child in Panel.Children)
+        {
+            if (child is ColorEntry)
+            {
+                var aux = (ColorEntry)child;
+                if (aux.ColorName.Equals("tileColor1")) tc1 = aux;
+                if (aux.ColorName.Equals("tileColor2")) tc2 = aux;
+            }
+        }
+
+        Console.WriteLine($"$$$$$$$$$$$ {tc1.ColorName} - {tc2.ColorName}");
+        (tc1, tc2) = (tc2, tc1);
+        Console.WriteLine($"$$$$$$$$$$$$$ {tc1.ColorName} - {tc2.ColorName}");
     }
 
     private void InitSelected()
@@ -87,8 +108,8 @@ public class ThemeMenu : UserControl
 
         InitSelected();
         Panel.Children.Add(comboBox);
-        Panel.Children.Add(SwitchTileColors);
-        Panel.Children.Add(SwitchEditColors);
+        Panel.Children.Add(SwitchTileColorsButton);
+        Panel.Children.Add(SwitchEditColorsButton);
 
         AddColorEntries(); // Populate initial color entries based on the default selection
     }
@@ -117,11 +138,11 @@ public class ThemeMenu : UserControl
                 Color c1 = switchTileColors
                     ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"])
                     : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
-                
+
                 Color c2 = switchTileColors
                     ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"])
                     : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
-                
+
                 // Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
                 // Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
                 Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
@@ -129,7 +150,7 @@ public class ThemeMenu : UserControl
                 SettingsMenu.SetColors(sFont, sBg);
 
                 foreach (var color in theme.Colors)
-                {   
+                {
                     ColorEntry newColorEntry = new ColorEntry(color.Key, color.Value, c1, c2);
                     newColorEntry.colorPicker.SelectedColorChanged += (sender, e) =>
                     {
@@ -176,7 +197,7 @@ public class ThemeMenu : UserControl
         ce1.colorPicker.Background = ce2.colorPicker.Background;
         ce1.colorPicker.Foreground = ce2.colorPicker.Foreground;
         ce1.colorPicker.SelectedColor = ce2.colorPicker.SelectedColor;
-        
+
         ce2.ColorName = temp.ColorName;
         ce2.ColorValue = temp.ColorValue;
         ce2.colorPicker.Background = temp.colorPicker.Background;
