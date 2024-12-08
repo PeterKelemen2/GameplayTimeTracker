@@ -41,26 +41,39 @@ public class ThemeMenu : UserControl
             Width = 150,
             Margin = new Thickness(0, 5, 0, 5),
         };
+        SwitchEditColorsButton.Click += SwitchEditColorsMethod;
     }
 
     private void SwitchTileColorsMethod(object sender, RoutedEventArgs e)
     {
-        // mainWindow.FindName("ContentPanel") as StackPanel;
-        ColorEntry tc1 = new ColorEntry();
-        ColorEntry tc2 = new ColorEntry();
-        foreach (var child in Panel.Children)
+        foreach (var theme in Themes)
         {
-            if (child is ColorEntry)
+            if (theme.ThemeName == SelectedThemeName)
             {
-                var aux = (ColorEntry)child;
-                if (aux.ColorName.Equals("tileColor1")) tc1 = aux;
-                if (aux.ColorName.Equals("tileColor2")) tc2 = aux;
+                (theme.Colors["tileColor1"], theme.Colors["tileColor2"]) =
+                    (theme.Colors["tileColor2"], theme.Colors["tileColor1"]);
+                JsonHandler jsonHandler = new JsonHandler();
+                jsonHandler.WriteThemesToFile(Themes);
+                CreateDropdown();
+                SettingsMenu.MainUpdateMethod();
             }
         }
-
-        Console.WriteLine($"$$$$$$$$$$$ {tc1.ColorName} - {tc2.ColorName}");
-        (tc1, tc2) = (tc2, tc1);
-        Console.WriteLine($"$$$$$$$$$$$$$ {tc1.ColorName} - {tc2.ColorName}");
+    }
+    
+    private void SwitchEditColorsMethod(object sender, RoutedEventArgs e)
+    {
+        foreach (var theme in Themes)
+        {
+            if (theme.ThemeName == SelectedThemeName)
+            {
+                (theme.Colors["editColor1"], theme.Colors["editColor2"]) =
+                    (theme.Colors["editColor2"], theme.Colors["editColor1"]);
+                JsonHandler jsonHandler = new JsonHandler();
+                jsonHandler.WriteThemesToFile(Themes);
+                CreateDropdown();
+                SettingsMenu.MainUpdateMethod();
+            }
+        }
     }
 
     private void InitSelected()
@@ -135,16 +148,8 @@ public class ThemeMenu : UserControl
                 Console.WriteLine($"You selected: {theme.ThemeName}");
                 SettingsMenu.SetBlurImage();
 
-                Color c1 = switchTileColors
-                    ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"])
-                    : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
-
-                Color c2 = switchTileColors
-                    ? (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"])
-                    : (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
-
-                // Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
-                // Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
+                Color c1 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor1"]);
+                Color c2 = (Color)ColorConverter.ConvertFromString(theme.Colors["tileColor2"]);
                 Color sFont = (Color)ColorConverter.ConvertFromString(theme.Colors["fontColor"]);
                 Color sBg = (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]);
                 SettingsMenu.SetColors(sFont, sBg);
@@ -187,22 +192,6 @@ public class ThemeMenu : UserControl
                 Themes.Add(defaultTheme);
             }
         }
-    }
-
-    private void SwitchColors(ColorEntry ce1, ColorEntry ce2)
-    {
-        ColorEntry temp = ce1;
-        ce1.ColorName = ce2.ColorName;
-        ce1.ColorValue = ce2.ColorValue;
-        ce1.colorPicker.Background = ce2.colorPicker.Background;
-        ce1.colorPicker.Foreground = ce2.colorPicker.Foreground;
-        ce1.colorPicker.SelectedColor = ce2.colorPicker.SelectedColor;
-
-        ce2.ColorName = temp.ColorName;
-        ce2.ColorValue = temp.ColorValue;
-        ce2.colorPicker.Background = temp.colorPicker.Background;
-        ce2.colorPicker.Foreground = temp.colorPicker.Foreground;
-        ce2.colorPicker.SelectedColor = temp.colorPicker.SelectedColor;
     }
 
     private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e,
