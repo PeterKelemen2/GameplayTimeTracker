@@ -11,12 +11,14 @@ public class ThemeMenu : UserControl
 {
     public List<Theme> Themes { get; set; }
     public StackPanel Panel { get; set; }
+    public Grid ButtonsGrid { get; set; }
     public ComboBox comboBox { get; set; }
     public String SelectedThemeName { get; set; }
     public SettingsMenu SettingsMenu { get; set; }
 
-    public Button SwitchTileColorsButton { get; set; }
-    public Button SwitchEditColorsButton { get; set; }
+    public Button switchTileColorsButton { get; set; }
+    public Button switchEditColorsButton { get; set; }
+    public Button switchBarsColorsButton { get; set; }
 
     public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
@@ -25,53 +27,70 @@ public class ThemeMenu : UserControl
         Themes = themes;
         SelectedThemeName = selectedThemeName;
 
-        SwitchTileColorsButton = new Button
+        ButtonsGrid = new Grid();
+        ButtonsGrid.Height = 80;
+        
+        switchTileColorsButton = new Button
         {
-            Content = "Switch Tile Colors",
+            Content = "Tile Colors \u21c6",
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
-            Width = 150,
+            Width = 120,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
         };
-        SwitchTileColorsButton.Click += SwitchTileColorsMethod;
-        SwitchEditColorsButton = new Button
+        switchTileColorsButton.Click += (sender, e) =>
         {
-            Content = "Switch Edit Colors",
+            SwitchTileColorsMethod(sender, e, "tileColor1", "tileColor2");
+        };
+        ButtonsGrid.Children.Add(switchTileColorsButton);
+
+        switchEditColorsButton = new Button
+        {
+            Content = "Edit Colors \u21c6",
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
-            Width = 150,
-            Margin = new Thickness(0, 5, 0, 5),
+            Width = 120,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Top,
         };
-        SwitchEditColorsButton.Click += SwitchEditColorsMethod;
+        switchEditColorsButton.Click += (sender, e) =>
+        {
+            SwitchTileColorsMethod(sender, e, "editColor1", "editColor2");
+        };
+        ButtonsGrid.Children.Add(switchEditColorsButton);
+
+        switchBarsColorsButton = new Button
+        {
+            Content = "Bar Colors \u21c6",
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Height = 30,
+            Width = 120,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(0, 40, 0, 0)
+        };
+        switchBarsColorsButton.Click += (sender, e) =>
+        {
+            SwitchTileColorsMethod(sender, e, "leftColor", "rightColor");
+        };
+        ButtonsGrid.Children.Add(switchBarsColorsButton);
     }
 
-    private void SwitchTileColorsMethod(object sender, RoutedEventArgs e)
+    private void SwitchTileColorsMethod(object sender, RoutedEventArgs e, String c1, String c2)
     {
         foreach (var theme in Themes)
         {
             if (theme.ThemeName == SelectedThemeName)
             {
-                (theme.Colors["tileColor1"], theme.Colors["tileColor2"]) =
-                    (theme.Colors["tileColor2"], theme.Colors["tileColor1"]);
-                JsonHandler jsonHandler = new JsonHandler();
-                jsonHandler.WriteThemesToFile(Themes);
-                CreateDropdown();
-                SettingsMenu.MainUpdateMethod();
-            }
-        }
-    }
-    
-    private void SwitchEditColorsMethod(object sender, RoutedEventArgs e)
-    {
-        foreach (var theme in Themes)
-        {
-            if (theme.ThemeName == SelectedThemeName)
-            {
-                (theme.Colors["editColor1"], theme.Colors["editColor2"]) =
-                    (theme.Colors["editColor2"], theme.Colors["editColor1"]);
-                JsonHandler jsonHandler = new JsonHandler();
-                jsonHandler.WriteThemesToFile(Themes);
-                CreateDropdown();
-                SettingsMenu.MainUpdateMethod();
+                if (theme.Colors.ContainsKey(c1) && theme.Colors.ContainsKey(c2))
+                {
+                    (theme.Colors[c1], theme.Colors[c2]) = (theme.Colors[c2], theme.Colors[c1]);
+                    JsonHandler jsonHandler = new JsonHandler();
+                    jsonHandler.WriteThemesToFile(Themes);
+                    CreateDropdown();
+                    SettingsMenu.MainUpdateMethod();
+                }
             }
         }
     }
@@ -121,8 +140,7 @@ public class ThemeMenu : UserControl
 
         InitSelected();
         Panel.Children.Add(comboBox);
-        Panel.Children.Add(SwitchTileColorsButton);
-        Panel.Children.Add(SwitchEditColorsButton);
+        Panel.Children.Add(ButtonsGrid);
 
         AddColorEntries(); // Populate initial color entries based on the default selection
     }
