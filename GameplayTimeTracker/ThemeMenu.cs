@@ -14,7 +14,7 @@ public class ThemeMenu : UserControl
     public ComboBox comboBox { get; set; }
     public String SelectedThemeName { get; set; }
     public SettingsMenu SettingsMenu { get; set; }
-
+    
     public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
         SettingsMenu = settingsMenu;

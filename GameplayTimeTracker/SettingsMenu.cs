@@ -121,7 +121,7 @@ public class SettingsMenu : UserControl
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
         PrefBlock = headerPanel.FindName("Pref") as TextBlock;
-
+        PrefBlock.FontWeight = FontWeights.Regular;
         PrefBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(PrefBlock);
@@ -132,6 +132,7 @@ public class SettingsMenu : UserControl
         };
 
         ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
+        ThemesBlock.FontWeight = FontWeights.Regular;
         ThemesBlock.MouseDown += (sender, e) =>
         {
             UpdateUnderline(ThemesBlock);

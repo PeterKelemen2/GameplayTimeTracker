@@ -246,7 +246,7 @@
                 <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
                     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                         <StackPanel x:Name="HeaderPanel" Orientation="Horizontal" Width="{Binding ElementName=SettingsBgRect, Path=Width}">
-                            <TextBlock x:Name="Pref" Text="Preferences" FontSize="14" Margin="10" FontWeight="Bold"
+                            <TextBlock x:Name="Pref" Text="Preferences" FontSize="14" Margin="10" FontWeight="Regular"
                                        Foreground="White" VerticalAlignment="Center">
                             </TextBlock>
                             <TextBlock x:Name="Themes" Text="Themes" FontSize="14" Margin="10" FontWeight="Regular"

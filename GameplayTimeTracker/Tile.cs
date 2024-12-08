@@ -80,6 +80,8 @@ public class Tile : UserControl
     private double hLast;
     private double mLast;
     private double currentPlaytime;
+    private double bgColorOpacity = 0.8;
+    private double bgGrayOpacity = 0.6;
 
     private const string? SampleImagePath = "assets/no_icon.png";
 
@@ -1032,7 +1034,7 @@ public class Tile : UserControl
                 Height = TileHeight * imageScale,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Opacity = 0.7
+                Opacity = bgGrayOpacity
             };
 
             bgImage2 = new Image
@@ -1197,35 +1199,70 @@ public class Tile : UserControl
     public void ToggleBgImageColor(bool runningBool)
     {
         // Create the fade-in animation
-        DoubleAnimation fadeInAnimation = new DoubleAnimation
+        // DoubleAnimation fadeInAnimation = new DoubleAnimation
+        // {
+        //     From = 0.0,
+        //     To = bgImageOpacity,
+        //     Duration = TimeSpan.FromSeconds(0.75),
+        //     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        // };
+        // DoubleAnimation fadeOutAnimation = new DoubleAnimation
+        // {
+        //     From = bgImageOpacity,
+        //     To = 0.0,
+        //     Duration = TimeSpan.FromSeconds(0.75),
+        //     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
+        // };
+
+        DoubleAnimation fadeInColored = new DoubleAnimation
         {
             From = 0.0,
-            To = 0.7,
+            To = bgColorOpacity,
             Duration = TimeSpan.FromSeconds(0.75),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
-        DoubleAnimation fadeOutAnimation = new DoubleAnimation
+
+        DoubleAnimation fadeOutColored = new DoubleAnimation
         {
-            From = 0.7,
+            From = bgColorOpacity,
             To = 0.0,
             Duration = TimeSpan.FromSeconds(0.75),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        DoubleAnimation fadeInGray = new DoubleAnimation
+        {
+            From = 0.0,
+            To = bgGrayOpacity,
+            Duration = TimeSpan.FromSeconds(0.75),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        DoubleAnimation fadeOutGray = new DoubleAnimation
+        {
+            From = bgGrayOpacity,
+            To = 0.0,
+            Duration = TimeSpan.FromSeconds(0.75),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
 
         if (runningBool)
         {
-            if (bgImage.Opacity > 0.0)
+            // bgImage - Gray
+            // bgImage2 - Color
+
+            if (bgImage.Opacity > 0.0) // Gray
             {
-                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
-                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
+                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeOutGray);
+                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeInColored);
             }
         }
         else
         {
-            if (bgImage2.Opacity > 0.0)
+            if (bgImage2.Opacity > 0.0) // Color
             {
-                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+                bgImage.BeginAnimation(UIElement.OpacityProperty, fadeInGray);
+                bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutColored);
             }
         }
     }
