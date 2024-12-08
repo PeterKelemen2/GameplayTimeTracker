@@ -14,13 +14,31 @@ public class ThemeMenu : UserControl
     public ComboBox comboBox { get; set; }
     public String SelectedThemeName { get; set; }
     public SettingsMenu SettingsMenu { get; set; }
-    
+
+    public Button SwitchTileColors { get; set; }
+    public Button SwitchEditColors { get; set; }
+
     public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
         SettingsMenu = settingsMenu;
         Panel = stackPanel;
         Themes = themes;
         SelectedThemeName = selectedThemeName;
+
+        SwitchTileColors = new Button
+        {
+            Content = "Switch Tile Colors",
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Height = 30,
+            Width = 150,
+        };
+        SwitchEditColors = new Button
+        {
+            Content = "Switch Edit Colors",
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Height = 30,
+            Width = 150,
+        };
     }
 
     private void InitSelected()
@@ -68,6 +86,7 @@ public class ThemeMenu : UserControl
 
         InitSelected();
         Panel.Children.Add(comboBox);
+        Panel.Children.Add(SwitchTileColors);
 
         AddColorEntries(); // Populate initial color entries based on the default selection
     }
@@ -78,7 +97,7 @@ public class ThemeMenu : UserControl
         for (int i = Panel.Children.Count - 1; i >= 0; i--)
         {
             var child = Panel.Children[i];
-            if (child is not ComboBox) // If it's not a ComboBox, remove it
+            if (child is ColorEntry)
             {
                 Console.WriteLine(child); // Log the child that is being removed
                 Panel.Children.RemoveAt(i);
@@ -108,6 +127,7 @@ public class ThemeMenu : UserControl
                     Panel.Children.Add(newColorEntry);
                     Console.WriteLine($"Name: {color.Key} - Value: {color.Value}");
                 }
+
                 Utils.SetColors(theme.Colors);
                 SettingsMenu.MainUpdateMethod();
             }
