@@ -22,7 +22,7 @@ public class GradientBar : UserControl
     public bool WasInitialized { get; set; }
 
     private Rectangle barBackground;
-    private Rectangle barForeground;
+    public Rectangle barForeground;
     private LinearGradientBrush gradientBrush;
     private Grid grid = new();
     private Tile TileParent;

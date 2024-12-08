@@ -753,12 +753,17 @@ public class Tile : UserControl
         container.Fill = gradientBrush;
         menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
+
         titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+
         totalPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
         totalPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        totalTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
+
         lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
     }
 
     public void SetGradients(bool fromContainer = false)
