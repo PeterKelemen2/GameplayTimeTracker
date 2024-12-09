@@ -423,38 +423,77 @@ public class Tile : UserControl
         }
     }
 
-    private void LaunchExe(object sender, RoutedEventArgs e)
+    private async void LaunchExe(object sender, RoutedEventArgs e)
     {
         try
         {
             if (IsRunning)
             {
                 Console.WriteLine("Already running");
+                return;
             }
-            else
+
+            // Capture UI-bound properties on the UI thread
+            string gameName = GameName; // Cache the value
+            string exePath = ExePath; // Cache the value
+
+            if (string.IsNullOrEmpty(exePath) || !System.IO.File.Exists(exePath))
+            {
+                throw new FileNotFoundException($"Executable not found: {exePath}");
+            }
+
+            string workingDir = System.IO.Path.GetDirectoryName(exePath);
+            if (string.IsNullOrEmpty(workingDir) || !System.IO.Directory.Exists(workingDir))
+            {
+                throw new DirectoryNotFoundException($"Working directory not found: {workingDir}");
+            }
+
+            await Task.Run(() =>
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = ExePath,
+                    FileName = exePath, // Use the cached variable
+                    WorkingDirectory = workingDir,
                     UseShellExecute = true
                 };
 
-                Process.Start(startInfo);
-            }
+                var process = Process.Start(startInfo);
+
+                if (process != null)
+                {
+                    Console.WriteLine($"Launched {gameName}. Waiting for it to exit...");
+                    process.WaitForExit();
+
+                    // Notify the user on the UI thread
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Console.WriteLine($"{gameName} has exited. Exit code: {process.ExitCode}");
+                    });
+                }
+                else
+                {
+                    // Notify the user on the UI thread
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Console.WriteLine($"Failed to start {gameName}");
+                        PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {gameName}", type: "ok");
+                        popupMenu.OpenMenu();
+                    });
+                }
+            });
         }
         catch (Win32Exception win32Ex) when (win32Ex.NativeErrorCode == 740) // Error 740 means elevation required
         {
-            // Prompt user for admin if the error suggests elevation is needed
             MessageBoxResult result = MessageBox.Show(
                 $"The application {GameName} requires administrator privileges. Do you want to run it as administrator?",
                 "Elevation Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                // Re-launch with admin privileges
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = ExePath,
+                    WorkingDirectory = System.IO.Path.GetDirectoryName(ExePath),
                     UseShellExecute = true,
                     Verb = "runas"
                 };
@@ -464,11 +503,18 @@ public class Tile : UserControl
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            Console.WriteLine($"Error: {ex}");
+            // Ensure error messages are shown on the UI thread
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!",
+                //     MessageBoxButton.OK, MessageBoxImage.Error);
+                PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {GameName}", type: "ok");
+                popupMenu.OpenMenu();
+            });
         }
     }
+
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
