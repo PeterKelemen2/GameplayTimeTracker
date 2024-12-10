@@ -22,6 +22,9 @@ There are two main parts that can be set by the user both on the user interface 
 		- Default value: `true`
 		- When set to `true`, the gradient brush of the Tile's edit menu will be in a horizontal orientation.
 		- When set to `false`, the orientation will be vertical.
+    -  `bigBgImages`
+        - Default value: `false`
+        - When set to `true`, the background blurred image of the icon is wider
 
 	
 - **Themes**
@@ -34,10 +37,16 @@ There are two main parts that can be set by the user both on the user interface 
 			-   **Default**: A dark-themed design.
 			-   **Pink**: A vibrant pink-themed design.
 			-   **Custom**: A placeholder for user-defined customization.
-
+- **Menus**
+  - Preferences
+    - All the previously mentioned settings can be configured here.  
+  - Themes
+    - Clicking the buttons allows the user to quickly switch the colors of the corresponding element.
+    - Theme updates dynamically as the user changes the colors.
+	  
 <p align="center">
-	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/959themes.png" height="250" style="margin-right: 20px;"/>
-	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/574prefs.png" height="250"/>
+	<img alt="Screenshot" src="https://i.imgur.com/9k5Gp2a.png" height="250" style="margin-right: 20px;"/>
+	<img alt="Screenshot" src="https://i.imgur.com/3uTIKNE.png" height="250"/>
 </p>
 
   If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
@@ -46,18 +55,16 @@ There are two main parts that can be set by the user both on the user interface 
 | Property       | Description                                  |Example Value     |
 |----------------|----------------------------------------------|------------------|
 | `bgColor`      | Background color of the application.         | `"#1E2030"`      | 
-| `footerColor`  | Footer bar color.                            | `"#90EE90"`      | 
-| `darkColor`    | Darker accents used in the UI.               | `"#1E2030"`      | 
-| `lightColor`   | Lighter accents used in the UI.              | `"#2E324A"`      | 
-| `fontColor`    | Text color.                                  | `"#DAE4FF"`      | 
-| `runningColor` | Highlight text color for running apps.       | `"#C3E88D"`      | 
-| `leftColor`    | Left-side gradient color of a progress bar.  | `"#89ACF2"`      | 
-| `rightColor`   | Right-side gradient color of a progress bar. | `"#B7BDF8"`      | 
 | `tileColor1`   | First gradient color of a tile.              | `"#414769"`      | 
 | `tileColor2`   | Second gradient color of a tile.             | `"#2E324A"`      | 
-| `shadowColor`  | Shadow color under a tile.                   | `"#151515"`      | 
+| `leftColor`    | Left-side gradient color of a progress bar.  | `"#89ACF2"`      | 
+| `rightColor`   | Right-side gradient color of a progress bar. | `"#B7BDF8"`      |
 | `editColor1`   | First gradient color of and edit dropdown.   | `"#7DD6EB"`      | 
 | `editColor2`   | Second highlight color of and edit dropdown. | `"#7DD6EB"`      |
+| `shadowColor`  | Shadow color under a tile.                   | `"#151515"`      | 
+| `fontColor`    | Text color.                                  | `"#DAE4FF"`      | 
+| `runningColor` | Highlight text color for running apps.       | `"#C3E88D"`      |
+| `footerColor`  | Footer bar color.                            | `"#90EE90"`      |
 
 ## Data
 
@@ -79,6 +86,9 @@ Each monitored application is tracked with the following properties:
 
 ### Editing
 All properties except `lastPlayedTime` can be modified via the application's edit menu.
+<p align="center">
+	<img alt="Editing using the Custom theme" src="https://i.imgur.com/Z4856Su.png" width="400"/>
+</p>
 
 ## License
 
