@@ -792,6 +792,9 @@ public class Tile : UserControl
         lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
+
+        runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
     }
 
     public void SetGradients(bool fromContainer = false)
@@ -1090,7 +1093,7 @@ public class Tile : UserControl
         Panel.SetZIndex(totalPlaytimeTitle, 1);
         Panel.SetZIndex(totalPlaytime, 1);
         Panel.SetZIndex(totalTimeGradientBar, 1);
-        
+
         Grid.SetRow(totalPlaytimeTitle, 0);
         Grid.SetRow(totalPlaytime, 0);
         Grid.SetRow(totalTimeGradientBar, 0);

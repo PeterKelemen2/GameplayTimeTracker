@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
 using Toolbelt.Drawing;
+
 // using HorizontalAlignment = System.Windows.HorizontalAlignment;
 // using MessageBox = System.Windows.MessageBox;
 // using TextBox = System.Windows.Controls.TextBox;
@@ -24,6 +25,7 @@ public class Utils
         Assembly.GetExecutingAssembly().GetName().Name);
 
     private const string SampleImagePath = "assets/no_icon.png";
+
     // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
     private const string DataFileName = "data.json";
@@ -64,20 +66,17 @@ public class Utils
         Dictionary<String, String> colors = new Dictionary<string, string>
         {
             { "bgColor", "#1E2030" },
-            { "footerColor", "#90EE90" },
-            { "darkColor", "#1E2030" },
-            { "lightColor", "#2E324A" },
-            { "fontColor", "#DAE4FF" },
-            { "runningColor", "#C3E88D" },
-            { "leftColor", "#89ACF2" },
-            { "rightColor", "#B7BDF8" },
             { "tileColor1", "#414769" },
             { "tileColor2", "#2E324A" },
-            { "shadowColor", "#151515" },
+            { "leftColor", "#89ACF2" },
+            { "rightColor", "#B7BDF8" },
             { "editColor1", "#7DD6EB" },
-            { "editColor2", "#7DD6EB" }
+            { "editColor2", "#7DD6EB" },
+            { "shadowColor", "#151515" },
+            { "fontColor", "#DAE4FF" },
+            { "runningColor", "#C3E88D" },
+            { "footerColor", "#90EE90" },
         };
-
         return colors;
     }
 
@@ -86,40 +85,36 @@ public class Utils
         Dictionary<String, String> colors = new Dictionary<string, string>
         {
             { "bgColor", "#45092b" },
-            { "footerColor", "#90EE90" },
-            { "darkColor", "#1E2030" },
-            { "lightColor", "#2E324A" },
-            { "fontColor", "#DAE4FF" },
-            { "runningColor", "#C3E88D" },
-            { "leftColor", "#89ACF2" },
-            { "rightColor", "#B7BDF8" },
             { "tileColor1", "#db1484" },
             { "tileColor2", "#7d2055" },
-            { "shadowColor", "#151515" },
+            { "leftColor", "#89ACF2" },
+            { "rightColor", "#B7BDF8" },
             { "editColor1", "#7DD6EB" },
-            { "editColor2", "#7DD6EB" }
+            { "editColor2", "#7DD6EB" },
+            { "shadowColor", "#151515" },
+            { "fontColor", "#DAE4FF" },
+            { "runningColor", "#C3E88D" },
+            { "footerColor", "#90EE90" },
         };
 
         return colors;
     }
-    
+
     public static Dictionary<String, String> GetCustomColors()
     {
         Dictionary<String, String> colors = new Dictionary<string, string>
         {
             { "bgColor", "#FF8B008B" },
-            { "footerColor", "#FF7B5EFF" },
-            { "darkColor", "#1E2030" },
-            { "lightColor", "#2E324A" },
-            { "fontColor", "#FFF0F8FF" },
-            { "runningColor", "#C3E88D" },
-            { "leftColor", "#FF7FFFD4" },
-            { "rightColor", "#B7BDF8" },
             { "tileColor1", "#FF00DDE0" },
             { "tileColor2", "#FFD958FF" },
-            { "shadowColor", "#151515" },
+            { "leftColor", "#FF7FFFD4" },
+            { "rightColor", "#B7BDF8" },
             { "editColor1", "#7DD6EB" },
-            { "editColor2", "#FF6A5ACD" }
+            { "editColor2", "#FF6A5ACD" },
+            { "shadowColor", "#151515" },
+            { "fontColor", "#FFF0F8FF" },
+            { "runningColor", "#FFA99DFF" },
+            { "footerColor", "#FF7B5EFF" },
         };
 
         return colors;
@@ -162,8 +157,8 @@ public class Utils
         {
             BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
             FooterColor = (Color)ColorConverter.ConvertFromString(colors["footerColor"]);
-            DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
-            LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
+            // DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
+            // LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
             FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);
             RunningColor = (Color)ColorConverter.ConvertFromString(colors["runningColor"]);
             LeftColor = (Color)ColorConverter.ConvertFromString(colors["leftColor"]);
@@ -180,9 +175,8 @@ public class Utils
             Console.WriteLine(ex.Message);
             BgColor = (Color)ColorConverter.ConvertFromString("#45092b");
             FooterColor = (Color)ColorConverter.ConvertFromString("#90EE90");
-            DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
-            DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
-            LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
+            // DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
+            // LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
             FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
             RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
             LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
@@ -194,7 +188,6 @@ public class Utils
             EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
         }
     }
-
 
     public const int TextMargin = 10;
     public const int TileLeftMargin = 7;
