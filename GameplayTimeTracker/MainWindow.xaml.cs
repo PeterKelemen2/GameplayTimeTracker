@@ -168,7 +168,7 @@ namespace GameplayTimeTracker
             iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
             Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
-                settings.HorizontalEditGradient, iconImagePath: iconPath, exePath: filePath
+                settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: filePath
             );
             newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 
@@ -366,7 +366,7 @@ namespace GameplayTimeTracker
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
             settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, handler.GetSettingsFromFile(), updateMethod: UpdateColors,
-                tileGradMethod: tileContainer.UpdateTilesGradients);
+                tileGradMethod: tileContainer.UpdateTilesGradients, tileBgImagesMethod: tileContainer.UpdateTileBgImages);
             settingsMenu.OpenMenu();
         }
 

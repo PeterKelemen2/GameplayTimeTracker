@@ -40,6 +40,8 @@ public class JsonHandler
         settings.HorizontalTileGradient = true;
         settings.HorizontalEditGradient = true;
 
+        settings.BigBgImages = false;
+
         settings.SelectedTheme = "Default";
 
         settings.ThemeList = new List<Theme>();
@@ -117,7 +119,7 @@ public class JsonHandler
         {
             Theme theme = new Theme();
             theme.ThemeName = "Custom";
-            theme.Colors = Utils.GetPinkColors();
+            theme.Colors = Utils.GetCustomColors();
             settings.ThemeList.Add(theme);
         }
     }
@@ -161,7 +163,7 @@ public class JsonHandler
         File.WriteAllText(Utils.SettingsFilePath, jsonString);
     }
 
-    public void WritePrefsToFile(bool start, bool tileG, bool editG)
+    public void WritePrefsToFile(bool start, bool tileG, bool editG, bool bigBgImages)
     {
         Settings currentSettings = GetSettingsFromFile();
 
@@ -178,7 +180,7 @@ public class JsonHandler
         currentSettings.HorizontalTileGradient = tileG;
         currentSettings.HorizontalEditGradient = editG;
 
-        Console.WriteLine($"************ {currentSettings.HorizontalTileGradient} {currentSettings.HorizontalEditGradient}");
+        currentSettings.BigBgImages = bigBgImages;
 
         WriteSettingsToFile(currentSettings);
     }
@@ -278,6 +280,7 @@ public class JsonHandler
                     param.gameName,
                     settings.HorizontalTileGradient,
                     settings.HorizontalEditGradient,
+                    settings.BigBgImages,
                     param.totalTime,
                     param.lastPlayedTime,
                     param.iconPath,

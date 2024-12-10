@@ -102,6 +102,28 @@ public class Utils
 
         return colors;
     }
+    
+    public static Dictionary<String, String> GetCustomColors()
+    {
+        Dictionary<String, String> colors = new Dictionary<string, string>
+        {
+            { "bgColor", "#FF8B008B" },
+            { "footerColor", "#FF7B5EFF" },
+            { "darkColor", "#1E2030" },
+            { "lightColor", "#2E324A" },
+            { "fontColor", "#FFF0F8FF" },
+            { "runningColor", "#C3E88D" },
+            { "leftColor", "#FF7FFFD4" },
+            { "rightColor", "#B7BDF8" },
+            { "tileColor1", "#FF00DDE0" },
+            { "tileColor2", "#FFD958FF" },
+            { "shadowColor", "#151515" },
+            { "editColor1", "#7DD6EB" },
+            { "editColor2", "#FF6A5ACD" }
+        };
+
+        return colors;
+    }
 
     public static Dictionary<String, String> CheckThemeIntegrity(Dictionary<String, String> theme)
     {
@@ -200,6 +222,12 @@ public class Utils
     public static BlurEffect blurEffect = new BlurEffect
     {
         Radius = 10,
+        RenderingBias = RenderingBias.Performance
+    };
+
+    public static BlurEffect bigBlurEffect = new BlurEffect
+    {
+        Radius = 30,
         RenderingBias = RenderingBias.Performance
     };
 

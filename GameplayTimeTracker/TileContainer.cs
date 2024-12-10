@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using MonoMac.CoreWlan;
 
 namespace GameplayTimeTracker;
 
@@ -294,6 +295,17 @@ public class TileContainer
         {
             tile.UpdateTileColors();
             tile.ToggleBgImageColor(tile.IsRunning);
+        }
+    }
+
+    public void UpdateTileBgImages(bool value)
+    {
+        Console.WriteLine("********************************Updating tile bg images");
+        foreach (var tile in tilesList)
+        {
+            // tile.iconContainerGrid = new Grid();
+            // tile.iconContainerGrid = tile.GetBgImagesInGrid(value);
+            tile.SetBgImageSizes(value);
         }
     }
 

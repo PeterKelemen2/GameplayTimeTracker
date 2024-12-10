@@ -42,7 +42,7 @@ public class Tile : UserControl
     private Image image;
     public Image bgImage;
     public Image bgImage2;
-    private Grid iconContainerGrid;
+    public Grid iconContainerGrid;
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -101,6 +101,7 @@ public class Tile : UserControl
 
     public bool HorizontalTileG { get; set; }
     public bool HorizontalEditG { get; set; }
+    public bool BigBgImages { get; set; }
 
     public double CurrentPlaytime { get; set; }
     public double HTotal { get; set; }
@@ -736,50 +737,33 @@ public class Tile : UserControl
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-
-    // private LinearGradientBrush createLinGradBrush(Color c1, Color c2)
-    // {
-    //     LinearGradientBrush brush = new LinearGradientBrush();
-    //     brush.StartPoint = new Point(0, 0);
-    //     brush.EndPoint = new Point(0, 1);
-    //     brush.GradientStops.Add(new GradientStop(c1, 0.0));
-    //     brush.GradientStops.Add(new GradientStop(c2, 1.0));
-    //     // brush.Freeze();
-    //     return brush;
-    // }
-
     public Tile()
     {
     }
 
     public Tile(TileContainer tileContainer, string gameName, bool horizontalTile,
-        bool horizontalEdit, double totalTime = 20, double lastPlayedTime = 10,
+        bool horizontalEdit, bool bigBgImages, double totalTime = 20, double lastPlayedTime = 10,
         string? iconImagePath = SampleImagePath, string exePath = "", double width = 760)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
-        // TotalPlaytime = totalTime;
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         LastPlaytime = lastPlayedTime;
-        // Percent = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
-        // LastPlaytime = 0;
         TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
-        if (!File.Exists(IconImagePath))
-        {
-            IconImagePath = SampleImagePath;
-        }
+        if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
         ExePath = exePath;
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
 
         HorizontalTileG = horizontalTile;
         HorizontalEditG = horizontalEdit;
+        BigBgImages = bigBgImages;
 
         Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
 
@@ -787,8 +771,6 @@ public class Tile : UserControl
         WasMoved = false;
 
         SetupIconVars();
-
-        // InitializeTile();
     }
 
     public void UpdateTileColors()
@@ -1026,6 +1008,9 @@ public class Tile : UserControl
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
+        Panel.SetZIndex(editButton, 1);
+        Panel.SetZIndex(removeButton, 1);
+        Panel.SetZIndex(launchButton, 1);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
@@ -1054,99 +1039,13 @@ public class Tile : UserControl
         Panel.SetZIndex(titleTextBlock, 1);
         Panel.SetZIndex(runningTextBlock, 1);
 
-        if (!isRunning)
-        {
-            runningTextBlock.Text = "";
-        }
-        else
-        {
-            isRunningGame = true;
-        }
+        if (!isRunning) runningTextBlock.Text = "";
 
         // Create the Image and other UI elements, positioning them in the second row as well
         if (IconImagePath != null)
         {
-            double imageScale = 1.5;
-            iconContainerGrid = new Grid
-            {
-                Width = TileHeight * imageScale + 20,
-                Height = TileHeight,
-                ClipToBounds = true,
-                Margin = new Thickness(10, 0, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-
-            bgImage = new Image
-            {
-                Source = bgImageGray,
-                Stretch = Stretch.UniformToFill,
-                Width = TileHeight * imageScale,
-                Height = TileHeight * imageScale,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Opacity = bgGrayOpacity
-            };
-
-            bgImage2 = new Image
-            {
-                Source = bgImageColor,
-                Stretch = Stretch.UniformToFill,
-                Width = TileHeight * imageScale,
-                Height = TileHeight * imageScale,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Opacity = 0.0
-            };
-
-            image = new Image
-            {
-                Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
-                Stretch = Stretch.UniformToFill,
-                Width = TileHeight / 2,
-                Height = TileHeight / 2,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(-10, 20, 10, 0),
-            };
-
-            var imageBorder = new Border
-            {
-                Padding = new Thickness(20),
-                Child = image,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Effect = Utils.dropShadowIcon,
-            };
-
-            var bgImageBorder = new Border
-            {
-                Padding = new Thickness(20),
-                Child = bgImage,
-                Height = TileHeight * 2,
-                Width = TileHeight * 2,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Effect = Utils.blurEffect
-            };
-
-            var bgImageBorder2 = new Border
-            {
-                Padding = new Thickness(20),
-                Child = bgImage2,
-                Height = TileHeight * 2,
-                Width = TileHeight * 2,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Effect = Utils.blurEffect
-            };
-
-            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
-            RenderOptions.SetBitmapScalingMode(bgImage, BitmapScalingMode.HighQuality);
-            RenderOptions.SetBitmapScalingMode(bgImage2, BitmapScalingMode.HighQuality);
-            iconContainerGrid.Children.Add(bgImageBorder);
-            iconContainerGrid.Children.Add(bgImageBorder2);
-            iconContainerGrid.Children.Add(imageBorder);
+            iconContainerGrid = new Grid();
+            iconContainerGrid = GetBgImagesInGrid(BigBgImages);
         }
         else
         {
@@ -1154,15 +1053,10 @@ public class Tile : UserControl
         }
 
         // Add all other elements as before, positioning them in the second row
-        // Grid.SetRow(image, 0);
-        // Grid.SetRow(bgImage, 0);
         Grid.SetRow(iconContainerGrid, 0);
-        // grid.Children.Add(bgImage);
         grid.Children.Add(iconContainerGrid);
         // Add playtime elements
 
-        // double[] fColMarg =
-        //     { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         totalPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock);
         totalPlaytimeTitle.Text = "Total Playtime:";
         totalPlaytimeTitle.Margin =
@@ -1174,7 +1068,6 @@ public class Tile : UserControl
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
         SetPlaytimeBars();
-
 
         lastPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlaytimeTitle.Text = "Last Playtime:";
@@ -1194,7 +1087,10 @@ public class Tile : UserControl
                 TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
-
+        Panel.SetZIndex(totalPlaytimeTitle, 1);
+        Panel.SetZIndex(totalPlaytime, 1);
+        Panel.SetZIndex(totalTimeGradientBar, 1);
+        
         Grid.SetRow(totalPlaytimeTitle, 0);
         Grid.SetRow(totalPlaytime, 0);
         Grid.SetRow(totalTimeGradientBar, 0);
@@ -1211,6 +1107,92 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
+    }
+
+    public Grid GetBgImagesInGrid(bool bigImages)
+    {
+        var localIconContainerGrid = new Grid
+        {
+            Width = TileWidth,
+            Height = TileHeight,
+            ClipToBounds = false,
+            Margin = new Thickness(0, 0, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        image = new Image
+        {
+            Source = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)),
+            Stretch = Stretch.UniformToFill,
+            Width = TileHeight / 2,
+            Height = TileHeight / 2,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 20, 0, 0),
+        };
+
+        bgImage = new Image
+        {
+            Source = bgImageGray,
+            Stretch = Stretch.UniformToFill,
+            Width = bigImages ? TileWidth / 2 - 20 : TileWidth / 2 - 140,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Opacity = bgGrayOpacity
+        };
+
+        bgImage2 = new Image
+        {
+            Source = bgImageColor,
+            Stretch = bgImage.Stretch,
+            Width = bgImage.Width,
+            Height = bgImage.Height,
+            HorizontalAlignment = bgImage.HorizontalAlignment,
+            VerticalAlignment = bgImage.VerticalAlignment,
+            Opacity = 0.0
+        };
+
+        var imageBorder = new Border
+        {
+            Padding = new Thickness(Utils.dropShadowIcon.BlurRadius),
+            Child = image,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(60, 0, 0, 0),
+            Effect = Utils.dropShadowIcon,
+        };
+
+        var bgImageBorder = new Border
+        {
+            Padding = new Thickness(Utils.blurEffect.Radius * 2, 0, Utils.blurEffect.Radius, 0),
+            Child = bgImage,
+            Height = localIconContainerGrid.Height + Utils.blurEffect.Radius * 2,
+            Width = iconContainerGrid.Width,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Effect = Utils.blurEffect
+        };
+
+        var bgImageBorder2 = new Border
+        {
+            Padding = bgImageBorder.Padding,
+            Child = bgImage2,
+            Height = bgImageBorder.Height,
+            Width = bgImageBorder.Width,
+            HorizontalAlignment = bgImageBorder.HorizontalAlignment,
+            VerticalAlignment = bgImageBorder.VerticalAlignment,
+            Effect = bgImageBorder.Effect
+        };
+
+        RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+        RenderOptions.SetBitmapScalingMode(bgImage, BitmapScalingMode.HighQuality);
+        RenderOptions.SetBitmapScalingMode(bgImage2, BitmapScalingMode.HighQuality);
+        localIconContainerGrid.Children.Add(bgImageBorder);
+        localIconContainerGrid.Children.Add(bgImageBorder2);
+        localIconContainerGrid.Children.Add(imageBorder);
+
+        return localIconContainerGrid;
     }
 
     // Creates the custom playtime bars
@@ -1249,22 +1231,6 @@ public class Tile : UserControl
     // Toggles between the two states oif the background image. Color for running, gray for not running
     public void ToggleBgImageColor(bool runningBool)
     {
-        // Create the fade-in animation
-        // DoubleAnimation fadeInAnimation = new DoubleAnimation
-        // {
-        //     From = 0.0,
-        //     To = bgImageOpacity,
-        //     Duration = TimeSpan.FromSeconds(0.75),
-        //     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        // };
-        // DoubleAnimation fadeOutAnimation = new DoubleAnimation
-        // {
-        //     From = bgImageOpacity,
-        //     To = 0.0,
-        //     Duration = TimeSpan.FromSeconds(0.75),
-        //     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
-        // };
-
         DoubleAnimation fadeInColored = new DoubleAnimation
         {
             From = 0.0,
@@ -1316,5 +1282,14 @@ public class Tile : UserControl
                 bgImage2.BeginAnimation(UIElement.OpacityProperty, fadeOutColored);
             }
         }
+    }
+
+    public void SetBgImageSizes(bool value)
+    {
+        grid.Children.Remove(iconContainerGrid);
+        iconContainerGrid.Children.Clear();
+        iconContainerGrid.Children.Add(GetBgImagesInGrid(value));
+        grid.Children.Add(iconContainerGrid);
+        ToggleBgImageColor(IsRunning);
     }
 }

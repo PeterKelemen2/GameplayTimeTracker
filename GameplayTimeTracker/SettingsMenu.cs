@@ -27,6 +27,7 @@ public class SettingsMenu : UserControl
 
     public Action MainUpdateMethod;
     public Action<bool, bool> TileGradMethod;
+    public Action<bool> TileBgImagesMethod;
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
@@ -71,6 +72,10 @@ public class SettingsMenu : UserControl
     {
     }
 
+    private void Dummy(bool value)
+    {
+    }
+
     private void Dummy(bool tileG, bool editG)
     {
     }
@@ -95,7 +100,8 @@ public class SettingsMenu : UserControl
         bool isToggled = false,
         string type = "yesNo",
         Action updateMethod = null,
-        Action<bool, bool> tileGradMethod = null)
+        Action<bool, bool> tileGradMethod = null,
+        Action<bool> tileBgImagesMethod = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -111,12 +117,14 @@ public class SettingsMenu : UserControl
         Type = type;
         MainUpdateMethod = updateMethod == null ? Dummy : updateMethod;
         TileGradMethod = tileGradMethod == null ? Dummy : tileGradMethod;
+        TileBgImagesMethod = tileBgImagesMethod == null ? Dummy : tileBgImagesMethod;
 
         ToClose = false;
 
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
             Settings.SelectedTheme);
-        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod);
+        PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
+            TileBgImagesMethod);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 

@@ -15,17 +15,21 @@ public class PrefMenu : UserControl
     public Dictionary<string, bool> Prefs { get; set; }
     public bool StartWithSystem { get; set; }
     public Action<bool, bool> TileGradUpdateMethod;
+    public Action<bool> TileBgImagesMethod;
 
-    public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod)
+    public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
+        Action<bool> tileBgImagesMethod)
     {
         Panel = stackPanel;
         CurrentSettings = settings;
         TileGradUpdateMethod = tileGradUpdateMethod;
+        TileBgImagesMethod = tileBgImagesMethod;
         // CreateMenu();
         Prefs = new Dictionary<string, bool>();
         Prefs.Add("Start with system", CurrentSettings.StartWithSystem);
         Prefs.Add("Horizontal Tile Gradient", CurrentSettings.HorizontalTileGradient);
         Prefs.Add("Horizontal Edit Gradient", CurrentSettings.HorizontalEditGradient);
+        Prefs.Add("Bigger Background Images", CurrentSettings.BigBgImages);
     }
 
     public void CreateMenuMethod()
@@ -34,6 +38,12 @@ public class PrefMenu : UserControl
         Panel.Children.Add(GetNewEntry("Start with system", CurrentSettings.StartWithSystem));
         Panel.Children.Add(GetNewEntry("Horizontal Tile Gradient", CurrentSettings.HorizontalTileGradient));
         Panel.Children.Add(GetNewEntry("Horizontal Edit Gradient", CurrentSettings.HorizontalEditGradient));
+        
+        PrefEntry newEntry = new PrefEntry(Panel, "Bigger Background Images", CurrentSettings.BigBgImages);
+        newEntry.checkBox.Checked += (sender, e) => UpdateBgImageSize(true);
+        newEntry.checkBox.Unchecked += (sender, e) => UpdateBgImageSize(false);
+        Panel.Children.Add(newEntry);
+        // Panel.Children.Add(GetNewEntry("Bigger Background Images", CurrentSettings.BigBgImages));
     }
 
 
@@ -42,6 +52,7 @@ public class PrefMenu : UserControl
         PrefEntry newEntry = new PrefEntry(Panel, prefName, value);
         newEntry.checkBox.Checked += (sender, e) => UpdatePrefs(newEntry.PrefName, true);
         newEntry.checkBox.Unchecked += (sender, e) => UpdatePrefs(newEntry.PrefName, false);
+
         return newEntry;
     }
 
@@ -49,14 +60,21 @@ public class PrefMenu : UserControl
     {
         if (Prefs.ContainsKey(key)) Prefs[key] = value;
         TileGradUpdateMethod(Prefs["Horizontal Tile Gradient"], Prefs["Horizontal Edit Gradient"]);
-        SaveToFile(Prefs);
+        SaveToFile();
     }
 
-    private void SaveToFile(Dictionary<String, bool> prefs)
+    private void UpdateBgImageSize(bool value)
+    {
+        if (Prefs.ContainsKey("Bigger Background Images")) Prefs["Bigger Background Images"] = value;
+        TileBgImagesMethod(value);
+        SaveToFile();
+    }
+
+    private void SaveToFile()
     {
         JsonHandler jsonHandler = new JsonHandler();
         jsonHandler.WritePrefsToFile(Prefs["Start with system"], Prefs["Horizontal Tile Gradient"],
-            Prefs["Horizontal Edit Gradient"]);
+            Prefs["Horizontal Edit Gradient"], Prefs["Bigger Background Images"]);
     }
 
     public void CreateMenu(object sender, MouseButtonEventArgs e)
