@@ -105,15 +105,15 @@ public class Utils
         Dictionary<String, String> colors = new Dictionary<string, string>
         {
             { "bgColor", "#FF8B008B" },
-            { "tileColor1", "#FF00DDE0" },
-            { "tileColor2", "#FFD958FF" },
+            { "tileColor1", "#FFD958FF" },
+            { "tileColor2", "#FF00DDE0" },
             { "leftColor", "#FF7FFFD4" },
             { "rightColor", "#B7BDF8" },
             { "editColor1", "#7DD6EB" },
             { "editColor2", "#FF6A5ACD" },
             { "shadowColor", "#151515" },
             { "fontColor", "#FFF0F8FF" },
-            { "runningColor", "#FFA99DFF" },
+            { "runningColor", "#86DBFF" },
             { "footerColor", "#FF7B5EFF" },
         };
 
