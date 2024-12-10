@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace GameplayTimeTracker;
 
@@ -29,7 +30,7 @@ public class ThemeMenu : UserControl
 
         ButtonsGrid = new Grid();
         ButtonsGrid.Height = 40;
-        
+
         switchTileColorsButton = new Button
         {
             Content = "Tile Colors \u21c6",
@@ -274,5 +275,13 @@ public class ThemeMenu : UserControl
     public void CreateMenu(object sender, MouseButtonEventArgs e)
     {
         CreateDropdown();
+        DoubleAnimation fadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        Panel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace GameplayTimeTracker;
 
@@ -38,11 +40,20 @@ public class PrefMenu : UserControl
         Panel.Children.Add(GetNewEntry("Start with system", CurrentSettings.StartWithSystem));
         Panel.Children.Add(GetNewEntry("Horizontal Tile Gradient", CurrentSettings.HorizontalTileGradient));
         Panel.Children.Add(GetNewEntry("Horizontal Edit Gradient", CurrentSettings.HorizontalEditGradient));
-        
+
         PrefEntry newEntry = new PrefEntry(Panel, "Bigger Background Images", CurrentSettings.BigBgImages);
         newEntry.checkBox.Checked += (sender, e) => UpdateBgImageSize(true);
         newEntry.checkBox.Unchecked += (sender, e) => UpdateBgImageSize(false);
         Panel.Children.Add(newEntry);
+
+        DoubleAnimation fadeInAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        Panel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
         // Panel.Children.Add(GetNewEntry("Bigger Background Images", CurrentSettings.BigBgImages));
     }
 
