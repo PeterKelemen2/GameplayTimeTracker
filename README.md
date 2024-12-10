@@ -3,7 +3,7 @@
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
 <p align="center">
-	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/917main.png" width="400"/>
+	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/917main.png" width="500"/>
 </p>
 
 ## Configuration
@@ -45,8 +45,8 @@ There are two main parts that can be set by the user both on the user interface 
     - Theme updates dynamically as the user changes the colors.
 	  
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/9k5Gp2a.png" height="250" style="margin-right: 20px;"/>
-	<img alt="Screenshot" src="https://i.imgur.com/3uTIKNE.png" height="250"/>
+	<img alt="Screenshot" src="https://i.imgur.com/9k5Gp2a.png" width="240" style="margin-right: 20px;"/>
+	<img alt="Screenshot" src="https://i.imgur.com/3uTIKNE.png" width="240"/>
 </p>
 
   If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
@@ -67,8 +67,11 @@ There are two main parts that can be set by the user both on the user interface 
 | `footerColor`  | Footer bar color.                            | `"#90EE90"`      |
 
 ## Data
-
 Each monitored application is tracked with the following properties:
+<p align="center">
+	<img alt="Editing using the Custom theme" src="https://i.imgur.com/Z4856Su.png" width="500"/>
+</p>
+
 - `gameName`
 	- String representation of the application's name.
 	- This is initially gathered from the _File Description_ of the executable, if available.
@@ -86,9 +89,7 @@ Each monitored application is tracked with the following properties:
 
 ### Editing
 All properties except `lastPlayedTime` can be modified via the application's edit menu.
-<p align="center">
-	<img alt="Editing using the Custom theme" src="https://i.imgur.com/Z4856Su.png" width="400"/>
-</p>
+
 
 ## License
 
