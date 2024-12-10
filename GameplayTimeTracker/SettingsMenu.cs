@@ -44,6 +44,8 @@ public class SettingsMenu : UserControl
     private DoubleAnimation blurOutAnimation = new();
     private ThicknessAnimation rollInAnimation = new();
     private ThicknessAnimation rollOutAnimation = new();
+    private DoubleAnimation rollOutTranslate = new();
+    private DoubleAnimation rollInTranslate = new();
     private ScaleTransform scaleTransform = new();
 
     public BitmapSource menuBgBitmap;
@@ -96,7 +98,7 @@ public class SettingsMenu : UserControl
     }
 
 
-    public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 400,
+    public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 500,
         bool isToggled = false,
         string type = "yesNo",
         Action updateMethod = null,
@@ -118,6 +120,7 @@ public class SettingsMenu : UserControl
         MainUpdateMethod = updateMethod == null ? Dummy : updateMethod;
         TileGradMethod = tileGradMethod == null ? Dummy : tileGradMethod;
         TileBgImagesMethod = tileBgImagesMethod == null ? Dummy : tileBgImagesMethod;
+        _lastClickedTextBlock = new TextBlock();
 
         ToClose = false;
 
@@ -132,21 +135,33 @@ public class SettingsMenu : UserControl
         PrefBlock.FontWeight = FontWeights.Regular;
         PrefBlock.MouseDown += (sender, e) =>
         {
-            UpdateUnderline(PrefBlock);
-            JsonHandler jsonHandler = new JsonHandler();
-            Settings = jsonHandler.GetSettingsFromFile();
-            pm.CurrentSettings = Settings;
-            pm.CreateMenu(sender, e);
+            
+            // UpdateUnderline(PrefBlock);
+            if (_lastClickedTextBlock != PrefBlock)
+            {
+                UpdateUnderline(PrefBlock);
+                pm.CreateMenu(sender, e);
+                JsonHandler jsonHandler = new JsonHandler();
+                Settings = jsonHandler.GetSettingsFromFile();
+                pm.CurrentSettings = Settings;
+            }
+            
+            // pm.CreateMenu(sender, e);
         };
 
         ThemesBlock = headerPanel.FindName("Themes") as TextBlock;
         ThemesBlock.FontWeight = FontWeights.Regular;
         ThemesBlock.MouseDown += (sender, e) =>
         {
-            UpdateUnderline(ThemesBlock);
-            tm.CreateMenu(sender, e);
+            
+            if (_lastClickedTextBlock != ThemesBlock)
+            {
+                UpdateUnderline(ThemesBlock);
+                tm.CreateMenu(sender, e);
+            }
         };
-
+        
+        _lastClickedTextBlock = PrefBlock;
         pm.CreateMenuMethod();
         UpdateUnderline(PrefBlock);
 
@@ -168,6 +183,8 @@ public class SettingsMenu : UserControl
 
         rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
         rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
+        rollOutTranslate.To = -WinHeight;
+        rollInTranslate.From = WinHeight;
         SetBlurImage();
     }
 
@@ -181,7 +198,10 @@ public class SettingsMenu : UserControl
 
         SettingsGrid.Visibility = Visibility.Visible;
         Console.WriteLine();
-        SettingsGrid.BeginAnimation(MarginProperty, rollInAnimation);
+        
+        var translateTransform = new TranslateTransform();
+        SettingsGrid.RenderTransform = translateTransform;
+        translateTransform.BeginAnimation(TranslateTransform.YProperty, rollInTranslate);
         blurUpdateTimer.Start();
         IsToggled = true;
     }
@@ -218,8 +238,11 @@ public class SettingsMenu : UserControl
             Console.WriteLine("Menu Closed!");
             isAnimating = false;
         };
-
-        SettingsGrid.BeginAnimation(MarginProperty, rollOutAnimation);
+        
+        var translateTransform = new TranslateTransform();
+        SettingsGrid.RenderTransform = translateTransform;
+        translateTransform.BeginAnimation(TranslateTransform.YProperty, rollOutTranslate);
+        // SettingsGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation2);
@@ -293,7 +316,7 @@ public class SettingsMenu : UserControl
         {
             From = new Thickness(0, 0, 0, -WinHeight),
             To = new Thickness(0, 0, 0, 0),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+            Duration = new Duration(TimeSpan.FromSeconds(0.45)),
             FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
@@ -301,11 +324,27 @@ public class SettingsMenu : UserControl
         rollOutAnimation = new ThicknessAnimation
         {
             From = new Thickness(0, 0, 0, 0),
-            To = new Thickness(0, 0, 0, WinHeight),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
+            To = new Thickness(0, 0, 0, WinHeight + H),
+            Duration = new Duration(TimeSpan.FromSeconds(2.75)),
             FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
+        
+        rollInTranslate = new DoubleAnimation
+        {
+            From = WinWidth,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+        
+        rollOutTranslate = new DoubleAnimation
+        {
+            From = 0,
+            To = -WinHeight,
+            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        }; 
 
         zoomInAnimation = new DoubleAnimation
         {

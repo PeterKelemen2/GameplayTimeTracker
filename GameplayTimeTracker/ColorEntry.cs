@@ -18,14 +18,14 @@ public class ColorEntry : UserControl
     private Rectangle bg;
     private Grid containerGrid;
     public ColorPicker colorPicker;
-    private int fontSize = 15;
+    private int fontSize = 16;
 
     public ColorEntry()
     {
         
     }
 
-    public ColorEntry(string colorName, string colorValue, Color c1, Color c2, double width = 250)
+    public ColorEntry(string colorName, string colorValue, Color c1, Color c2, double width = 370)
     {
         ColorName = colorName;
         ColorValue = colorValue;

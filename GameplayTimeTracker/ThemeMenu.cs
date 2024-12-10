@@ -28,7 +28,7 @@ public class ThemeMenu : UserControl
         SelectedThemeName = selectedThemeName;
 
         ButtonsGrid = new Grid();
-        ButtonsGrid.Height = 80;
+        ButtonsGrid.Height = 40;
         
         switchTileColorsButton = new Button
         {
@@ -38,6 +38,7 @@ public class ThemeMenu : UserControl
             Width = 120,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
+            Effect = Utils.dropShadowText,
         };
         switchTileColorsButton.Click += (sender, e) =>
         {
@@ -51,8 +52,9 @@ public class ThemeMenu : UserControl
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
             Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Right,
+            HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Top,
+            Effect = Utils.dropShadowText,
         };
         switchEditColorsButton.Click += (sender, e) =>
         {
@@ -66,9 +68,9 @@ public class ThemeMenu : UserControl
             Style = (Style)Application.Current.FindResource("RoundedButton"),
             Height = 30,
             Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(0, 40, 0, 0)
+            Effect = Utils.dropShadowText,
         };
         switchBarsColorsButton.Click += (sender, e) =>
         {
