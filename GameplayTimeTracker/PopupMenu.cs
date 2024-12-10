@@ -46,6 +46,8 @@ public class PopupMenu : UserControl
     private ThicknessAnimation rollInAnimation = new();
     private ThicknessAnimation rollOutAnimation = new();
     private ScaleTransform scaleTransform = new();
+    private DoubleAnimation rollOutTranslate = new();
+    private DoubleAnimation rollInTranslate = new();
 
     private Button yesButton = new();
     private Button noButton = new();
@@ -99,24 +101,22 @@ public class PopupMenu : UserControl
             Interval = TimeSpan.FromSeconds(1)
         };
         blurUpdateTimer.Tick += (s, e) => SetBlurImage();
-
-        rollInAnimation = new ThicknessAnimation
+        
+        rollInTranslate = new DoubleAnimation
         {
-            From = new Thickness(0, 0, 0, -WinHeight),
-            To = new Thickness(0, 0, 0, 0),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
+            From = WinHeight,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
-
-        rollOutAnimation = new ThicknessAnimation
+        
+        rollOutTranslate = new DoubleAnimation
         {
-            From = new Thickness(0, 0, 0, 0),
-            To = new Thickness(0, 0, 0, WinHeight),
-            Duration = new Duration(TimeSpan.FromSeconds(0.25)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
+            From = 0,
+            To = -WinHeight,
+            Duration = new Duration(TimeSpan.FromSeconds(0.4)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
+        }; 
 
         zoomInAnimation = new DoubleAnimation
         {
@@ -157,38 +157,6 @@ public class PopupMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.5)),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
-
-        fadeInAnimation = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(0.05)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        fadeOutAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        otherFadeInAnimation = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(1)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        otherFadeOutAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(1)),
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        };
     }
 
     // Recalculating dimensions when window size is changing 
@@ -198,8 +166,10 @@ public class PopupMenu : UserControl
         WinWidth = e.NewSize.Width;
         WinHeight = e.NewSize.Height;
 
-        rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
-        rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
+        // rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
+        // rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
+        rollOutTranslate.To = -WinHeight;
+        rollInTranslate.From = WinHeight;
         SetBlurImage();
         // Adjust the height of the rectangle dynamically
         // H = WinHeight * 0.25; // For example, make the height 25% of the window height
@@ -324,8 +294,9 @@ public class PopupMenu : UserControl
         }
 
         ContainerGrid.Children.Add(MenuContainerGrid);
-        menuTitle.BeginAnimation(OpacityProperty, otherFadeInAnimation);
-        MenuContainerGrid.BeginAnimation(MarginProperty, rollInAnimation);
+        var translateTransform = new TranslateTransform();
+        MenuContainerGrid.RenderTransform = translateTransform;
+        translateTransform.BeginAnimation(TranslateTransform.YProperty, rollInTranslate);
         blurUpdateTimer.Start();
         IsToggled = true;
     }
@@ -355,9 +326,11 @@ public class PopupMenu : UserControl
             isAnimating = false;
         };
 
-        MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
+        var translateTransform = new TranslateTransform();
+        MenuContainerGrid.RenderTransform = translateTransform;
+        translateTransform.BeginAnimation(TranslateTransform.YProperty, rollOutTranslate);
+        // MenuContainerGrid.BeginAnimation(MarginProperty, rollOutAnimation);
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
-        menuTitle.BeginAnimation(OpacityProperty, otherFadeOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation2);
 

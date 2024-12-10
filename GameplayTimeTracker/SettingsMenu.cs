@@ -181,8 +181,6 @@ public class SettingsMenu : UserControl
         WinWidth = e.NewSize.Width;
         WinHeight = e.NewSize.Height;
 
-        rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
-        rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
         rollOutTranslate.To = -WinHeight;
         rollInTranslate.From = WinHeight;
         SetBlurImage();
@@ -312,29 +310,11 @@ public class SettingsMenu : UserControl
 
     private void CreateAnimations()
     {
-        rollInAnimation = new ThicknessAnimation
-        {
-            From = new Thickness(0, 0, 0, -WinHeight),
-            To = new Thickness(0, 0, 0, 0),
-            Duration = new Duration(TimeSpan.FromSeconds(0.45)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        rollOutAnimation = new ThicknessAnimation
-        {
-            From = new Thickness(0, 0, 0, 0),
-            To = new Thickness(0, 0, 0, WinHeight + H),
-            Duration = new Duration(TimeSpan.FromSeconds(2.75)),
-            FillBehavior = FillBehavior.HoldEnd, // Holds the end value after the animation completes
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-        
         rollInTranslate = new DoubleAnimation
         {
-            From = WinWidth,
+            From = WinHeight,
             To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
         
@@ -342,8 +322,8 @@ public class SettingsMenu : UserControl
         {
             From = 0,
             To = -WinHeight,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            Duration = new Duration(TimeSpan.FromSeconds(0.4)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
         }; 
 
         zoomInAnimation = new DoubleAnimation
