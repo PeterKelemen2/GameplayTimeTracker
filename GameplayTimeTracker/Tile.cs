@@ -1168,7 +1168,7 @@ public class Tile : UserControl
 
         var bgImageBorder = new Border
         {
-            Padding = new Thickness(Utils.blurEffect.Radius * 2, 0, Utils.blurEffect.Radius, 0),
+            Padding = new Thickness(Utils.blurEffect.Radius * 3, 0, Utils.blurEffect.Radius, 0),
             Child = bgImage,
             Height = localIconContainerGrid.Height + Utils.blurEffect.Radius * 2,
             Width = iconContainerGrid.Width,
