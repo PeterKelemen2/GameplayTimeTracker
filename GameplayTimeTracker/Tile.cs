@@ -742,7 +742,7 @@ public class Tile : UserControl
     }
 
     public Tile(TileContainer tileContainer, string gameName, bool horizontalTile,
-        bool horizontalEdit, bool bigBgImages, double totalTime = 20, double lastPlayedTime = 10,
+        bool horizontalEdit, bool bigBgImages, double totalTime = 0, double lastPlayedTime = 0,
         string? iconImagePath = SampleImagePath, string exePath = "", double width = 760)
     {
         _tileContainer = tileContainer;
