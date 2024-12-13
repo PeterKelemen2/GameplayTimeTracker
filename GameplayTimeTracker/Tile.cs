@@ -33,10 +33,10 @@ public class Tile : UserControl
     private bool isRunningGame = false;
     public bool wasRunning = false;
 
-    private Grid grid;
+    public Grid grid;
     private Rectangle menuRectangle;
     private Rectangle shadowRectangle;
-    private Rectangle container;
+    public Rectangle container;
     private Button editButton;
     private Button removeButton;
     private Button editSaveButton;
@@ -478,14 +478,14 @@ public class Tile : UserControl
                 };
 
                 Console.WriteLine($"Trying to launch {exePath} with arguments: {ShortcutArgs}");
-                
+
                 var process = Process.Start(startInfo);
-                
+
                 if (process != null)
                 {
                     Console.WriteLine($"Launched {gameName}. Waiting for it to exit...");
                     process.WaitForExit();
-                
+
                     // Notify the user on the UI thread
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -1035,9 +1035,13 @@ public class Tile : UserControl
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
+
+        Panel.SetZIndex(container, 1);
         Panel.SetZIndex(editButton, 1);
         Panel.SetZIndex(removeButton, 1);
         Panel.SetZIndex(launchButton, 1);
+
+
         grid.Children.Add(container);
         grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
@@ -1131,6 +1135,18 @@ public class Tile : UserControl
         grid.Children.Add(lastPlaytimeTitle);
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);
+
+        Panel.SetZIndex(lastPlaytimeTitle, 1);
+        Panel.SetZIndex(lastPlaytime, 1);
+        Panel.SetZIndex(lastTimeGradientBar, 1);
+
+        Panel.SetZIndex(iconContainerGrid, 1);
+
+        // Add new EditMenu for testing purposes
+        EditMenu eMenu = new EditMenu(this);
+        Panel.SetZIndex(eMenu, 0);
+        Grid.SetRow(eMenu, 1);
+        // grid.Children.Add(eMenu);
 
         // Set the Grid as the content of the UserControl
         Content = grid;
