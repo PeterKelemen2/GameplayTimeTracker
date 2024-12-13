@@ -226,7 +226,6 @@ public class JsonHandler
                 Description = "Shortcut to Gameplay Time Tracker",
             };
             shortcut.Save(shortcutPath);
-            
         }
         else
         {
@@ -286,7 +285,7 @@ public class JsonHandler
                     param.lastPlayedTime,
                     param.iconPath,
                     param.exePath,
-                    param.arguments));
+                    param.arguments == null ? "" : param.arguments));
             }
         }
     }
