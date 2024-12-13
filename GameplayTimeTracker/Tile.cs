@@ -1037,9 +1037,9 @@ public class Tile : UserControl
         Grid.SetRow(launchButton, 0);
 
         Panel.SetZIndex(container, 1);
-        Panel.SetZIndex(editButton, 1);
-        Panel.SetZIndex(removeButton, 1);
-        Panel.SetZIndex(launchButton, 1);
+        Panel.SetZIndex(editButton, 3);
+        Panel.SetZIndex(removeButton, 3);
+        Panel.SetZIndex(launchButton, 3);
 
 
         grid.Children.Add(container);
@@ -1067,8 +1067,8 @@ public class Tile : UserControl
         Grid.SetRow(runningTextBlock, 0);
         grid.Children.Add(titleTextBlock);
         grid.Children.Add(runningTextBlock);
-        Panel.SetZIndex(titleTextBlock, 1);
-        Panel.SetZIndex(runningTextBlock, 1);
+        Panel.SetZIndex(titleTextBlock, 3);
+        Panel.SetZIndex(runningTextBlock, 3);
 
         if (!isRunning) runningTextBlock.Text = "";
 
@@ -1118,9 +1118,9 @@ public class Tile : UserControl
                 TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
-        Panel.SetZIndex(totalPlaytimeTitle, 1);
-        Panel.SetZIndex(totalPlaytime, 1);
-        Panel.SetZIndex(totalTimeGradientBar, 1);
+        Panel.SetZIndex(totalPlaytimeTitle, 3);
+        Panel.SetZIndex(totalPlaytime, 3);
+        Panel.SetZIndex(totalTimeGradientBar, 3);
 
         Grid.SetRow(totalPlaytimeTitle, 0);
         Grid.SetRow(totalPlaytime, 0);
@@ -1136,11 +1136,11 @@ public class Tile : UserControl
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);
 
-        Panel.SetZIndex(lastPlaytimeTitle, 1);
-        Panel.SetZIndex(lastPlaytime, 1);
-        Panel.SetZIndex(lastTimeGradientBar, 1);
+        Panel.SetZIndex(lastPlaytimeTitle, 3);
+        Panel.SetZIndex(lastPlaytime, 3);
+        Panel.SetZIndex(lastTimeGradientBar, 3);
 
-        Panel.SetZIndex(iconContainerGrid, 1);
+        Panel.SetZIndex(iconContainerGrid, 2);
 
         // Add new EditMenu for testing purposes
         EditMenu eMenu = new EditMenu(this);
@@ -1332,6 +1332,7 @@ public class Tile : UserControl
         grid.Children.Remove(iconContainerGrid);
         iconContainerGrid.Children.Clear();
         iconContainerGrid.Children.Add(GetBgImagesInGrid(value));
+        Panel.SetZIndex(iconContainerGrid, 2);
         grid.Children.Add(iconContainerGrid);
         ToggleBgImageColor(IsRunning);
     }
