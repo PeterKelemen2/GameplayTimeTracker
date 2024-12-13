@@ -120,6 +120,8 @@ public class Tile : UserControl
     public bool WasOpened { get; set; }
     public bool WasMoved { get; set; }
 
+    public EditMenu TileEditMenu { get; set; }
+
     private double[] fColMarg;
     private double[] sColMarg;
 
@@ -127,6 +129,11 @@ public class Tile : UserControl
     private Dictionary<UIElement, Thickness> originalMargins = new();
     private Dictionary<UIElement, double> originalHeights = new();
     // private bool wasOnceOpened = false;
+
+    public void OpenExeFolder(object sender, RoutedEventArgs e)
+    {
+        Process.Start("explorer.exe", $"/select,\"{ExePath}\"");
+    }
 
     // Sets the margin of the edit menu elements and plays an animation to bring them down from under the tile
     public void ToggleEdit()
@@ -344,7 +351,25 @@ public class Tile : UserControl
 
     public void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {
-        ToggleEdit();
+        // ToggleEdit();
+        // EditMenu eMenu = new EditMenu(this);
+        // Panel.SetZIndex(eMenu, 0);
+        // Grid.SetRow(eMenu, 1);
+        // grid.Children.Add(eMenu);
+        // if (!grid.Children.Contains(TileEditMenu))
+        // {
+        //     grid.Children.Add(TileEditMenu);
+        // }
+
+        if (!TileEditMenu.IsOpen)
+        {
+            TileEditMenu.OpenMenu();
+        }
+        else
+        {
+            TileEditMenu.CloseMenu();
+        }
+        // eMenu.OpenMenu();
     }
 
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
@@ -789,7 +814,7 @@ public class Tile : UserControl
         HorizontalEditG = horizontalEdit;
         BigBgImages = bigBgImages;
 
-        Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
+        // Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
 
         IsMenuToggled = false;
         WasMoved = false;
@@ -1143,11 +1168,14 @@ public class Tile : UserControl
         Panel.SetZIndex(iconContainerGrid, 2);
 
         // Add new EditMenu for testing purposes
-        EditMenu eMenu = new EditMenu(this);
-        Panel.SetZIndex(eMenu, 0);
-        Grid.SetRow(eMenu, 1);
-        grid.Children.Add(eMenu);
-
+        // EditMenu eMenu = new EditMenu(this);
+        // Panel.SetZIndex(eMenu, 0);
+        
+        // grid.Children.Add(eMenu);
+        TileEditMenu = new EditMenu(this);
+        Grid.SetRow(TileEditMenu, 1);
+        TileEditMenu.IsOpen = false;
+        grid.Children.Add(TileEditMenu);
         // Set the Grid as the content of the UserControl
         Content = grid;
     }

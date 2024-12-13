@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Gtk;
 using Application = System.Windows.Application;
@@ -15,12 +16,14 @@ namespace GameplayTimeTracker;
 
 public class EditMenu : UserControl
 {
+    private Tile Parent { get; set; }
     public Grid Container { get; set; }
     public Rectangle BgRectangle { get; set; }
     public double Width { get; set; }
     public double Height { get; set; }
     public string Title { get; set; }
 
+    public bool IsOpen { get; set; }
 
     public TextBlock TitleEditBlock { get; set; }
     public TextBox TitleEditBox { get; set; }
@@ -39,26 +42,31 @@ public class EditMenu : UserControl
     public Button ChangeIconButton { get; set; }
     public Button SaveButton { get; set; }
 
-    public Double[] colMargins = { 20, 210, 430}; // Left margin
+    public Double[] colMargins = { 20, 210, 430 }; // Left margin
     public Double[] rowMargins = { 15, 35, 80, 100 }; // Top margin
-
+    double padding = 30;
+    double borderRadius = 8;
+    double indent = 5;
+    private double animationTime = 0.5;
 
     public EditMenu(Tile parent)
     {
-        double padding = 30;
-        double borderRadius = 8;
-        double indent = 5;
+        Parent = parent;
         Width = parent.TileWidth - padding;
         Height = parent.TileHeight;
         Title = parent.GameName;
+        IsOpen = false;
         Console.WriteLine($"Edit menu for {Title}: {Width}x{Height}");
+    }
 
+    private void CreateMenuContent()
+    {
         Container = new Grid
         {
             Width = Width,
             Height = Height,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(-5, -borderRadius, 0, 0)
+            Margin = new Thickness(-5, -Height, 0, 0)
         };
 
         BgRectangle = new Rectangle
@@ -75,30 +83,32 @@ public class EditMenu : UserControl
         Container.Children.Add(BgRectangle);
 
         TitleEditBlock = SampleBlock("Title", 0, 0, indent);
-        TitleEditBox = SampleBox(parent.GameName, 0, 1);
+        TitleEditBox = SampleBox(Parent.GameName, 0, 1);
         Container.Children.Add(TitleEditBlock);
         Container.Children.Add(TitleEditBox);
 
         PlaytimeEditBlock = SampleBlock("Playtime", 1, 0, indent);
-        PlaytimeEditBox = SampleBox($"{parent.hTotal}h {parent.mTotal}m", 1, 1);
+        PlaytimeEditBox = SampleBox($"{Parent.hTotal}h {Parent.mTotal}m", 1, 1);
         Container.Children.Add(PlaytimeEditBlock);
         Container.Children.Add(PlaytimeEditBox);
 
         PathEditBlock = SampleBlock("Path", 0, 2, indent);
-        PathEditBox = SampleBox(parent.ExePath, 0, 3);
+        PathEditBox = SampleBox(Parent.ExePath, 0, 3);
         Container.Children.Add(PathEditBlock);
         Container.Children.Add(PathEditBox);
 
         ArgsEditBlock = SampleBlock("Arguments", 1, 2, indent);
-        ArgsEditBox = SampleBox(parent.ShortcutArgs, 1, 3);
+        ArgsEditBox = SampleBox(Parent.ShortcutArgs, 1, 3);
         Container.Children.Add(ArgsEditBlock);
         Container.Children.Add(ArgsEditBox);
 
         BrowseExeButton = SampleButton("New exe", col: 2, row: 1, topMarginModifier: 10);
-        // BrowseExeButton.Click += parent.UpdateExe;
+        BrowseExeButton.Click += Parent.UpdateExe;
         OpenFolderButton = SampleButton("Open Folder", col: 2, row: 3, topMarginModifier: -10);
+        OpenFolderButton.Click += Parent.OpenExeFolder;
 
         ChangeIconButton = SampleButton("Change Icon", col: 0, row: 1, topMarginModifier: 10, fromRight: true);
+        ChangeIconButton.Click += Parent.UpdateIcons;
         SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
         SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
         Container.Children.Add(BrowseExeButton);
@@ -107,6 +117,50 @@ public class EditMenu : UserControl
         Container.Children.Add(SaveButton);
 
         Content = Container;
+    }
+
+    public void OpenMenu()
+    {
+        if (IsOpen)
+        {
+            return;
+        }
+
+        CreateMenuContent();
+        ThicknessAnimation marginAnimation = new ThicknessAnimation
+        {
+            From = new Thickness(0, -Height, 0, 0),
+            To = new Thickness(0, -borderRadius, 0, 0),
+            Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
+            FillBehavior = FillBehavior.HoldEnd,
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+        Container.BeginAnimation(MarginProperty, marginAnimation);
+        IsOpen = true;
+    }
+
+    public void CloseMenu()
+    {
+        if (IsOpen)
+        {
+            ThicknessAnimation marginAnimation = new ThicknessAnimation
+            {
+                From = new Thickness(0, -borderRadius, 0, 0),
+                To = new Thickness(0, -Height, 0, 0),
+                Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
+                FillBehavior = FillBehavior.HoldEnd,
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            };
+
+            marginAnimation.Completed += (s, e) =>
+            {
+                Container.Children.Clear();
+                Container = null;
+                IsOpen = false;
+            };
+
+            Container.BeginAnimation(MarginProperty, marginAnimation);
+        }
     }
 
     private TextBox SampleBox(string text = "", int col = 0, int row = 0)
