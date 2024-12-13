@@ -582,6 +582,7 @@ public class Utils
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon
         };
+        
 
         return sampleTextBoxEdit;
     }
