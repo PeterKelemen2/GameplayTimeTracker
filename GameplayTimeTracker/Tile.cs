@@ -78,8 +78,8 @@ public class Tile : UserControl
     List<UIElement> mainElements = new List<UIElement>();
     List<UIElement> animatedElements = new List<UIElement>();
 
-    private double hTotal;
-    private double mTotal;
+    public double hTotal;
+    public double mTotal;
     private double hLast;
     private double mLast;
     private double currentPlaytime;
@@ -1146,7 +1146,7 @@ public class Tile : UserControl
         EditMenu eMenu = new EditMenu(this);
         Panel.SetZIndex(eMenu, 0);
         Grid.SetRow(eMenu, 1);
-        // grid.Children.Add(eMenu);
+        grid.Children.Add(eMenu);
 
         // Set the Grid as the content of the UserControl
         Content = grid;
