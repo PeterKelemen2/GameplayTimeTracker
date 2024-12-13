@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Shellify;
 using Action = System.Action;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
@@ -157,18 +158,32 @@ namespace GameplayTimeTracker
 
         private void AddEntry(string filePath)
         {
-            string fileName = Path.GetFileName(filePath);
+            string arguments = "";
+            string exePath = "";
+            if (Path.GetExtension(filePath).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
+            {
+                var shortcut = ShellLinkFile.Load(filePath);
+                exePath = shortcut.LinkInfo.LocalBasePath;
+                arguments = shortcut.Arguments;
+            }
+            else if (Path.GetExtension(filePath).Equals(".exe", StringComparison.OrdinalIgnoreCase))
+            {
+                exePath = filePath;
+            }
+
+            Console.WriteLine($"Creating icon for {exePath}");
+            string fileName = Path.GetFileName(exePath);
             fileName = fileName.Substring(0, fileName.Length - 4);
 
             string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-            // string? iconPath = $"assets/{uniqueFileName}";
             string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
 
-            Utils.PrepIcon(filePath, iconPath);
+            Utils.PrepIcon(exePath, iconPath);
             iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
             Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
-                settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: filePath
+                settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: exePath,
+                shortcutArgs: arguments.Length > 0 ? arguments : ""
             );
             newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 
@@ -198,13 +213,17 @@ namespace GameplayTimeTracker
             }
         }
 
+
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+            openFileDialog.Filter = "Executable files (*.exe, *.lnk)|*.exe;*.lnk|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                AddEntry(openFileDialog.FileName);
+                string selectedFile = openFileDialog.FileName;
+                Console.WriteLine($"Selected File: {selectedFile}");
+                // Check if the selected file is a shortcut
+                AddEntry(selectedFile);
             }
         }
 
@@ -365,8 +384,10 @@ namespace GameplayTimeTracker
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, handler.GetSettingsFromFile(), updateMethod: UpdateColors,
-                tileGradMethod: tileContainer.UpdateTilesGradients, tileBgImagesMethod: tileContainer.UpdateTileBgImages);
+            settingsMenu = new SettingsMenu(ContainerGrid, SettingsGrid, handler.GetSettingsFromFile(),
+                updateMethod: UpdateColors,
+                tileGradMethod: tileContainer.UpdateTilesGradients,
+                tileBgImagesMethod: tileContainer.UpdateTileBgImages);
             settingsMenu.OpenMenu();
         }
 

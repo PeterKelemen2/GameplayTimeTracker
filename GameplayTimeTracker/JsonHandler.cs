@@ -226,6 +226,7 @@ public class JsonHandler
                 Description = "Shortcut to Gameplay Time Tracker",
             };
             shortcut.Save(shortcutPath);
+            
         }
         else
         {

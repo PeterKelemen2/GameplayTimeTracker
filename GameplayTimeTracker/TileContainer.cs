@@ -213,7 +213,7 @@ public class TileContainer
         tileToUpdate.lastTimeGradientBar.Percent =
             Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
 
-        Console.WriteLine($"Updating last gradient bar {tileToUpdate.GameName}");
+        // Console.WriteLine($"Updating last gradient bar {tileToUpdate.GameName}");
         tileToUpdate.lastTimeGradientBar.UpdateBar();
     }
 
@@ -277,11 +277,11 @@ public class TileContainer
             }
             else
             {
-                Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
+                // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
                 tile.totalTimeGradientBar.UpdateBar();
             }
 
-            Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
+            // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
             tile.lastTimeGradientBar.UpdateBar();
         }
 

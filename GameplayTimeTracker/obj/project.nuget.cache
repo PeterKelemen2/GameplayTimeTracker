@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JwcL7Gw8CVs=",
+  "dgSpecHash": "TFlwUyJY2BE=",
   "success": true,
   "projectFilePath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,9 @@
     "C:\\Users\\Peti\\.nuget\\packages\\notifyicon.base\\1.23.10209.11223\\notifyicon.base.1.23.10209.11223.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\notifyicon.windows\\1.23.10209.11223\\notifyicon.windows.1.23.10209.11223.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\pangosharp\\3.24.24.38\\pangosharp.3.24.24.38.nupkg.sha512",
+    "C:\\Users\\Peti\\.nuget\\packages\\securifybv.propertystore\\0.1.0\\securifybv.propertystore.0.1.0.nupkg.sha512",
+    "C:\\Users\\Peti\\.nuget\\packages\\securifybv.shelllink\\0.1.0\\securifybv.shelllink.0.1.0.nupkg.sha512",
+    "C:\\Users\\Peti\\.nuget\\packages\\shellify\\0.4.0\\shellify.0.4.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.buffers\\4.3.0\\system.buffers.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.diagnostics.debug\\4.3.0\\system.diagnostics.debug.4.3.0.nupkg.sha512",
     "C:\\Users\\Peti\\.nuget\\packages\\system.diagnostics.tracing\\4.3.0\\system.diagnostics.tracing.4.3.0.nupkg.sha512",

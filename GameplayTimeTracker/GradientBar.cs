@@ -72,7 +72,7 @@ public class GradientBar : UserControl
     // Calculates new width needed for bar. If I change any of this, it's not working for some reason 
     public void UpdateBar()
     {
-        Console.WriteLine("Changing bar size to " + Percent);
+        // Console.WriteLine("Changing bar size to " + Percent);
         // double newWidth = CalculateWidth();
         barForeground.Width = CalculateWidth();
     }

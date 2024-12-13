@@ -249,6 +249,36 @@
           "lib/net6.0/PangoSharp.dll": {}
         }
       },
+      "securifybv.PropertyStore/0.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/securifybv.PropertyStore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/securifybv.PropertyStore.dll": {}
+        }
+      },
+      "securifybv.ShellLink/0.1.0": {
+        "type": "package",
+        "dependencies": {
+          "securifybv.PropertyStore": "0.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/securifybv.ShellLink.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/securifybv.ShellLink.dll": {}
+        }
+      },
+      "Shellify/0.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Shellify.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Shellify.dll": {}
+        }
+      },
       "System.Buffers/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -855,6 +885,42 @@
         "lib/netstandard2.0/PangoSharp.dll",
         "pangosharp.3.24.24.38.nupkg.sha512",
         "pangosharp.nuspec"
+      ]
+    },
+    "securifybv.PropertyStore/0.1.0": {
+      "sha512": "N7oMyWl3RCbSi8SFK3vVtBpJD3OompLGZOwO2VQpyw6d8Qk8HTxCSuQzeSB4QzUWewQvMoQu5Qr5QgDQ1z5/5g==",
+      "type": "package",
+      "path": "securifybv.propertystore/0.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/securifybv.PropertyStore.dll",
+        "securifybv.propertystore.0.1.0.nupkg.sha512",
+        "securifybv.propertystore.nuspec"
+      ]
+    },
+    "securifybv.ShellLink/0.1.0": {
+      "sha512": "VjJ8rJi6+yVla8DG1XRthwVneZq2Iojhf0KXwEKqJ+bIgbFTCIMpq33i0/HvPJSS1TdmaoGEnPHmjwP2ibenaA==",
+      "type": "package",
+      "path": "securifybv.shelllink/0.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/securifybv.ShellLink.dll",
+        "securifybv.shelllink.0.1.0.nupkg.sha512",
+        "securifybv.shelllink.nuspec"
+      ]
+    },
+    "Shellify/0.4.0": {
+      "sha512": "o20xYWA9Yl3UJMGt/PczHnfmBSij67iXk77gzSDj+8MGtQv9FY8y3aMkvTDapJIj+9U0IE6GGdyU6MDoJcImrA==",
+      "type": "package",
+      "path": "shellify/0.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Shellify.dll",
+        "shellify.0.4.0.nupkg.sha512",
+        "shellify.nuspec"
       ]
     },
     "System.Buffers/4.3.0": {
@@ -2072,8 +2138,10 @@
       "Extended.Wpf.Toolkit >= 4.6.1",
       "IconExtractor >= 1.0.1",
       "NotifyIcon.Windows >= 1.23.10209.11223",
+      "Shellify >= 0.4.0",
       "System.Drawing.Common >= 8.0.10",
-      "WindowsShortcutFactory >= 1.2.0"
+      "WindowsShortcutFactory >= 1.2.0",
+      "securifybv.ShellLink >= 0.1.0"
     ]
   },
   "packageFolders": {
@@ -2131,6 +2199,10 @@
             "target": "Package",
             "version": "[1.23.10209.11223, )"
           },
+          "Shellify": {
+            "target": "Package",
+            "version": "[0.4.0, )"
+          },
           "System.Drawing.Common": {
             "target": "Package",
             "version": "[8.0.10, )"
@@ -2138,6 +2210,10 @@
           "WindowsShortcutFactory": {
             "target": "Package",
             "version": "[1.2.0, )"
+          },
+          "securifybv.ShellLink": {
+            "target": "Package",
+            "version": "[0.1.0, )"
           }
         },
         "imports": [

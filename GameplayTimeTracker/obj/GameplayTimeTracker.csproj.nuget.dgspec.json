@@ -56,6 +56,10 @@
               "target": "Package",
               "version": "[1.23.10209.11223, )"
             },
+            "Shellify": {
+              "target": "Package",
+              "version": "[0.4.0, )"
+            },
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[8.0.10, )"
@@ -63,6 +67,10 @@
             "WindowsShortcutFactory": {
               "target": "Package",
               "version": "[1.2.0, )"
+            },
+            "securifybv.ShellLink": {
+              "target": "Package",
+              "version": "[0.1.0, )"
             }
           },
           "imports": [

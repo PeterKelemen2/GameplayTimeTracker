@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using Shellify;
+using ShellLink.Structures;
+using WindowsShortcutFactory;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Key = System.Windows.Input.Key;
@@ -97,6 +100,7 @@ public class Tile : UserControl
     public double LastPlaytimePercent { get; set; }
     public string? IconImagePath { get; set; }
     public string ExePath { get; set; }
+    public string ShortcutArgs { get; set; }
     public string ExePathName { get; set; }
 
     public bool HorizontalTileG { get; set; }
@@ -424,6 +428,17 @@ public class Tile : UserControl
         }
     }
 
+    private String GetShortcutArguments(string shortcutPath)
+    {
+        if (!System.IO.File.Exists(shortcutPath))
+            throw new FileNotFoundException($"Shortcut not found: {shortcutPath}");
+
+        ShellLinkFile shortcut = ShellLinkFile.Load(shortcutPath);
+        Console.WriteLine(shortcut.Arguments);
+
+        return shortcut.Arguments;
+    }
+
     private async void LaunchExe(object sender, RoutedEventArgs e)
     {
         try
@@ -437,6 +452,9 @@ public class Tile : UserControl
             // Capture UI-bound properties on the UI thread
             string gameName = GameName; // Cache the value
             string exePath = ExePath; // Cache the value
+
+            Console.WriteLine(exePath);
+            Console.WriteLine(GetShortcutArguments("F:\\Games\\Need for Speed SHIFT\\_SHIFT.exe - Shortcut.lnk"));
 
             if (string.IsNullOrEmpty(exePath) || !System.IO.File.Exists(exePath))
             {
@@ -454,17 +472,20 @@ public class Tile : UserControl
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = exePath, // Use the cached variable
+                    Arguments = ShortcutArgs,
                     WorkingDirectory = workingDir,
                     UseShellExecute = true
                 };
 
+                Console.WriteLine($"Trying to launch {exePath} with arguments: {ShortcutArgs}");
+                
                 var process = Process.Start(startInfo);
-
+                
                 if (process != null)
                 {
                     Console.WriteLine($"Launched {gameName}. Waiting for it to exit...");
                     process.WaitForExit();
-
+                
                     // Notify the user on the UI thread
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -743,7 +764,7 @@ public class Tile : UserControl
 
     public Tile(TileContainer tileContainer, string gameName, bool horizontalTile,
         bool horizontalEdit, bool bigBgImages, double totalTime = 0, double lastPlayedTime = 0,
-        string? iconImagePath = SampleImagePath, string exePath = "", double width = 760)
+        string? iconImagePath = SampleImagePath, string exePath = "", string shortcutArgs = "", double width = 760)
     {
         _tileContainer = tileContainer;
         TileWidth = width;
@@ -759,7 +780,10 @@ public class Tile : UserControl
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
         ExePath = exePath;
+        Console.WriteLine($"+!+!!+!+!+! {exePath}");
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
+
+        ShortcutArgs = shortcutArgs.Length > 0 ? shortcutArgs : "";
 
         HorizontalTileG = horizontalTile;
         HorizontalEditG = horizontalEdit;
