@@ -285,7 +285,8 @@ public class JsonHandler
                     param.totalTime,
                     param.lastPlayedTime,
                     param.iconPath,
-                    param.exePath));
+                    param.exePath,
+                    param.arguments));
             }
         }
     }
@@ -298,7 +299,7 @@ public class JsonHandler
         foreach (var tile in container.tilesList)
         {
             paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath,
-                tile.ExePath));
+                tile.ExePath, tile.ShortcutArgs));
         }
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });

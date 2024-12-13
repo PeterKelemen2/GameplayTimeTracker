@@ -171,45 +171,55 @@ namespace GameplayTimeTracker
                 exePath = filePath;
             }
 
-            Console.WriteLine($"Creating icon for {exePath}");
-            string fileName = Path.GetFileName(exePath);
-            fileName = fileName.Substring(0, fileName.Length - 4);
-
-            string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-            string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
-
-            Utils.PrepIcon(exePath, iconPath);
-            iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-
-            Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
-                settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: exePath,
-                shortcutArgs: arguments.Length > 0 ? arguments : ""
-            );
-            newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-
-            if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
-                  Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+            if (tileContainer.IsExePathPresent(exePath))
             {
-                // Closing all opened edit menus and reseting them to avoid graphical glitch
-                foreach (var tile in tileContainer.tilesList)
-                {
-                    if (tile.IsMenuToggled)
-                    {
-                        tile.ToggleEdit();
-                        tile.WasOpened = false;
-                    }
-                }
-
-                tileContainer.AddTile(newTile, newlyAdded: true);
-                tileContainer.ListTiles();
-                ShowTilesOnCanvas();
-                handler.WriteContentToFile(tileContainer);
-                // MessageBox.Show($"Selected file: {filePath}");
+                PopupMenu popupMenu = new(text: $"{Path.GetFileNameWithoutExtension(exePath)} is alreay in the list",
+                    type: "ok");
+                popupMenu.OpenMenu();
             }
             else
             {
-                selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
-                selfPopup.OpenMenu();
+                Console.WriteLine($"Creating icon for {exePath}");
+                string fileName = Path.GetFileName(exePath);
+                fileName = fileName.Substring(0, fileName.Length - 4);
+
+                string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
+                string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
+
+                Utils.PrepIcon(exePath, iconPath);
+                iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+
+
+                Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
+                    settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: exePath,
+                    shortcutArgs: arguments.Length > 0 ? arguments : ""
+                );
+                newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+
+                if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+                      Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+                {
+                    // Closing all opened edit menus and reseting them to avoid graphical glitch
+                    foreach (var tile in tileContainer.tilesList)
+                    {
+                        if (tile.IsMenuToggled)
+                        {
+                            tile.ToggleEdit();
+                            tile.WasOpened = false;
+                        }
+                    }
+
+                    tileContainer.AddTile(newTile, newlyAdded: true);
+                    tileContainer.ListTiles();
+                    ShowTilesOnCanvas();
+                    handler.WriteContentToFile(tileContainer);
+                    // MessageBox.Show($"Selected file: {filePath}");
+                }
+                else
+                {
+                    selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
+                    selfPopup.OpenMenu();
+                }
             }
         }
 

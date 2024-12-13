@@ -35,6 +35,12 @@ public class TileContainer
     {
         return tilesList.Select(x => x.ExePath).ToList();
     }
+    
+    public bool IsExePathPresent(string exePathToCheck)
+    {
+        // Get the list of ExePaths and check if the specific exePath is present
+        return tilesList.Any(x => x.ExePath.Equals(exePathToCheck, StringComparison.OrdinalIgnoreCase));
+    }
 
     public List<string?> GetExecutableNames()
     {
@@ -161,6 +167,7 @@ public class TileContainer
             {
                 if (tile.Id.Equals(id))
                 {
+                    // tile.ToggleEdit();
                     tilesList.Remove(tile);
                     isRemoved = true;
                     // TextBlock totalText = _mainWindow.FindName("GamesLoaded") as TextBlock;

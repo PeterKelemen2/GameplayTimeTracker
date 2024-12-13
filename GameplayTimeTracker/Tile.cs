@@ -453,8 +453,8 @@ public class Tile : UserControl
             string gameName = GameName; // Cache the value
             string exePath = ExePath; // Cache the value
 
-            Console.WriteLine(exePath);
-            Console.WriteLine(GetShortcutArguments("F:\\Games\\Need for Speed SHIFT\\_SHIFT.exe - Shortcut.lnk"));
+            // Console.WriteLine(exePath);
+            // Console.WriteLine(GetShortcutArguments("F:\\Games\\Need for Speed SHIFT\\_SHIFT.exe - Shortcut.lnk"));
 
             if (string.IsNullOrEmpty(exePath) || !System.IO.File.Exists(exePath))
             {
