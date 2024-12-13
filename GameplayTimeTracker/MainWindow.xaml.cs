@@ -173,7 +173,7 @@ namespace GameplayTimeTracker
 
             if (tileContainer.IsExePathPresent(exePath))
             {
-                PopupMenu popupMenu = new(text: $"{Path.GetFileNameWithoutExtension(exePath)} is alreay in the list",
+                PopupMenu popupMenu = new(text: $"{FileVersionInfo.GetVersionInfo(exePath).FileDescription} is already on the list",
                     type: "ok");
                 popupMenu.OpenMenu();
             }
@@ -188,7 +188,6 @@ namespace GameplayTimeTracker
 
                 Utils.PrepIcon(exePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-
 
                 Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
                     settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: exePath,
@@ -232,7 +231,6 @@ namespace GameplayTimeTracker
             {
                 string selectedFile = openFileDialog.FileName;
                 Console.WriteLine($"Selected File: {selectedFile}");
-                // Check if the selected file is a shortcut
                 AddEntry(selectedFile);
             }
         }
