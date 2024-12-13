@@ -39,7 +39,7 @@ public class EditMenu : UserControl
     public Button ChangeIconButton { get; set; }
     public Button SaveButton { get; set; }
 
-    public Double[] colMargins = { 20, 210 }; // Left margin
+    public Double[] colMargins = { 20, 210, 430}; // Left margin
     public Double[] rowMargins = { 15, 35, 80, 100 }; // Top margin
 
 
@@ -70,8 +70,8 @@ public class EditMenu : UserControl
             RadiusY = Utils.BorderRadius,
             Effect = Utils.dropShadowRectangle
         };
-        TranslateTransform bgTransform = new TranslateTransform();
-        Container.RenderTransform = bgTransform;
+        // TranslateTransform bgTransform = new TranslateTransform();
+        // Container.RenderTransform = bgTransform;
         Container.Children.Add(BgRectangle);
 
         TitleEditBlock = SampleBlock("Title", 0, 0, indent);
@@ -86,14 +86,25 @@ public class EditMenu : UserControl
 
         PathEditBlock = SampleBlock("Path", 0, 2, indent);
         PathEditBox = SampleBox(parent.ExePath, 0, 3);
-        BrowseExeButton = SampleButton("Browse", col: 1, row: 3);
-        BrowseExeButton.Click += parent.UpdateExe;
-        OpenFolderButton =
-            SampleButton("Open", col: 1, row: 3, leftMarginModifier: PlaytimeEditBox.Width - BrowseExeButton.Width);
         Container.Children.Add(PathEditBlock);
         Container.Children.Add(PathEditBox);
+
+        ArgsEditBlock = SampleBlock("Arguments", 1, 2, indent);
+        ArgsEditBox = SampleBox(parent.ShortcutArgs, 1, 3);
+        Container.Children.Add(ArgsEditBlock);
+        Container.Children.Add(ArgsEditBox);
+
+        BrowseExeButton = SampleButton("New exe", col: 2, row: 1, topMarginModifier: 10);
+        // BrowseExeButton.Click += parent.UpdateExe;
+        OpenFolderButton = SampleButton("Open Folder", col: 2, row: 3, topMarginModifier: -10);
+
+        ChangeIconButton = SampleButton("Change Icon", col: 0, row: 1, topMarginModifier: 10, fromRight: true);
+        SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
+        SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
+        Container.Children.Add(ChangeIconButton);
+        Container.Children.Add(SaveButton);
 
         Content = Container;
     }
@@ -137,8 +148,8 @@ public class EditMenu : UserControl
         return sampleTextBlock;
     }
 
-    private Button SampleButton(string text = "", double width = 80, double height = Utils.TextBoxHeight, int col = 0,
-        int row = 0, double leftMarginModifier = 0, double topMarginModifier = 0)
+    private Button SampleButton(string text = "", double width = 120, double height = Utils.TextBoxHeight, int col = 0,
+        int row = 0, double leftMarginModifier = 0, double topMarginModifier = 0, bool fromRight = false)
     {
         var newButton = new Button
         {
@@ -146,9 +157,13 @@ public class EditMenu : UserControl
             Content = text,
             Height = height,
             Width = width,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = fromRight ? HorizontalAlignment.Right : HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(colMargins[col] + leftMarginModifier, rowMargins[row] + topMarginModifier, 0, 0),
+            Margin = new Thickness(
+                fromRight ? 0 : colMargins[col] + leftMarginModifier,
+                rowMargins[row] + topMarginModifier,
+                fromRight ? colMargins[col] + leftMarginModifier : 0,
+                0),
             Effect = Utils.dropShadowIcon
         };
 
