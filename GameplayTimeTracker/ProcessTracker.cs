@@ -68,9 +68,9 @@ public class ProcessTracker
             if (isRunning)
             {
                 // Setting things up if first start
-                if (tile.wasRunning == false)
+                if (tile.WasRunning == false)
                 {
-                    tile.wasRunning = true;
+                    tile.WasRunning = true;
                     tile.IsRunning = true;
                     tile.ResetLastPlaytime();
                     tile.UpdatePlaytimeText();
@@ -105,7 +105,7 @@ public class ProcessTracker
                 // If it was running, set it back to initial state
                 if (tile.IsRunning)
                 {
-                    tile.wasRunning = false;
+                    tile.WasRunning = false;
                     tile.IsRunning = false;
                     tile.lastPlaytimeTitle.Text = LastPlaytimeString;
                     tile.runningTextBlock.Text = notRunningText;

@@ -238,10 +238,7 @@ public class TileContainer
     {
         foreach (var tile in tilesList)
         {
-            if (tile.IsMenuToggled)
-            {
-                if (tile.TileEditMenu.IsOpen) tile.TileEditMenu.CloseMenu();
-            }
+            if (tile.TileEditMenu.IsOpen) tile.TileEditMenu.CloseMenu();
         }
     }
 

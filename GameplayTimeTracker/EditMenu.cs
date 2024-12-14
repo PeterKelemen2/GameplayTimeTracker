@@ -89,7 +89,7 @@ public class EditMenu : UserControl
         Container.Children.Add(TitleEditBox);
 
         PlaytimeEditBlock = SampleBlock("Playtime", 1, 0, indent);
-        PlaytimeEditBox = SampleBox($"{Parent.hTotal}h {Parent.mTotal}m", 1, 1);
+        PlaytimeEditBox = SampleBox($"{Parent.HTotal}h {Parent.MTotal}m", 1, 1);
         PlaytimeEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(PlaytimeEditBlock);
         Container.Children.Add(PlaytimeEditBox);

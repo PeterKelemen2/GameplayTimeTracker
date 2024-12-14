@@ -28,24 +28,11 @@ public class Tile : UserControl
 {
     private TileContainer _tileContainer;
 
-    // public bool isMenuOpen = false;
-
-    public bool isRunning = false;
-
-    // private bool isRunningGame = false;
-    public bool wasRunning = false;
-
     public Grid grid;
 
-    // private Rectangle menuRectangle;
-    // private Rectangle shadowRectangle;
     public Rectangle container;
     private Button editButton;
-
     private Button removeButton;
-
-    // private Button editSaveButton;
-    // private Button changeIconButton;
     private Button launchButton;
     private Image image;
     public Image bgImage;
@@ -59,17 +46,7 @@ public class Tile : UserControl
     private TextBlock lastPlaytime;
 
     private TextBlock sampleTextBlock;
-
-    // private TextBox editNameBox;
     private TextBox sampleTextBox;
-
-    // private TextBlock editNameTitle;
-    // private TextBox editPlaytimeBox;
-    // private TextBlock editPlaytimeTitle;
-
-    // private TextBlock editExePathTitle;
-    // private TextBox editExePathBox;
-    // private Button editExePathButton;
 
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
@@ -81,14 +58,6 @@ public class Tile : UserControl
     LinearGradientBrush gradientBrush;
     LinearGradientBrush editGradientBrush;
 
-    // List<UIElement> editElements = new List<UIElement>();
-    List<UIElement> mainElements = new List<UIElement>();
-    // List<UIElement> animatedElements = new List<UIElement>();
-
-    public double hTotal;
-    public double mTotal;
-    private double hLast;
-    private double mLast;
     private double currentPlaytime;
     private double bgColorOpacity = 0.8;
     private double bgGrayOpacity = 0.6;
@@ -100,7 +69,6 @@ public class Tile : UserControl
     public double TileWidth { get; set; }
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }
-
     public double TotalPlaytime { get; set; }
     public double TotalPlaytimePercent { get; set; }
     public double LastPlaytime { get; set; }
@@ -109,24 +77,17 @@ public class Tile : UserControl
     public string ExePath { get; set; }
     public string ShortcutArgs { get; set; }
     public string ExePathName { get; set; }
-
     public bool HorizontalTileG { get; set; }
     public bool HorizontalEditG { get; set; }
     public bool BigBgImages { get; set; }
-
     public double CurrentPlaytime { get; set; }
     public double HTotal { get; set; }
     public double HLast { get; set; }
     public double MTotal { get; set; }
     public double MLast { get; set; }
     public bool IsRunning { get; set; }
-    public bool IsMenuToggled { get; set; }
-
-    // public bool IsRunningGame { get; set; }
-    // public bool WasRunning { get; set; }
-    // public bool WasOpened { get; set; }
+    public bool WasRunning { get; set; }
     public bool WasMoved { get; set; }
-
     public EditMenu TileEditMenu { get; set; }
 
     private double[] fColMarg;
@@ -176,18 +137,18 @@ public class Tile : UserControl
         }
 
         // Save changed Total Playtime
-        if ((hTotal, mTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal))
+        if ((HTotal, MTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, HTotal, MTotal))
         {
-            (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal);
-            if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
+            (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, HTotal, MTotal);
+            if (Math.Abs(hAux - HTotal) > 0 || Math.Abs(mAux - MTotal) > 0)
             {
                 TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
 
-            (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+            (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
 
-            totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-            TileEditMenu.PlaytimeEditBox.Text = $"{hTotal}h {mTotal}m";
+            totalPlaytime.Text = $"{HTotal}h {MTotal}m";
+            TileEditMenu.PlaytimeEditBox.Text = $"{HTotal}h {MTotal}m";
             _tileContainer.UpdatePlaytimeBars();
 
             TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
@@ -497,8 +458,8 @@ public class Tile : UserControl
 
     public void UpdatePlaytimeText()
     {
-        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-        lastPlaytime.Text = IsRunning ? $"{hLast}h {mLast}m {CurrentPlaytime}s" : $"{hLast}h {mLast}m";
+        totalPlaytime.Text = $"{HTotal}h {MTotal}m";
+        lastPlaytime.Text = IsRunning ? $"{HLast}h {MLast}m {CurrentPlaytime}s" : $"{HLast}h {MLast}m";
     }
 
     /*
@@ -513,25 +474,25 @@ public class Tile : UserControl
         int customHour = 60 - 1;
         if (sec > customHour) // 60-1
         {
-            mLast++;
-            mTotal++;
+            MLast++;
+            MTotal++;
 
             LastPlaytime++;
-            if (mTotal > customHour) // 60-1
+            if (MTotal > customHour) // 60-1
             {
-                hTotal++;
-                mTotal = 0;
+                HTotal++;
+                MTotal = 0;
             }
 
-            if (mLast > customHour) // 60-1
+            if (MLast > customHour) // 60-1
             {
-                hLast++;
-                mLast = 0;
+                HLast++;
+                MLast = 0;
                 _tileContainer.InitSave();
             }
 
-            TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
-            LastPlaytime = CalculatePlaytimeFromHnM(hLast, mLast);
+            TotalPlaytime = CalculatePlaytimeFromHnM(HTotal, MTotal);
+            LastPlaytime = CalculatePlaytimeFromHnM(HLast, MLast);
             LastPlaytimePercent = TotalPlaytime > 0 ? LastPlaytime / TotalPlaytime : 0; // Avoid division by zero
             CurrentPlaytime = 0;
 
@@ -541,15 +502,15 @@ public class Tile : UserControl
             _tileContainer.InitSave();
         }
 
-        Console.WriteLine($"Current playtime of {GameName}: {hLast}h {mLast}m {CurrentPlaytime}s");
-        Console.WriteLine($"Total playtime of {GameName}: {hTotal}h {mTotal}m");
+        Console.WriteLine($"Current playtime of {GameName}: {HLast}h {MLast}m {CurrentPlaytime}s");
+        Console.WriteLine($"Total playtime of {GameName}: {HTotal}h {MTotal}m");
     }
 
     // Resets all the values associated with an ongoing playtime calculation.
     public void ResetLastPlaytime()
     {
-        mLast = 0;
-        hLast = 0;
+        MLast = 0;
+        HLast = 0;
         CurrentPlaytime = 0;
         LastPlaytime = 0;
         LastPlaytimePercent = 0;
@@ -580,6 +541,8 @@ public class Tile : UserControl
         bool horizontalEdit = true, bool bigBgImages = false, double totalTime = 0, double lastPlayedTime = 0,
         string? iconImagePath = SampleImagePath, string exePath = "", string shortcutArgs = "", double width = 760)
     {
+        WasRunning = false;
+        IsRunning = false;
         _tileContainer = tileContainer;
         TileWidth = width;
         TileHeight = Utils.THeight;
@@ -604,7 +567,6 @@ public class Tile : UserControl
 
         // Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
 
-        IsMenuToggled = false;
         WasMoved = false;
 
         SetupIconVars();
@@ -662,8 +624,8 @@ public class Tile : UserControl
 
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        (hLast, mLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
+        (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        (HLast, MLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();
@@ -722,8 +684,6 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
-        mainElements.AddRange(new UIElement[] { container, editButton, removeButton, launchButton });
-
         CustomButton customEditButton = new CustomButton(text: "Test");
         customEditButton.Margin = new Thickness(100, 0, 0, 0);
         customEditButton.Click += ToggleEdit_Click;
@@ -769,7 +729,7 @@ public class Tile : UserControl
         Panel.SetZIndex(titleTextBlock, 3);
         Panel.SetZIndex(runningTextBlock, 3);
 
-        if (!isRunning) runningTextBlock.Text = "";
+        if (!IsRunning) runningTextBlock.Text = "";
 
         // Create the Image and other UI elements, positioning them in the second row as well
         if (IconImagePath != null)
@@ -793,7 +753,7 @@ public class Tile : UserControl
             new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+        totalPlaytime.Text = $"{HTotal}h {MTotal}m";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
@@ -805,7 +765,7 @@ public class Tile : UserControl
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 10, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        lastPlaytime.Text = $"{hLast}h {mLast}m";
+        lastPlaytime.Text = $"{HLast}h {MLast}m";
         lastPlaytime.Margin = new Thickness(sColMarg[0],
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 
