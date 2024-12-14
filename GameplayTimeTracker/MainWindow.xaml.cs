@@ -69,8 +69,6 @@ namespace GameplayTimeTracker
                     {
                         try
                         {
-                            // theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
-
                             SolidColorBrush scb = new SolidColorBrush(
                                 (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]));
                             ScrollViewer.Background = scb;

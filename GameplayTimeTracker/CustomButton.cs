@@ -15,6 +15,9 @@ public class CustomButton : UserControl
     public Rectangle ButtonBase;
     private string ButtonImagePath;
     public Image ButtonImage = new Image();
+    public Color ButtonColor { get; set; }
+    public Color ButtonHoverColor { get; set; }
+    public Color ButtonPressedColor { get; set; }
     public Grid Grid { get; private set; } // Make Grid a property with private set
 
     // Dependency Properties
@@ -40,10 +43,12 @@ public class CustomButton : UserControl
         remove => RemoveHandler(ClickEvent, value);
     }
 
-    public CustomButton(Grid parent = null, double width = 100, double height = 30, double borderRadius = 7,
+    public CustomButton(Grid parent = null, double width = 100, double height = 30, string type = "",
+        double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
         string buttonImagePath = "", bool isDisabled = false)
     {
+        SetButtonColors(type);
         Grid = new Grid
         {
             Width = width,
@@ -57,9 +62,11 @@ public class CustomButton : UserControl
             Height = height,
             RadiusX = borderRadius,
             RadiusY = borderRadius,
-            Fill = new SolidColorBrush(Utils.ButtonColor),
+            Fill = new SolidColorBrush(ButtonColor),
             Effect = Utils.dropShadowIcon
         };
+
+
         Grid.Children.Add(ButtonBase);
 
         TextBlock buttonTextBlock = new TextBlock
@@ -118,25 +125,47 @@ public class CustomButton : UserControl
         Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
     }
 
+    public void SetButtonColors(string type)
+    {
+        switch (type)
+        {
+            case "positive":
+                ButtonColor = Utils.PositiveButtonColor;
+                ButtonHoverColor = Utils.PositiveButtonColorHover;
+                ButtonPressedColor = Utils.PositiveButtonColorPress;
+                break;
+            case "negative":
+                ButtonColor = Utils.NegativeButtonColor;
+                ButtonHoverColor = Utils.NegativeButtonColorHover;
+                ButtonPressedColor = Utils.NegativeButtonColorPress;
+                break;
+            default:
+                ButtonColor = Utils.DefButtonColor;
+                ButtonHoverColor = Utils.DefButtonColorHover;
+                ButtonPressedColor = Utils.DefButtonColorPress;
+                break;
+        }
+    }
+
     private void OnMouseEnter(object sender, MouseEventArgs e)
     {
-        ButtonBase.Fill = new SolidColorBrush(Utils.EditColor2); // Change to hover color
+        ButtonBase.Fill = new SolidColorBrush(ButtonHoverColor); // Change to hover color
     }
 
     private void OnMouseLeave(object sender, MouseEventArgs e)
     {
-        ButtonBase.Fill = new SolidColorBrush(Utils.ButtonColor); // Revert to default color
+        ButtonBase.Fill = new SolidColorBrush(ButtonColor); // Revert to default color
     }
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        ButtonBase.Fill = new SolidColorBrush(Utils.EditColor1); // Change color for feedback
+        ButtonBase.Fill = new SolidColorBrush(ButtonPressedColor); // Change color for feedback
         e.Handled = true;
     }
 
     private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        ButtonBase.Fill = new SolidColorBrush(Utils.ButtonColor); // Revert color
+        ButtonBase.Fill = new SolidColorBrush(ButtonColor); // Revert color
         RaiseEvent(new RoutedEventArgs(ClickEvent)); // Raise the Click event
         e.Handled = true;
     }

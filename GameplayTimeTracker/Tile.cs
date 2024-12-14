@@ -31,7 +31,9 @@ public class Tile : UserControl
     public Grid grid;
 
     public Rectangle container;
-    private Button editButton;
+
+    // private Button editButton;
+    public CustomButton EditButton { get; set; }
     private Button removeButton;
     private Button launchButton;
     private Image image;
@@ -355,9 +357,9 @@ public class Tile : UserControl
         };
 
         // Apply the animations to the tile
-        editButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(editButton));
-        removeButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(removeButton));
-        launchButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(launchButton));
+        // editButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(editButton));
+        // removeButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(removeButton));
+        // launchButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(launchButton));
         BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(this));
         grid.BeginAnimation(MaxHeightProperty, heightAnimation);
     }
@@ -646,17 +648,24 @@ public class Tile : UserControl
         };
         int topMargin = -40;
 
-        editButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
-            Height = 40,
-            Width = 40,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, topMargin, 100, 0),
-            Effect = Utils.dropShadowIcon
-        };
-        editButton.Click += ToggleEdit_Click;
+        // editButton = new Button
+        // {
+        //     Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
+        //     Height = 40,
+        //     Width = 40,
+        //     HorizontalAlignment = HorizontalAlignment.Right,
+        //     VerticalAlignment = VerticalAlignment.Center,
+        //     Margin = new Thickness(0, topMargin, 100, 0),
+        //     Effect = Utils.dropShadowIcon
+        // };
+        // editButton.Click += ToggleEdit_Click;
+        EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon, type:"positive");
+        EditButton.HorizontalAlignment = HorizontalAlignment.Right;
+        EditButton.VerticalAlignment = VerticalAlignment.Center;
+        EditButton.Margin = new Thickness(0, topMargin, 100, 0);
+        EditButton.Click += ToggleEdit_Click;
+        Panel.SetZIndex(EditButton, 3);
+        grid.Children.Add(EditButton);
 
         removeButton = new Button
         {
@@ -684,25 +693,18 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
-        CustomButton customEditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon);
-        customEditButton.Margin = new Thickness(100, 0, 0, 0);
-        customEditButton.Click += ToggleEdit_Click;
-        Panel.SetZIndex(customEditButton, 3);
-        grid.Children.Add(customEditButton);
-
-
         Grid.SetRow(container, 0);
-        Grid.SetRow(editButton, 0);
+        // Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
         Grid.SetRow(launchButton, 0);
 
         Panel.SetZIndex(container, 1);
-        Panel.SetZIndex(editButton, 3);
+        // Panel.SetZIndex(editButton, 3);
         Panel.SetZIndex(removeButton, 3);
         Panel.SetZIndex(launchButton, 3);
 
         grid.Children.Add(container);
-        grid.Children.Add(editButton);
+        // grid.Children.Add(editButton);
         grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
 
@@ -813,6 +815,7 @@ public class Tile : UserControl
         // Set the Grid as the content of the UserControl
         Content = grid;
     }
+
 
     public Grid GetBgImagesInGrid(bool bigImages)
     {

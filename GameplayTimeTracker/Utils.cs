@@ -44,17 +44,18 @@ public class Utils
     public static Color FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
 
-    public static Color DefButtonColor = (Color)ColorConverter.ConvertFromString("#199BB3");
+    public static Color DefButtonColor = (Color)ColorConverter.ConvertFromString("#3BC9E3");
     public static Color DefButtonColorHover = (Color)ColorConverter.ConvertFromString("#ADD8E6");
-    public static Color DefButtonColorPress = DefButtonColor;
+    public static Color DefButtonColorPress = (Color)ColorConverter.ConvertFromString("#199BB3");
+
 
     public static Color PositiveButtonColor = (Color)ColorConverter.ConvertFromString("#90EE90");
-    public static Color PositiveButtonColorHover = (Color)ColorConverter.ConvertFromString("#ADD8E6");
-    public static Color PositiveButtonColorPress = PositiveButtonColor;
+    public static Color PositiveButtonColorHover = (Color)ColorConverter.ConvertFromString("#B5FFB5");
+    public static Color PositiveButtonColorPress = (Color)ColorConverter.ConvertFromString("#489447");
 
-    public static Color NegativeButtonColor = (Color)ColorConverter.ConvertFromString("#a30202");
-    public static Color NegativeButtonColorHover = (Color)ColorConverter.ConvertFromString("#e33b3b");
-    public static Color NegativeButtonColorPress = NegativeButtonColor;
+    public static Color NegativeButtonColor = (Color)ColorConverter.ConvertFromString("#ED0C0C");
+    public static Color NegativeButtonColorHover = (Color)ColorConverter.ConvertFromString("#E33B3B");
+    public static Color NegativeButtonColorPress = (Color)ColorConverter.ConvertFromString("#A30202");
 
     public static Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     public static Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
@@ -67,8 +68,6 @@ public class Utils
     public static Color ButtonColor = (Color)ColorConverter.ConvertFromString("#3BC9E3");
 
     public static bool toUpdate = false;
-    // public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#328fa8");
-    // public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#3279a8");
 
     public static System.Windows.Window mainWindow = Application.Current.MainWindow;
 
