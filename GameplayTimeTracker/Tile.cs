@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -30,15 +31,19 @@ public class Tile : UserControl
     // public bool isMenuOpen = false;
 
     public bool isRunning = false;
+
     // private bool isRunningGame = false;
     public bool wasRunning = false;
 
     public Grid grid;
+
     // private Rectangle menuRectangle;
     // private Rectangle shadowRectangle;
     public Rectangle container;
     private Button editButton;
+
     private Button removeButton;
+
     // private Button editSaveButton;
     // private Button changeIconButton;
     private Button launchButton;
@@ -52,7 +57,9 @@ public class Tile : UserControl
     private TextBlock totalPlaytime;
     public TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
+
     private TextBlock sampleTextBlock;
+
     // private TextBox editNameBox;
     private TextBox sampleTextBox;
 
@@ -625,7 +632,6 @@ public class Tile : UserControl
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
         ExePath = exePath;
-        Console.WriteLine($"+!+!!+!+!+! {exePath}");
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
 
         ShortcutArgs = shortcutArgs.Length > 0 ? shortcutArgs : "";
@@ -670,10 +676,12 @@ public class Tile : UserControl
         editGradientBrush = HorizontalEditG
             ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
             : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
-        if (fromContainer)
+
+        if (container != null) container.Fill = gradientBrush;
+
+        if (TileEditMenu != null && TileEditMenu.IsOpen)
         {
-            container.Fill = gradientBrush;
-            if (TileEditMenu.IsOpen) TileEditMenu.BgRectangle.Fill = editGradientBrush;
+            TileEditMenu.BgRectangle.Fill = editGradientBrush;
         }
     }
 
@@ -754,6 +762,13 @@ public class Tile : UserControl
 
         mainElements.AddRange(new UIElement[] { container, editButton, removeButton, launchButton });
 
+        CustomButton customEditButton = new CustomButton(text: "Test");
+        customEditButton.Margin = new Thickness(100, 0, 0, 0);
+        customEditButton.Click += ToggleEdit_Click;
+        Panel.SetZIndex(customEditButton, 3);
+        grid.Children.Add(customEditButton);
+
+
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);
         Grid.SetRow(removeButton, 0);
@@ -763,7 +778,6 @@ public class Tile : UserControl
         Panel.SetZIndex(editButton, 3);
         Panel.SetZIndex(removeButton, 3);
         Panel.SetZIndex(launchButton, 3);
-
 
         grid.Children.Add(container);
         grid.Children.Add(editButton);

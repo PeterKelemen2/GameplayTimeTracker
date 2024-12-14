@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -29,6 +30,16 @@ public class CustomButton : UserControl
         DependencyProperty.Register("Height", typeof(double), typeof(CustomButton),
             new PropertyMetadata(40.0, OnHeightChanged));
 
+    public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(
+        "Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CustomButton));
+
+    // CLR Wrapper for the Click Event
+    public event RoutedEventHandler Click
+    {
+        add => AddHandler(ClickEvent, value);
+        remove => RemoveHandler(ClickEvent, value);
+    }
+
     public CustomButton(Grid parent = null, double width = 100, double height = 30, double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
         string buttonImagePath = "", bool isDisabled = false)
@@ -36,9 +47,9 @@ public class CustomButton : UserControl
         Grid = new Grid
         {
             Width = width,
-            Height = height
+            Height = height,
+            HorizontalAlignment = HorizontalAlignment.Left,
         };
-        this.Content = Grid; // Set the inner Grid as the content of the UserControl
 
         ButtonBase = new Rectangle
         {
@@ -99,10 +110,39 @@ public class CustomButton : UserControl
             }
         }
 
-        if (parent != null)
-        {
-            parent.Children.Add(this); // Add this CustomButton to the parent grid
-        }
+        // if (parent != null)
+        // {
+        //     parent.Children.Add(this); // Add this CustomButton to the parent grid
+        // }
+
+        Content = Grid;
+        Grid.MouseEnter += OnMouseEnter;
+        Grid.MouseLeave += OnMouseLeave;
+        Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
+        Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
+    }
+    
+    private void OnMouseEnter(object sender, MouseEventArgs e)
+    {
+        ButtonBase.Fill = new SolidColorBrush(Utils.EditColor2); // Change to hover color
+    }
+
+    private void OnMouseLeave(object sender, MouseEventArgs e)
+    {
+        ButtonBase.Fill = new SolidColorBrush(Utils.ButtonColor); // Revert to default color
+    }
+    
+    private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        ButtonBase.Fill = new SolidColorBrush(Utils.EditColor1); // Change color for feedback
+        e.Handled = true;
+    }
+
+    private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        ButtonBase.Fill = new SolidColorBrush(Utils.ButtonColor); // Revert color
+        RaiseEvent(new RoutedEventArgs(ClickEvent)); // Raise the Click event
+        e.Handled = true;
     }
 
     // Dependency Property Change Callbacks
