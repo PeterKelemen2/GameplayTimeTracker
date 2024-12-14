@@ -866,8 +866,6 @@ public class Tile : UserControl
     public void UpdateTileColors()
     {
         SetGradients();
-        // gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
-        // editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
         container.Fill = gradientBrush;
         menuRectangle.Fill = editGradientBrush;
         shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
@@ -899,7 +897,7 @@ public class Tile : UserControl
         if (fromContainer)
         {
             container.Fill = gradientBrush;
-            menuRectangle.Fill = editGradientBrush;
+            if (TileEditMenu.IsOpen) TileEditMenu.BgRectangle.Fill = editGradientBrush;
         }
     }
 
