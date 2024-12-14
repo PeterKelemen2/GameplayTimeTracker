@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Gtk;
+// using Gtk;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using Grid = System.Windows.Controls.Grid;
@@ -78,27 +79,29 @@ public class EditMenu : UserControl
             RadiusY = Utils.BorderRadius,
             Effect = Utils.dropShadowRectangle
         };
-        // TranslateTransform bgTransform = new TranslateTransform();
-        // Container.RenderTransform = bgTransform;
         Container.Children.Add(BgRectangle);
 
         TitleEditBlock = SampleBlock("Title", 0, 0, indent);
         TitleEditBox = SampleBox(Parent.GameName, 0, 1);
+        TitleEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(TitleEditBlock);
         Container.Children.Add(TitleEditBox);
 
         PlaytimeEditBlock = SampleBlock("Playtime", 1, 0, indent);
         PlaytimeEditBox = SampleBox($"{Parent.hTotal}h {Parent.mTotal}m", 1, 1);
+        PlaytimeEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(PlaytimeEditBlock);
         Container.Children.Add(PlaytimeEditBox);
 
         PathEditBlock = SampleBlock("Path", 0, 2, indent);
         PathEditBox = SampleBox(Parent.ExePath, 0, 3);
+        PathEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(PathEditBlock);
         Container.Children.Add(PathEditBox);
 
         ArgsEditBlock = SampleBlock("Arguments", 1, 2, indent);
         ArgsEditBox = SampleBox(Parent.ShortcutArgs, 1, 3);
+        ArgsEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(ArgsEditBlock);
         Container.Children.Add(ArgsEditBox);
 
@@ -111,6 +114,7 @@ public class EditMenu : UserControl
         ChangeIconButton.Click += Parent.UpdateIcons;
         SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
         SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
+        SaveButton.Click += Parent.editSaveButton_Click;
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
         Container.Children.Add(ChangeIconButton);
@@ -222,5 +226,15 @@ public class EditMenu : UserControl
         };
 
         return newButton;
+    }
+    
+    private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            // Call your method here
+            Parent.SaveEditedData();
+            e.Handled = true; // Optional, prevents the beep sound
+        }
     }
 }

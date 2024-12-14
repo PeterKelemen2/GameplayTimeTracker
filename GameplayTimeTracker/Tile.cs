@@ -361,15 +361,10 @@ public class Tile : UserControl
         //     grid.Children.Add(TileEditMenu);
         // }
 
-        if (!TileEditMenu.IsOpen)
-        {
-            TileEditMenu.OpenMenu();
-        }
-        else
-        {
+        if (TileEditMenu.IsOpen)
             TileEditMenu.CloseMenu();
-        }
-        // eMenu.OpenMenu();
+        else
+            TileEditMenu.OpenMenu();
     }
 
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
@@ -380,47 +375,103 @@ public class Tile : UserControl
     // Updates elements of the tile if there is change. Has a failsafe if new time values would cause a crash
     public void SaveEditedData()
     {
-        titleTextBlock.Text = editNameBox.Text;
-        if (!GameName.Equals(editNameBox.Text))
+        bool toSave = false;
+        // Save changed Name
+        if (!GameName.Equals(TileEditMenu.TitleEditBox.Text))
         {
-            GameName = editNameBox.Text;
-        }
-
-        double savedH = hTotal;
-        double savedM = mTotal;
-        double savedTotal = TotalPlaytime;
-        Console.WriteLine(TotalPlaytime);
-        try
-        {
-            (double hAux, double mAux) = Utils.DecodeTimeString(editPlaytimeBox.Text, hTotal, mTotal);
-            if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
+            string savedTitle = GameName;
+            try
             {
-                TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+                GameName = TileEditMenu.TitleEditBox.Text;
+                titleTextBlock.Text = TileEditMenu.TitleEditBox.Text;
+                toSave = true;
             }
-
-            (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+            catch (Exception ex)
+            {
+                GameName = savedTitle;
+                TileEditMenu.TitleEditBox.Text = savedTitle;
+                titleTextBlock.Text = savedTitle;
+                _tileContainer.InitSave();
+                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new title!", type: "ok");
+                popupMenu.OpenMenu();
+            }
         }
-        catch (FormatException)
+
+        // Save changed Total Playtime
+        if ((hTotal, mTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal))
         {
-            Console.WriteLine("Format Exception");
-            hTotal = savedH;
-            mTotal = savedM;
-            TotalPlaytime = savedTotal;
-            _tileContainer.InitSave();
-            MessageBox.Show("An error occured while saving new playtime");
+            double savedH = hTotal;
+            double savedM = mTotal;
+            double savedTotal = TotalPlaytime;
+            try
+            {
+                (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal);
+                if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
+                {
+                    TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+                }
+
+                (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+
+                totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+                editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
+                _tileContainer.UpdatePlaytimeBars();
+
+                TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+                mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
+                toSave = true;
+            }
+            catch (Exception ex)
+            {
+                hTotal = savedH;
+                mTotal = savedM;
+                TotalPlaytime = savedTotal;
+                _tileContainer.InitSave();
+                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new playtime!", type: "ok");
+                popupMenu.OpenMenu();
+            }
         }
 
-        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-        editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
-        Console.WriteLine("Updating bars from Tile - SaveEditedData");
-        _tileContainer.UpdatePlaytimeBars();
+        if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
+        {
+            string savedArgs = ShortcutArgs;
+            try
+            {
+                ShortcutArgs = TileEditMenu.ArgsEditBox.Text;
+                toSave = true;
+            }
+            catch (Exception ex)
+            {
+                ShortcutArgs = savedArgs;
+                _tileContainer.InitSave();
+                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new arguments!", type: "ok");
+                popupMenu.OpenMenu();
+            }
+        }
+        
+        if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
+        {
+            string savedPath = ExePath;
+            try
+            {
+                ExePath = TileEditMenu.PathEditBox.Text;
+                toSave = true;
+            }
+            catch (Exception ex)
+            {
+                ExePath = savedPath;
+                _tileContainer.InitSave();
+                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new path!", type: "ok");
+                popupMenu.OpenMenu();
+            }
+        }
 
-        TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-        mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
-
-        _tileContainer.InitSave();
-        _tileContainer.ListTiles();
-        Console.WriteLine("File Saved !!!");
+        if (toSave)
+        {
+            _tileContainer.InitSave();
+            // _tileContainer.ListTiles();
+            Console.WriteLine("Data file saved!");
+        }
     }
 
     // Sets new path for the exe chosen by the user
@@ -1170,7 +1221,7 @@ public class Tile : UserControl
         // Add new EditMenu for testing purposes
         // EditMenu eMenu = new EditMenu(this);
         // Panel.SetZIndex(eMenu, 0);
-        
+
         // grid.Children.Add(eMenu);
         TileEditMenu = new EditMenu(this);
         Grid.SetRow(TileEditMenu, 1);
