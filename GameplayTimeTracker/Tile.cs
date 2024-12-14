@@ -351,16 +351,6 @@ public class Tile : UserControl
 
     public void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {
-        // ToggleEdit();
-        // EditMenu eMenu = new EditMenu(this);
-        // Panel.SetZIndex(eMenu, 0);
-        // Grid.SetRow(eMenu, 1);
-        // grid.Children.Add(eMenu);
-        // if (!grid.Children.Contains(TileEditMenu))
-        // {
-        //     grid.Children.Add(TileEditMenu);
-        // }
-
         if (TileEditMenu.IsOpen)
             TileEditMenu.CloseMenu();
         else
@@ -448,7 +438,7 @@ public class Tile : UserControl
                 popupMenu.OpenMenu();
             }
         }
-        
+
         if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
         {
             string savedPath = ExePath;
@@ -497,7 +487,7 @@ public class Tile : UserControl
                 else
                 {
                     ExePath = filePath;
-                    editExePathBox.Text = $"{ExePath}";
+                    if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
                     _tileContainer.InitSave();
                 }
             }
