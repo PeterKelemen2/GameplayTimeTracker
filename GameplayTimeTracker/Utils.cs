@@ -25,6 +25,9 @@ public class Utils
         Assembly.GetExecutingAssembly().GetName().Name);
 
     private const string SampleImagePath = "assets/no_icon.png";
+    public const string EditIcon = "assets/edit.png";
+    public const string RemIcon = "assets/remove.png";
+    public const string SaveIcon = "assets/save.png";
 
     // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
@@ -40,6 +43,19 @@ public class Utils
     public static Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
+
+    public static Color DefButtonColor = (Color)ColorConverter.ConvertFromString("#199BB3");
+    public static Color DefButtonColorHover = (Color)ColorConverter.ConvertFromString("#ADD8E6");
+    public static Color DefButtonColorPress = DefButtonColor;
+
+    public static Color PositiveButtonColor = (Color)ColorConverter.ConvertFromString("#90EE90");
+    public static Color PositiveButtonColorHover = (Color)ColorConverter.ConvertFromString("#ADD8E6");
+    public static Color PositiveButtonColorPress = PositiveButtonColor;
+
+    public static Color NegativeButtonColor = (Color)ColorConverter.ConvertFromString("#a30202");
+    public static Color NegativeButtonColorHover = (Color)ColorConverter.ConvertFromString("#e33b3b");
+    public static Color NegativeButtonColorPress = NegativeButtonColor;
+
     public static Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     public static Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
@@ -76,6 +92,12 @@ public class Utils
             { "fontColor", "#DAE4FF" },
             { "runningColor", "#C3E88D" },
             { "footerColor", "#90EE90" },
+            { "button", $"{DefButtonColor.ToString()}" },
+            { "buttonHover", $"{DefButtonColorHover.ToString()}" },
+            { "positiveButton", $"{PositiveButtonColor.ToString()}" },
+            { "positiveButtonHover", $"{PositiveButtonColorHover.ToString()}" },
+            { "negativeButton", $"{NegativeButtonColor.ToString()}" },
+            { "negativeButtonHover", $"{NegativeButtonColorHover.ToString()}" },
         };
         return colors;
     }
@@ -95,6 +117,12 @@ public class Utils
             { "fontColor", "#DAE4FF" },
             { "runningColor", "#C3E88D" },
             { "footerColor", "#90EE90" },
+            { "button", $"{DefButtonColor.ToString()}" },
+            { "buttonHover", $"{DefButtonColorHover.ToString()}" },
+            { "positiveButton", $"{PositiveButtonColor.ToString()}" },
+            { "positiveButtonHover", $"{PositiveButtonColorHover.ToString()}" },
+            { "negativeButton", $"{NegativeButtonColor.ToString()}" },
+            { "negativeButtonHover", $"{NegativeButtonColorHover.ToString()}" },
         };
 
         return colors;
@@ -115,6 +143,12 @@ public class Utils
             { "fontColor", "#FFF0F8FF" },
             { "runningColor", "#86DBFF" },
             { "footerColor", "#FF7B5EFF" },
+            { "button", $"{DefButtonColor.ToString()}" },
+            { "buttonHover", $"{DefButtonColorHover.ToString()}" },
+            { "positiveButton", $"{PositiveButtonColor.ToString()}" },
+            { "positiveButtonHover", $"{PositiveButtonColorHover.ToString()}" },
+            { "negativeButton", $"{NegativeButtonColor.ToString()}" },
+            { "negativeButtonHover", $"{NegativeButtonColorHover.ToString()}" },
         };
 
         return colors;
@@ -157,8 +191,6 @@ public class Utils
         {
             BgColor = (Color)ColorConverter.ConvertFromString(colors["bgColor"]);
             FooterColor = (Color)ColorConverter.ConvertFromString(colors["footerColor"]);
-            // DarkColor = (Color)ColorConverter.ConvertFromString(colors["darkColor"]);
-            // LightColor = (Color)ColorConverter.ConvertFromString(colors["lightColor"]);
             FontColor = (Color)ColorConverter.ConvertFromString(colors["fontColor"]);
             RunningColor = (Color)ColorConverter.ConvertFromString(colors["runningColor"]);
             LeftColor = (Color)ColorConverter.ConvertFromString(colors["leftColor"]);
@@ -168,6 +200,19 @@ public class Utils
             ShadowColor = (Color)ColorConverter.ConvertFromString(colors["shadowColor"]);
             EditColor1 = (Color)ColorConverter.ConvertFromString(colors["editColor1"]);
             EditColor2 = (Color)ColorConverter.ConvertFromString(colors["editColor2"]);
+            DefButtonColor = (Color)ColorConverter.ConvertFromString(colors["button"]);
+            DefButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["buttonHover"]);
+            PositiveButtonColor = (Color)ColorConverter.ConvertFromString(colors["positiveButton"]);
+            PositiveButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["positiveButtonHover"]);
+            NegativeButtonColor = (Color)ColorConverter.ConvertFromString(colors["negativeButton"]);
+            NegativeButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["negativeButtonHover"]);
+
+            // { "button", $"{DefButtonColor.ToString()}" },
+            // { "buttonHover", $"{DefButtonColorHover.ToString()}" },
+            // { "positiveButton", $"{PositiveButtonColor.ToString()}" },
+            // { "positiveButtonHover", $"{PositiveButtonColorHover.ToString()}" },
+            // { "negativeButton", $"{NegativeButtonColor.ToString()}" },
+            // { "negativeButtonHover", $"{NegativeButtonColorHover.ToString()}"},
             toUpdate = true;
         }
         catch (Exception ex)
@@ -175,8 +220,6 @@ public class Utils
             Console.WriteLine(ex.Message);
             BgColor = (Color)ColorConverter.ConvertFromString("#45092b");
             FooterColor = (Color)ColorConverter.ConvertFromString("#90EE90");
-            // DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
-            // LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
             FontColor = (Color)ColorConverter.ConvertFromString("#DAE4FF");
             RunningColor = (Color)ColorConverter.ConvertFromString("#C3E88D");
             LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
@@ -186,6 +229,12 @@ public class Utils
             ShadowColor = (Color)ColorConverter.ConvertFromString("#151515");
             EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
             EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
+            DefButtonColor = (Color)ColorConverter.ConvertFromString(colors["button"]);
+            DefButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["buttonHover"]);
+            PositiveButtonColor = (Color)ColorConverter.ConvertFromString(colors["positiveButton"]);
+            PositiveButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["positiveButtonHover"]);
+            NegativeButtonColor = (Color)ColorConverter.ConvertFromString(colors["negativeButton"]);
+            NegativeButtonColorHover = (Color)ColorConverter.ConvertFromString(colors["negativeButtonHover"]);
         }
     }
 
@@ -582,7 +631,7 @@ public class Utils
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon
         };
-        
+
 
         return sampleTextBoxEdit;
     }

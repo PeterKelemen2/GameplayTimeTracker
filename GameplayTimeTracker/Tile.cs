@@ -684,7 +684,7 @@ public class Tile : UserControl
         launchButton.Background = new SolidColorBrush(Colors.LightGreen);
         launchButton.Click += LaunchExe;
 
-        CustomButton customEditButton = new CustomButton(text: "Test");
+        CustomButton customEditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon);
         customEditButton.Margin = new Thickness(100, 0, 0, 0);
         customEditButton.Click += ToggleEdit_Click;
         Panel.SetZIndex(customEditButton, 3);

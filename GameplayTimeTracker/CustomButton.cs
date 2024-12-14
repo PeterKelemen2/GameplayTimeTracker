@@ -54,7 +54,7 @@ public class CustomButton : UserControl
         ButtonBase = new Rectangle
         {
             Width = width,
-            Height = 30,
+            Height = height,
             RadiusX = borderRadius,
             RadiusY = borderRadius,
             Fill = new SolidColorBrush(Utils.ButtonColor),
@@ -68,9 +68,9 @@ public class CustomButton : UserControl
             Foreground = new SolidColorBrush(Colors.Black),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            FontSize = fontSize,
+            FontSize = Utils.TextFontSize,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
-            Margin = new Thickness(0, 0, 0, fontSize / 4),
+            Margin = new Thickness(0, 0, 0, Utils.TextFontSize),
         };
         if (!buttonTextBlock.Text.Equals(""))
         {
@@ -85,6 +85,7 @@ public class CustomButton : UserControl
                 ButtonImage.Width = height / 2;
                 ButtonImage.Height = height / 2;
                 ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
+                // RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
 
                 if (!buttonTextBlock.Text.Equals(""))
                 {
@@ -109,14 +110,14 @@ public class CustomButton : UserControl
                 }
             }
         }
-        
+
         Content = Grid;
         Grid.MouseEnter += OnMouseEnter;
         Grid.MouseLeave += OnMouseLeave;
         Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
         Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
     }
-    
+
     private void OnMouseEnter(object sender, MouseEventArgs e)
     {
         ButtonBase.Fill = new SolidColorBrush(Utils.EditColor2); // Change to hover color
@@ -126,7 +127,7 @@ public class CustomButton : UserControl
     {
         ButtonBase.Fill = new SolidColorBrush(Utils.ButtonColor); // Revert to default color
     }
-    
+
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         ButtonBase.Fill = new SolidColorBrush(Utils.EditColor1); // Change color for feedback

@@ -64,11 +64,12 @@ namespace GameplayTimeTracker
             {
                 foreach (var theme in themesList)
                 {
+                    theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
                     if (theme.ThemeName.Equals(themeName))
                     {
                         try
                         {
-                            theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
+                            // theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
 
                             SolidColorBrush scb = new SolidColorBrush(
                                 (Color)ColorConverter.ConvertFromString(theme.Colors["bgColor"]));

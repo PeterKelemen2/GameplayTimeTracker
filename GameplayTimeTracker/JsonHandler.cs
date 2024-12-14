@@ -122,6 +122,11 @@ public class JsonHandler
             theme.Colors = Utils.GetCustomColors();
             settings.ThemeList.Add(theme);
         }
+
+        foreach (Theme theme in settings.ThemeList)
+        {
+            theme.Colors = Utils.CheckThemeIntegrity(theme.Colors);
+        }
     }
 
     public void WriteThemesToFile(List<Theme> themesList)
