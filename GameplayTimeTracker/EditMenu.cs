@@ -25,6 +25,7 @@ public class EditMenu : UserControl
     public string Title { get; set; }
 
     public bool IsOpen { get; set; }
+    public bool ToSave { get; set; }
 
     public TextBlock TitleEditBlock { get; set; }
     public TextBox TitleEditBox { get; set; }
@@ -116,7 +117,7 @@ public class EditMenu : UserControl
         SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
         SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
         SaveButton.Click += Parent.editSaveButton_Click;
-        SaveButton.Click += ShowSaveIndicator;
+        // SaveButton.Click += ShowSaveIndicator;
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
         Container.Children.Add(ChangeIconButton);
@@ -127,8 +128,7 @@ public class EditMenu : UserControl
 
     private void ShowSaveIndicator(object sender, RoutedEventArgs e)
     {
-        SaveIndicator indicator = new SaveIndicator(Container, Parent.TileHeight);
-        Container.Children.Add(indicator);
+        ShowSaveIndicatorMethod();
     }
 
     public void OpenMenu()
@@ -253,9 +253,19 @@ public class EditMenu : UserControl
         {
             // Call your method here
             Parent.SaveEditedData();
+            ShowSaveIndicatorMethod();
+
+            e.Handled = true; // Optional, prevents the beep sound
+        }
+    }
+
+    public void ShowSaveIndicatorMethod()
+    {
+        if (ToSave)
+        {
             SaveIndicator indicator = new SaveIndicator(Container, Parent.TileHeight);
             Container.Children.Add(indicator);
-            e.Handled = true; // Optional, prevents the beep sound
+            ToSave = false;
         }
     }
 }

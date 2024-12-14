@@ -111,6 +111,8 @@ public class Tile : UserControl
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
     {
         SaveEditedData();
+        
+        TileEditMenu.ShowSaveIndicatorMethod();
     }
 
     // Updates elements of the tile if there is change. Has a failsafe if new time values would cause a crash
@@ -173,6 +175,7 @@ public class Tile : UserControl
 
         if (toSave)
         {
+            TileEditMenu.ToSave = true;
             _tileContainer.InitSave();
             Console.WriteLine("Data file saved!");
         }
