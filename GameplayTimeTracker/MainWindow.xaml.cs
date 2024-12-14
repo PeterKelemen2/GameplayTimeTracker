@@ -164,7 +164,7 @@ namespace GameplayTimeTracker
             {
                 var shortcut = ShellLinkFile.Load(filePath);
                 exePath = shortcut.LinkInfo.LocalBasePath;
-                arguments = shortcut.Arguments;
+                arguments += shortcut.Arguments;
             }
             else if (Path.GetExtension(filePath).Equals(".exe", StringComparison.OrdinalIgnoreCase))
             {
@@ -173,7 +173,7 @@ namespace GameplayTimeTracker
 
             if (tileContainer.IsExePathPresent(exePath))
             {
-                PopupMenu popupMenu = new(text: $"{FileVersionInfo.GetVersionInfo(exePath).FileDescription} is already on the list",
+                PopupMenu popupMenu = new(text: $"{exePath} is already on the list",
                     type: "ok");
                 popupMenu.OpenMenu();
             }
@@ -189,35 +189,36 @@ namespace GameplayTimeTracker
                 Utils.PrepIcon(exePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
 
-                Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
-                    settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath, exePath: exePath,
-                    shortcutArgs: arguments.Length > 0 ? arguments : ""
-                );
-                newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-
-                if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
-                      Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+                try
                 {
-                    // Closing all opened edit menus and reseting them to avoid graphical glitch
-                    foreach (var tile in tileContainer.tilesList)
+                    Console.WriteLine($"Trying to add: {fileName}");
+                    Tile newTile = new Tile(tileContainer, fileName, settings.HorizontalTileGradient,
+                        settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
+                        exePath: exePath,
+                        shortcutArgs: arguments.Length > 0 ? arguments : ""
+                    );
+
+                    newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+
+                    if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+                          Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                     {
-                        if (tile.IsMenuToggled)
-                        {
-                            tile.ToggleEdit();
-                            tile.WasOpened = false;
-                        }
+                        tileContainer.AddTile(newTile, newlyAdded: true);
+                        // tileContainer.ListTiles();
+                        ShowTilesOnCanvas();
+                        handler.WriteContentToFile(tileContainer);
                     }
-
-                    tileContainer.AddTile(newTile, newlyAdded: true);
-                    tileContainer.ListTiles();
-                    ShowTilesOnCanvas();
-                    handler.WriteContentToFile(tileContainer);
-                    // MessageBox.Show($"Selected file: {filePath}");
+                    else
+                    {
+                        selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
+                        selfPopup.OpenMenu();
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
-                    selfPopup.OpenMenu();
+                    PopupMenu popupMenu = new(text: $"Something went wrong adding {filePath}", type: "ok");
+                    popupMenu.OpenMenu();
+                    Console.WriteLine(e);
                 }
             }
         }

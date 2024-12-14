@@ -54,7 +54,7 @@ public class EditMenu : UserControl
     {
         Parent = parent;
         Width = parent.TileWidth - padding;
-        Height = parent.TileHeight;
+        Height = parent.TileHeight - Utils.dropShadowIcon.BlurRadius;
         Title = parent.GameName;
         IsOpen = false;
         Console.WriteLine($"Edit menu for {Title}: {Width}x{Height}");
@@ -77,7 +77,7 @@ public class EditMenu : UserControl
             Fill = Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2),
             RadiusX = Utils.BorderRadius,
             RadiusY = Utils.BorderRadius,
-            Effect = Utils.dropShadowRectangle
+            Effect = Utils.dropShadowIcon
         };
         Container.Children.Add(BgRectangle);
 
@@ -134,7 +134,7 @@ public class EditMenu : UserControl
         ThicknessAnimation marginAnimation = new ThicknessAnimation
         {
             From = new Thickness(0, -Height, 0, 0),
-            To = new Thickness(0, -borderRadius, 0, 0),
+            To = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
             Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
             FillBehavior = FillBehavior.HoldEnd,
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
@@ -149,7 +149,7 @@ public class EditMenu : UserControl
         {
             ThicknessAnimation marginAnimation = new ThicknessAnimation
             {
-                From = new Thickness(0, -borderRadius, 0, 0),
+                From = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
                 To = new Thickness(0, -Height, 0, 0),
                 Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
                 FillBehavior = FillBehavior.HoldEnd,
@@ -227,7 +227,7 @@ public class EditMenu : UserControl
 
         return newButton;
     }
-    
+
     private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
