@@ -25,7 +25,7 @@ public class PopupMenu : UserControl
     public bool ToClose { get; set; }
 
     public string MenuText { get; set; }
-    public string Type { get; set; }
+    public PopupType Type { get; set; }
 
     private readonly RoutedEventHandler ButtonAction1;
     private readonly RoutedEventHandler ButtonAction2;
@@ -70,7 +70,7 @@ public class PopupMenu : UserControl
     }
 
     public PopupMenu(string text = "", double w = 350, double h = 150, bool isToggled = false,
-        string type = "yesNo",
+        PopupType type = PopupType.YesNo,
         RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
     {
         mainWindow = Utils.GetMainWindow();
@@ -242,7 +242,7 @@ public class PopupMenu : UserControl
 
         switch (Type)
         {
-            case "yesNo":
+            case PopupType.YesNo:
                 yesButton = new Button
                 {
                     Style = (Style)Application.Current.FindResource("RoundedButton"),

@@ -9,6 +9,8 @@ using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
 
+
+
 public class CustomButton : UserControl
 {
     private bool isDisabled = false;
@@ -43,7 +45,8 @@ public class CustomButton : UserControl
         remove => RemoveHandler(ClickEvent, value);
     }
 
-    public CustomButton(Grid parent = null, double width = 100, double height = 30, string type = "",
+    public CustomButton(Grid parent = null, double width = 100, double height = 30,
+        ButtonType type = ButtonType.Default,
         double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
         string buttonImagePath = "", bool isDisabled = false)
@@ -125,16 +128,16 @@ public class CustomButton : UserControl
         Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
     }
 
-    public void SetButtonColors(string type)
+    public void SetButtonColors(ButtonType type)
     {
         switch (type)
         {
-            case "positive":
+            case ButtonType.Positive:
                 ButtonColor = Utils.PositiveButtonColor;
                 ButtonHoverColor = Utils.PositiveButtonColorHover;
                 ButtonPressedColor = Utils.PositiveButtonColorPress;
                 break;
-            case "negative":
+            case ButtonType.Negative:
                 ButtonColor = Utils.NegativeButtonColor;
                 ButtonHoverColor = Utils.NegativeButtonColorHover;
                 ButtonPressedColor = Utils.NegativeButtonColorPress;

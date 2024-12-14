@@ -133,7 +133,8 @@ public class Tile : UserControl
                 TileEditMenu.TitleEditBox.Text = savedTitle;
                 titleTextBlock.Text = savedTitle;
                 _tileContainer.InitSave();
-                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new title!", type: "ok");
+                PopupMenu popupMenu =
+                    new PopupMenu(text: "An error occured when saving new title!", type: PopupType.OK);
                 popupMenu.OpenMenu();
             }
         }
@@ -277,7 +278,7 @@ public class Tile : UserControl
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         Console.WriteLine($"Failed to start {gameName}");
-                        PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {gameName}", type: "ok");
+                        PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {gameName}", type: PopupType.OK);
                         popupMenu.OpenMenu();
                     });
                 }
@@ -310,7 +311,7 @@ public class Tile : UserControl
             {
                 // MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!",
                 //     MessageBoxButton.OK, MessageBoxImage.Error);
-                PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {GameName}", type: "ok");
+                PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {GameName}", type: PopupType.OK);
                 popupMenu.OpenMenu();
             });
         }
@@ -659,7 +660,8 @@ public class Tile : UserControl
         //     Effect = Utils.dropShadowIcon
         // };
         // editButton.Click += ToggleEdit_Click;
-        EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon, type:"positive");
+        EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon,
+            type: ButtonType.Default);
         EditButton.HorizontalAlignment = HorizontalAlignment.Right;
         EditButton.VerticalAlignment = VerticalAlignment.Center;
         EditButton.Margin = new Thickness(0, topMargin, 100, 0);

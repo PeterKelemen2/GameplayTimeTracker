@@ -173,7 +173,7 @@ namespace GameplayTimeTracker
             if (tileContainer.IsExePathPresent(exePath))
             {
                 PopupMenu popupMenu = new(text: $"{exePath} is already on the list",
-                    type: "ok");
+                    type: PopupType.OK);
                 popupMenu.OpenMenu();
             }
             else
@@ -209,13 +209,13 @@ namespace GameplayTimeTracker
                     }
                     else
                     {
-                        selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: "ok");
+                        selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: PopupType.OK);
                         selfPopup.OpenMenu();
                     }
                 }
                 catch (Exception e)
                 {
-                    PopupMenu popupMenu = new(text: $"Something went wrong adding {filePath}", type: "ok");
+                    PopupMenu popupMenu = new(text: $"Something went wrong adding {filePath}", type: PopupType.OK);
                     popupMenu.OpenMenu();
                     Console.WriteLine(e);
                 }
