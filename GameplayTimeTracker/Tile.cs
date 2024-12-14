@@ -27,20 +27,20 @@ public class Tile : UserControl
 {
     private TileContainer _tileContainer;
 
-    public bool isMenuOpen = false;
+    // public bool isMenuOpen = false;
 
     public bool isRunning = false;
-    private bool isRunningGame = false;
+    // private bool isRunningGame = false;
     public bool wasRunning = false;
 
     public Grid grid;
-    private Rectangle menuRectangle;
-    private Rectangle shadowRectangle;
+    // private Rectangle menuRectangle;
+    // private Rectangle shadowRectangle;
     public Rectangle container;
     private Button editButton;
     private Button removeButton;
-    private Button editSaveButton;
-    private Button changeIconButton;
+    // private Button editSaveButton;
+    // private Button changeIconButton;
     private Button launchButton;
     private Image image;
     public Image bgImage;
@@ -53,16 +53,16 @@ public class Tile : UserControl
     public TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
     private TextBlock sampleTextBlock;
-    private TextBox editNameBox;
+    // private TextBox editNameBox;
     private TextBox sampleTextBox;
 
-    private TextBlock editNameTitle;
-    private TextBox editPlaytimeBox;
-    private TextBlock editPlaytimeTitle;
+    // private TextBlock editNameTitle;
+    // private TextBox editPlaytimeBox;
+    // private TextBlock editPlaytimeTitle;
 
-    private TextBlock editExePathTitle;
-    private TextBox editExePathBox;
-    private Button editExePathButton;
+    // private TextBlock editExePathTitle;
+    // private TextBox editExePathBox;
+    // private Button editExePathButton;
 
     public GradientBar totalTimeGradientBar;
     public GradientBar lastTimeGradientBar;
@@ -74,9 +74,9 @@ public class Tile : UserControl
     LinearGradientBrush gradientBrush;
     LinearGradientBrush editGradientBrush;
 
-    List<UIElement> editElements = new List<UIElement>();
+    // List<UIElement> editElements = new List<UIElement>();
     List<UIElement> mainElements = new List<UIElement>();
-    List<UIElement> animatedElements = new List<UIElement>();
+    // List<UIElement> animatedElements = new List<UIElement>();
 
     public double hTotal;
     public double mTotal;
@@ -125,228 +125,9 @@ public class Tile : UserControl
     private double[] fColMarg;
     private double[] sColMarg;
 
-
-    private Dictionary<UIElement, Thickness> originalMargins = new();
-    private Dictionary<UIElement, double> originalHeights = new();
-    // private bool wasOnceOpened = false;
-
     public void OpenExeFolder(object sender, RoutedEventArgs e)
     {
         Process.Start("explorer.exe", $"/select,\"{ExePath}\"");
-    }
-
-    // Sets the margin of the edit menu elements and plays an animation to bring them down from under the tile
-    public void ToggleEdit()
-    {
-        isMenuOpen = !isMenuOpen;
-        IsMenuToggled = !IsMenuToggled;
-        isMenuOpen = IsMenuToggled;
-        double animationDuration = 0.35;
-
-        DoubleAnimation heightAnimation = new DoubleAnimation
-        {
-            From = isMenuOpen ? 0 : TileHeight + 20, To = isMenuOpen ? TileHeight + 20 : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        DoubleAnimation opacityAnimation = new DoubleAnimation
-        {
-            From = isMenuOpen ? 0 : 1, To = isMenuOpen ? 1 : 0,
-            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        if (!WasOpened)
-        {
-            double padding = 3;
-            // menuRectangle.MaxHeight = TileHeight + 40;
-            // shadowRectangle.MaxHeight = 30;
-
-            editNameTitle.MaxHeight = Utils.EditTextMaxHeight;
-            editNameBox.Height = Utils.TextBoxHeight;
-            editNameBox.MaxHeight = Utils.TextBoxHeight;
-
-            editPlaytimeBox.MaxHeight = Utils.EditTextMaxHeight;
-            editPlaytimeTitle.MaxHeight = Utils.EditTextMaxHeight;
-
-            // changeIconButton.MaxHeight = Utils.EditTextMaxHeight;
-            editSaveButton.Height = Utils.TextBoxHeight;
-            editSaveButton.Width = changeIconButton.Width;
-            // editSaveButton.MaxHeight = Utils.TextBoxHeight;
-
-            editExePathButton.Height = Utils.TextBoxHeight;
-            changeIconButton.Height = Utils.TextBoxHeight;
-
-            // newTestButton.ButtonBase.Height = 30;
-            // newTestButton.Grid.Height = 30;
-
-            double rowMargin = 20;
-
-            menuRectangle.Margin = new Thickness(Utils.TileLeftMargin + 15, Utils.MenuTopMargin, 0, 0);
-            shadowRectangle.Margin = new Thickness(Utils.TileLeftMargin + 10,
-                -2 * TileHeight + 29, 0, 0);
-
-            editNameTitle.Margin = new Thickness(Utils.EditFColLeft, Utils.EditColTop, 0, 0);
-            editNameTitle.Padding = new Thickness(4, 0, 0, 15);
-            editNameBox.Margin = new Thickness(editNameTitle.Margin.Left,
-                (int)(editNameTitle.Margin.Top + rowMargin + padding), 0, 0);
-
-            editExePathTitle.Margin = new Thickness(editNameTitle.Margin.Left,
-                (int)(editNameBox.Margin.Top * 2), 0, 0);
-            editExePathTitle.Padding = new Thickness(4, 0, 0, 15);
-            editExePathBox.Margin = new Thickness(editNameTitle.Margin.Left,
-                (int)(editExePathTitle.Margin.Top + rowMargin + padding), 0, 0);
-            editExePathButton.Margin = new Thickness(editNameTitle.Margin.Left + Utils.EditSColLeft,
-                editExePathBox.Margin.Top, 0, 0);
-
-            editPlaytimeTitle.Margin =
-                new Thickness(editNameTitle.Margin.Left + Utils.EditSColLeft, editNameTitle.Margin.Top, 0, 0);
-            editPlaytimeTitle.Padding = new Thickness(4, 0, 0, 15);
-            editPlaytimeBox.Margin = new Thickness(editPlaytimeTitle.Margin.Left, editNameBox.Margin.Top, 0, 0);
-
-            changeIconButton.Margin = new Thickness(0, editNameBox.Margin.Top, Utils.EditFColLeft, 0);
-            editSaveButton.Margin = new Thickness(0, editExePathBox.Margin.Top, Utils.EditFColLeft, 0);
-
-            // newTestButton.Margin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
-
-            Thickness testButtonMargin = new Thickness(300, editExePathBox.Margin.Top, 0, 0);
-
-            animatedElements = new List<UIElement>();
-            animatedElements.AddRange(new UIElement[]
-            {
-                shadowRectangle, changeIconButton,
-                editNameTitle, editNameBox,
-                editPlaytimeTitle,
-                editPlaytimeBox,
-                editExePathTitle, editExePathBox, editExePathButton,
-                editSaveButton,
-                // newTestButton.Grid, newTestButton.ButtonBase
-            });
-
-
-            foreach (var element in animatedElements)
-            {
-                if (element is FrameworkElement frameworkElement)
-                {
-                    // Store the original margin in the dictionary
-                    originalMargins[element] = frameworkElement.Margin;
-                }
-            }
-
-            foreach (var elem in editElements)
-            {
-                if (elem is FrameworkElement frameworkElement)
-                {
-                    if (!double.IsNaN(frameworkElement.Height))
-                    {
-                        originalHeights[elem] = frameworkElement.Height;
-                        Console.WriteLine(frameworkElement.Height);
-                    }
-                    else
-                    {
-                        originalHeights[elem] = 0;
-                    }
-                }
-            }
-
-            foreach (var elem in editElements)
-            {
-                if (elem is FrameworkElement frameworkElement)
-                {
-                    if (!double.IsNaN(frameworkElement.Height))
-                    {
-                        originalHeights[elem] = frameworkElement.Height;
-                        Console.WriteLine(frameworkElement.Height);
-                    }
-                    else
-                    {
-                        originalHeights[elem] = 0;
-                    }
-                }
-            }
-
-            WasOpened = true;
-        }
-
-        heightAnimation.Completed += (s, a) =>
-        {
-            foreach (var elem in editElements)
-            {
-                elem.Visibility = !isMenuOpen ? Visibility.Collapsed : Visibility.Visible;
-            }
-        };
-
-        // Set the visibility to visible before starting the animation if we are opening the menu
-        if (isMenuOpen)
-        {
-            foreach (var element in editElements)
-            {
-                element.Visibility = Visibility.Visible;
-            }
-        }
-
-        foreach (var element in editElements)
-        {
-            if (element is CustomButton)
-            {
-                Console.WriteLine("Custom Button found!");
-            }
-
-            if (animatedElements.Contains(element) && element is FrameworkElement frameworkElement)
-            {
-                // Get the original margin
-                Thickness originalMargin = originalMargins[element];
-
-                // Determine the target top margin based on the menu state
-                double targetTopMargin =
-                    isMenuOpen ? originalMargin.Top : 0; // Animate to 0 if closing, otherwise to original
-
-                // Create the margin animation
-                ThicknessAnimation marginAnimation = new ThicknessAnimation
-                {
-                    From = new Thickness(originalMargin.Left, isMenuOpen ? 0 : originalMargin.Top, originalMargin.Right,
-                        originalMargin.Bottom),
-                    To = new Thickness(originalMargin.Left, targetTopMargin, originalMargin.Right,
-                        originalMargin.Bottom),
-                    Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
-                    FillBehavior = FillBehavior.HoldEnd,
-                    EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-                };
-
-
-                // Start the margin animation
-
-                frameworkElement.BeginAnimation(MarginProperty, marginAnimation);
-            }
-
-            double oHeight = originalHeights[element];
-            DoubleAnimation heightAnimationFromOG = new DoubleAnimation
-            {
-                From = isMenuOpen ? 0 : oHeight, To = isMenuOpen ? oHeight : 0,
-                Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-            };
-
-            // Start the other animations
-            if (oHeight > 0)
-            {
-                element.BeginAnimation(MaxHeightProperty, heightAnimationFromOG);
-            }
-            else
-            {
-                element.BeginAnimation(MaxHeightProperty, heightAnimation);
-            }
-
-            if (element is Rectangle)
-            {
-                Console.WriteLine("Rectangle found");
-            }
-
-            element.BeginAnimation(OpacityProperty, opacityAnimation);
-        }
-
-        Console.WriteLine(isMenuOpen);
     }
 
     public void ToggleEdit_Click(object sender, RoutedEventArgs e)
@@ -404,7 +185,7 @@ public class Tile : UserControl
                 (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
 
                 totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-                editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
+                TileEditMenu.PlaytimeEditBox.Text = $"{hTotal}h {mTotal}m";
                 _tileContainer.UpdatePlaytimeBars();
 
                 TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
@@ -743,8 +524,6 @@ public class Tile : UserControl
         lastTimeGradientBar.UpdateBarSizeWidth(TileWidth);
 
         container.Width = TileWidth;
-        menuRectangle.Width = TileWidth - 30;
-        shadowRectangle.Width = TileWidth - 20;
     }
 
     public void UpdatePlaytimeText()
@@ -867,8 +646,6 @@ public class Tile : UserControl
     {
         SetGradients();
         container.Fill = gradientBrush;
-        menuRectangle.Fill = editGradientBrush;
-        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
 
         titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
@@ -882,7 +659,6 @@ public class Tile : UserControl
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
-        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
     }
 
     public void SetGradients(bool fromContainer = false)
@@ -907,13 +683,8 @@ public class Tile : UserControl
         fColMarg = new[] { TileWidth * 0.25, TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin };
         sColMarg = new[] { TileWidth * 0.545, 1 };
 
-        // gradientBrush = Utils.createLinGradBrushVer(Utils.TileColor1, Utils.TileColor2);
-        // editGradientBrush = Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2);
-
         SetGradients();
 
-        editElements = new List<UIElement>();
-        mainElements = new List<UIElement>();
         sampleTextBlock = Utils.NewTextBlock();
 
         sampleTextBox = Utils.NewTextBoxEdit();
@@ -928,118 +699,6 @@ public class Tile : UserControl
         RowDefinition row2 = new RowDefinition();
         grid.RowDefinitions.Add(row1);
         grid.RowDefinitions.Add(row2);
-
-        // Create the first Rectangle
-        menuRectangle = new Rectangle
-        {
-            Width = TileWidth - 30,
-            Height = TileHeight,
-            RadiusX = CornerRadius,
-            RadiusY = CornerRadius,
-            Fill = editGradientBrush,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            MaxHeight = 0,
-            Effect = Utils.dropShadowRectangle,
-        };
-
-        shadowRectangle = new Rectangle();
-        shadowRectangle.Fill = new SolidColorBrush(Utils.ShadowColor);
-        shadowRectangle.Width = TileWidth - 20;
-        shadowRectangle.Height = TileHeight;
-        shadowRectangle.MaxHeight = 0;
-        shadowRectangle.HorizontalAlignment = HorizontalAlignment.Left;
-        shadowRectangle.Effect = Utils.fakeShadow;
-
-        editNameTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        editNameTitle.Text = "Name";
-        editNameTitle.MaxHeight = 0;
-        editNameTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
-        editNameTitle.Effect = null;
-
-        editNameBox = Utils.CloneTextBoxEdit(sampleTextBox);
-        editNameBox.Text = GameName;
-        // editNameBox.Width = 150;
-        editNameBox.Effect = Utils.dropShadowLightArea;
-        editNameBox.KeyDown += editBox_KeyDown;
-
-        editPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        editPlaytimeTitle.Text = "Playtime";
-        editPlaytimeTitle.MaxHeight = 0;
-        editPlaytimeTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
-        editPlaytimeTitle.Effect = null;
-
-        editPlaytimeBox = Utils.CloneTextBoxEdit(sampleTextBox);
-        editPlaytimeBox.Text = $"{hTotal}h {mTotal}m";
-        // editPlaytimeBox.Width = 150;
-        editPlaytimeBox.Height = Utils.TextBoxHeight;
-        editPlaytimeBox.Effect = Utils.dropShadowLightArea;
-        editPlaytimeBox.KeyDown += editBox_KeyDown;
-
-        editExePathTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        editExePathTitle.Text = "Path";
-        editExePathTitle.MaxHeight = 0;
-        editExePathTitle.Foreground = new SolidColorBrush(Utils.DarkColor);
-        editExePathTitle.Effect = null;
-
-        editExePathBox = Utils.CloneTextBoxEdit(sampleTextBox);
-        editExePathBox.Text = $"{ExePath}";
-        // editExePathBox.Width = 150;
-        editExePathBox.Height = Utils.TextBoxHeight;
-        editExePathBox.Effect = Utils.dropShadowLightArea;
-        editExePathBox.KeyDown += editBox_KeyDown;
-
-        editExePathButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Content = "Browse",
-            Height = 30,
-            Width = 80,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            MaxHeight = 0,
-            Effect = Utils.dropShadowLightArea
-        };
-        editExePathButton.Click += UpdateExe;
-
-        editSaveButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButtonSave"),
-            Height = 48,
-            Width = 96,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(0, 0, 100, 0),
-            MaxHeight = 0,
-            Effect = Utils.dropShadowLightArea
-        };
-        editSaveButton.Click += editSaveButton_Click;
-
-        changeIconButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Content = "Change icon",
-            Height = 30,
-            Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Top,
-            MaxHeight = 0,
-            Effect = Utils.dropShadowLightArea
-        };
-        changeIconButton.Click += UpdateIcons;
-
-        editElements.AddRange(new UIElement[]
-        {
-            menuRectangle, shadowRectangle, editNameTitle, editNameBox, editPlaytimeTitle,
-            editSaveButton, changeIconButton,
-            editPlaytimeBox,
-            editExePathTitle, editExePathBox, editExePathButton,
-        });
-        foreach (var elem in editElements)
-        {
-            Grid.SetRow(elem, 1);
-            grid.Children.Add(elem);
-        }
 
         // Create the second Rectangle
         container = new Rectangle

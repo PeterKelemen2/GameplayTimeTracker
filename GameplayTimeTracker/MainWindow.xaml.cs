@@ -163,12 +163,12 @@ namespace GameplayTimeTracker
             if (Path.GetExtension(filePath).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
             {
                 var shortcut = ShellLinkFile.Load(filePath);
-                exePath = shortcut.LinkInfo.LocalBasePath;
+                exePath += shortcut.LinkInfo.LocalBasePath;
                 arguments += shortcut.Arguments;
             }
             else if (Path.GetExtension(filePath).Equals(".exe", StringComparison.OrdinalIgnoreCase))
             {
-                exePath = filePath;
+                exePath += filePath;
             }
 
             if (tileContainer.IsExePathPresent(exePath))

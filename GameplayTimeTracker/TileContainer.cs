@@ -35,7 +35,7 @@ public class TileContainer
     {
         return tilesList.Select(x => x.ExePath).ToList();
     }
-    
+
     public bool IsExePathPresent(string exePathToCheck)
     {
         // Get the list of ExePaths and check if the specific exePath is present
@@ -240,7 +240,7 @@ public class TileContainer
         {
             if (tile.IsMenuToggled)
             {
-                tile.ToggleEdit();
+                if (tile.TileEditMenu.IsOpen) tile.TileEditMenu.CloseMenu();
             }
         }
     }
