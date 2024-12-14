@@ -45,10 +45,11 @@ public class EditMenu : UserControl
 
     public Double[] colMargins = { 20, 210, 430 }; // Left margin
     public Double[] rowMargins = { 15, 35, 80, 100 }; // Top margin
-    double padding = 30;
-    double borderRadius = 8;
-    double indent = 5;
+    private double padding = 30;
+    private double borderRadius = 8;
+    private double indent = 5;
     private double animationTime = 0.5;
+    private bool IsAnimating = false;
 
     public EditMenu(Tile parent)
     {
@@ -125,11 +126,12 @@ public class EditMenu : UserControl
 
     public void OpenMenu()
     {
-        if (IsOpen)
+        if (IsOpen || IsAnimating)
         {
             return;
         }
 
+        IsAnimating = true;
         CreateMenuContent();
         ThicknessAnimation marginAnimation = new ThicknessAnimation
         {
@@ -139,32 +141,42 @@ public class EditMenu : UserControl
             FillBehavior = FillBehavior.HoldEnd,
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
+        marginAnimation.Completed += (s, e) =>
+        {
+            IsAnimating = false;
+            IsOpen = true;
+        };
+
         Container.BeginAnimation(MarginProperty, marginAnimation);
-        IsOpen = true;
     }
 
     public void CloseMenu()
     {
-        if (IsOpen)
+        if (!IsOpen || IsAnimating)
         {
-            ThicknessAnimation marginAnimation = new ThicknessAnimation
-            {
-                From = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
-                To = new Thickness(0, -Height, 0, 0),
-                Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
-                FillBehavior = FillBehavior.HoldEnd,
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-            };
-
-            marginAnimation.Completed += (s, e) =>
-            {
-                Container.Children.Clear();
-                Container = null;
-                IsOpen = false;
-            };
-
-            Container.BeginAnimation(MarginProperty, marginAnimation);
+            return;
         }
+
+        IsAnimating = true;
+
+        ThicknessAnimation marginAnimation = new ThicknessAnimation
+        {
+            From = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
+            To = new Thickness(0, -Height, 0, 0),
+            Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
+            FillBehavior = FillBehavior.HoldEnd,
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        marginAnimation.Completed += (s, e) =>
+        {
+            Container.Children.Clear();
+            Container = null;
+            IsAnimating = false;
+            IsOpen = false;
+        };
+
+        Container.BeginAnimation(MarginProperty, marginAnimation);
     }
 
     private TextBox SampleBox(string text = "", int col = 0, int row = 0)
