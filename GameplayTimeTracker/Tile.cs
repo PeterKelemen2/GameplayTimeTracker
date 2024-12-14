@@ -122,9 +122,9 @@ public class Tile : UserControl
     public bool IsRunning { get; set; }
     public bool IsMenuToggled { get; set; }
 
-    public bool IsRunningGame { get; set; }
-    public bool WasRunning { get; set; }
-    public bool WasOpened { get; set; }
+    // public bool IsRunningGame { get; set; }
+    // public bool WasRunning { get; set; }
+    // public bool WasOpened { get; set; }
     public bool WasMoved { get; set; }
 
     public EditMenu TileEditMenu { get; set; }
@@ -178,76 +178,38 @@ public class Tile : UserControl
         // Save changed Total Playtime
         if ((hTotal, mTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal))
         {
-            double savedH = hTotal;
-            double savedM = mTotal;
-            double savedTotal = TotalPlaytime;
-            try
+            (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal);
+            if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
             {
-                (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, hTotal, mTotal);
-                if (Math.Abs(hAux - hTotal) > 0 || Math.Abs(mAux - mTotal) > 0)
-                {
-                    TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
-                }
-
-                (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-
-                totalPlaytime.Text = $"{hTotal}h {mTotal}m";
-                TileEditMenu.PlaytimeEditBox.Text = $"{hTotal}h {mTotal}m";
-                _tileContainer.UpdatePlaytimeBars();
-
-                TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-                mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
-                toSave = true;
+                TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
-            catch (Exception ex)
-            {
-                hTotal = savedH;
-                mTotal = savedM;
-                TotalPlaytime = savedTotal;
-                _tileContainer.InitSave();
-                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new playtime!", type: "ok");
-                popupMenu.OpenMenu();
-            }
+
+            (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+
+            totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+            TileEditMenu.PlaytimeEditBox.Text = $"{hTotal}h {mTotal}m";
+            _tileContainer.UpdatePlaytimeBars();
+
+            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+            mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
+            toSave = true;
         }
 
         if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
         {
-            string savedArgs = ShortcutArgs;
-            try
-            {
-                ShortcutArgs = TileEditMenu.ArgsEditBox.Text;
-                toSave = true;
-            }
-            catch (Exception ex)
-            {
-                ShortcutArgs = savedArgs;
-                _tileContainer.InitSave();
-                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new arguments!", type: "ok");
-                popupMenu.OpenMenu();
-            }
+            ShortcutArgs = TileEditMenu.ArgsEditBox.Text;
+            toSave = true;
         }
 
         if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
         {
-            string savedPath = ExePath;
-            try
-            {
-                ExePath = TileEditMenu.PathEditBox.Text;
-                toSave = true;
-            }
-            catch (Exception ex)
-            {
-                ExePath = savedPath;
-                _tileContainer.InitSave();
-                PopupMenu popupMenu = new PopupMenu(text: "An error occured when saving new path!", type: "ok");
-                popupMenu.OpenMenu();
-            }
+            ExePath = TileEditMenu.PathEditBox.Text;
+            toSave = true;
         }
 
         if (toSave)
         {
             _tileContainer.InitSave();
-            // _tileContainer.ListTiles();
             Console.WriteLine("Data file saved!");
         }
     }

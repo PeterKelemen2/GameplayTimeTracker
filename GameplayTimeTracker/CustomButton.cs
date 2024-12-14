@@ -109,12 +109,7 @@ public class CustomButton : UserControl
                 }
             }
         }
-
-        // if (parent != null)
-        // {
-        //     parent.Children.Add(this); // Add this CustomButton to the parent grid
-        // }
-
+        
         Content = Grid;
         Grid.MouseEnter += OnMouseEnter;
         Grid.MouseLeave += OnMouseLeave;
