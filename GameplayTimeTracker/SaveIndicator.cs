@@ -49,7 +49,8 @@ public class SaveIndicator : UserControl
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             Foreground = new SolidColorBrush(Colors.White),
-            FontSize = Utils.TextFontSize,
+            FontSize = Utils.TitleFontSize,
+            FontWeight = FontWeights.Bold,
             Effect = Utils.dropShadowText
         };
         Container.Children.Add(TextB);
