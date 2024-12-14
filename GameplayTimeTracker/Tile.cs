@@ -34,7 +34,7 @@ public class Tile : UserControl
 
     // private Button editButton;
     public CustomButton EditButton { get; set; }
-    private Button removeButton;
+    private CustomButton RemoveButton { get; set; }
     private Button launchButton;
     private Image image;
     public Image bgImage;
@@ -336,7 +336,7 @@ public class Tile : UserControl
         // Create the height animation for shrinking the tile
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
-            From = TileHeight * 2,
+            From = TileHeight,
             To = 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
@@ -359,7 +359,7 @@ public class Tile : UserControl
 
         // Apply the animations to the tile
         // editButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(editButton));
-        // removeButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(removeButton));
+        // RemoveButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(RemoveButton));
         // launchButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(launchButton));
         BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(this));
         grid.BeginAnimation(MaxHeightProperty, heightAnimation);
@@ -669,17 +669,25 @@ public class Tile : UserControl
         Panel.SetZIndex(EditButton, 3);
         grid.Children.Add(EditButton);
 
-        removeButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),
-            Height = 40,
-            Width = 40,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, topMargin, 50, 0),
-            Effect = Utils.dropShadowIcon
-        };
-        removeButton.Click += OpenDeleteDialog;
+        // removeButton = new Button
+        // {
+        //     Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),
+        //     Height = 40,
+        //     Width = 40,
+        //     HorizontalAlignment = HorizontalAlignment.Right,
+        //     VerticalAlignment = VerticalAlignment.Center,
+        //     Margin = new Thickness(0, topMargin, 50, 0),
+        //     Effect = Utils.dropShadowIcon
+        // };
+        // removeButton.Click += OpenDeleteDialog;
+        RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.RemIcon,
+            type: ButtonType.Negative);
+        RemoveButton.HorizontalAlignment = HorizontalAlignment.Right;
+        RemoveButton.VerticalAlignment = VerticalAlignment.Center;
+        RemoveButton.Margin = new Thickness(0, topMargin, 50, 0);
+        RemoveButton.Click += OpenDeleteDialog;
+        Panel.SetZIndex(RemoveButton, 3);
+        grid.Children.Add(RemoveButton);
 
         launchButton = new Button
         {
@@ -696,18 +704,13 @@ public class Tile : UserControl
         launchButton.Click += LaunchExe;
 
         Grid.SetRow(container, 0);
-        // Grid.SetRow(editButton, 0);
-        Grid.SetRow(removeButton, 0);
+        Grid.SetRow(RemoveButton, 0);
         Grid.SetRow(launchButton, 0);
 
         Panel.SetZIndex(container, 1);
-        // Panel.SetZIndex(editButton, 3);
-        Panel.SetZIndex(removeButton, 3);
         Panel.SetZIndex(launchButton, 3);
 
         grid.Children.Add(container);
-        // grid.Children.Add(editButton);
-        grid.Children.Add(removeButton);
         grid.Children.Add(launchButton);
 
 

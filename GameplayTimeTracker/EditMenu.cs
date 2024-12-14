@@ -116,12 +116,19 @@ public class EditMenu : UserControl
         SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
         SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
         SaveButton.Click += Parent.editSaveButton_Click;
+        SaveButton.Click += ShowSaveIndicator;
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
         Container.Children.Add(ChangeIconButton);
         Container.Children.Add(SaveButton);
 
         Content = Container;
+    }
+
+    private void ShowSaveIndicator(object sender, RoutedEventArgs e)
+    {
+        SaveIndicator indicator = new SaveIndicator(Container, Parent.TileHeight);
+        Container.Children.Add(indicator);
     }
 
     public void OpenMenu()
@@ -246,6 +253,8 @@ public class EditMenu : UserControl
         {
             // Call your method here
             Parent.SaveEditedData();
+            SaveIndicator indicator = new SaveIndicator(Container, Parent.TileHeight);
+            Container.Children.Add(indicator);
             e.Handled = true; // Optional, prevents the beep sound
         }
     }
