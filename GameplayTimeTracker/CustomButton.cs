@@ -4,19 +4,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
-
-
 
 public class CustomButton : UserControl
 {
     private bool isDisabled = false;
     public Rectangle ButtonBase;
     private string ButtonImagePath;
-    public Image ButtonImage = new Image();
+    public Image ButtonImage { get; set; }
     public Color ButtonColor { get; set; }
     public Color ButtonHoverColor { get; set; }
     public Color ButtonPressedColor { get; set; }
@@ -91,11 +90,12 @@ public class CustomButton : UserControl
         {
             if (File.Exists(buttonImagePath))
             {
+                ButtonImage = new Image();
                 ButtonImage.Source = new BitmapImage(new Uri(buttonImagePath, UriKind.RelativeOrAbsolute));
                 ButtonImage.Width = height / 2;
                 ButtonImage.Height = height / 2;
                 ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
-                // RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
+                RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
 
                 if (!buttonTextBlock.Text.Equals(""))
                 {
@@ -150,14 +150,44 @@ public class CustomButton : UserControl
         }
     }
 
+    private double animTime = 0.1;
+
     private void OnMouseEnter(object sender, MouseEventArgs e)
     {
         ButtonBase.Fill = new SolidColorBrush(ButtonHoverColor); // Change to hover color
+
+        // Animate scale transform
+        ScaleTransform scaleTransform = new ScaleTransform(1.0, 1.0); // Initial size
+        ButtonImage.RenderTransform = scaleTransform;
+        ButtonImage.RenderTransformOrigin = new Point(0.5, 0.5); // Set origin to center
+
+        DoubleAnimation scaleAnimation = new DoubleAnimation
+        {
+            To = 1.2, // Target scale
+            Duration = TimeSpan.FromSeconds(animTime),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
     }
 
     private void OnMouseLeave(object sender, MouseEventArgs e)
     {
         ButtonBase.Fill = new SolidColorBrush(ButtonColor); // Revert to default color
+
+        // Animate scale back to normal
+        ScaleTransform scaleTransform = ButtonImage.RenderTransform as ScaleTransform;
+        if (scaleTransform != null)
+        {
+            DoubleAnimation scaleAnimation = new DoubleAnimation
+            {
+                To = 1.0, // Target scale
+                Duration = TimeSpan.FromSeconds(animTime),
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            };
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+        }
     }
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
