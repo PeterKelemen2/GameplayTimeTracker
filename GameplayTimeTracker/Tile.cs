@@ -510,14 +510,16 @@ public class Tile : UserControl
     {
         WasRunning = false;
         IsRunning = false;
+        
         _tileContainer = tileContainer;
+        GameName = gameName;
         TileWidth = width;
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
+        
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
-
         LastPlaytimePercent = LastPlaytime / TotalPlaytime;
         
         (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
@@ -527,7 +529,7 @@ public class Tile : UserControl
         // (LastH, LastM, LastS) = Utils.ConvertMinutesToTime(LastPlaytime);
         // TotalPlaytime = GetTotalPlaytimeAsDouble();
         // LastPlaytime = GetLastPlaytimeAsDouble();
-        GameName = gameName;
+        
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
