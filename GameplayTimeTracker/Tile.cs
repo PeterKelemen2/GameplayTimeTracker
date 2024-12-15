@@ -82,11 +82,11 @@ public class Tile : UserControl
     public bool HorizontalTileG { get; set; }
     public bool HorizontalEditG { get; set; }
     public bool BigBgImages { get; set; }
-    public double CurrentPlaytime { get; set; }
-    public double HTotal { get; set; }
-    public double HLast { get; set; }
-    public double MTotal { get; set; }
-    public double MLast { get; set; }
+    // public double CurrentPlaytime { get; set; }
+    // public double HTotal { get; set; }
+    // public double HLast { get; set; }
+    // public double MTotal { get; set; }
+    // public double MLast { get; set; }
     public bool IsRunning { get; set; }
     public bool WasRunning { get; set; }
     public bool WasMoved { get; set; }
@@ -149,24 +149,25 @@ public class Tile : UserControl
         }
 
         // Save changed Total Playtime
-        if ((HTotal, MTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, HTotal, MTotal))
-        {
-            (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, HTotal, MTotal);
-            if (Math.Abs(hAux - HTotal) > 0 || Math.Abs(mAux - MTotal) > 0)
-            {
-                // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
-            }
-
-            // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-
-            totalPlaytime.Text = $"{HTotal}h {MTotal}m";
-            TileEditMenu.PlaytimeEditBox.Text = $"{HTotal}h {MTotal}m";
-            _tileContainer.UpdatePlaytimeBars();
-
-            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-            mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
-            toSave = true;
-        }
+        // if ((HTotal, MTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS))
+        // {
+        //     (double hAux, double mAux, double sAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
+        //     // if (Math.Abs(hAux - TotalH) > 0 || Math.Abs(mAux - TotalM) > 0 || Math.Abs(sAux - TotalS) > 0)
+        //     // {
+        //     //     // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+        //     // }
+        //
+        //     // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        //     (TotalH, TotalM, TotalS) = GetTotalPlaytime2(hAux, mAux, sAux); 
+        //
+        //     totalPlaytime.Text = $"{HTotal}h {MTotal}m";
+        //     TileEditMenu.PlaytimeEditBox.Text = $"{HTotal}h {MTotal}m";
+        //     _tileContainer.UpdatePlaytimeBars();
+        //
+        //     TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+        //     mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
+        //     toSave = true;
+        // }
 
         if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
         {
@@ -465,50 +466,6 @@ public class Tile : UserControl
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
     }
 
-    /*
-     * Calculates last and total hour and minute values based on the sec parameter.
-     * It never goes over 59 seconds, since that is the point where the minute turns.
-     * Same with the minutes-hour relation.
-     * After calculating the new values, total and last playtime is updated, along with the text and bars.
-     * The current seconds counter is being reset to 0.
-     */
-    public void CalculatePlaytimeFromSec(double sec)
-    {
-        int customHour = 60 - 1;
-        if (sec > customHour) // 60-1
-        {
-            MLast++;
-            MTotal++;
-
-            LastPlaytime++;
-            if (MTotal > customHour) // 60-1
-            {
-                HTotal++;
-                MTotal = 0;
-            }
-
-            if (MLast > customHour) // 60-1
-            {
-                HLast++;
-                MLast = 0;
-                _tileContainer.InitSave();
-            }
-
-            // TotalPlaytime = CalculatePlaytimeFromHnM(HTotal, MTotal);
-            // LastPlaytime = CalculatePlaytimeFromHnM(HLast, MLast);
-            LastPlaytimePercent = TotalPlaytime > 0 ? LastPlaytime / TotalPlaytime : 0; // Avoid division by zero
-            CurrentPlaytime = 0;
-
-            UpdatePlaytimeText();
-            Console.WriteLine("Updating bars from Tile - CalculatePlaytimeFromSec");
-            _tileContainer.UpdatePlaytimeBars();
-            _tileContainer.InitSave();
-        }
-
-        Console.WriteLine($"Current playtime of {GameName}: {HLast}h {MLast}m {CurrentPlaytime}s");
-        Console.WriteLine($"Total playtime of {GameName}: {HTotal}h {MTotal}m");
-    }
-
     public void IncrementPlaytime()
     {
         double min = 59;
@@ -535,46 +492,33 @@ public class Tile : UserControl
                 TotalM = 0;
             }
         }
+
+        TotalPlaytime = GetTotalPlaytimeAsDouble();
+        LastPlaytime = GetLastPlaytimeAsDouble();
     }
 
-    public double GetTotalPlaytime2()
+    public double GetTotalPlaytimeAsDouble()
     {
         return TotalH + (TotalM / 60) + (TotalS / 3600);
     }
 
-    public double GetLastPlaytime2()
+    public double GetLastPlaytimeAsDouble()
     {
         return LastH + (LastM / 60) + (LastS / 3600);
     }
 
-    
-
     // Resets all the values associated with an ongoing playtime calculation.
     public void ResetLastPlaytime()
     {
-        // MLast = 0;
-        // HLast = 0;
-        // CurrentPlaytime = 0;
         LastH = 0;
         LastM = 0;
         LastS = 0;
-        // LastPlaytime = 0;
+        LastPlaytime = 0;
         LastPlaytimePercent = 0;
         UpdatePlaytimeText();
         _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
         _tileContainer.InitSave();
     }
-    //
-    // private (double, double) CalculatePlaytimeFromMinutes(double playtime)
-    // {
-    //     return ((int)(playtime / 60), (int)(playtime % 60));
-    // }
-    //
-    // private double CalculatePlaytimeFromHnM(double h, double m)
-    // {
-    //     // Converting h and m to minutes
-    //     return 60 * h + m;
-    // }
 
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
@@ -596,7 +540,7 @@ public class Tile : UserControl
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         LastPlaytime = lastPlayedTime;
-        TotalPlaytimePercent = tileContainer.GetTilesListTotalPlaytime();
+        TotalPlaytimePercent = tileContainer.GetTLTotalTimeDouble();
         // TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
 
         LastPlaytimePercent = LastPlaytime / TotalPlaytime;
@@ -786,7 +730,7 @@ public class Tile : UserControl
             new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        totalPlaytime.Text = $"{HTotal}h {MTotal}m";
+        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
@@ -798,7 +742,7 @@ public class Tile : UserControl
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 10, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        lastPlaytime.Text = $"{HLast}h {MLast}m";
+        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}";
         lastPlaytime.Margin = new Thickness(sColMarg[0],
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 

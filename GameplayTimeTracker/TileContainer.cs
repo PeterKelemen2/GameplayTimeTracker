@@ -323,12 +323,12 @@ public class TileContainer
         }
     }
 
-    public double GetTilesListTotalPlaytime()
+    public double GetTLTotalTimeDouble()
     {
         double globalTotalPlaytime = 0;
         foreach (Tile tile in tilesList)
         {
-            globalTotalPlaytime += tile.GetTotalPlaytime2();
+            globalTotalPlaytime += tile.GetTotalPlaytimeAsDouble();
         }
 
         return globalTotalPlaytime;
@@ -336,11 +336,11 @@ public class TileContainer
 
     public void UpdatePlaytimeBars()
     {
-        double totalH = GetTilesListTotalPlaytime();
+        double totalH = GetTLTotalTimeDouble();
         foreach (Tile tile in tilesList)
         {
-            tile.totalTimeGradientBar.Percent = tile.GetTotalPlaytime2() / totalH;
-            tile.lastTimeGradientBar.Percent = tile.GetLastPlaytime2() / tile.GetTotalPlaytime2();
+            tile.totalTimeGradientBar.Percent = tile.GetTotalPlaytimeAsDouble() / totalH;
+            tile.lastTimeGradientBar.Percent = tile.GetLastPlaytimeAsDouble() / tile.GetTotalPlaytimeAsDouble();
             Console.WriteLine($"Total-total {totalH}");
             if (!tile.totalTimeGradientBar.WasInitialized)
             {

@@ -62,8 +62,6 @@ public class ProcessTracker
         Console.WriteLine("=================");
         foreach (var tile in _tileContainer.tilesList)
         {
-            // tile.TestPlaytimeTotal();
-            
             var isRunning =
                 runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
 
@@ -92,15 +90,16 @@ public class ProcessTracker
                 }
 
                 // tile.CurrentPlaytime++;
-                // tile.CalculatePlaytimeFromSec(tile.CurrentPlaytime);
                 tile.IncrementPlaytime();
-                
+
                 // Only update if a minute is passed
-                if (tile.LastM % 60 == 0)
+                if (tile.LastS % 59 == 0)
                 {
                     _tileContainer.UpdatePlaytimeBars();
-                    TextBlock mainTotalTimeBlock =  Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-                    mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
+                    _tileContainer.InitSave();
+                    TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+                    mainTotalTimeBlock.Text =
+                        $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
                 }
             }
             else
@@ -118,7 +117,6 @@ public class ProcessTracker
 
             // Update text every cycle for seconds
             tile.UpdatePlaytimeText();
-            
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");

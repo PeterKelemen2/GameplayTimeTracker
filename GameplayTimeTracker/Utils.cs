@@ -472,6 +472,13 @@ public class Utils
         return renderBitmap;
     }
 
+    public static String GetPrettyTime(double totalHours)
+    {
+        (double h, double m, double s) = ConvertDoubleToTime(totalHours);
+        String prettyTime = $"{h}h {m}m {s}s";
+        return prettyTime;
+    }
+
     public static (int Hours, int Minutes, int Seconds) ConvertDoubleToTime(double totalHours)
     {
         int hours = (int)totalHours; // Extract the whole number part for hours
@@ -486,29 +493,37 @@ public class Utils
     }
     
     // Regex handling of the edited time textfield
-    public static (double, double) DecodeTimeString(string timeString, double prevH, double prevM)
+    public static (double, double, double) DecodeTimeString(string timeString, double prevH, double prevM, double prevS)
     {
         if (string.IsNullOrWhiteSpace(timeString))
         {
-            return (prevH, prevM);
+            return (prevH, prevM, prevS);
         }
 
-        // Regular expression to match the different formats: 
-        // - "23-56", "23h 56m", "23h56m", or "23 56"
-        string pattern = @"(\d+)?\D*(\d+)?";
-
-        // string pattern = @"(\d+)[h\- ]?(\d+)[m]?";
+        // Updated pattern to capture hours, minutes, and seconds in various formats:
+        // Examples: "23-56-30", "23h 56m 30s", "23:56:30", or "23h56m30s"
+        string pattern = @"(?:(\d+)[h\-:]?)?\s*(?:(\d+)[m\-:]?)?\s*(?:(\d+)[s]?)?";
 
         // Match the input string against the pattern
         Match match = Regex.Match(timeString, pattern);
 
-        double h;
-        double m;
+        double h = prevH;
+        double m = prevM;
+        double s = prevS;
+
         if (match.Success)
         {
             // Extract the matched numbers and convert them to double
             h = match.Groups[1].Success ? double.Parse(match.Groups[1].Value) : prevH;
             m = match.Groups[2].Success ? double.Parse(match.Groups[2].Value) : prevM;
+            s = match.Groups[3].Success ? double.Parse(match.Groups[3].Value) : prevS;
+
+            // Normalize seconds and minutes if necessary
+            if (s > 59)
+            {
+                m += Math.Floor(s / 60);
+                s %= 60;
+            }
 
             if (m > 59)
             {
@@ -516,14 +531,15 @@ public class Utils
                 m %= 60;
             }
 
-            Console.WriteLine($"{timeString} Decoded as: {h} {m}");
-            return (h, m);
+            Console.WriteLine($"{timeString} Decoded as: {h}h {m}m {s}s");
+            return (h, m, s);
         }
         else
         {
             throw new FormatException("Input does not contain valid numbers in the expected format.");
         }
     }
+
 
     // Check if an image is available for usage
     public static bool IsValidImage(string imagePath)
