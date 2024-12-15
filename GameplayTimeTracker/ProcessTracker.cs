@@ -12,8 +12,8 @@ public class ProcessTracker
     List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
-    private string currentlyRunningTimeString = "Current Playtime:";
-    private string LastPlaytimeString = "Last Playtime:";
+    private string currSessionText = "Current Playtime:";
+    private string lastSessionText = "Last Playtime:";
     private string notRunningText = "";
     private Dictionary<string, bool> runningDictionary;
 
@@ -73,27 +73,19 @@ public class ProcessTracker
                     tile.WasRunning = true;
                     tile.IsRunning = true;
                     tile.ResetLastPlaytime();
-                    tile.UpdatePlaytimeText();
                     tile.ToggleBgImageColor(isRunning);
-                    Console.WriteLine($"Setting new last playtime for {tile.ExePathName}");
+                    Console.WriteLine($"Setting new playtime for {tile.ExePathName}");
                 }
 
                 // Only change text if it's not already the correct string
-                if (!tile.lastPlaytimeTitle.Text.Equals(currentlyRunningTimeString))
-                {
-                    tile.lastPlaytimeTitle.Text = currentlyRunningTimeString;
-                }
+                if (!tile.lastPlaytimeTitle.Text.Equals(currSessionText)) tile.lastPlaytimeTitle.Text = currSessionText;
+                if (!tile.runningTextBlock.Text.Equals(runningText)) tile.runningTextBlock.Text = runningText;
 
-                if (!tile.runningTextBlock.Text.Equals(runningText))
-                {
-                    tile.runningTextBlock.Text = runningText;
-                }
-
-                // tile.CurrentPlaytime++;
                 tile.IncrementPlaytime();
+                tile.UpdatePlaytimeText();
 
                 // Only update if a minute is passed
-                if (tile.LastS % 59 == 0)
+                if (tile.LastS % 60 == 0 || tile.TotalS % 60 == 0)
                 {
                     _tileContainer.UpdatePlaytimeBars();
                     _tileContainer.InitSave();
@@ -109,14 +101,13 @@ public class ProcessTracker
                 {
                     tile.WasRunning = false;
                     tile.IsRunning = false;
-                    tile.lastPlaytimeTitle.Text = LastPlaytimeString;
+                    tile.lastPlaytimeTitle.Text = lastSessionText;
                     tile.runningTextBlock.Text = notRunningText;
                     tile.ToggleBgImageColor(isRunning);
                 }
             }
 
-            // Update text every cycle for seconds
-            tile.UpdatePlaytimeText();
+            
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");

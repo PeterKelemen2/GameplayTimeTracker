@@ -1,19 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
-using Shellify;
-using ShellLink.Structures;
-using WindowsShortcutFactory;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using Key = System.Windows.Input.Key;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -27,12 +21,9 @@ using System.Windows.Shapes;
 public class Tile : UserControl
 {
     private TileContainer _tileContainer;
-
     public Grid grid;
-
     public Rectangle container;
 
-    // private Button editButton;
     public CustomButton EditButton { get; set; }
     private CustomButton RemoveButton { get; set; }
     private Button launchButton;
@@ -81,14 +72,7 @@ public class Tile : UserControl
     public string ExePathName { get; set; }
     public bool HorizontalTileG { get; set; }
     public bool HorizontalEditG { get; set; }
-
     public bool BigBgImages { get; set; }
-
-    // public double CurrentPlaytime { get; set; }
-    // public double HTotal { get; set; }
-    // public double HLast { get; set; }
-    // public double MTotal { get; set; }
-    // public double MLast { get; set; }
     public bool IsRunning { get; set; }
     public bool WasRunning { get; set; }
     public bool WasMoved { get; set; }
@@ -150,18 +134,21 @@ public class Tile : UserControl
             }
         }
 
-        (double newH, double newM, double newS) =
-            Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
-        if (newH != TotalH || newM != TotalM || newS != TotalS)
+        if (!IsRunning)
         {
-            (TotalH, TotalM, TotalS) = (newH, newM, newS);
-            TotalPlaytime = GetTotalPlaytimeAsDouble();
-            TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
-            _tileContainer.UpdatePlaytimeBars();
-            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-            mainTotalTimeBlock.Text =
-                $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
-            toSave = true;
+            (double newH, double newM, double newS) =
+                Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
+            if (newH != TotalH || newM != TotalM || newS != TotalS)
+            {
+                (TotalH, TotalM, TotalS) = (newH, newM, newS);
+                TotalPlaytime = GetTotalPlaytimeAsDouble();
+                TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
+                _tileContainer.UpdatePlaytimeBars();
+                TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+                mainTotalTimeBlock.Text =
+                    $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+                toSave = true;
+            }
         }
 
         if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
@@ -461,7 +448,7 @@ public class Tile : UserControl
 
     public void IncrementPlaytime()
     {
-        double min = 59;
+        double min = 60;
         LastS++;
         if (LastS > min)
         {
@@ -532,14 +519,11 @@ public class Tile : UserControl
         CornerRadius = Utils.BorderRadius;
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
-        LastPlaytime = lastPlayedTime;
-        TotalPlaytimePercent = tileContainer.GetTLTotalTimeDouble();
-        // TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
+        TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
 
         LastPlaytimePercent = LastPlaytime / TotalPlaytime;
         (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
         (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
-        // LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
@@ -553,10 +537,7 @@ public class Tile : UserControl
         HorizontalEditG = horizontalEdit;
         BigBgImages = bigBgImages;
 
-        // Console.WriteLine($"#################### Tile Gradient settings: {HorizontalTileG}, {HorizontalEditG}");
-
         WasMoved = false;
-
         SetupIconVars();
     }
 
@@ -723,7 +704,7 @@ public class Tile : UserControl
             new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}";
+        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
@@ -735,7 +716,7 @@ public class Tile : UserControl
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 10, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}";
+        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         lastPlaytime.Margin = new Thickness(sColMarg[0],
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 

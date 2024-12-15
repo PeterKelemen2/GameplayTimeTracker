@@ -348,35 +348,10 @@ public class TileContainer
             }
             else
             {
-                // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
                 tile.totalTimeGradientBar.UpdateBar();
             }
             
-            // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
             tile.lastTimeGradientBar.UpdateBar();
         }
-        // foreach (var tile in tilesList)
-        //     {
-        //         tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
-        //
-        //         Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
-        //
-        //         var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
-        //
-        //         tile.lastTimeGradientBar.Percent = newPercent;
-        //
-        //         if (!tile.totalTimeGradientBar.WasInitialized)
-        //         {
-        //             tile.totalTimeGradientBar.InitializeBar();
-        //         }
-        //         else
-        //         {
-        //             // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
-        //             tile.totalTimeGradientBar.UpdateBar();
-        //         }
-        //
-        //         // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
-        //         tile.lastTimeGradientBar.UpdateBar();
-        //     }
     }
 }

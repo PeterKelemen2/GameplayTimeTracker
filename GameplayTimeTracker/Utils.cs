@@ -482,12 +482,9 @@ public class Utils
     public static (int Hours, int Minutes, int Seconds) ConvertDoubleToTime(double totalHours)
     {
         int hours = (int)totalHours; // Extract the whole number part for hours
-        double fractionalHours = totalHours - hours; // Get the fractional part
-
-        int minutes = (int)(fractionalHours * 60); // Convert fractional hours to minutes
-        double fractionalMinutes = (fractionalHours * 60) - minutes; // Get the fractional part of minutes
-
-        int seconds = (int)(fractionalMinutes * 60); // Convert fractional minutes to seconds
+        double totalMinutes = (totalHours - hours) * 60; // Convert remaining fraction to minutes
+        int minutes = (int)totalMinutes; // Extract the whole number part for minutes
+        int seconds = (int)((totalMinutes - minutes) * 60); // Convert remaining fraction to seconds
 
         return (hours, minutes, seconds);
     }
