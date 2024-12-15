@@ -91,6 +91,13 @@ public class Tile : UserControl
     public bool WasRunning { get; set; }
     public bool WasMoved { get; set; }
     public EditMenu TileEditMenu { get; set; }
+    public double TotalH { get; set; }
+    public double TotalM { get; set; }
+    public double TotalS { get; set; }
+    public double LastH { get; set; }
+    public double LastM { get; set; }
+    public double LastS { get; set; }
+
 
     private double[] fColMarg;
     private double[] sColMarg;
@@ -111,7 +118,7 @@ public class Tile : UserControl
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
     {
         SaveEditedData();
-        
+
         TileEditMenu.ShowSaveIndicatorMethod();
     }
 
@@ -147,10 +154,10 @@ public class Tile : UserControl
             (double hAux, double mAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, HTotal, MTotal);
             if (Math.Abs(hAux - HTotal) > 0 || Math.Abs(mAux - MTotal) > 0)
             {
-                TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
+                // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
             }
 
-            (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+            // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
 
             totalPlaytime.Text = $"{HTotal}h {MTotal}m";
             TileEditMenu.PlaytimeEditBox.Text = $"{HTotal}h {MTotal}m";
@@ -209,17 +216,6 @@ public class Tile : UserControl
                 }
             }
         }
-    }
-
-    private String GetShortcutArguments(string shortcutPath)
-    {
-        if (!System.IO.File.Exists(shortcutPath))
-            throw new FileNotFoundException($"Shortcut not found: {shortcutPath}");
-
-        ShellLinkFile shortcut = ShellLinkFile.Load(shortcutPath);
-        Console.WriteLine(shortcut.Arguments);
-
-        return shortcut.Arguments;
     }
 
     private async void LaunchExe(object sender, RoutedEventArgs e)
@@ -319,7 +315,6 @@ public class Tile : UserControl
             });
         }
     }
-
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
@@ -464,8 +459,10 @@ public class Tile : UserControl
 
     public void UpdatePlaytimeText()
     {
-        totalPlaytime.Text = $"{HTotal}h {MTotal}m";
-        lastPlaytime.Text = IsRunning ? $"{HLast}h {MLast}m {CurrentPlaytime}s" : $"{HLast}h {MLast}m";
+        // totalPlaytime.Text = $"{HTotal}h {MTotal}m";
+        // lastPlaytime.Text = IsRunning ? $"{HLast}h {MLast}m {CurrentPlaytime}s" : $"{HLast}h {MLast}m";
+        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
+        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
     }
 
     /*
@@ -497,8 +494,8 @@ public class Tile : UserControl
                 _tileContainer.InitSave();
             }
 
-            TotalPlaytime = CalculatePlaytimeFromHnM(HTotal, MTotal);
-            LastPlaytime = CalculatePlaytimeFromHnM(HLast, MLast);
+            // TotalPlaytime = CalculatePlaytimeFromHnM(HTotal, MTotal);
+            // LastPlaytime = CalculatePlaytimeFromHnM(HLast, MLast);
             LastPlaytimePercent = TotalPlaytime > 0 ? LastPlaytime / TotalPlaytime : 0; // Avoid division by zero
             CurrentPlaytime = 0;
 
@@ -512,29 +509,72 @@ public class Tile : UserControl
         Console.WriteLine($"Total playtime of {GameName}: {HTotal}h {MTotal}m");
     }
 
+    public void IncrementPlaytime()
+    {
+        double min = 59;
+        LastS++;
+        if (LastS > min)
+        {
+            LastS = 0;
+            LastM++;
+            if (LastM > min)
+            {
+                LastH++;
+                LastM = 0;
+            }
+        }
+
+        TotalS++;
+        if (TotalS > min)
+        {
+            TotalS = 0;
+            TotalM++;
+            if (TotalM > min)
+            {
+                TotalH++;
+                TotalM = 0;
+            }
+        }
+    }
+
+    public double GetTotalPlaytime2()
+    {
+        return TotalH + (TotalM / 60) + (TotalS / 3600);
+    }
+
+    public double GetLastPlaytime2()
+    {
+        return LastH + (LastM / 60) + (LastS / 3600);
+    }
+
+    
+
     // Resets all the values associated with an ongoing playtime calculation.
     public void ResetLastPlaytime()
     {
-        MLast = 0;
-        HLast = 0;
-        CurrentPlaytime = 0;
-        LastPlaytime = 0;
+        // MLast = 0;
+        // HLast = 0;
+        // CurrentPlaytime = 0;
+        LastH = 0;
+        LastM = 0;
+        LastS = 0;
+        // LastPlaytime = 0;
         LastPlaytimePercent = 0;
         UpdatePlaytimeText();
         _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
         _tileContainer.InitSave();
     }
-
-    private (double, double) CalculatePlaytimeFromMinutes(double playtime)
-    {
-        return ((int)(playtime / 60), (int)(playtime % 60));
-    }
-
-    private double CalculatePlaytimeFromHnM(double h, double m)
-    {
-        // Converting h and m to minutes
-        return 60 * h + m;
-    }
+    //
+    // private (double, double) CalculatePlaytimeFromMinutes(double playtime)
+    // {
+    //     return ((int)(playtime / 60), (int)(playtime % 60));
+    // }
+    //
+    // private double CalculatePlaytimeFromHnM(double h, double m)
+    // {
+    //     // Converting h and m to minutes
+    //     return 60 * h + m;
+    // }
 
     public static readonly DependencyProperty GameNameProperty =
         DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
@@ -556,8 +596,13 @@ public class Tile : UserControl
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         LastPlaytime = lastPlayedTime;
-        TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
-        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
+        TotalPlaytimePercent = tileContainer.GetTilesListTotalPlaytime();
+        // TotalPlaytimePercent = tileContainer.CalculateTotalPlaytime() / LastPlaytime;
+
+        LastPlaytimePercent = LastPlaytime / TotalPlaytime;
+        (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
+        (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
+        // LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
@@ -630,8 +675,8 @@ public class Tile : UserControl
 
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        (HLast, MLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
+        // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        // (HLast, MLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();
@@ -652,17 +697,6 @@ public class Tile : UserControl
         };
         int topMargin = -40;
 
-        // editButton = new Button
-        // {
-        //     Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
-        //     Height = 40,
-        //     Width = 40,
-        //     HorizontalAlignment = HorizontalAlignment.Right,
-        //     VerticalAlignment = VerticalAlignment.Center,
-        //     Margin = new Thickness(0, topMargin, 100, 0),
-        //     Effect = Utils.dropShadowIcon
-        // };
-        // editButton.Click += ToggleEdit_Click;
         EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.EditIcon,
             type: ButtonType.Default);
         EditButton.HorizontalAlignment = HorizontalAlignment.Right;
@@ -672,17 +706,6 @@ public class Tile : UserControl
         Panel.SetZIndex(EditButton, 3);
         grid.Children.Add(EditButton);
 
-        // removeButton = new Button
-        // {
-        //     Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),
-        //     Height = 40,
-        //     Width = 40,
-        //     HorizontalAlignment = HorizontalAlignment.Right,
-        //     VerticalAlignment = VerticalAlignment.Center,
-        //     Margin = new Thickness(0, topMargin, 50, 0),
-        //     Effect = Utils.dropShadowIcon
-        // };
-        // removeButton.Click += OpenDeleteDialog;
         RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: Utils.RemIcon,
             type: ButtonType.Negative);
         RemoveButton.HorizontalAlignment = HorizontalAlignment.Right;
@@ -824,7 +847,6 @@ public class Tile : UserControl
         Content = grid;
     }
 
-
     public Grid GetBgImagesInGrid(bool bigImages)
     {
         var localIconContainerGrid = new Grid
@@ -932,16 +954,6 @@ public class Tile : UserControl
                 TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
-    }
-
-    private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            // Call your method here
-            SaveEditedData();
-            e.Handled = true; // Optional, prevents the beep sound
-        }
     }
 
     // Toggles between the two states oif the background image. Color for running, gray for not running

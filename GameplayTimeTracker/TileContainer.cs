@@ -257,41 +257,41 @@ public class TileContainer
     }
 
     // Calculates playtime and updates playtime bars accordingly
-    public void UpdatePlaytimeBars()
-    {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
-        double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
-
-        Console.WriteLine("Global: " + globalTotalPlaytime);
-        foreach (var tile in tilesList)
-        {
-            tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
-
-            Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
-
-            var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
-
-            tile.lastTimeGradientBar.Percent = newPercent;
-
-            if (!tile.totalTimeGradientBar.WasInitialized)
-            {
-                tile.totalTimeGradientBar.InitializeBar();
-            }
-            else
-            {
-                // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
-                tile.totalTimeGradientBar.UpdateBar();
-            }
-
-            // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
-            tile.lastTimeGradientBar.UpdateBar();
-        }
-
-        stopwatch.Stop();
-        Console.WriteLine($"Updating ALL playtime bars took: {stopwatch.Elapsed}");
-    }
+    // public void UpdatePlaytimeBars()
+    // {
+    //     Stopwatch stopwatch = new Stopwatch();
+    //     stopwatch.Start();
+    //
+    //     double globalTotalPlaytime = 1 / CalculateTotalPlaytime();
+    //
+    //     Console.WriteLine("Global: " + globalTotalPlaytime);
+    //     foreach (var tile in tilesList)
+    //     {
+    //         tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
+    //
+    //         Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
+    //
+    //         var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
+    //
+    //         tile.lastTimeGradientBar.Percent = newPercent;
+    //
+    //         if (!tile.totalTimeGradientBar.WasInitialized)
+    //         {
+    //             tile.totalTimeGradientBar.InitializeBar();
+    //         }
+    //         else
+    //         {
+    //             // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
+    //             tile.totalTimeGradientBar.UpdateBar();
+    //         }
+    //
+    //         // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
+    //         tile.lastTimeGradientBar.UpdateBar();
+    //     }
+    //
+    //     stopwatch.Stop();
+    //     Console.WriteLine($"Updating ALL playtime bars took: {stopwatch.Elapsed}");
+    // }
 
     public void UpdateTilesColors()
     {
@@ -321,5 +321,62 @@ public class TileContainer
             tile.HorizontalEditG = editG;
             tile.SetGradients(true);
         }
+    }
+
+    public double GetTilesListTotalPlaytime()
+    {
+        double globalTotalPlaytime = 0;
+        foreach (Tile tile in tilesList)
+        {
+            globalTotalPlaytime += tile.GetTotalPlaytime2();
+        }
+
+        return globalTotalPlaytime;
+    }
+
+    public void UpdatePlaytimeBars()
+    {
+        double totalH = GetTilesListTotalPlaytime();
+        foreach (Tile tile in tilesList)
+        {
+            tile.totalTimeGradientBar.Percent = tile.GetTotalPlaytime2() / totalH;
+            tile.lastTimeGradientBar.Percent = tile.GetLastPlaytime2() / tile.GetTotalPlaytime2();
+            Console.WriteLine($"Total-total {totalH}");
+            if (!tile.totalTimeGradientBar.WasInitialized)
+            {
+                tile.totalTimeGradientBar.InitializeBar();
+            }
+            else
+            {
+                // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
+                tile.totalTimeGradientBar.UpdateBar();
+            }
+            
+            // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
+            tile.lastTimeGradientBar.UpdateBar();
+        }
+        // foreach (var tile in tilesList)
+        //     {
+        //         tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime * globalTotalPlaytime, 2);
+        //
+        //         Console.WriteLine("Tile total percent:" + tile.totalTimeGradientBar.Percent);
+        //
+        //         var newPercent = Math.Round(tile.LastPlaytime / tile.TotalPlaytime, 2);
+        //
+        //         tile.lastTimeGradientBar.Percent = newPercent;
+        //
+        //         if (!tile.totalTimeGradientBar.WasInitialized)
+        //         {
+        //             tile.totalTimeGradientBar.InitializeBar();
+        //         }
+        //         else
+        //         {
+        //             // Console.WriteLine($"Updating total time gradient bar for {tile.GameName}");
+        //             tile.totalTimeGradientBar.UpdateBar();
+        //         }
+        //
+        //         // Console.WriteLine($"Updating last time gradient bar for {tile.GameName}");
+        //         tile.lastTimeGradientBar.UpdateBar();
+        //     }
     }
 }

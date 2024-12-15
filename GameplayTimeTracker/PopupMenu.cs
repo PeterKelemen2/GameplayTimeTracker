@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
+using Brushes = System.Windows.Media.Brushes;
+using FontFamily = System.Windows.Media.FontFamily;
+using Image = System.Windows.Controls.Image;
+using Point = System.Windows.Point;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 
 namespace GameplayTimeTracker;
@@ -64,7 +69,7 @@ public class PopupMenu : UserControl
     private bool isAnimating = false;
 
     public Image bgImage;
-    
+
     public PopupMenu()
     {
     }
@@ -90,9 +95,6 @@ public class PopupMenu : UserControl
         if (routedEvent2 == null) ButtonAction2 = (s, e) => { };
         else ButtonAction2 = routedEvent2;
 
-        // ButtonAction1 = routedEvent1 == null ? Dummy : ButtonAction1;
-        // ButtonAction2 = routedEvent2 == null ? Dummy : ButtonAction2;
-
         IsImageSet = false;
         ToClose = false;
 
@@ -101,7 +103,7 @@ public class PopupMenu : UserControl
             Interval = TimeSpan.FromSeconds(1)
         };
         blurUpdateTimer.Tick += (s, e) => SetBlurImage();
-        
+
         rollInTranslate = new DoubleAnimation
         {
             From = WinHeight,
@@ -109,14 +111,14 @@ public class PopupMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
-        
+
         rollOutTranslate = new DoubleAnimation
         {
             From = 0,
             To = -WinHeight,
             Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
-        }; 
+        };
 
         zoomInAnimation = new DoubleAnimation
         {
@@ -201,7 +203,7 @@ public class PopupMenu : UserControl
             }
         }
     }
-    
+
     // Opens the menu, creates prompt based on the type of menu it is
     public void OpenMenu()
     {
@@ -219,7 +221,9 @@ public class PopupMenu : UserControl
             Fill = new SolidColorBrush(Utils.BgColor),
             RadiusX = Utils.SettingsRadius,
             RadiusY = Utils.SettingsRadius,
-            Effect = Utils.dropShadowRectangle
+            Effect = Utils.dropShadowRectangle,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch
         };
         MenuContainerGrid.Children.Add(menuRect);
 
@@ -237,7 +241,6 @@ public class PopupMenu : UserControl
             Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
             Effect = Utils.dropShadowText
         };
-
         MenuContainerGrid.Children.Add(menuTitle);
 
         switch (Type)
@@ -300,16 +303,14 @@ public class PopupMenu : UserControl
         blurUpdateTimer.Start();
         IsToggled = true;
     }
-    
-    
 
     public void CloseMenuMethod()
     {
         if (isAnimating)
             return;
-        
+
         isAnimating = true;
-        
+
         ToClose = true;
         SetBlurImage(true);
         blurUpdateTimer.Stop();

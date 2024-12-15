@@ -472,6 +472,19 @@ public class Utils
         return renderBitmap;
     }
 
+    public static (int Hours, int Minutes, int Seconds) ConvertDoubleToTime(double totalHours)
+    {
+        int hours = (int)totalHours; // Extract the whole number part for hours
+        double fractionalHours = totalHours - hours; // Get the fractional part
+
+        int minutes = (int)(fractionalHours * 60); // Convert fractional hours to minutes
+        double fractionalMinutes = (fractionalHours * 60) - minutes; // Get the fractional part of minutes
+
+        int seconds = (int)(fractionalMinutes * 60); // Convert fractional minutes to seconds
+
+        return (hours, minutes, seconds);
+    }
+    
     // Regex handling of the edited time textfield
     public static (double, double) DecodeTimeString(string timeString, double prevH, double prevM)
     {
@@ -614,6 +627,25 @@ public class Utils
             Effect = original.Effect,
             // Add other properties that you need to copy as well...
         };
+    }
+    
+    public static double GetTextHeight(TextBlock textBlock)
+    {
+        // Create a FormattedText object
+        var formattedText = new FormattedText(
+            textBlock.Text,
+            System.Globalization.CultureInfo.CurrentCulture,
+            FlowDirection.LeftToRight,
+            new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
+            textBlock.FontSize,
+            textBlock.Foreground,
+            VisualTreeHelper.GetDpi(textBlock).PixelsPerDip);
+
+        // Apply the TextBlock's width for wrapping
+        formattedText.MaxTextWidth = textBlock.Width;
+
+        // Calculate the line count
+        return formattedText.MaxTextHeight;
     }
 
     public static TextBox NewTextBoxEdit()

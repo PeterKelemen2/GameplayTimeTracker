@@ -243,7 +243,7 @@ namespace GameplayTimeTracker
                 }
                 catch (Exception exception)
                 {
-                    PopupMenu popupMenu = new(text: $"Something went wrong adding {Path.GetFileName(selectedFile)}", type: PopupType.OK);
+                    PopupMenu popupMenu = new(text: $"Something went wrong adding {selectedFile}", type: PopupType.OK);
                     popupMenu.OpenMenu();
                     Console.WriteLine(exception);
                 }
