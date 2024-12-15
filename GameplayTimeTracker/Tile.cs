@@ -215,9 +215,6 @@ public class Tile : UserControl
             string gameName = GameName; // Cache the value
             string exePath = ExePath; // Cache the value
 
-            // Console.WriteLine(exePath);
-            // Console.WriteLine(GetShortcutArguments("F:\\Games\\Need for Speed SHIFT\\_SHIFT.exe - Shortcut.lnk"));
-
             if (string.IsNullOrEmpty(exePath) || !System.IO.File.Exists(exePath))
             {
                 throw new FileNotFoundException($"Executable not found: {exePath}");
@@ -522,8 +519,14 @@ public class Tile : UserControl
         TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
 
         LastPlaytimePercent = LastPlaytime / TotalPlaytime;
+        
         (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
         (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
+        
+        // (TotalH, TotalM, TotalS) = Utils.ConvertMinutesToTime(TotalPlaytime);
+        // (LastH, LastM, LastS) = Utils.ConvertMinutesToTime(LastPlaytime);
+        // TotalPlaytime = GetTotalPlaytimeAsDouble();
+        // LastPlaytime = GetLastPlaytimeAsDouble();
         GameName = gameName;
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
@@ -752,15 +755,11 @@ public class Tile : UserControl
 
         Panel.SetZIndex(iconContainerGrid, 2);
 
-        // Add new EditMenu for testing purposes
-        // EditMenu eMenu = new EditMenu(this);
-        // Panel.SetZIndex(eMenu, 0);
-
-        // grid.Children.Add(eMenu);
         TileEditMenu = new EditMenu(this);
         Grid.SetRow(TileEditMenu, 1);
         TileEditMenu.IsOpen = false;
         grid.Children.Add(TileEditMenu);
+        
         // Set the Grid as the content of the UserControl
         Content = grid;
     }

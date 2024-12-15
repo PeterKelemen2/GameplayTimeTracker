@@ -489,6 +489,16 @@ public class Utils
         return (hours, minutes, seconds);
     }
     
+    public static (int Hours, int Minutes, int Seconds) ConvertMinutesToTime(double totalMinutes)
+    {
+        int hours = (int)(totalMinutes / 60); // Extract the whole number part for hours
+        double remainingMinutes = totalMinutes % 60; // Get the remaining minutes
+        int minutes = (int)remainingMinutes; // Extract the whole number part for minutes
+        int seconds = (int)((remainingMinutes - minutes) * 60); // Convert fractional minutes to seconds
+
+        return (hours, minutes, seconds);
+    }
+    
     // Regex handling of the edited time textfield
     public static (double, double, double) DecodeTimeString(string timeString, double prevH, double prevM, double prevS)
     {

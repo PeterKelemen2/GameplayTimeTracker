@@ -109,7 +109,6 @@ public class GradientBar : UserControl
         Content = grid;
 
         stopwatch.Stop();
-        // Console.WriteLine($"Initializin GB took {stopwatch.Elapsed}");
         WasInitialized = true;
     }
 }

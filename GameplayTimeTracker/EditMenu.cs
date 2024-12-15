@@ -59,7 +59,6 @@ public class EditMenu : UserControl
         Height = parent.TileHeight - Utils.dropShadowIcon.BlurRadius;
         Title = parent.GameName;
         IsOpen = false;
-        Console.WriteLine($"Edit menu for {Title}: {Width}x{Height}");
     }
 
     private void CreateMenuContent()

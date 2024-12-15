@@ -50,6 +50,36 @@ namespace GameplayTimeTracker
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
+
+            // Console.WriteLine(Utils.ConvertMinutesToTime(108));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(20));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(875));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(119));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(350));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(151));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(2144));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(48));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(60));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(60));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(21));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(256));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(163));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(180));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(0));
+            //
+            // Console.WriteLine(Utils.ConvertMinutesToTime(99));
+            // Console.WriteLine(Utils.ConvertMinutesToTime(39));
         }
 
         private void InitSettings()
@@ -328,7 +358,6 @@ namespace GameplayTimeTracker
             foreach (var tile in tileContainer.tilesList)
             {
                 double lm = (Width - tile.TileWidth) * 0.5 + ScrollViewer.Padding.Left - 1;
-                Console.WriteLine(lm);
                 tile.Margin = new Thickness(lm, 5, 0, 5);
 
                 MainStackPanel.Children.Add(tile);
