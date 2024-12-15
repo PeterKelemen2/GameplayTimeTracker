@@ -81,7 +81,9 @@ public class Tile : UserControl
     public string ExePathName { get; set; }
     public bool HorizontalTileG { get; set; }
     public bool HorizontalEditG { get; set; }
+
     public bool BigBgImages { get; set; }
+
     // public double CurrentPlaytime { get; set; }
     // public double HTotal { get; set; }
     // public double HLast { get; set; }
@@ -148,26 +150,19 @@ public class Tile : UserControl
             }
         }
 
-        // Save changed Total Playtime
-        // if ((HTotal, MTotal) != Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS))
-        // {
-        //     (double hAux, double mAux, double sAux) = Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
-        //     // if (Math.Abs(hAux - TotalH) > 0 || Math.Abs(mAux - TotalM) > 0 || Math.Abs(sAux - TotalS) > 0)
-        //     // {
-        //     //     // TotalPlaytime = CalculatePlaytimeFromHnM(hAux, mAux);
-        //     // }
-        //
-        //     // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        //     (TotalH, TotalM, TotalS) = GetTotalPlaytime2(hAux, mAux, sAux); 
-        //
-        //     totalPlaytime.Text = $"{HTotal}h {MTotal}m";
-        //     TileEditMenu.PlaytimeEditBox.Text = $"{HTotal}h {MTotal}m";
-        //     _tileContainer.UpdatePlaytimeBars();
-        //
-        //     TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-        //     mainTotalTimeBlock.Text = $"Total Playtime: {_tileContainer.GetTotalPlaytimePretty()}";
-        //     toSave = true;
-        // }
+        (double newH, double newM, double newS) =
+            Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
+        if (newH != TotalH || newM != TotalM || newS != TotalS)
+        {
+            (TotalH, TotalM, TotalS) = (newH, newM, newS);
+            TotalPlaytime = GetTotalPlaytimeAsDouble();
+            TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
+            _tileContainer.UpdatePlaytimeBars();
+            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+            mainTotalTimeBlock.Text =
+                $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+            toSave = true;
+        }
 
         if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
         {
@@ -460,8 +455,6 @@ public class Tile : UserControl
 
     public void UpdatePlaytimeText()
     {
-        // totalPlaytime.Text = $"{HTotal}h {MTotal}m";
-        // lastPlaytime.Text = IsRunning ? $"{HLast}h {MLast}m {CurrentPlaytime}s" : $"{HLast}h {MLast}m";
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
     }
