@@ -132,7 +132,7 @@ public class CustomButton : UserControl
     {
         switch (type)
         {
-            case ButtonType.Positive:
+            case ButtonType.Positive: 
                 ButtonColor = Utils.PositiveButtonColor;
                 ButtonHoverColor = Utils.PositiveButtonColorHover;
                 ButtonPressedColor = Utils.PositiveButtonColorPress;

@@ -161,9 +161,15 @@ namespace GameplayTimeTracker
             string exePath = "";
             if (Path.GetExtension(filePath).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine("Selected file is a shortcut!");
                 var shortcut = ShellLinkFile.Load(filePath);
+                Console.WriteLine("Loaded shortcut!");
+
                 exePath += shortcut.LinkInfo.LocalBasePath;
+                Console.WriteLine($"Exe path: {shortcut.LinkInfo.LocalBasePath}");
+
                 arguments += shortcut.Arguments;
+                Console.WriteLine($"Arguments: {shortcut.Arguments}");
             }
             else if (Path.GetExtension(filePath).Equals(".exe", StringComparison.OrdinalIgnoreCase))
             {
@@ -231,7 +237,16 @@ namespace GameplayTimeTracker
             {
                 string selectedFile = openFileDialog.FileName;
                 Console.WriteLine($"Selected File: {selectedFile}");
-                AddEntry(selectedFile);
+                try
+                {
+                    AddEntry(selectedFile);
+                }
+                catch (Exception exception)
+                {
+                    PopupMenu popupMenu = new(text: $"Something went wrong adding {Path.GetFileName(selectedFile)}", type: PopupType.OK);
+                    popupMenu.OpenMenu();
+                    Console.WriteLine(exception);
+                }
             }
         }
 
