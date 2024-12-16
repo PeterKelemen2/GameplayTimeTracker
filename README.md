@@ -3,7 +3,7 @@
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
 <p align="center">
-	<img alt="Screenshot" src="https://www.kepfeltoltes.eu/images/2024/12/07/917main.png" width="500"/>
+	<img alt="Screenshot" src="https://i.imgur.com/i0PEanW.png" width="500"/>
 </p>
 
 ## Configuration
@@ -40,17 +40,21 @@ There are two main parts that can be set by the user both on the user interface 
 - **Menus**
   - Preferences
     - All the previously mentioned settings can be configured here.  
+    - If coming from an earlier release, the user can update the data file using the `Update legacy data` button to 
+    accomodate for the new time calculation logic.
   - Themes
     - Clicking the buttons allows the user to quickly switch the colors of the corresponding element.
     - Theme updates dynamically as the user changes the colors.
 	  
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/9k5Gp2a.png" width="240" style="margin-right: 20px;"/>
-	<img alt="Screenshot" src="https://i.imgur.com/3uTIKNE.png" width="240"/>
+	<img alt="Screenshot" src="https://i.imgur.com/OSCMH2p.png" width="240" style="margin-right: 20px;"/>
+	<img alt="Screenshot" src="https://i.imgur.com/N9uddSY.png" width="240"/>
 </p>
 
-  If a theme or its colors are missing from the configuration file, the application will regenerate default themes to ensure proper functionality.
-  Each theme contains the following customizable color properties:
+  If a theme or its colors are missing from the configuration file, the application will regenerate default themes to 
+  ensure proper functionality. 
+  
+Each theme contains the following customizable color properties:
 
 | Property       | Description                                  |Example Value     |
 |----------------|----------------------------------------------|------------------|
@@ -65,11 +69,17 @@ There are two main parts that can be set by the user both on the user interface 
 | `fontColor`    | Text color.                                  | `"#DAE4FF"`      | 
 | `runningColor` | Highlight text color for running apps.       | `"#C3E88D"`      |
 | `footerColor`  | Footer bar color.                            | `"#90EE90"`      |
+| `button`  | Normal button color.                         | `"#FF3BC9E3"`      |
+| `buttonHover`  | Normal button hover color.                   | `"#FFADD8E6"`      |
+| `positiveButton`  | Positive button color.                       | `"#FF90EE90"`      |
+| `positiveButtonHover`  | Positive button hover color.                 | `"#FFB5FFB5"`      |
+| `negativeButton`  | Negative button color.                       | `"#FFED0C0C"`      |
+| `negativeButtonHover`  | Negative button hover color.                 | `"#FFE33B3B"`      |
 
 ## Data
 Each monitored application is tracked with the following properties:
 <p align="center">
-	<img alt="Editing using the Custom theme" src="https://i.imgur.com/Z4856Su.png" width="500"/>
+	<img alt="Editing using the Custom theme" src="https://i.imgur.com/9yFmT12.png" width="500"/>
 </p>
 
 - `gameName`
@@ -86,9 +96,13 @@ Each monitored application is tracked with the following properties:
 	- Icon images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Saved Icons\`.
 - `exePath`
 	- A string specifying the full path to the application's executable file.
+- `arguments`
+	- A string specifying launch parameters for the executable. Arguments are extracted from shortcut 
+    files upon addition. 
 
 ### Editing
-All properties except `lastPlayedTime` can be modified via the application's edit menu.
+- All properties except `lastPlayedTime` can be modified via the application's edit menu.
+- Clicking the `Open Folder` button, the user can open the folder containing the executable file previously chosen.
 
 
 ## License
