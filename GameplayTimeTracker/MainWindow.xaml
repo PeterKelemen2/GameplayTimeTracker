@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="Gameplay Time Tracker"
-        Height="800"
-        Width="800"
+        Title="Gameplay Time Tracker" 
+        Height="800" 
+        Width="800" 
         MinWidth="800"
-        Closing="OnCloseNotify"
+        Closing="OnCloseNotify" 
         SizeChanged="OnSizeChanged"
         StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
@@ -192,7 +192,8 @@
                               Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z" />
             </Grid>
         </ControlTemplate>
-
+        
+        
 
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -244,8 +245,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
                     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
-                        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal"
-                                    Width="{Binding ElementName=SettingsBgRect, Path=Width}">
+                        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal" Width="{Binding ElementName=SettingsBgRect, Path=Width}">
                             <TextBlock x:Name="Pref" Text="Preferences" FontSize="16" Margin="10" FontWeight="Regular"
                                        Foreground="White" VerticalAlignment="Center">
                             </TextBlock>
@@ -257,8 +257,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                     <StackPanel x:Name="ContentPanel" HorizontalAlignment="Center"></StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -267,22 +266,15 @@
         <Grid x:Name="Grid">
             <!-- Define row definitions for the Grid -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="70" />
             </Grid.RowDefinitions>
-            
-            <Rectangle Grid.Row="0" x:Name="CustomTitleBar" Width="800" Height="40"
-                       Fill="LightCoral"
-                       HorizontalAlignment="Left" VerticalAlignment="Top"
-                       MouseLeftButtonDown="CustomTitleBar_MouseLeftButtonDown"
-                       Panel.ZIndex="1" />
-            
-            <Rectangle Grid.Row="1" x:Name="OverlayTop" Width="800" Height="40"
+
+            <Rectangle x:Name="OverlayTop" Width="800" Height="40"
                        Fill="{StaticResource OverlayGradientTop}"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
                        Panel.ZIndex="1" />
-            <Rectangle Grid.Row="1" x:Name="OverlayBottom" Width="800" Height="40"
+            <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
                        Fill="{StaticResource OverlayGradientBottom}"
                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
                        Panel.ZIndex="1" />
@@ -290,7 +282,7 @@
 
             <!-- Scrollable area in the top 3/4 -->
             <ScrollViewer x:Name="ScrollViewer"
-                          Grid.Row="1"
+                          Grid.Row="0"
                           ScrollChanged="ShowScrollViewerOverlay"
                           VerticalScrollBarVisibility="Hidden"
                           HorizontalScrollBarVisibility="Disabled"
@@ -299,7 +291,7 @@
             </ScrollViewer>
 
             <!-- Other content in the bottom 1/4 -->
-            <Grid Grid.Row="2" x:Name="Footer" Background="LightGreen">
+            <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
                 <!-- Add other UI elements here -->
                 <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
                         HorizontalAlignment="Left"
