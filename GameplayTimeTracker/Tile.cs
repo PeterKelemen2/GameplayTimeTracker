@@ -144,6 +144,7 @@ public class Tile : UserControl
                 TotalPlaytime = GetTotalPlaytimeAsDouble();
                 TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
                 _tileContainer.UpdatePlaytimeBars();
+                UpdatePlaytimeText();
                 TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
                 mainTotalTimeBlock.Text =
                     $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
