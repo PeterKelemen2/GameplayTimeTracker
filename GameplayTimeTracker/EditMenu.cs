@@ -5,14 +5,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Xceed.Wpf.AvalonDock.Controls;
-// using Gtk;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using Grid = System.Windows.Controls.Grid;
 using Style = System.Windows.Style;
-
-// using Gdk;
 
 namespace GameplayTimeTracker;
 
