@@ -803,7 +803,7 @@ public class Tile : UserControl
         TileEditMenu = new EditMenu(this);
         Grid.SetRow(TileEditMenu, 1);
         TileEditMenu.IsOpen = false;
-        // grid.Children.Add(TileEditMenu);
+        grid.Children.Add(TileEditMenu);
 
         // Set the Grid as the content of the UserControl
         Content = grid;

@@ -50,36 +50,6 @@ namespace GameplayTimeTracker
             UpdateStackPane();
             tileContainer.Total = GamesLoaded;
             GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
-
-            // Console.WriteLine(Utils.ConvertMinutesToTime(108));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(20));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(875));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(119));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(350));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(151));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(2144));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(48));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(60));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(60));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(21));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(1));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(256));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(163));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(180));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(0));
-            //
-            // Console.WriteLine(Utils.ConvertMinutesToTime(99));
-            // Console.WriteLine(Utils.ConvertMinutesToTime(39));
         }
 
         private void InitSettings()
@@ -369,9 +339,10 @@ namespace GameplayTimeTracker
             ScrollViewer scrollViewer = sender as ScrollViewer;
 
             OverlayTop.Visibility = e.VerticalOffset > 0 ? Visibility.Visible : Visibility.Collapsed;
-            OverlayBottom.Visibility = e.VerticalOffset < ScrollViewer.ScrollableHeight
+            OverlayBottom.Visibility = scrollViewer != null && e.VerticalOffset < scrollViewer.ScrollableHeight
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+            Console.WriteLine(e.VerticalOffset);
             OverlayTop.Width = scrollViewer.ViewportWidth * 2;
             OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
         }
@@ -511,6 +482,22 @@ namespace GameplayTimeTracker
             double newWidth = ActualWidth - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
             Console.WriteLine(ActualWidth);
             tileContainer.UpdateTilesWidth(newWidth);
+        }
+
+        private void CustomTitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                try
+                {
+                    this.DragMove(); // Initiates the drag operation
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Handle potential exceptions, such as calling DragMove when the window isn't in a movable state
+                    Console.WriteLine($"DragMove exception: {ex.Message}");
+                }
+            }
         }
     }
 }
