@@ -41,7 +41,7 @@
 <!--            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
 <!--        </PackageReference>-->
         <PackageReference Include="NotifyIcon.Windows" Version="1.23.10209.11223"/>
-        <PackageReference Include="securifybv.ShellLink" Version="0.1.0" />
+<!--        <PackageReference Include="securifybv.ShellLink" Version="0.1.0" />-->
         <PackageReference Include="Shellify" Version="0.4.0" />
         <PackageReference Include="System.Drawing.Common" Version="8.0.10"/>
         <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1"/>

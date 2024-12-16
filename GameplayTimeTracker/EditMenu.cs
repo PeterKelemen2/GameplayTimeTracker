@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Controls;
 // using Gtk;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
@@ -180,6 +181,7 @@ public class EditMenu : UserControl
             Container = null;
             IsAnimating = false;
             IsOpen = false;
+            if (Parent.grid.Children.Contains(this)) Parent.grid.Children.Remove(this);
         };
 
         Container.BeginAnimation(MarginProperty, marginAnimation);

@@ -67,10 +67,6 @@
             "WindowsShortcutFactory": {
               "target": "Package",
               "version": "[1.2.0, )"
-            },
-            "securifybv.ShellLink": {
-              "target": "Package",
-              "version": "[0.1.0, )"
             }
           },
           "imports": [

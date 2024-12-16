@@ -96,9 +96,18 @@ public class Tile : UserControl
     public void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {
         if (TileEditMenu.IsOpen)
+        {
             TileEditMenu.CloseMenu();
+        }
         else
+        {
+            if (!grid.Children.Contains(TileEditMenu))
+            {
+                grid.Children.Add(TileEditMenu);
+            }
+            
             TileEditMenu.OpenMenu();
+        }
     }
 
     public void editSaveButton_Click(object sender, RoutedEventArgs e)
@@ -140,7 +149,7 @@ public class Tile : UserControl
                 Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
             if (newH != TotalH || newM != TotalM || newS != TotalS)
             {
-                (TotalH, TotalM, TotalS) = (newH, newM, newS+1);
+                (TotalH, TotalM, TotalS) = (newH, newM, newS + 1);
                 TotalPlaytime = GetTotalPlaytimeAsDouble();
                 TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
                 _tileContainer.UpdatePlaytimeBars();
@@ -483,7 +492,7 @@ public class Tile : UserControl
 
     public void IncrementPlaytime()
     {
-        double min = 60-1;
+        double min = 60 - 1;
         LastS++;
         if (LastS > min)
         {
@@ -794,7 +803,7 @@ public class Tile : UserControl
         TileEditMenu = new EditMenu(this);
         Grid.SetRow(TileEditMenu, 1);
         TileEditMenu.IsOpen = false;
-        grid.Children.Add(TileEditMenu);
+        // grid.Children.Add(TileEditMenu);
 
         // Set the Grid as the content of the UserControl
         Content = grid;
