@@ -356,14 +356,15 @@ public class Utils
         return result;
     }
 
-    public static ThicknessAnimation GetMarginTopBottomAnimation(FrameworkElement uiElement)
+    public static ThicknessAnimation GetMarginTopBottomAnimation(FrameworkElement uiElement, double duration)
     {
         Thickness m = uiElement.Margin;
         return new ThicknessAnimation
         {
             From = new Thickness(m.Left, m.Top, m.Right, m.Bottom),
             To = new Thickness(m.Left, 0, m.Right, 0),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+            Duration = TimeSpan.FromSeconds(duration)
         };
     }
 

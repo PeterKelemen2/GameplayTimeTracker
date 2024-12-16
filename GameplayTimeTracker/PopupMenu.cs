@@ -325,6 +325,10 @@ public class PopupMenu : UserControl
             bgImage.Source = null;
             Console.WriteLine("Menu Closed!");
             isAnimating = false;
+            // Reset state flags
+            IsToggled = false;
+            IsImageSet = false;
+            ToClose = false;
         };
 
         var translateTransform = new TranslateTransform();
@@ -334,11 +338,6 @@ public class PopupMenu : UserControl
         bgImage.Effect.BeginAnimation(BlurEffect.RadiusProperty, blurOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, zoomOutAnimation);
         scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, zoomOutAnimation2);
-
-        // Reset state flags
-        IsToggled = false;
-        IsImageSet = false;
-        ToClose = false;
 
         Console.WriteLine("Menu closed!");
     }

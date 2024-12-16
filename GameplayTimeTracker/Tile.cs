@@ -140,7 +140,7 @@ public class Tile : UserControl
                 Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
             if (newH != TotalH || newM != TotalM || newS != TotalS)
             {
-                (TotalH, TotalM, TotalS) = (newH, newM, newS);
+                (TotalH, TotalM, TotalS) = (newH, newM, newS+1);
                 TotalPlaytime = GetTotalPlaytimeAsDouble();
                 TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
                 _tileContainer.UpdatePlaytimeBars();
@@ -308,14 +308,44 @@ public class Tile : UserControl
     {
         // Delay for delete menu closing
         await Task.Delay(500);
+        if (TileEditMenu != null)
+        {
+            if (TileEditMenu.IsOpen) TileEditMenu.CloseMenu();
+        }
 
-        double animationDuration = 1.0; // Duration for the animations
+        double animationDuration = 2.0; // Duration for the animations
+        double currentHeight = RenderSize.Height;
 
-        // Create the height animation for shrinking the tile
+        if (RenderTransform is not ScaleTransform scaleTransform)
+        {
+            scaleTransform = new ScaleTransform(1, 1); // Initial scale (1 means no scaling)
+            RenderTransform = scaleTransform;
+            RenderTransformOrigin = new Point(0.0, 0.0); // Set origin to the top-left for scaling
+        }
+
+        // Create the Y scale animation for shrinking the tile
+        DoubleAnimation scaleYAnimation = new DoubleAnimation
+        {
+            From = 1, // Original scale
+            To = 0, // Shrink to zero
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        // Create the height animation for the tile's height
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
-            From = TileHeight,
-            To = 0,
+            From = currentHeight * 2, // Start with the captured height
+            To = 0, // Shrink to zero
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        Thickness targetMargin = new Thickness(-iconContainerGrid.Width / 2, -iconContainerGrid.Margin.Top, 0, 0);
+        ThicknessAnimation marginAnimation = new ThicknessAnimation
+        {
+            From = iconContainerGrid.Margin, // Start from the current margin
+            To = targetMargin, // Move out to the left
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
@@ -331,16 +361,23 @@ public class Tile : UserControl
             // If the tile's parent is a Panel, remove the tile from the panel's children
             if (Parent is Panel panel)
             {
+                Console.WriteLine("Removing!!");
                 panel.Children.Remove(this);
             }
         };
 
-        // Apply the animations to the tile
-        // editButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(editButton));
-        // RemoveButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(RemoveButton));
-        // launchButton.BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(launchButton));
-        BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(this));
-        grid.BeginAnimation(MaxHeightProperty, heightAnimation);
+        // Apply the Y scale animation
+        // scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleYAnimation);
+
+        // Apply the height animation 
+        container.Effect = null;
+        BeginAnimation(MaxHeightProperty, heightAnimation);
+        EditButton.BeginAnimation(OpacityProperty, scaleYAnimation);
+        RemoveButton.BeginAnimation(OpacityProperty, scaleYAnimation);
+        iconContainerGrid.BeginAnimation(MarginProperty, marginAnimation);
+        iconContainerGrid.BeginAnimation(OpacityProperty, scaleYAnimation);
+        // Optionally animate other properties like margin
+        BeginAnimation(MarginProperty, Utils.GetMarginTopBottomAnimation(this, animationDuration));
     }
 
     public string GameName
@@ -508,28 +545,25 @@ public class Tile : UserControl
         bool horizontalEdit = true, bool bigBgImages = false, double totalTime = 0, double lastPlayedTime = 0,
         string? iconImagePath = SampleImagePath, string exePath = "", string shortcutArgs = "", double width = 760)
     {
+        HorizontalAlignment = HorizontalAlignment.Stretch;
+        VerticalAlignment = VerticalAlignment.Stretch;
         WasRunning = false;
         IsRunning = false;
-        
+
         _tileContainer = tileContainer;
         GameName = gameName;
         TileWidth = width;
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
-        
+
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
         LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
         TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
         LastPlaytimePercent = LastPlaytime / TotalPlaytime;
-        
+
         (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
         (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
-        
-        // (TotalH, TotalM, TotalS) = Utils.ConvertMinutesToTime(TotalPlaytime);
-        // (LastH, LastM, LastS) = Utils.ConvertMinutesToTime(LastPlaytime);
-        // TotalPlaytime = GetTotalPlaytimeAsDouble();
-        // LastPlaytime = GetLastPlaytimeAsDouble();
-        
+
         IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
@@ -598,8 +632,7 @@ public class Tile : UserControl
 
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        // (HTotal, MTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
-        // (HLast, MLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
+
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();
@@ -761,7 +794,7 @@ public class Tile : UserControl
         Grid.SetRow(TileEditMenu, 1);
         TileEditMenu.IsOpen = false;
         grid.Children.Add(TileEditMenu);
-        
+
         // Set the Grid as the content of the UserControl
         Content = grid;
     }
