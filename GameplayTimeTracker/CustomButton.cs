@@ -56,7 +56,8 @@ public class CustomButton : UserControl
         {
             Width = width,
             Height = height,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
         };
 
         ButtonBase = new Rectangle
@@ -68,8 +69,6 @@ public class CustomButton : UserControl
             Fill = new SolidColorBrush(ButtonColor),
             Effect = Utils.dropShadowIcon
         };
-
-
         Grid.Children.Add(ButtonBase);
 
         TextBlock buttonTextBlock = new TextBlock
@@ -80,7 +79,7 @@ public class CustomButton : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             FontSize = Utils.TextFontSize,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
-            Margin = new Thickness(0, 0, 0, Utils.TextFontSize),
+            // Margin = new Thickness(0, 0, 0, Utils.TextFontSize / 2),
         };
         if (!buttonTextBlock.Text.Equals(""))
         {

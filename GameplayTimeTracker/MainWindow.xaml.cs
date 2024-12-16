@@ -441,9 +441,10 @@ namespace GameplayTimeTracker
                 menuGrid: SettingsGrid,
                 settings: handler.GetSettingsFromFile(),
                 tileContainer,
-                updateMethod: tileContainer.UpdateLegacyTime,
+                updateMethod: UpdateColors,
                 tileGradMethod: tileContainer.UpdateTilesGradients,
-                tileBgImagesMethod: tileContainer.UpdateTileBgImages);
+                tileBgImagesMethod: tileContainer.UpdateTileBgImages,
+                updateLegacyMethod: tileContainer.UpdateLegacyTime);
             settingsMenu.OpenMenu();
         }
 

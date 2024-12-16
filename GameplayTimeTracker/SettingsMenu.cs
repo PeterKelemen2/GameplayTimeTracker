@@ -28,6 +28,8 @@ public class SettingsMenu : UserControl
     public Action MainUpdateMethod;
     public Action<bool, bool> TileGradMethod;
     public Action<bool> TileBgImagesMethod;
+    public Action<SettingsMenu> UpdateLegacyDataMethod;
+
     private DispatcherTimer blurUpdateTimer;
 
     public Grid ContainerGrid;
@@ -98,16 +100,17 @@ public class SettingsMenu : UserControl
     }
 
 
-    public SettingsMenu(Grid containerGrid, 
-        Grid menuGrid, 
-        Settings settings, 
+    public SettingsMenu(Grid containerGrid,
+        Grid menuGrid,
+        Settings settings,
         TileContainer tc, double w = 350,
         double h = 500,
         bool isToggled = false,
         string type = "yesNo",
         Action updateMethod = null,
         Action<bool, bool> tileGradMethod = null,
-        Action<bool> tileBgImagesMethod = null)
+        Action<bool> tileBgImagesMethod = null,
+        Action<SettingsMenu> updateLegacyMethod = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -124,6 +127,7 @@ public class SettingsMenu : UserControl
         MainUpdateMethod = updateMethod == null ? Dummy : updateMethod;
         TileGradMethod = tileGradMethod == null ? Dummy : tileGradMethod;
         TileBgImagesMethod = tileBgImagesMethod == null ? Dummy : tileBgImagesMethod;
+        UpdateLegacyDataMethod = updateLegacyMethod;
         _lastClickedTextBlock = new TextBlock();
 
         ToClose = false;
@@ -131,7 +135,7 @@ public class SettingsMenu : UserControl
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
             Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
-            TileBgImagesMethod, tc.UpdateLegacyTime);
+            TileBgImagesMethod, menu => tc.UpdateLegacyTime(menu), sMenu: this);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
