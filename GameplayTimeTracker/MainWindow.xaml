@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="Gameplay Time Tracker" 
-        Height="800" 
-        Width="800" 
+        Title="Gameplay Time Tracker"
+        Height="800"
+        Width="800"
         MinWidth="800"
-        Closing="OnCloseNotify" 
+        Closing="OnCloseNotify"
         SizeChanged="OnSizeChanged"
         StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
@@ -192,8 +192,7 @@
                               Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z" />
             </Grid>
         </ControlTemplate>
-        
-        
+
 
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -224,115 +223,126 @@
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Grid x:Name="ContainerGrid"
-          AllowDrop="True"
-          DragEnter="Grid_DragEnter"
+    <Grid x:Name="WindowGrid">
+        <!-- <Grid.RowDefinitions> -->
+        <!--     <RowDefinition Height="40" /> -->
+        <!--     <RowDefinition Height="*" /> -->
+        <!-- </Grid.RowDefinitions> -->
+        <Grid Grid.Row="0" x:Name="ContainerGrid"
+              AllowDrop="True"
+              DragEnter="Grid_DragEnter"
 
-          DragLeave="Grid_DragLeave"
-          Drop="Grid_Drop">
-        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
-        </Grid>
-
-        <Grid x:Name="SettingsGrid" Panel.ZIndex="10" Visibility="Collapsed">
-            <Grid.Effect>
-                <DropShadowEffect ShadowDepth="0" BlurRadius="20" />
-            </Grid.Effect>
-            <Rectangle x:Name="SettingsBgRect" Fill="#1D2640" Width="400" Height="500" RadiusX="10" RadiusY="10"></Rectangle>
-            <Grid Width="400" Height="500">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
-                        <StackPanel x:Name="HeaderPanel" Orientation="Horizontal" Width="{Binding ElementName=SettingsBgRect, Path=Width}">
-                            <TextBlock x:Name="Pref" Text="Preferences" FontSize="16" Margin="10" FontWeight="Regular"
-                                       Foreground="White" VerticalAlignment="Center">
-                            </TextBlock>
-                            <TextBlock x:Name="Themes" Text="Themes" FontSize="16" Margin="10" FontWeight="Regular"
-                                       Foreground="White"
-                                       VerticalAlignment="Center">
-                            </TextBlock>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                    <StackPanel x:Name="ContentPanel" HorizontalAlignment="Center"></StackPanel>
-                </ScrollViewer>
+              DragLeave="Grid_DragLeave"
+              Drop="Grid_Drop">
+            <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
             </Grid>
-        </Grid>
 
-        <Grid x:Name="Grid">
-            <!-- Define row definitions for the Grid -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="70" />
-            </Grid.RowDefinitions>
+            <Grid x:Name="SettingsGrid" Panel.ZIndex="10" Visibility="Collapsed">
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="20" />
+                </Grid.Effect>
+                <Rectangle x:Name="SettingsBgRect" Fill="#1D2640" Width="400" Height="500" RadiusX="10" RadiusY="10"></Rectangle>
+                <Grid Width="400" Height="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                            <StackPanel x:Name="HeaderPanel" Orientation="Horizontal"
+                                        Width="{Binding ElementName=SettingsBgRect, Path=Width}">
+                                <TextBlock x:Name="Pref" Text="Preferences" FontSize="16" Margin="10"
+                                           FontWeight="Regular"
+                                           Foreground="White" VerticalAlignment="Center">
+                                </TextBlock>
+                                <TextBlock x:Name="Themes" Text="Themes" FontSize="16" Margin="10" FontWeight="Regular"
+                                           Foreground="White"
+                                           VerticalAlignment="Center">
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
 
-            <Rectangle x:Name="OverlayTop" Width="800" Height="40"
-                       Fill="{StaticResource OverlayGradientTop}"
-                       HorizontalAlignment="Left" VerticalAlignment="Top"
-                       Panel.ZIndex="1" />
-            <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
-                       Fill="{StaticResource OverlayGradientBottom}"
-                       HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                       Panel.ZIndex="1" />
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <StackPanel x:Name="ContentPanel" HorizontalAlignment="Center"></StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+
+            <Grid x:Name="Grid">
+                <!-- Define row definitions for the Grid -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="70" />
+                </Grid.RowDefinitions>
+
+                <Rectangle x:Name="OverlayTop" Width="800" Height="40"
+                           Fill="{StaticResource OverlayGradientTop}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Panel.ZIndex="1" />
+                <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
+                           Fill="{StaticResource OverlayGradientBottom}"
+                           HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                           Panel.ZIndex="1" />
 
 
-            <!-- Scrollable area in the top 3/4 -->
-            <ScrollViewer x:Name="ScrollViewer"
-                          Grid.Row="0"
-                          ScrollChanged="ShowScrollViewerOverlay"
-                          VerticalScrollBarVisibility="Hidden"
-                          HorizontalScrollBarVisibility="Disabled"
-                          Padding="-7,5,0,5" Background="#1E2030">
-                <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
-            </ScrollViewer>
+                <!-- Scrollable area in the top 3/4 -->
+                <ScrollViewer x:Name="ScrollViewer"
+                              Grid.Row="0"
+                              ScrollChanged="ShowScrollViewerOverlay"
+                              VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="-7,5,0,5" Background="#1E2030">
+                    <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
+                </ScrollViewer>
 
-            <!-- Other content in the bottom 1/4 -->
-            <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
-                <!-- Add other UI elements here -->
-                <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
-                        HorizontalAlignment="Left"
-                        Margin="20,0,0,0"
-                        Height="30"
-                        Width="140"
-                        Click="AddExecButton_Click">
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
-                    </Button.Effect>
-                </Button>
+                <!-- Other content in the bottom 1/4 -->
+                <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
+                    <!-- Add other UI elements here -->
+                    <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
+                            HorizontalAlignment="Left"
+                            Margin="20,0,0,0"
+                            Height="30"
+                            Width="140"
+                            Click="AddExecButton_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
+                        </Button.Effect>
+                    </Button>
 
-                <Button Content="Settings" Style="{StaticResource RoundedButton}"
-                        HorizontalAlignment="Left"
-                        Margin="180,0,0,0"
-                        Height="30"
-                        Width="140"
-                        Click="OpenSettingsWindow">
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
-                    </Button.Effect>
-                </Button>
+                    <Button Content="Settings" Style="{StaticResource RoundedButton}"
+                            HorizontalAlignment="Left"
+                            Margin="180,0,0,0"
+                            Height="30"
+                            Width="140"
+                            Click="OpenSettingsWindow">
+                        <Button.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
+                        </Button.Effect>
+                    </Button>
 
-                <TextBlock x:Name="GamesLoaded"
-                           Text="Games managed: 0"
-                           Foreground="Black"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           Margin="340,0,20,0"
-                           FontSize="16"
-                           FontWeight="Bold" />
+                    <TextBlock x:Name="GamesLoaded"
+                               Text="Games managed: 0"
+                               Foreground="Black"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="340,0,20,0"
+                               FontSize="16"
+                               FontWeight="Bold" />
 
-                <TextBlock x:Name="TotalPlaytimeTextBlock"
-                           Text="Total Playtime: 0 hours"
-                           Foreground="Black"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           Margin="0,0,20,0"
-                           FontSize="16"
-                           FontWeight="Bold" />
+                    <TextBlock x:Name="TotalPlaytimeTextBlock"
+                               Text="Total Playtime: 0 hours"
+                               Foreground="Black"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Margin="0,0,20,0"
+                               FontSize="16"
+                               FontWeight="Bold" />
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
+
+
 </Window>
