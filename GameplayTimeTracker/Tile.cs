@@ -482,7 +482,7 @@ public class Tile : UserControl
 
     public void IncrementPlaytime()
     {
-        double min = 60;
+        double min = 60-1;
         LastS++;
         if (LastS > min)
         {
