@@ -18,14 +18,16 @@ public class PrefMenu : UserControl
     public bool StartWithSystem { get; set; }
     public Action<bool, bool> TileGradUpdateMethod;
     public Action<bool> TileBgImagesMethod;
+    public Action UpdateLegacyMethod;
 
     public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
-        Action<bool> tileBgImagesMethod)
+        Action<bool> tileBgImagesMethod, Action updateLegacyMethod = null)
     {
         Panel = stackPanel;
         CurrentSettings = settings;
         TileGradUpdateMethod = tileGradUpdateMethod;
         TileBgImagesMethod = tileBgImagesMethod;
+        UpdateLegacyMethod = updateLegacyMethod;
         // CreateMenu();
         Prefs = new Dictionary<string, bool>();
         Prefs.Add("Start with system", CurrentSettings.StartWithSystem);
@@ -45,6 +47,16 @@ public class PrefMenu : UserControl
         newEntry.checkBox.Checked += (sender, e) => UpdateBgImageSize(true);
         newEntry.checkBox.Unchecked += (sender, e) => UpdateBgImageSize(false);
         Panel.Children.Add(newEntry);
+
+        CustomButton updateLegacyData =
+            new CustomButton(text: "Update legacy data", width: 150, height: 40, type: ButtonType.Positive);
+        // updateLegacyData.HorizontalAlignment = HorizontalAlignment.Center;
+        // updateLegacyData.VerticalAlignment = VerticalAlignment.Center;
+        updateLegacyData.Click += Update_Click;
+        Panel.Children.Add(updateLegacyData);
+        // EditButton.Margin = new Thickness(0, topMargin, 100, 0);
+        // EditButton.Click += ToggleEdit_Click;
+        
 
         DoubleAnimation fadeInAnimation = new DoubleAnimation
         {
@@ -91,5 +103,13 @@ public class PrefMenu : UserControl
     public void CreateMenu(object sender, MouseButtonEventArgs e)
     {
         CreateMenuMethod();
+    }
+    
+    public void Update_Click(object sender, RoutedEventArgs e)
+    {
+        if (UpdateLegacyMethod != null)
+        {
+            UpdateLegacyMethod();
+        }
     }
 }

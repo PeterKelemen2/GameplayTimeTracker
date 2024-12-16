@@ -98,7 +98,11 @@ public class SettingsMenu : UserControl
     }
 
 
-    public SettingsMenu(Grid containerGrid, Grid menuGrid, Settings settings, double w = 350, double h = 500,
+    public SettingsMenu(Grid containerGrid, 
+        Grid menuGrid, 
+        Settings settings, 
+        TileContainer tc, double w = 350,
+        double h = 500,
         bool isToggled = false,
         string type = "yesNo",
         Action updateMethod = null,
@@ -127,7 +131,7 @@ public class SettingsMenu : UserControl
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
             Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
-            TileBgImagesMethod);
+            TileBgImagesMethod, tc.UpdateLegacyTime);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 
@@ -135,7 +139,6 @@ public class SettingsMenu : UserControl
         PrefBlock.FontWeight = FontWeights.Regular;
         PrefBlock.MouseDown += (sender, e) =>
         {
-            
             // UpdateUnderline(PrefBlock);
             if (_lastClickedTextBlock != PrefBlock)
             {
@@ -145,7 +148,7 @@ public class SettingsMenu : UserControl
                 Settings = jsonHandler.GetSettingsFromFile();
                 pm.CurrentSettings = Settings;
             }
-            
+
             // pm.CreateMenu(sender, e);
         };
 
@@ -153,14 +156,13 @@ public class SettingsMenu : UserControl
         ThemesBlock.FontWeight = FontWeights.Regular;
         ThemesBlock.MouseDown += (sender, e) =>
         {
-            
             if (_lastClickedTextBlock != ThemesBlock)
             {
                 UpdateUnderline(ThemesBlock);
                 tm.CreateMenu(sender, e);
             }
         };
-        
+
         _lastClickedTextBlock = PrefBlock;
         pm.CreateMenuMethod();
         UpdateUnderline(PrefBlock);
@@ -196,7 +198,7 @@ public class SettingsMenu : UserControl
 
         SettingsGrid.Visibility = Visibility.Visible;
         Console.WriteLine();
-        
+
         var translateTransform = new TranslateTransform();
         SettingsGrid.RenderTransform = translateTransform;
         translateTransform.BeginAnimation(TranslateTransform.YProperty, rollInTranslate);
@@ -236,7 +238,7 @@ public class SettingsMenu : UserControl
             Console.WriteLine("Menu Closed!");
             isAnimating = false;
         };
-        
+
         var translateTransform = new TranslateTransform();
         SettingsGrid.RenderTransform = translateTransform;
         translateTransform.BeginAnimation(TranslateTransform.YProperty, rollOutTranslate);
@@ -317,14 +319,14 @@ public class SettingsMenu : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
         };
-        
+
         rollOutTranslate = new DoubleAnimation
         {
             From = 0,
             To = -WinHeight,
             Duration = new Duration(TimeSpan.FromSeconds(0.4)),
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn }
-        }; 
+        };
 
         zoomInAnimation = new DoubleAnimation
         {

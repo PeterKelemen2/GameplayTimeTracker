@@ -44,12 +44,13 @@ public class CustomButton : UserControl
         remove => RemoveHandler(ClickEvent, value);
     }
 
-    public CustomButton(Grid parent = null, double width = 100, double height = 30,
+    public CustomButton(double width = 100, double height = 30,
         ButtonType type = ButtonType.Default,
         double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
         string buttonImagePath = "", bool isDisabled = false)
     {
+        ButtonImagePath = buttonImagePath;
         SetButtonColors(type);
         Grid = new Grid
         {
@@ -86,7 +87,7 @@ public class CustomButton : UserControl
             Grid.Children.Add(buttonTextBlock);
         }
 
-        if (!string.Equals(buttonImagePath, ""))
+        if (!buttonImagePath.Equals(""))
         {
             if (File.Exists(buttonImagePath))
             {
@@ -132,7 +133,7 @@ public class CustomButton : UserControl
     {
         switch (type)
         {
-            case ButtonType.Positive: 
+            case ButtonType.Positive:
                 ButtonColor = Utils.PositiveButtonColor;
                 ButtonHoverColor = Utils.PositiveButtonColorHover;
                 ButtonPressedColor = Utils.PositiveButtonColorPress;
@@ -157,36 +158,42 @@ public class CustomButton : UserControl
         ButtonBase.Fill = new SolidColorBrush(ButtonHoverColor); // Change to hover color
 
         // Animate scale transform
-        ScaleTransform scaleTransform = new ScaleTransform(1.0, 1.0); // Initial size
-        ButtonImage.RenderTransform = scaleTransform;
-        ButtonImage.RenderTransformOrigin = new Point(0.5, 0.5); // Set origin to center
-
-        DoubleAnimation scaleAnimation = new DoubleAnimation
+        if (!ButtonImagePath.Equals(""))
         {
-            To = 1.2, // Target scale
-            Duration = TimeSpan.FromSeconds(animTime),
-            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-        };
-        scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
-        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+            ScaleTransform scaleTransform = new ScaleTransform(1.0, 1.0); // Initial size
+            ButtonImage.RenderTransform = scaleTransform;
+            ButtonImage.RenderTransformOrigin = new Point(0.5, 0.5); // Set origin to center
+
+            DoubleAnimation scaleAnimation = new DoubleAnimation
+            {
+                To = 1.2, // Target scale
+                Duration = TimeSpan.FromSeconds(animTime),
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+            };
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+        }
     }
 
     private void OnMouseLeave(object sender, MouseEventArgs e)
     {
         ButtonBase.Fill = new SolidColorBrush(ButtonColor); // Revert to default color
 
-        // Animate scale back to normal
-        ScaleTransform scaleTransform = ButtonImage.RenderTransform as ScaleTransform;
-        if (scaleTransform != null)
+        if (!ButtonImagePath.Equals(""))
         {
-            DoubleAnimation scaleAnimation = new DoubleAnimation
+            // Animate scale back to normal
+            ScaleTransform scaleTransform = ButtonImage.RenderTransform as ScaleTransform;
+            if (scaleTransform != null)
             {
-                To = 1.0, // Target scale
-                Duration = TimeSpan.FromSeconds(animTime),
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-            };
-            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
-            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+                DoubleAnimation scaleAnimation = new DoubleAnimation
+                {
+                    To = 1.0, // Target scale
+                    Duration = TimeSpan.FromSeconds(animTime),
+                    EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+                };
+                scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+                scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+            }
         }
     }
 

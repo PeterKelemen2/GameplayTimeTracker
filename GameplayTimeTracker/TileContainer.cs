@@ -311,8 +311,26 @@ public class TileContainer
             {
                 tile.totalTimeGradientBar.UpdateBar();
             }
-            
+
             tile.lastTimeGradientBar.UpdateBar();
         }
+    }
+
+    public void UpdateLegacyTime()
+    {
+        foreach (var tile in tilesList)
+        {
+            (tile.TotalH, tile.TotalM, tile.TotalS) = Utils.ConvertMinutesToTime(tile.TotalPlaytime);
+            (tile.LastH, tile.LastM, tile.LastS) = Utils.ConvertMinutesToTime(tile.LastPlaytime);
+            tile.TotalPlaytime = tile.GetTotalPlaytimeAsDouble();
+            tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
+            tile.UpdatePlaytimeText();
+        }
+        
+        UpdatePlaytimeBars();
+        TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+        mainTotalTimeBlock.Text =
+            $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
+        InitSave();
     }
 }
