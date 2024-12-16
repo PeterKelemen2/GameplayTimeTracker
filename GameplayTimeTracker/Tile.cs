@@ -507,8 +507,8 @@ public class Tile : UserControl
             }
         }
 
-        TotalPlaytime = GetTotalPlaytimeAsDouble();
-        LastPlaytime = GetLastPlaytimeAsDouble();
+        // TotalPlaytime = GetTotalPlaytimeAsDouble();
+        // LastPlaytime = GetLastPlaytimeAsDouble();
     }
 
     public double GetTotalPlaytimeAsDouble()

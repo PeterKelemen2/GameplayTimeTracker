@@ -302,6 +302,8 @@ public class JsonHandler
 
         foreach (var tile in container.tilesList)
         {
+            tile.TotalPlaytime = tile.GetTotalPlaytimeAsDouble();
+            tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
             paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath,
                 tile.ExePath, tile.ShortcutArgs));
         }
