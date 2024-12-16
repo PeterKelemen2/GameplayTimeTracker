@@ -56,6 +56,8 @@ There are two main parts that can be set by the user both on the user interface 
   
 Each theme contains the following customizable color properties:
 
+Note: Only the `Edit` and `Remove` buttons are using the specified color values at the moment. 
+
 | Property       | Description                                  |Example Value     |
 |----------------|----------------------------------------------|------------------|
 | `bgColor`      | Background color of the application.         | `"#1E2030"`      | 
