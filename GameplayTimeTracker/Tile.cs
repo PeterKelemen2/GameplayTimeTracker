@@ -40,6 +40,7 @@ public class Tile : UserControl
     private TextBlock totalPlaytime;
     public TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
+    private TextBlock lastPlayDateTitleBlock;
     private TextBlock lastPlayDateBlock;
 
     private TextBlock sampleTextBlock;
@@ -60,6 +61,8 @@ public class Tile : UserControl
     private double bgGrayOpacity = 0.6;
 
     private const string? SampleImagePath = "assets/no_icon.png";
+    private const string? Started = "Started: ";
+    private const string? Ended = "Ended:";
 
     public int Id { get; set; }
     public int Index { get; set; }
@@ -494,12 +497,14 @@ public class Tile : UserControl
     {
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
+        lastPlayDateTitleBlock.Text = Started;
         lastPlayDateBlock.Text = $"{LastPlayDate.ToShortDateString()} {LastPlayDate.ToShortTimeString()}";
     }
 
     public void UpdateDateInfo()
     {
         LastPlayDate = DateTime.Now;
+        lastPlayDateTitleBlock.Text = Ended;
         lastPlayDateBlock.Text = $"{LastPlayDate.ToShortDateString()} {LastPlayDate.ToShortTimeString()}";
     }
 
@@ -552,7 +557,6 @@ public class Tile : UserControl
         LastS = 0;
         LastPlaytime = 0;
         LastPlaytimePercent = 0;
-        LastPlayDateString = $"Today, {DateTime.Now.ToShortTimeString()}";
         LastPlayDate = DateTime.Now;
         UpdatePlaytimeText();
         _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
@@ -805,9 +809,14 @@ public class Tile : UserControl
             Effect = Utils.dropShadowText,
         };
 
+        lastPlayDateTitleBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
+        lastPlayDateTitleBlock.Text = LastPlayDate.Year > 1999 ? Ended : Started;
+        lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0],
+            TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 75, 0, 0);
+
         lastPlayDateBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         lastPlayDateBlock.Text = LastPlayDateString;
-        lastPlayDateBlock.Margin = new Thickness(sColMarg[0],
+        lastPlayDateBlock.Margin = new Thickness(sColMarg[0] + 60,
             TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 75, 0, 0);
 
         Panel.SetZIndex(totalPlaytimeTitle, 3);
@@ -824,11 +833,13 @@ public class Tile : UserControl
         grid.Children.Add(lastPlaytimeTitle);
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);
+        grid.Children.Add(lastPlayDateTitleBlock);
         grid.Children.Add(lastPlayDateBlock);
 
         Panel.SetZIndex(lastPlaytimeTitle, 3);
         Panel.SetZIndex(lastPlaytime, 3);
         Panel.SetZIndex(lastTimeGradientBar, 3);
+        Panel.SetZIndex(lastPlayDateTitleBlock, 3);
         Panel.SetZIndex(lastPlayDateBlock, 3);
 
         Panel.SetZIndex(iconContainerGrid, 2);

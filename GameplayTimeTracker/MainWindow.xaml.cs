@@ -228,7 +228,8 @@ namespace GameplayTimeTracker
                 try
                 {
                     Console.WriteLine($"Trying to add: {fileName}");
-                    Tile newTile = new Tile(tileContainer, fileName, DateTime.Today ,settings.HorizontalTileGradient,
+                    Tile newTile = new Tile(tileContainer, fileName, new DateTime(1999, 1, 1, 1, 1, 1),
+                        settings.HorizontalTileGradient,
                         settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
                         exePath: exePath,
                         shortcutArgs: arguments.Length > 0 ? arguments : ""
