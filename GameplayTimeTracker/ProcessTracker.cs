@@ -12,8 +12,8 @@ public class ProcessTracker
     List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
-    private string currSessionText = "Current Playtime:";
-    private string lastSessionText = "Last Playtime:";
+    private string currSessionText = "Current Session:";
+    private string lastSessionText = "Last Session:";
     private string notRunningText = "";
     private Dictionary<string, bool> runningDictionary;
 
@@ -103,11 +103,10 @@ public class ProcessTracker
                     tile.IsRunning = false;
                     tile.lastPlaytimeTitle.Text = lastSessionText;
                     tile.runningTextBlock.Text = notRunningText;
+                    tile.UpdateDateInfo();
                     tile.ToggleBgImageColor(isRunning);
                 }
             }
-
-            
         }
 
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");

@@ -283,6 +283,7 @@ public class JsonHandler
                 container.AddTile(new Tile(
                     container,
                     param.gameName,
+                    param.lastPlayDate,
                     settings.HorizontalTileGradient,
                     settings.HorizontalEditGradient,
                     settings.BigBgImages,
@@ -304,7 +305,8 @@ public class JsonHandler
         {
             tile.TotalPlaytime = tile.GetTotalPlaytimeAsDouble();
             tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
-            paramsList.Add(new Params(tile.GameName, tile.TotalPlaytime, tile.LastPlaytime, tile.IconImagePath,
+            paramsList.Add(new Params(tile.GameName, tile.LastPlayDate, tile.TotalPlaytime, tile.LastPlaytime,
+                tile.IconImagePath,
                 tile.ExePath, tile.ShortcutArgs));
         }
 
