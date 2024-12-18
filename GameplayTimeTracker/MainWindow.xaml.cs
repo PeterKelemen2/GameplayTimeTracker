@@ -110,11 +110,6 @@ namespace GameplayTimeTracker
             ContentRendered += MainWindow_ContentRendered;
         }
 
-        private void ClickableRect_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine("Clicked rect!!");
-        }
-
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             ShowTilesOnCanvas();

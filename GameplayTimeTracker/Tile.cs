@@ -638,6 +638,8 @@ public class Tile : UserControl
 
         lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        lastPlayDateBlock.Foreground = new SolidColorBrush(Utils.FontColor);
+        lastPlayDateTitleBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
