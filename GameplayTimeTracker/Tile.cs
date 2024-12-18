@@ -61,7 +61,7 @@ public class Tile : UserControl
     private double bgGrayOpacity = 0.6;
 
     private const string? SampleImagePath = "assets/no_icon.png";
-    private const string? Started = "Started: ";
+    private const string? Started = "Started:";
     private const string? Ended = "Ended:";
 
     public int Id { get; set; }
@@ -488,6 +488,8 @@ public class Tile : UserControl
         lastPlaytime.Margin = new Thickness(sColMarg[0], lastPlaytime.Margin.Top, 0, 0);
         lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], lastPlaytimeTitle.Margin.Top, 0, 0);
         lastTimeGradientBar.Margin = new Thickness(sColMarg[0], lastTimeGradientBar.Margin.Top, 0, 0);
+        lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0], lastPlayDateTitleBlock.Margin.Top, 0, 0);
+        lastPlayDateBlock.Margin = new Thickness(sColMarg[0] + 60, lastPlayDateBlock.Margin.Top, 0, 0);
         lastTimeGradientBar.UpdateBarSizeWidth(TileWidth);
 
         container.Width = TileWidth;
@@ -498,14 +500,16 @@ public class Tile : UserControl
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         lastPlayDateTitleBlock.Text = Started;
-        lastPlayDateBlock.Text = $"{LastPlayDate.ToShortDateString()} {LastPlayDate.ToShortTimeString()}";
+        lastPlayDateBlock.Text =
+            $"{LastPlayDate.ToShortDateString().Replace(" ", "")} {LastPlayDate.ToShortTimeString()}";
     }
 
     public void UpdateDateInfo()
     {
         LastPlayDate = DateTime.Now;
         lastPlayDateTitleBlock.Text = Ended;
-        lastPlayDateBlock.Text = $"{LastPlayDate.ToShortDateString()} {LastPlayDate.ToShortTimeString()}";
+        lastPlayDateBlock.Text =
+            $"{LastPlayDate.ToShortDateString().Replace(" ", "")} {LastPlayDate.ToShortTimeString()}";
     }
 
     public void IncrementPlaytime()
@@ -592,7 +596,8 @@ public class Tile : UserControl
         else
         {
             LastPlayDate = lastPlayDate;
-            LastPlayDateString = $"{lastPlayDate.ToShortDateString()} {lastPlayDate.ToShortTimeString()}";
+            LastPlayDateString =
+                $"{lastPlayDate.ToShortDateString().Replace(" ", "")} {lastPlayDate.ToShortTimeString()}";
         }
 
         TotalPlaytime = totalTime < 0 ? 0 : totalTime;
@@ -736,7 +741,6 @@ public class Tile : UserControl
 
         grid.Children.Add(container);
         grid.Children.Add(launchButton);
-
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         titleTextBlock.Text = GameName;
