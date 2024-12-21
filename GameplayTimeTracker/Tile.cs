@@ -459,10 +459,36 @@ public class Tile : UserControl
         }
 
         // Proceed if the file exists
-        bgImageGray = Utils.ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
+        bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
+    
+    // TODO: Needs fixing, uses too much memory
+    public BitmapSource ConvertToGrayscale(BitmapSource source)
+    {
+        var stride = (source.PixelWidth * source.Format.BitsPerPixel + 7) / 8;
+        var pixels = new byte[stride * source.PixelWidth];
 
+        source.CopyPixels(pixels, stride, 0);
+
+        for (int i = 0; i < pixels.Length; i += 4)
+        {
+            // this works for PixelFormats.Bgra32
+            var blue = pixels[i];
+            var green = pixels[i + 1];
+            var red = pixels[i + 2];
+            var gray = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
+            pixels[i] = gray;
+            pixels[i + 1] = gray;
+            pixels[i + 2] = gray;
+        }
+
+        return BitmapSource.Create(
+            source.PixelWidth, source.PixelHeight,
+            source.DpiX, source.DpiY,
+            source.Format, null, pixels, stride);
+    }
+    
     public void UpdateImageVars(bool toSave = true)
     {
         SetupIconVars();

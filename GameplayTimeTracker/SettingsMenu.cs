@@ -26,6 +26,7 @@ public class SettingsMenu : UserControl
     public string Type { get; set; }
 
     public Action MainUpdateMethod;
+    public Action ShowTilesMethod;
     public Action<bool, bool> TileGradMethod;
     public Action<bool> TileBgImagesMethod;
     public Action<SettingsMenu> UpdateLegacyDataMethod;
@@ -110,7 +111,8 @@ public class SettingsMenu : UserControl
         Action updateMethod = null,
         Action<bool, bool> tileGradMethod = null,
         Action<bool> tileBgImagesMethod = null,
-        Action<SettingsMenu> updateLegacyMethod = null)
+        Action<SettingsMenu> updateLegacyMethod = null,
+        Action showTilesOnCanvasMethod = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -128,6 +130,7 @@ public class SettingsMenu : UserControl
         TileGradMethod = tileGradMethod == null ? Dummy : tileGradMethod;
         TileBgImagesMethod = tileBgImagesMethod == null ? Dummy : tileBgImagesMethod;
         UpdateLegacyDataMethod = updateLegacyMethod;
+        ShowTilesMethod = showTilesOnCanvasMethod;
         _lastClickedTextBlock = new TextBlock();
 
         ToClose = false;
@@ -135,7 +138,7 @@ public class SettingsMenu : UserControl
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
             Settings.SelectedTheme);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
-            TileBgImagesMethod, menu => tc.RestoreBackup(), sMenu: this);
+            TileBgImagesMethod, menu => tc.RestoreBackup(), ShowTilesMethod, sMenu: this);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 

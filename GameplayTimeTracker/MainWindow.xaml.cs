@@ -330,7 +330,7 @@ namespace GameplayTimeTracker
             }
         }
 
-        private void ShowTilesOnCanvas()
+        public void ShowTilesOnCanvas()
         {
             MainStackPanel.Children.Clear();
             foreach (var tile in tileContainer.tilesList)
@@ -421,7 +421,8 @@ namespace GameplayTimeTracker
                 tileContainer,
                 updateMethod: UpdateColors,
                 tileGradMethod: tileContainer.UpdateTilesGradients,
-                tileBgImagesMethod: tileContainer.UpdateTileBgImages
+                tileBgImagesMethod: tileContainer.UpdateTileBgImages,
+                showTilesOnCanvasMethod: ShowTilesOnCanvas
                 // updateLegacyMethod: tileContainer.UpdateLegacyTime
             );
             settingsMenu.OpenMenu();

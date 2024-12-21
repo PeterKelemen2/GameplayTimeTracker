@@ -347,7 +347,6 @@ public class TileContainer
         if (File.Exists(Utils.BackupDataFilePath))
         {
             handler.RestoreBackupDataFile();
-            // handler.InitializeContainer(this, handler.GetSettingsFromFile());
             AddRestoredEntries(handler);
         }
     }
@@ -358,7 +357,7 @@ public class TileContainer
         Settings settings = handler.GetSettingsFromFile();
         foreach (var entry in paramsList)
         {
-            var matchingTile = tilesList.FirstOrDefault(tile => tile.GameName == entry.gameName);
+            var matchingTile = tilesList.FirstOrDefault(tile => tile.ExePath == entry.exePath);
             Tile newTile = new Tile(
                 this,
                 entry.gameName,
@@ -376,7 +375,9 @@ public class TileContainer
             if (matchingTile != null)
             {
                 Console.WriteLine(entry.gameName + " is already in the backup!");
-                matchingTile = newTile;
+                tilesList.Remove(matchingTile);
+                AddTile(newTile);
+                // matchingTile.InitializeTile();
             }
             else
             {
@@ -384,6 +385,6 @@ public class TileContainer
                 AddTile(newTile, newlyAdded: true);
             }
         }
-        InitSave();
+        // InitSave();
     }
 }

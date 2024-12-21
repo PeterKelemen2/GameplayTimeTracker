@@ -21,19 +21,21 @@ public class PrefMenu : UserControl
     public Action<bool, bool> TileGradUpdateMethod;
     public Action<bool> TileBgImagesMethod;
     public Action<SettingsMenu> RestoreBackupMethod;
+    public Action ShowTilesMethod;
     SettingsMenu settingsMenu;
     private CustomButton createBackupButton;
     private CustomButton restoreBackupButton;
 
 
     public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
-        Action<bool> tileBgImagesMethod, Action<SettingsMenu> restoreBackupMethod = null, SettingsMenu sMenu = null)
+        Action<bool> tileBgImagesMethod, Action<SettingsMenu> restoreBackupMethod = null, Action showTiles = null, SettingsMenu sMenu = null)
     {
         Panel = stackPanel;
         CurrentSettings = settings;
         TileGradUpdateMethod = tileGradUpdateMethod;
         TileBgImagesMethod = tileBgImagesMethod;
         RestoreBackupMethod = restoreBackupMethod;
+        ShowTilesMethod = showTiles;
         settingsMenu = sMenu;
         // CreateMenu();
         Prefs = new Dictionary<string, bool>();
@@ -124,6 +126,7 @@ public class PrefMenu : UserControl
             PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect",
                 type: PopupType.OK);
             settingsMenu.CloseMenuMethod();
+            ShowTilesMethod();
             popup.OpenMenu();
         }
     }
