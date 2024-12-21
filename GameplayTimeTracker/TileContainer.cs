@@ -316,7 +316,8 @@ public class TileContainer
         }
     }
 
-    public void UpdateLegacyTime(SettingsMenu setMenu)
+    // public void UpdateLegacyTime(SettingsMenu setMenu)
+    public void UpdateLegacyTime()
     {
         foreach (var tile in tilesList)
         {
@@ -333,8 +334,8 @@ public class TileContainer
             $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
         InitSave();
         Console.WriteLine("Legacy data updated!");
-        PopupMenu popupMenu = new PopupMenu(text: "Success!\nAll values converted!", type: PopupType.OK);
-        setMenu.CloseMenuMethod();
-        popupMenu.OpenMenu();
+        // PopupMenu popupMenu = new PopupMenu(text: "Success!\nAll values converted!", type: PopupType.OK);
+        // setMenu.CloseMenuMethod();
+        // popupMenu.OpenMenu();
     }
 }

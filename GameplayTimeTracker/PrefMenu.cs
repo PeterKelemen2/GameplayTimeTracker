@@ -57,7 +57,7 @@ public class PrefMenu : UserControl
         updateLegacyData.HorizontalAlignment = HorizontalAlignment.Center;
         updateLegacyData.VerticalAlignment = VerticalAlignment.Center;
         updateLegacyData.Click += Update_Click;
-        Panel.Children.Add(updateLegacyData);
+        // Panel.Children.Add(updateLegacyData);
         // EditButton.Margin = new Thickness(0, topMargin, 100, 0);
         // EditButton.Click += ToggleEdit_Click;
 

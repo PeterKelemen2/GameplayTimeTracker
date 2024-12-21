@@ -294,6 +294,11 @@ public class JsonHandler
                     param.arguments == null ? "" : param.arguments));
             }
         }
+        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2))
+        {
+            Console.WriteLine($"Application needs updating!");
+            container.UpdateLegacyTime();
+        }
     }
 
     // By using a list of parameters from the container, it writes the data to the file

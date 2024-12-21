@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -409,8 +410,9 @@ namespace GameplayTimeTracker
                 tileContainer,
                 updateMethod: UpdateColors,
                 tileGradMethod: tileContainer.UpdateTilesGradients,
-                tileBgImagesMethod: tileContainer.UpdateTileBgImages,
-                updateLegacyMethod: tileContainer.UpdateLegacyTime);
+                tileBgImagesMethod: tileContainer.UpdateTileBgImages
+                // updateLegacyMethod: tileContainer.UpdateLegacyTime
+                );
             settingsMenu.OpenMenu();
         }
 
