@@ -273,6 +273,7 @@ public class JsonHandler
             File.WriteAllText(Utils.DataFilePath, "[]");
         }
 
+        container.tilesList.Clear();
         string jsonString = File.ReadAllText(Utils.DataFilePath);
 
         List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
@@ -295,7 +296,7 @@ public class JsonHandler
             }
         }
 
-        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 3))
+        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2))
         {
             Console.WriteLine($"Application needs updating!");
             // WriteContentToFile(container, Utils.BackupDataFilePath);
@@ -323,7 +324,7 @@ public class JsonHandler
         Console.WriteLine($"!! Saved data to {outputPath} !!");
     }
 
-    private void BackupDataFile()
+    public void BackupDataFile()
     {
         try
         {
@@ -333,6 +334,22 @@ public class JsonHandler
         catch (FileNotFoundException e)
         {
             Console.WriteLine("File not found!");
+        }
+    }
+
+    public void RestoreBackupDataFile()
+    {
+        try
+        {
+            if (File.Exists(Utils.BackupDataFilePath))
+            {
+                string backupData = File.ReadAllText(Utils.BackupDataFilePath);
+                File.WriteAllText(Utils.DataFilePath, backupData);
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine($"File not found!\n{e}");
         }
     }
 }

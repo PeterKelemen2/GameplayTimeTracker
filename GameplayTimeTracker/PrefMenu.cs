@@ -18,17 +18,17 @@ public class PrefMenu : UserControl
     public bool StartWithSystem { get; set; }
     public Action<bool, bool> TileGradUpdateMethod;
     public Action<bool> TileBgImagesMethod;
-    public Action<SettingsMenu> UpdateLegacyMethod;
+    public Action<SettingsMenu> RestoreBackupMethod;
     SettingsMenu settingsMenu;
 
     public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
-        Action<bool> tileBgImagesMethod, Action<SettingsMenu> updateLegacyMethod = null, SettingsMenu sMenu = null)
+        Action<bool> tileBgImagesMethod, Action<SettingsMenu> restoreBackupMethod = null, SettingsMenu sMenu = null)
     {
         Panel = stackPanel;
         CurrentSettings = settings;
         TileGradUpdateMethod = tileGradUpdateMethod;
         TileBgImagesMethod = tileBgImagesMethod;
-        UpdateLegacyMethod = updateLegacyMethod;
+        RestoreBackupMethod = restoreBackupMethod;
         settingsMenu = sMenu;
         // CreateMenu();
         Prefs = new Dictionary<string, bool>();
@@ -51,13 +51,13 @@ public class PrefMenu : UserControl
         Panel.Children.Add(newEntry);
 
         CustomButton updateLegacyData =
-            new CustomButton(text: "Update legacy data", width: 150, height: 40, type: ButtonType.Positive,
+            new CustomButton(text: "Restore Backup data", width: 150, height: 40, type: ButtonType.Positive,
                 isBold: true);
         updateLegacyData.Margin = new Thickness(10);
         updateLegacyData.HorizontalAlignment = HorizontalAlignment.Center;
         updateLegacyData.VerticalAlignment = VerticalAlignment.Center;
-        updateLegacyData.Click += Update_Click;
-        // Panel.Children.Add(updateLegacyData);
+        updateLegacyData.Click += Restore_Click;
+        Panel.Children.Add(updateLegacyData);
         // EditButton.Margin = new Thickness(0, topMargin, 100, 0);
         // EditButton.Click += ToggleEdit_Click;
 
@@ -109,11 +109,14 @@ public class PrefMenu : UserControl
         CreateMenuMethod();
     }
 
-    public void Update_Click(object sender, RoutedEventArgs e)
+    public void Restore_Click(object sender, RoutedEventArgs e)
     {
-        if (UpdateLegacyMethod != null)
+        if (RestoreBackupMethod != null)
         {
-            UpdateLegacyMethod(settingsMenu);
+            RestoreBackupMethod(settingsMenu);
+            PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect", type:PopupType.OK);
+            settingsMenu.CloseMenuMethod();
+            popup.OpenMenu();
         }
     }
 }

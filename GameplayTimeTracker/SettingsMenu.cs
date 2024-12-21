@@ -134,10 +134,10 @@ public class SettingsMenu : UserControl
 
         ThemeMenu tm = new ThemeMenu(this, mainWindow.FindName("ContentPanel") as StackPanel, Themes,
             Settings.SelectedTheme);
-        // PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
-        //     TileBgImagesMethod, menu => tc.UpdateLegacyTime(menu), sMenu: this);
         PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
-            TileBgImagesMethod, sMenu: this);
+            TileBgImagesMethod, menu => tc.RestoreBackup(), sMenu: this);
+        // PrefMenu pm = new PrefMenu(mainWindow.FindName("ContentPanel") as StackPanel, Settings, TileGradMethod,
+        //     TileBgImagesMethod, sMenu: this);
 
         StackPanel headerPanel = mainWindow.FindName("ContentPanel") as StackPanel;
 

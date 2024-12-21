@@ -334,8 +334,15 @@ public class TileContainer
             $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
         InitSave();
         Console.WriteLine("Legacy data updated!");
-        // PopupMenu popupMenu = new PopupMenu(text: "Success!\nAll values converted!", type: PopupType.OK);
-        // setMenu.CloseMenuMethod();
-        // popupMenu.OpenMenu();
+    }
+
+    public void RestoreBackup()
+    {
+        JsonHandler handler = new JsonHandler();
+        if (File.Exists(Utils.BackupDataFilePath))
+        {
+            handler.RestoreBackupDataFile();
+            handler.InitializeContainer(this, handler.GetSettingsFromFile());
+        }
     }
 }
