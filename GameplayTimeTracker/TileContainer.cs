@@ -377,16 +377,9 @@ public class TileContainer
                 entry.arguments == null ? "" : entry.arguments);
             if (matchingTile != null)
             {
-                Console.WriteLine(entry.gameName + " is already in the backup!");
                 tilesList.Remove(matchingTile);
-                AddTile(newTile, newlyAdded: true);
-                // matchingTile.InitializeTile();
             }
-            else
-            {
-                Console.WriteLine(entry.gameName + " NOT in the backup!");
-                AddTile(newTile, newlyAdded: true);
-            }
+            AddTile(newTile, newlyAdded: true);
         }
         // InitSave();
     }
