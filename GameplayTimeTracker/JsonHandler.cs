@@ -284,7 +284,9 @@ public class JsonHandler
                 container.AddTile(new Tile(
                     container,
                     param.gameName,
-                    param.lastPlayDate,
+                    param.lastPlayDate.Year < 2000 || param.lastPlayDate == null
+                        ? new DateTime(2, 1, 1)
+                        : param.lastPlayDate,
                     settings.HorizontalTileGradient,
                     settings.HorizontalEditGradient,
                     settings.BigBgImages,
@@ -295,14 +297,11 @@ public class JsonHandler
                     param.arguments == null ? "" : param.arguments));
             }
         }
+    }
 
-        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2))
-        {
-            Console.WriteLine($"Application needs updating!");
-            // WriteContentToFile(container, Utils.BackupDataFilePath);
-            BackupDataFile();
-            container.UpdateLegacyTime();
-        }
+    public bool CheckForDataToUpdate()
+    {
+        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 3);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
@@ -357,6 +356,7 @@ public class JsonHandler
         {
             Console.WriteLine($"File not found!\n{e}");
         }
+
         return false;
     }
 }

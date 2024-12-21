@@ -114,6 +114,17 @@ namespace GameplayTimeTracker
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             ShowTilesOnCanvas();
+            if (handler.CheckForDataToUpdate())
+            {
+                PopupMenu popupMenu =
+                    new PopupMenu(
+                        text:
+                        "It seems like your data needs updating!\nIf you already did this, just restore backup data in Settings",
+                        h: 190, type: PopupType.OK);
+                popupMenu.OpenMenu();
+                handler.BackupDataFile();
+                tileContainer.UpdateLegacyTime();
+            }
         }
 
         private void UpdateColors()
@@ -412,7 +423,7 @@ namespace GameplayTimeTracker
                 tileGradMethod: tileContainer.UpdateTilesGradients,
                 tileBgImagesMethod: tileContainer.UpdateTileBgImages
                 // updateLegacyMethod: tileContainer.UpdateLegacyTime
-                );
+            );
             settingsMenu.OpenMenu();
         }
 

@@ -500,8 +500,9 @@ public class Tile : UserControl
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         lastPlayDateTitleBlock.Text = Started;
-        lastPlayDateBlock.Text =
-            $"{LastPlayDate.ToShortDateString().Replace(" ", "")} {LastPlayDate.ToShortTimeString()}";
+        lastPlayDateBlock.Text = LastPlayDate.Year < 2000
+            ? "Never"
+            : $"{LastPlayDate.ToShortDateString().Replace(" ", "")} {LastPlayDate.ToShortTimeString()}";
     }
 
     public void UpdateDateInfo()
@@ -589,6 +590,7 @@ public class Tile : UserControl
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
 
+        Console.WriteLine(lastPlayDate.Year);
         if (lastPlayDate.Year < 2000)
         {
             LastPlayDateString = "Never";
