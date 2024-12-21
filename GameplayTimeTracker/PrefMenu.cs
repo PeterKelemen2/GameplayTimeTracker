@@ -123,11 +123,11 @@ public class PrefMenu : UserControl
         if (RestoreBackupMethod != null)
         {
             RestoreBackupMethod(settingsMenu);
-            PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect",
-                type: PopupType.OK);
-            settingsMenu.CloseMenuMethod();
+            // PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect",
+            //     type: PopupType.OK);
+            // settingsMenu.CloseMenuMethod();
             ShowTilesMethod();
-            popup.OpenMenu();
+            // popup.OpenMenu();
         }
     }
 

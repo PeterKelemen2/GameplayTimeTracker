@@ -482,7 +482,7 @@ public class Tile : UserControl
             pixels[i + 1] = gray;
             pixels[i + 2] = gray;
         }
-
+        
         return BitmapSource.Create(
             source.PixelWidth, source.PixelHeight,
             source.DpiX, source.DpiY,
