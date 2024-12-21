@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +22,9 @@ public class PrefMenu : UserControl
     public Action<bool> TileBgImagesMethod;
     public Action<SettingsMenu> RestoreBackupMethod;
     SettingsMenu settingsMenu;
+    private CustomButton createBackupButton;
+    private CustomButton restoreBackupButton;
+
 
     public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
         Action<bool> tileBgImagesMethod, Action<SettingsMenu> restoreBackupMethod = null, SettingsMenu sMenu = null)
@@ -50,16 +55,19 @@ public class PrefMenu : UserControl
         newEntry.checkBox.Unchecked += (sender, e) => UpdateBgImageSize(false);
         Panel.Children.Add(newEntry);
 
-        CustomButton updateLegacyData =
+        createBackupButton = new CustomButton(text: "Create Backup data", width: 150, height: 40,
+            type: ButtonType.Positive,
+            isBold: true);
+        createBackupButton.Margin = new Thickness(0,30,0,0);
+        createBackupButton.Click += CreateBackup_Click;
+        Panel.Children.Add(createBackupButton);
+
+        restoreBackupButton =
             new CustomButton(text: "Restore Backup data", width: 150, height: 40, type: ButtonType.Positive,
-                isBold: true);
-        updateLegacyData.Margin = new Thickness(10);
-        updateLegacyData.HorizontalAlignment = HorizontalAlignment.Center;
-        updateLegacyData.VerticalAlignment = VerticalAlignment.Center;
-        updateLegacyData.Click += Restore_Click;
-        Panel.Children.Add(updateLegacyData);
-        // EditButton.Margin = new Thickness(0, topMargin, 100, 0);
-        // EditButton.Click += ToggleEdit_Click;
+                isBold: true, isDisabled: !File.Exists(Utils.BackupDataFilePath));
+        restoreBackupButton.Margin = new Thickness(10);
+        restoreBackupButton.Click += Restore_Click;
+        Panel.Children.Add(restoreBackupButton);
 
 
         DoubleAnimation fadeInAnimation = new DoubleAnimation
@@ -70,7 +78,6 @@ public class PrefMenu : UserControl
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
         Panel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-        // Panel.Children.Add(GetNewEntry("Bigger Background Images", CurrentSettings.BigBgImages));
     }
 
 
@@ -114,9 +121,31 @@ public class PrefMenu : UserControl
         if (RestoreBackupMethod != null)
         {
             RestoreBackupMethod(settingsMenu);
-            PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect", type:PopupType.OK);
+            PopupMenu popup = new PopupMenu(text: "Please restart application for this to take effect",
+                type: PopupType.OK);
             settingsMenu.CloseMenuMethod();
             popup.OpenMenu();
         }
+    }
+
+    public void CreateBackup_Click(object sender, RoutedEventArgs e)
+    {
+        JsonHandler handler = new JsonHandler();
+        bool created = handler.BackupDataFile();
+        PopupMenu popup = new PopupMenu();
+        if (created)
+        {
+            popup = new PopupMenu(text: "Backup created successfully!",
+                type: PopupType.OK);
+            restoreBackupButton.Enable();
+        }
+        else
+        {
+            popup = new PopupMenu(text: "Could not create backup!",
+                type: PopupType.OK);
+        }
+
+        settingsMenu.CloseMenuMethod();
+        popup.OpenMenu();
     }
 }

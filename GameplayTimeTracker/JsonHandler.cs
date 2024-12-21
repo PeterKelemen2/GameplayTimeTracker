@@ -324,20 +324,23 @@ public class JsonHandler
         Console.WriteLine($"!! Saved data to {outputPath} !!");
     }
 
-    public void BackupDataFile()
+    public bool BackupDataFile()
     {
         try
         {
             string oldContent = File.ReadAllText(Utils.DataFilePath);
             File.WriteAllText(Utils.BackupDataFilePath, oldContent);
+            return true;
         }
         catch (FileNotFoundException e)
         {
             Console.WriteLine("File not found!");
         }
+
+        return false;
     }
 
-    public void RestoreBackupDataFile()
+    public bool RestoreBackupDataFile()
     {
         try
         {
@@ -345,11 +348,15 @@ public class JsonHandler
             {
                 string backupData = File.ReadAllText(Utils.BackupDataFilePath);
                 File.WriteAllText(Utils.DataFilePath, backupData);
+                return true;
             }
+
+            return false;
         }
         catch (FileNotFoundException e)
         {
             Console.WriteLine($"File not found!\n{e}");
         }
+        return false;
     }
 }
