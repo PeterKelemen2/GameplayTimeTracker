@@ -294,15 +294,18 @@ public class JsonHandler
                     param.arguments == null ? "" : param.arguments));
             }
         }
-        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2))
+
+        if (Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 3))
         {
             Console.WriteLine($"Application needs updating!");
+            // WriteContentToFile(container, Utils.BackupDataFilePath);
+            BackupDataFile();
             container.UpdateLegacyTime();
         }
     }
 
     // By using a list of parameters from the container, it writes the data to the file
-    public void WriteContentToFile(TileContainer container)
+    public void WriteContentToFile(TileContainer container, string outputPath)
     {
         List<Params> paramsList = new List<Params>();
 
@@ -316,7 +319,20 @@ public class JsonHandler
         }
 
         string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(Utils.DataFilePath, jsonString);
-        Console.WriteLine($"!! Saved data to {Utils.DataFilePath} !!");
+        File.WriteAllText(outputPath, jsonString);
+        Console.WriteLine($"!! Saved data to {outputPath} !!");
+    }
+
+    private void BackupDataFile()
+    {
+        try
+        {
+            string oldContent = File.ReadAllText(Utils.DataFilePath);
+            File.WriteAllText(Utils.BackupDataFilePath, oldContent);
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine("File not found!");
+        }
     }
 }

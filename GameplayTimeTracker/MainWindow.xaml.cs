@@ -209,7 +209,7 @@ namespace GameplayTimeTracker
                         tileContainer.AddTile(newTile, newlyAdded: true);
                         // tileContainer.ListTiles();
                         ShowTilesOnCanvas();
-                        handler.WriteContentToFile(tileContainer);
+                        handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
                     }
                     else
                     {

@@ -57,7 +57,7 @@ public class TileContainer
 
     public void InitSave()
     {
-        handler.WriteContentToFile(this);
+        handler.WriteContentToFile(this, Utils.DataFilePath);
         Console.WriteLine(" ==== Saved! ====");
     }
 
