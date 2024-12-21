@@ -115,10 +115,13 @@ public class TileContainer
 
             if (newlyAdded)
             {
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(newTile.ExePath);
-                if (fvi.FileDescription != null)
+                if (File.Exists(newTile.ExePath))
                 {
-                    newTile.GameName = fvi.FileDescription;
+                    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(newTile.ExePath);
+                    if (fvi.FileDescription != null)
+                    {
+                        newTile.GameName = fvi.FileDescription;
+                    }
                 }
             }
 
@@ -376,7 +379,7 @@ public class TileContainer
             {
                 Console.WriteLine(entry.gameName + " is already in the backup!");
                 tilesList.Remove(matchingTile);
-                AddTile(newTile);
+                AddTile(newTile, newlyAdded: true);
                 // matchingTile.InitializeTile();
             }
             else
