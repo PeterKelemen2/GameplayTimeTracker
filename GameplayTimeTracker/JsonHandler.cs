@@ -309,7 +309,7 @@ public class JsonHandler
 
     public bool CheckForDataToUpdate()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2);
+        return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
