@@ -55,6 +55,11 @@ public class TileContainer
         tilesList = newList;
     }
 
+    public void SetTile(Tile oldTile, Tile newTile)
+    {
+        oldTile = newTile;
+    }
+
     public void InitSave()
     {
         handler.WriteContentToFile(this, Utils.DataFilePath);
@@ -327,7 +332,7 @@ public class TileContainer
             tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
             tile.UpdatePlaytimeText();
         }
-        
+
         UpdatePlaytimeBars();
         TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
         mainTotalTimeBlock.Text =
@@ -342,7 +347,43 @@ public class TileContainer
         if (File.Exists(Utils.BackupDataFilePath))
         {
             handler.RestoreBackupDataFile();
-            handler.InitializeContainer(this, handler.GetSettingsFromFile());
+            // handler.InitializeContainer(this, handler.GetSettingsFromFile());
+            AddRestoredEntries(handler);
         }
+    }
+
+    public void AddRestoredEntries(JsonHandler handler)
+    {
+        List<Params> paramsList = handler.GetDataFromFile();
+        Settings settings = handler.GetSettingsFromFile();
+        foreach (var entry in paramsList)
+        {
+            var matchingTile = tilesList.FirstOrDefault(tile => tile.GameName == entry.gameName);
+            Tile newTile = new Tile(
+                this,
+                entry.gameName,
+                entry.lastPlayDate.Year < 2000 || entry.lastPlayDate == null
+                    ? new DateTime(2, 1, 1)
+                    : entry.lastPlayDate,
+                settings.HorizontalTileGradient,
+                settings.HorizontalEditGradient,
+                settings.BigBgImages,
+                entry.totalTime,
+                entry.lastPlayedTime,
+                entry.iconPath,
+                entry.exePath,
+                entry.arguments == null ? "" : entry.arguments);
+            if (matchingTile != null)
+            {
+                Console.WriteLine(entry.gameName + " is already in the backup!");
+                matchingTile = newTile;
+            }
+            else
+            {
+                Console.WriteLine(entry.gameName + " NOT in the backup!");
+                AddTile(newTile, newlyAdded: true);
+            }
+        }
+        InitSave();
     }
 }

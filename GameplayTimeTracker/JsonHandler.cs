@@ -299,9 +299,17 @@ public class JsonHandler
         }
     }
 
+    public List<Params> GetDataFromFile()
+    {
+        string jsonString = File.ReadAllText(Utils.DataFilePath);
+
+        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
+        return paramsList;
+    }
+
     public bool CheckForDataToUpdate()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 3);
+        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 2);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
