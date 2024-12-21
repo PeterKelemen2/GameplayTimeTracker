@@ -307,9 +307,11 @@ public class JsonHandler
         return paramsList;
     }
 
+    // TODO: Needs implementation to settings file, so it won't run on every start 
+    // Switch operator
     public bool CheckForDataToUpdate()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
+        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 1);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
