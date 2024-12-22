@@ -80,7 +80,7 @@ public class CustomButton : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             FontSize = fontSize,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
-            // Margin = new Thickness(0, 0, 0, Utils.TextFontSize / 2),
+            Margin = new Thickness(0, -3, 0, 0),
         };
         if (!buttonTextBlock.Text.Equals(""))
         {
@@ -191,15 +191,15 @@ public class CustomButton : UserControl
         ButtonBase.Fill = new SolidColorBrush(ButtonHoverColor); // Change to hover color
 
         // Animate scale transform
-        if (!ButtonImagePath.Equals(""))
+        if (Grid.Children.Contains(ButtonBase))
         {
             ScaleTransform scaleTransform = new ScaleTransform(1.0, 1.0); // Initial size
-            ButtonImage.RenderTransform = scaleTransform;
-            ButtonImage.RenderTransformOrigin = new Point(0.5, 0.5); // Set origin to center
+            Grid.RenderTransform = scaleTransform;
+            Grid.RenderTransformOrigin = new Point(0.5, 0.5); // Set origin to center
 
             DoubleAnimation scaleAnimation = new DoubleAnimation
             {
-                To = 1.2, // Target scale
+                To = 1.05, // Target scale
                 Duration = TimeSpan.FromSeconds(animTime),
                 EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
             };
@@ -212,10 +212,10 @@ public class CustomButton : UserControl
     {
         ButtonBase.Fill = new SolidColorBrush(ButtonColor); // Revert to default color
 
-        if (!ButtonImagePath.Equals(""))
+        if (Grid.Children.Contains(ButtonBase))
         {
             // Animate scale back to normal
-            ScaleTransform scaleTransform = ButtonImage.RenderTransform as ScaleTransform;
+            ScaleTransform scaleTransform = Grid.RenderTransform as ScaleTransform;
             if (scaleTransform != null)
             {
                 DoubleAnimation scaleAnimation = new DoubleAnimation
