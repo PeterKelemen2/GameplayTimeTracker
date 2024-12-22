@@ -59,7 +59,6 @@ There are two main parts that can be set by the user both on the user interface 
     - All the previously mentioned settings can be configured here.
     - A backup can be created, that will be stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Backup Data\`
     - Restoring backup happens by selecting a previously saved backup.
-    - 
   - Themes
     - Clicking the buttons allows the user to quickly switch the colors of the corresponding element.
     - Theme updates dynamically as the user changes the colors.
