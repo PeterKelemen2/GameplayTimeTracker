@@ -126,6 +126,18 @@ public class Tile : UserControl
         TileEditMenu.ShowSaveIndicatorMethod();
     }
 
+    public void SetLaunchButtonState()
+    {
+        if (!File.Exists(ExePath) || !System.IO.Path.GetExtension(ExePath).ToLower().Equals(".exe"))
+        {
+            LaunchButton.Disable();
+        }
+        else
+        {
+            LaunchButton.Enable();
+        }
+    }
+    
     // Updates elements of the tile if there is change. Has a failsafe if new time values would cause a crash
     public void SaveEditedData()
     {
@@ -179,14 +191,7 @@ public class Tile : UserControl
         if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
         {
             ExePath = TileEditMenu.PathEditBox.Text;
-            if (!System.IO.Path.Exists(ExePath.ToLower()) || System.IO.Path.GetExtension(ExePath.ToLower()) != ".exe")
-            {
-                LaunchButton.Disable();
-            }
-            else
-            {
-                LaunchButton.Enable();
-            }
+            SetLaunchButtonState();
             toSave = true;
         }
 
@@ -221,14 +226,7 @@ public class Tile : UserControl
                 {
                     ExePath = filePath;
                     if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
-                    if (System.IO.Path.GetExtension(ExePath.ToLower()).Equals(".exe"))
-                    {
-                        if (LaunchButton.IsDisabled) LaunchButton.Enable();
-                    }
-                    else
-                    {
-                        if (!LaunchButton.IsDisabled) LaunchButton.Disable();
-                    }
+                    SetLaunchButtonState();
 
                     _tileContainer.InitSave();
                 }
@@ -763,39 +761,23 @@ public class Tile : UserControl
         RemoveButton.Click += OpenDeleteDialog;
         Panel.SetZIndex(RemoveButton, 3);
         grid.Children.Add(RemoveButton);
-
-        // launchButton = new Button
-        // {
-        //     Style = (Style)Application.Current.FindResource("RoundedButton"),
-        //     Content = "Launch",
-        //     Height = 40,
-        //     Width = 90,
-        //     HorizontalAlignment = HorizontalAlignment.Right,
-        //     VerticalAlignment = VerticalAlignment.Center,
-        //     Margin = new Thickness(0, 60, 50, 0),
-        //     Effect = Utils.dropShadowIcon,
-        // };
-        // launchButton.Background = new SolidColorBrush(Colors.LightGreen);
+        
         LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40,
             type: ButtonType.Positive, isDisabled: false);
         LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
         LaunchButton.VerticalAlignment = VerticalAlignment.Center;
         LaunchButton.Margin = new Thickness(0, 60, 50, 0);
-        if (!System.IO.Path.Exists(ExePath) || !System.IO.Path.GetExtension(ExePath).Equals(".exe"))
-            LaunchButton.Disable();
+        SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);
         grid.Children.Add(LaunchButton);
         LaunchButton.Click += LaunchExe;
 
         Grid.SetRow(container, 0);
         Grid.SetRow(RemoveButton, 0);
-        // Grid.SetRow(launchButton, 0);
 
         Panel.SetZIndex(container, 1);
-        // Panel.SetZIndex(launchButton, 3);
 
         grid.Children.Add(container);
-        // grid.Children.Add(launchButton);
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         titleTextBlock.Text = GameName;
@@ -850,28 +832,16 @@ public class Tile : UserControl
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0);
-        // new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
         SetPlaytimeBars(tmm[2]);
 
         lastPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlaytimeTitle.Text = "Last Session:";
         lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[0], 0, 0);
-        // TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 0, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         lastPlaytime.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0);
-        // TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
-
-        // lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
-        // {
-        //     HorizontalAlignment = HorizontalAlignment.Left,
-        //     VerticalAlignment = VerticalAlignment.Top,
-        //     Margin = new Thickness(sColMarg[0],
-        //         TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
-        //     Effect = Utils.dropShadowText,
-        // };
 
         lastPlayDateTitleBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlayDateTitleBlock.Text = LastPlayDate.Year > 1999 ? Ended : Started;
