@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text.Json;
+using Microsoft.Win32;
 using MonoMac.CoreImage;
 using WindowsShortcutFactory;
 
@@ -309,14 +310,7 @@ public class JsonHandler
     // Switch operator
     public bool CheckForDataToUpdate()
     {
-        // settings = GetSettingsFromFile();
-        // if (settings.DataNeedsUpdating == null)
-        // {
-        //     settings.DataNeedsUpdating = true;
-        //     WriteSettingsToFile(settings);
-        //     return true;
-        // }
-        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 5);
+        return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
@@ -343,7 +337,10 @@ public class JsonHandler
         try
         {
             string oldContent = File.ReadAllText(Utils.DataFilePath);
-            File.WriteAllText(Utils.BackupDataFilePath, oldContent);
+            DateTime d = DateTime.Now;
+            string backupFileName = $"backup-{d.Year}-{d.Month}-{d.Day}-{d.Hour}-{d.Minute}-{d.Second}.json";
+            Directory.CreateDirectory(Utils.BackupDataFolder);
+            File.WriteAllText(Path.Combine(Utils.BackupDataFolder, backupFileName), oldContent);
             return true;
         }
         catch (FileNotFoundException e)
@@ -358,18 +355,41 @@ public class JsonHandler
     {
         try
         {
-            if (File.Exists(Utils.BackupDataFilePath))
+            // Just to be safe, if new data file is not satisfactory
+            BackupDataFile();
+            
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                string backupData = File.ReadAllText(Utils.BackupDataFilePath);
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                Title = "Select a Backup JSON File",
+                InitialDirectory = Utils.BackupDataFolder
+            };
+
+            // Show the dialog and get the result
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string selectedFilePath = openFileDialog.FileName;
+
+                // Read the selected JSON file
+                string backupData = File.ReadAllText(selectedFilePath);
+
+                // Write the content to the data file
                 File.WriteAllText(Utils.DataFilePath, backupData);
+
                 return true;
             }
 
-            return false;
+            return false; // User canceled the dialog
         }
         catch (FileNotFoundException e)
         {
             Console.WriteLine($"File not found!\n{e}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred:\n{e}");
         }
 
         return false;

@@ -34,10 +34,12 @@ public class Utils
     private const string DataFileName = "data.json";
     private const string BackupDataFileName = "backup_data.json";
     private const string SavedIconsFolderName = "Saved Icons";
+    private const string BackupFolderName = "Backup Data";
     public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
     public static string BackupDataFilePath = Path.Combine(DocumentsPath, BackupDataFileName);
     public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
+    public static string BackupDataFolder = Path.Combine(DocumentsPath, BackupFolderName);
 
     public static Color BgColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color FooterColor = (Color)ColorConverter.ConvertFromString("#1E2030");
