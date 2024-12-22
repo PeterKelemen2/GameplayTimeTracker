@@ -124,11 +124,14 @@ namespace GameplayTimeTracker
             {
                 PopupMenu popupMenu =
                     new PopupMenu(
-                        textArray: new []{"It seems like your data needs updating!", 
+                        textArray: new[]
+                        {
+                            "It seems like your data needs updating!",
                             "Would you like to update it now?",
                             "Don't worry, your current data will be backup up!"
                         },
-                        h: 270, type: PopupType.YesNo, yesClick: ToUpdate_Click);
+                        textArrayFontSizes: new[] { 20, 20, 20 },
+                        h: 260, type: PopupType.YesNo, yesClick: ToUpdate_Click);
                 popupMenu.OpenMenu();
             }
         }
