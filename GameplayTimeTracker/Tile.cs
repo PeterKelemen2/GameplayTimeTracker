@@ -195,7 +195,6 @@ public class Tile : UserControl
     public void UpdateExe(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
-        // openFileDialog.InitialDirectory = Sy
         if (System.IO.Path.Exists(ExePath))
         {
             openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ExePath);
@@ -215,6 +214,14 @@ public class Tile : UserControl
                 {
                     ExePath = filePath;
                     if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
+                    if (System.IO.Path.GetExtension(ExePath).Equals(".exe"))
+                    {
+                        if (LaunchButton.IsDisabled) LaunchButton.Enable();
+                    }
+                    else
+                    {
+                        if (!LaunchButton.IsDisabled) LaunchButton.Disable();
+                    }
                     _tileContainer.InitSave();
                 }
             }
