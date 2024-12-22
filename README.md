@@ -2,9 +2,23 @@
 
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well.
+
+## Data Update Process (Version 1.3.2 and Later)
+In version `1.3.1`, a new method for storing elapsed time was introduced, along with a button to manually 
+convert legacy data. In version `1.3.2`, this process has been automated. Upon the first launch after 
+updating to version `1.3.2`, the user will be prompted to update from the previous data format.
+
+If the update has already been performed, you can restore the most recent **backup** from the
+Settings menu. Alternatively, you may set the `dataNeedsUpdating` flag to `false` in the settings file.
+
+To safeguard against data loss, the application automatically creates a backup of the current data before 
+initiating the update.
+
+
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/i0PEanW.png" width="500"/>
+	<img alt="Screenshot" src="https://i.imgur.com/3wDo2Qx.png" width="500"/>
 </p>
+
 
 ## Configuration
 The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`
@@ -25,8 +39,11 @@ There are two main parts that can be set by the user both on the user interface 
     -  `bigBgImages`
         - Default value: `false`
         - When set to `true`, the background blurred image of the icon is wider
+    - `dataNeedsUpdating`
+        - Default value: `true`
+        - When set to `true`, the app will prompt the user to update legacy time data
 
-	
+
 - **Themes**
 	- `selectedTheme`
 		- Default value: `Default`
@@ -39,16 +56,17 @@ There are two main parts that can be set by the user both on the user interface 
 			-   **Custom**: A placeholder for user-defined customization.
 - **Menus**
   - Preferences
-    - All the previously mentioned settings can be configured here.  
-    - If coming from an earlier release, the user can update the data file using the `Update legacy data` button to 
-    accomodate for the new time calculation logic.
+    - All the previously mentioned settings can be configured here.
+    - A backup can be created, that will be stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Backup Data\`
+    - Restoring backup happens by selecting a previously saved backup.
+    - 
   - Themes
     - Clicking the buttons allows the user to quickly switch the colors of the corresponding element.
     - Theme updates dynamically as the user changes the colors.
 	  
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/OSCMH2p.png" width="240" style="margin-right: 20px;"/>
-	<img alt="Screenshot" src="https://i.imgur.com/N9uddSY.png" width="240"/>
+	<img alt="Screenshot" src="https://i.imgur.com/a2678sj.png" width="240" style="margin-right: 20px;"/>
+	<img alt="Screenshot" src="https://i.imgur.com/nnGBVMk.png" width="240"/>
 </p>
 
   If a theme or its colors are missing from the configuration file, the application will regenerate default themes to 
@@ -81,7 +99,7 @@ Note: Only the `Edit` and `Remove` buttons are using the specified color values 
 ## Data
 Each monitored application is tracked with the following properties:
 <p align="center">
-	<img alt="Editing using the Custom theme" src="https://i.imgur.com/9yFmT12.png" width="500"/>
+	<img alt="Editing using the Custom theme" src="https://i.imgur.com/dkaNQOd.png" width="500"/>
 </p>
 
 - `gameName`
@@ -98,12 +116,13 @@ Each monitored application is tracked with the following properties:
 	- Icon images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Saved Icons\`.
 - `exePath`
 	- A string specifying the full path to the application's executable file.
+    - The Launch button will only be enabled if the path exists or the file is an executable.
 - `arguments`
 	- A string specifying launch parameters for the executable. Arguments are extracted from shortcut 
     files upon addition. 
 
 ### Editing
-- All properties except `lastPlayedTime` can be modified via the application's edit menu.
+- All properties except `lastPlayedTime` and `dataNeedsUpdating` can be modified via the application's edit menu.
 - Clicking the `Open Folder` button, the user can open the folder containing the executable file previously chosen.
 
 
