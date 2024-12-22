@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
-using GLib;
 using Application = System.Windows.Application;
 using DateTime = System.DateTime;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -180,6 +179,14 @@ public class Tile : UserControl
         if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
         {
             ExePath = TileEditMenu.PathEditBox.Text;
+            if (!System.IO.Path.Exists(ExePath.ToLower()) || System.IO.Path.GetExtension(ExePath.ToLower()) != ".exe")
+            {
+                LaunchButton.Disable();
+            }
+            else
+            {
+                LaunchButton.Enable();
+            }
             toSave = true;
         }
 
@@ -214,7 +221,7 @@ public class Tile : UserControl
                 {
                     ExePath = filePath;
                     if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
-                    if (System.IO.Path.GetExtension(ExePath).Equals(".exe"))
+                    if (System.IO.Path.GetExtension(ExePath.ToLower()).Equals(".exe"))
                     {
                         if (LaunchButton.IsDisabled) LaunchButton.Enable();
                     }
