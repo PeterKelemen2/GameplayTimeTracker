@@ -38,15 +38,7 @@ public class TileContainer
 
     public string GetTileNameByExePath(string exePath)
     {
-        foreach (var tile in tilesList)
-        {
-            if (tile.ExePath.Equals(exePath))
-            {
-                return tile.GameName;
-            }
-        }
-
-        return "";
+        return tilesList.FirstOrDefault(tile => tile.ExePath.Equals(exePath))?.GameName ?? string.Empty;
     }
 
     public bool IsExePathPresent(string exePathToCheck)
