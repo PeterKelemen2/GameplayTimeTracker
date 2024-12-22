@@ -36,6 +36,19 @@ public class TileContainer
         return tilesList.Select(x => x.ExePath).ToList();
     }
 
+    public string GetTileNameByExePath(string exePath)
+    {
+        foreach (var tile in tilesList)
+        {
+            if (tile.ExePath.Equals(exePath))
+            {
+                return tile.GameName;
+            }
+        }
+
+        return "";
+    }
+
     public bool IsExePathPresent(string exePathToCheck)
     {
         // Get the list of ExePaths and check if the specific exePath is present
@@ -379,6 +392,7 @@ public class TileContainer
             {
                 tilesList.Remove(matchingTile);
             }
+
             AddTile(newTile, newlyAdded: true);
         }
         // InitSave();

@@ -137,7 +137,7 @@ public class Tile : UserControl
             LaunchButton.Enable();
         }
     }
-    
+
     // Updates elements of the tile if there is change. Has a failsafe if new time values would cause a crash
     public void SaveEditedData()
     {
@@ -220,14 +220,23 @@ public class Tile : UserControl
             {
                 if (_tileContainer.GetTilesExePath().Contains(filePath))
                 {
-                    MessageBox.Show("This executable is already in use!", "Duplicate");
+                    PopupMenu popupMenu = new PopupMenu(textArray: new[]
+                        {
+                            "This executable is already in use by",
+                            $"{_tileContainer.GetTileNameByExePath(filePath)}",
+                            "Would you like to select another executable?"
+                        },
+                        h: 220,
+                        textArrayFontSizes: new[] { 17, 20, 17 },
+                        type: PopupType.YesNo,
+                        yesClick: UpdateExe);
+                    popupMenu.OpenMenu();
                 }
                 else
                 {
                     ExePath = filePath;
                     if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
                     SetLaunchButtonState();
-
                     _tileContainer.InitSave();
                 }
             }
@@ -761,7 +770,7 @@ public class Tile : UserControl
         RemoveButton.Click += OpenDeleteDialog;
         Panel.SetZIndex(RemoveButton, 3);
         grid.Children.Add(RemoveButton);
-        
+
         LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40,
             type: ButtonType.Positive, isDisabled: false);
         LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
