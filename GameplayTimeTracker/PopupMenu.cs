@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -25,6 +26,7 @@ public class PopupMenu : UserControl
 
     public double W { get; set; }
     public double H { get; set; }
+    public int LineSpacing { get; set; }
 
     public bool IsToggled { get; set; }
     public bool IsImageSet { get; set; }
@@ -69,7 +71,7 @@ public class PopupMenu : UserControl
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
-    double padding = 10;
+    double padding = 15;
     private bool isAnimating = false;
 
     public Image bgImage;
@@ -78,7 +80,8 @@ public class PopupMenu : UserControl
     {
     }
 
-    public PopupMenu(string text = "", string[] textArray = null, int[] textArrayFontSizes = null, double w = 350,
+    public PopupMenu(string text = "", string[] textArray = null, int[] textArrayFontSizes = null, int lineSpacing = 10,
+        double w = 350,
         double h = 150,
         bool isToggled = false,
         PopupType type = PopupType.YesNo,
@@ -94,6 +97,7 @@ public class PopupMenu : UserControl
         H = h;
         IsToggled = isToggled;
         Type = type;
+        LineSpacing = lineSpacing;
 
         if (yesClick == null) ButtonAction1 = (s, e) => { };
         else ButtonAction1 = yesClick;
@@ -112,11 +116,26 @@ public class PopupMenu : UserControl
 
         if (textArrayFontSizes != null)
         {
-            TextArraySizes = textArrayFontSizes;
+            if (textArrayFontSizes.Length < TextArray.Length)
+            {
+                var newFontSizes = new int[TextArray.Length];
+                Array.Copy(textArrayFontSizes, newFontSizes, textArrayFontSizes.Length);
+
+                for (int i = textArrayFontSizes.Length; i < TextArray.Length; i++)
+                {
+                    newFontSizes[i] = 20; // Default font size
+                }
+
+                TextArraySizes = newFontSizes;
+            }
+            else
+            {
+                TextArraySizes = textArrayFontSizes;
+            }
         }
         else
         {
-            TextArraySizes = new[] { 20 };
+            TextArraySizes = Enumerable.Repeat(20, TextArray.Length).ToArray();
         }
 
         IsImageSet = false;
@@ -185,6 +204,7 @@ public class PopupMenu : UserControl
         };
     }
 
+
     // Recalculating dimensions when window size is changing 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -247,12 +267,16 @@ public class PopupMenu : UserControl
         {
             for (int i = 0; i < TextArray.Length; i++)
             {
+                // Add the text
                 menuTitle.Inlines.Add(new Run(TextArray[i] + "\n") { FontSize = TextArraySizes[i] });
+
+                // Line spacing
+                menuTitle.Inlines.Add(new Run(".\n") { Foreground = Brushes.Transparent, FontSize = LineSpacing });
             }
         }
         else
         {
-            menuTitle.Inlines.Add(new Run(MenuText + "\n"));
+            menuTitle.Inlines.Add(new Run(MenuText));
         }
     }
 
