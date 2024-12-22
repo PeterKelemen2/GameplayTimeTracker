@@ -24,7 +24,7 @@ public class GradientBar : UserControl
     private Rectangle barBackground;
     public Rectangle barForeground;
     private LinearGradientBrush gradientBrush;
-    private Grid grid = new();
+    public Grid grid = new();
     private Tile TileParent;
 
     public GradientBar(Tile tileParent,

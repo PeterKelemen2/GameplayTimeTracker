@@ -222,6 +222,7 @@ public class Tile : UserControl
                     {
                         if (!LaunchButton.IsDisabled) LaunchButton.Disable();
                     }
+
                     _tileContainer.InitSave();
                 }
             }
@@ -470,7 +471,7 @@ public class Tile : UserControl
         bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
         bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
     }
-    
+
     // TODO: Needs fixing, uses too much memory
     public BitmapSource ConvertToGrayscale(BitmapSource source)
     {
@@ -490,13 +491,13 @@ public class Tile : UserControl
             pixels[i + 1] = gray;
             pixels[i + 2] = gray;
         }
-        
+
         return BitmapSource.Create(
             source.PixelWidth, source.PixelHeight,
             source.DpiX, source.DpiY,
             source.Format, null, pixels, stride);
     }
-    
+
     public void UpdateImageVars(bool toSave = true)
     {
         SetupIconVars();
@@ -681,7 +682,7 @@ public class Tile : UserControl
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
     }
 
-    public void SetGradients(bool fromContainer = false)
+    public void SetGradients()
     {
         gradientBrush = HorizontalTileG
             ? Utils.createLinGradBrushHor(Utils.TileColor1, Utils.TileColor2)
@@ -768,12 +769,13 @@ public class Tile : UserControl
         //     Effect = Utils.dropShadowIcon,
         // };
         // launchButton.Background = new SolidColorBrush(Colors.LightGreen);
-        LaunchButton = new CustomButton(text:"Launch", width: 90, height: 40,
+        LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40,
             type: ButtonType.Positive, isDisabled: false);
         LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
         LaunchButton.VerticalAlignment = VerticalAlignment.Center;
         LaunchButton.Margin = new Thickness(0, 60, 50, 0);
-        if (!System.IO.Path.Exists(ExePath)) LaunchButton.Disable();
+        if (!System.IO.Path.Exists(ExePath) || !System.IO.Path.GetExtension(ExePath).Equals(".exe"))
+            LaunchButton.Disable();
         Panel.SetZIndex(LaunchButton, 3);
         grid.Children.Add(LaunchButton);
         LaunchButton.Click += LaunchExe;
@@ -828,46 +830,49 @@ public class Tile : UserControl
         grid.Children.Add(iconContainerGrid);
         // Add playtime elements
 
+        // Top margin modifier
+        int[] tmm = { -17, 5, 30, 65 };
+
         totalPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock);
         totalPlaytimeTitle.Text = "Total Playtime:";
         totalPlaytimeTitle.Margin =
-            new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
+            new Thickness(fColMarg[0], fColMarg[1] + tmm[0], 0, 0);
+        // new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         totalPlaytime.Margin = Margin =
-            new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
+            new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0);
+        // new Thickness(fColMarg[0], fColMarg[1] + 15, 0, 0);
 
-        SetPlaytimeBars();
+        SetPlaytimeBars(tmm[2]);
 
         lastPlaytimeTitle = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlaytimeTitle.Text = "Last Session:";
-        lastPlaytimeTitle.Margin = new Thickness(sColMarg[0],
-            TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 10, 0, 0);
+        lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[0], 0, 0);
+        // TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin - 0, 0, 0);
 
         lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
-        lastPlaytime.Margin = new Thickness(sColMarg[0],
-            TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
+        lastPlaytime.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0);
+        // TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 15, 0, 0);
 
-        lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(sColMarg[0],
-                TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
-            Effect = Utils.dropShadowText,
-        };
+        // lastTimeGradientBar = new GradientBar(this, percent: LastPlaytimePercent)
+        // {
+        //     HorizontalAlignment = HorizontalAlignment.Left,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     Margin = new Thickness(sColMarg[0],
+        //         TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+        //     Effect = Utils.dropShadowText,
+        // };
 
         lastPlayDateTitleBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlayDateTitleBlock.Text = LastPlayDate.Year > 1999 ? Ended : Started;
-        lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0],
-            TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 75, 0, 0);
+        lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[3], 0, 0);
 
         lastPlayDateBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         lastPlayDateBlock.Text = LastPlayDateString;
-        lastPlayDateBlock.Margin = new Thickness(sColMarg[0] + 60,
-            TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 75, 0, 0);
+        lastPlayDateBlock.Margin = new Thickness(sColMarg[0] + 60, fColMarg[1] + tmm[3], 0, 0);
 
         Panel.SetZIndex(totalPlaytimeTitle, 3);
         Panel.SetZIndex(totalPlaytime, 3);
@@ -990,15 +995,15 @@ public class Tile : UserControl
     }
 
     // Creates the custom playtime bars
-    public void SetPlaytimeBars()
+    public void SetPlaytimeBars(int tm)
     {
         totalTimeGradientBar = new GradientBar(this, percent: TotalPlaytimePercent)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin =
-                new Thickness(fColMarg[0] - 3,
-                    TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+                new Thickness(fColMarg[0] - 3, fColMarg[1] + tm, 0, 0),
+            // TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
             Effect = Utils.dropShadowText,
         };
 
@@ -1006,8 +1011,7 @@ public class Tile : UserControl
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3,
-                TileHeight / 2 - Utils.TitleFontSize - Utils.TextMargin + 40, 0, 0),
+            Margin = new Thickness((Utils.TextMargin + TileHeight + 20) * 2.3, fColMarg[1] + tm, 0, 0),
             Effect = Utils.dropShadowText,
         };
     }

@@ -72,7 +72,10 @@ public class EditMenu : UserControl
         {
             Width = Width,
             Height = Height,
-            Fill = Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2),
+            // Fill = Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2),
+            Fill = Parent.HorizontalEditG
+                ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
+                : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2),
             RadiusX = Utils.BorderRadius,
             RadiusY = Utils.BorderRadius,
             Effect = Utils.dropShadowIcon
