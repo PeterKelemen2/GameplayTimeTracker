@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -30,6 +31,8 @@ public class PopupMenu : UserControl
     public bool ToClose { get; set; }
 
     public string MenuText { get; set; }
+    public string[] TextArray { get; set; }
+    public int[] TextArraySizes { get; set; }
     public PopupType Type { get; set; }
 
     private readonly RoutedEventHandler ButtonAction1;
@@ -66,6 +69,7 @@ public class PopupMenu : UserControl
 
     private double _zoomPercent = 1.07;
     int bRadius = 10;
+    double padding = 10;
     private bool isAnimating = false;
 
     public Image bgImage;
@@ -74,9 +78,11 @@ public class PopupMenu : UserControl
     {
     }
 
-    public PopupMenu(string text = "", double w = 350, double h = 150, bool isToggled = false,
+    public PopupMenu(string text = "", string[] textArray = null, int[] textArrayFontSizes = null, double w = 350,
+        double h = 150,
+        bool isToggled = false,
         PopupType type = PopupType.YesNo,
-        RoutedEventHandler routedEvent1 = null, RoutedEventHandler routedEvent2 = null)
+        RoutedEventHandler yesClick = null, RoutedEventHandler noClick = null)
     {
         mainWindow = Utils.GetMainWindow();
         mainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -89,11 +95,29 @@ public class PopupMenu : UserControl
         IsToggled = isToggled;
         Type = type;
 
-        if (routedEvent1 == null) ButtonAction1 = (s, e) => { };
-        else ButtonAction1 = routedEvent1;
+        if (yesClick == null) ButtonAction1 = (s, e) => { };
+        else ButtonAction1 = yesClick;
 
-        if (routedEvent2 == null) ButtonAction2 = (s, e) => { };
-        else ButtonAction2 = routedEvent2;
+        if (noClick == null) ButtonAction2 = (s, e) => { };
+        else ButtonAction2 = noClick;
+
+        if (textArray != null)
+        {
+            TextArray = textArray;
+        }
+        else
+        {
+            TextArray = new[] { text };
+        }
+
+        if (textArrayFontSizes != null)
+        {
+            TextArraySizes = textArrayFontSizes;
+        }
+        else
+        {
+            TextArraySizes = new[] { 20 };
+        }
 
         IsImageSet = false;
         ToClose = false;
@@ -204,11 +228,39 @@ public class PopupMenu : UserControl
         }
     }
 
+    private void SetMenuTextContent()
+    {
+        menuTitle = new TextBlock
+        {
+            // Text = MenuText,
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
+            FontWeight = FontWeights.Bold,
+            TextWrapping = TextWrapping.Wrap,
+            Width = W - 2 * padding,
+            TextAlignment = TextAlignment.Center,
+            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
+            Effect = Utils.dropShadowText
+        };
+        if (TextArray.Length > 0)
+        {
+            for (int i = 0; i < TextArray.Length; i++)
+            {
+                menuTitle.Inlines.Add(new Run(TextArray[i] + "\n") { FontSize = TextArraySizes[i] });
+            }
+        }
+        else
+        {
+            menuTitle.Inlines.Add(new Run(MenuText + "\n"));
+        }
+    }
+
     // Opens the menu, creates prompt based on the type of menu it is
     public void OpenMenu()
     {
         Console.WriteLine("Opening Menu...");
-        double padding = 10;
+
         CreateBlurOverlay();
 
         MenuContainerGrid = new Grid();
@@ -227,20 +279,21 @@ public class PopupMenu : UserControl
         };
         MenuContainerGrid.Children.Add(menuRect);
 
-        menuTitle = new TextBlock
-        {
-            Text = MenuText,
-            Foreground = new SolidColorBrush(Utils.FontColor),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Top,
-            FontSize = 20,
-            FontWeight = FontWeights.Bold,
-            TextWrapping = TextWrapping.Wrap,
-            Width = W - 2 * padding,
-            TextAlignment = TextAlignment.Center,
-            Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
-            Effect = Utils.dropShadowText
-        };
+        // menuTitle = new TextBlock
+        // {
+        //     Text = MenuText,
+        //     Foreground = new SolidColorBrush(Utils.FontColor),
+        //     HorizontalAlignment = HorizontalAlignment.Center,
+        //     VerticalAlignment = VerticalAlignment.Top,
+        //     FontSize = 20,
+        //     FontWeight = FontWeights.Bold,
+        //     TextWrapping = TextWrapping.Wrap,
+        //     Width = W - 2 * padding,
+        //     TextAlignment = TextAlignment.Center,
+        //     Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
+        //     Effect = Utils.dropShadowText
+        // };
+        SetMenuTextContent();
         MenuContainerGrid.Children.Add(menuTitle);
 
         switch (Type)

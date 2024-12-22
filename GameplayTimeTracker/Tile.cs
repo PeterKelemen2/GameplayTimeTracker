@@ -317,7 +317,7 @@ public class Tile : UserControl
 
     private void OpenDeleteDialog(object sender, RoutedEventArgs e)
     {
-        deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", routedEvent1: DeleteTile);
+        deleteMenu = new PopupMenu(text: $"Do you really want to delete {GameName}?", yesClick: DeleteTile);
         deleteMenu.OpenMenu();
         // DeleteTile(sender, e);
     }

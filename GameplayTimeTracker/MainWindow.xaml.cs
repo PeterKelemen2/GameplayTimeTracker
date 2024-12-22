@@ -105,6 +105,7 @@ namespace GameplayTimeTracker
             handler.InitializeContainer(tileContainer, settings);
             dragDropOverlay = new DragDropOverlay();
             DragDropGrid.Children.Add(dragDropOverlay);
+            // CheckToUpdate();    
 
             Closing += MainWindow_Closing;
             Loaded += OnLoaded;
@@ -114,17 +115,34 @@ namespace GameplayTimeTracker
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             ShowTilesOnCanvas();
-            if (handler.CheckForDataToUpdate())
+            CheckToUpdate();
+        }
+
+        private void CheckToUpdate()
+        {
+            if (handler.CheckForDataToUpdate() && settings.DataNeedsUpdating)
             {
                 PopupMenu popupMenu =
                     new PopupMenu(
                         text:
-                        "It seems like your data needs updating!\nIf you already did this, just restore backup data in Settings",
-                        h: 190, type: PopupType.OK);
+                        "It seems like your data needs updating!\n\nWould you like to update it now?\n\nDon't worry, your current data will be backed up!",
+                        h: 270, type: PopupType.YesNo, yesClick: ToUpdate_Click);
+                
                 popupMenu.OpenMenu();
-                handler.BackupDataFile();
-                tileContainer.UpdateLegacyTime();
             }
+        }
+
+        public void ToUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateData();
+        }
+
+        public void UpdateData()
+        {
+            handler.BackupDataFile();
+            tileContainer.UpdateLegacyTime();
+            settings.DataNeedsUpdating = false;
+            handler.WriteSettingsToFile(settings);
         }
 
         private void UpdateColors()
@@ -375,7 +393,7 @@ namespace GameplayTimeTracker
                 CloseSettingsMenu();
 
                 exitPopup = new PopupMenu(text: "Are you sure you want to exit?",
-                    routedEvent1: ExitButton_Click);
+                    yesClick: ExitButton_Click);
                 exitPopup.OpenMenu();
 
                 // Reinitialize NotifyIcon if it's null

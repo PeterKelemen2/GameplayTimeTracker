@@ -6,7 +6,9 @@ namespace GameplayTimeTracker;
 public class Settings
 {
     [JsonPropertyName("startWithSystem")] public bool StartWithSystem { get; set; }
-    [JsonPropertyName("dataNeedsUpdating")] public bool DataNeedsUpdating { get; set; }
+
+    [JsonPropertyName("dataNeedsUpdating")]
+    public bool DataNeedsUpdating { get; set; } = true;
 
     [JsonPropertyName("horizontalTileGradient")] public bool HorizontalTileGradient { get; set; }
 

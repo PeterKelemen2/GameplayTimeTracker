@@ -24,7 +24,7 @@ public class JsonHandler
         }
     }
 
-    private void WriteSettingsToFile(Settings settings)
+    public void WriteSettingsToFile(Settings settings)
     {
         string defaultJson = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(Utils.SettingsFilePath, defaultJson);
@@ -190,7 +190,6 @@ public class JsonHandler
         WriteSettingsToFile(currentSettings);
     }
 
-
     private void RemoveShortcutForStartup()
     {
         string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
@@ -307,11 +306,17 @@ public class JsonHandler
         return paramsList;
     }
 
-    // TODO: Needs implementation to settings file, so it won't run on every start 
     // Switch operator
     public bool CheckForDataToUpdate()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 1);
+        // settings = GetSettingsFromFile();
+        // if (settings.DataNeedsUpdating == null)
+        // {
+        //     settings.DataNeedsUpdating = true;
+        //     WriteSettingsToFile(settings);
+        //     return true;
+        // }
+        return Assembly.GetExecutingAssembly().GetName().Version < new Version(1, 3, 5);
     }
 
     // By using a list of parameters from the container, it writes the data to the file
