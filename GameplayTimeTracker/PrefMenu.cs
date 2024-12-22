@@ -65,7 +65,7 @@ public class PrefMenu : UserControl
         Panel.Children.Add(createBackupButton);
 
         restoreBackupButton =
-            new CustomButton(text: "Restore Backup data", width: 170, height: 40, type: ButtonType.Positive,
+            new CustomButton(text: "Restore Backup data", width: 170, height: 40, type: ButtonType.Default,
                 isBold: true, isDisabled: !File.Exists(Utils.BackupDataFilePath));
         restoreBackupButton.Margin = new Thickness(10);
         restoreBackupButton.Click += Restore_Click;

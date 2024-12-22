@@ -355,9 +355,6 @@ public class JsonHandler
     {
         try
         {
-            // Just to be safe, if new data file is not satisfactory
-            BackupDataFile();
-            
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
@@ -370,6 +367,9 @@ public class JsonHandler
 
             if (result == true)
             {
+                // Just to be safe, if new data file is not satisfactory
+                BackupDataFile();
+                
                 string selectedFilePath = openFileDialog.FileName;
 
                 // Read the selected JSON file
