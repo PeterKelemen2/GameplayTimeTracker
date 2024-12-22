@@ -57,7 +57,7 @@ public class PrefMenu : UserControl
         newEntry.checkBox.Unchecked += (sender, e) => UpdateBgImageSize(false);
         Panel.Children.Add(newEntry);
 
-        createBackupButton = new CustomButton(text: "Create Backup data", width: 150, height: 40,
+        createBackupButton = new CustomButton(text: "Create Backup data", width: 170, height: 40,
             type: ButtonType.Positive,
             isBold: true);
         createBackupButton.Margin = new Thickness(0,30,0,0);
@@ -65,7 +65,7 @@ public class PrefMenu : UserControl
         Panel.Children.Add(createBackupButton);
 
         restoreBackupButton =
-            new CustomButton(text: "Restore Backup data", width: 150, height: 40, type: ButtonType.Positive,
+            new CustomButton(text: "Restore Backup data", width: 170, height: 40, type: ButtonType.Positive,
                 isBold: true, isDisabled: !File.Exists(Utils.BackupDataFilePath));
         restoreBackupButton.Margin = new Thickness(10);
         restoreBackupButton.Click += Restore_Click;
