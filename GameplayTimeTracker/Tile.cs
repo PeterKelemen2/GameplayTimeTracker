@@ -30,6 +30,7 @@ public class Tile : UserControl
     public CustomButton EditButton { get; set; }
     private CustomButton RemoveButton { get; set; }
     private Button launchButton;
+    private CustomButton LaunchButton { get; set; }
     private Image image;
     public Image bgImage;
     public Image bgImage2;
@@ -748,29 +749,37 @@ public class Tile : UserControl
         Panel.SetZIndex(RemoveButton, 3);
         grid.Children.Add(RemoveButton);
 
-        launchButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Content = "Launch",
-            Height = 40,
-            Width = 90,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, 60, 50, 0),
-            Effect = Utils.dropShadowIcon,
-        };
-        launchButton.Background = new SolidColorBrush(Colors.LightGreen);
-        launchButton.Click += LaunchExe;
+        // launchButton = new Button
+        // {
+        //     Style = (Style)Application.Current.FindResource("RoundedButton"),
+        //     Content = "Launch",
+        //     Height = 40,
+        //     Width = 90,
+        //     HorizontalAlignment = HorizontalAlignment.Right,
+        //     VerticalAlignment = VerticalAlignment.Center,
+        //     Margin = new Thickness(0, 60, 50, 0),
+        //     Effect = Utils.dropShadowIcon,
+        // };
+        // launchButton.Background = new SolidColorBrush(Colors.LightGreen);
+        LaunchButton = new CustomButton(text:"Launch", width: 90, height: 40,
+            type: ButtonType.Positive, isDisabled: false);
+        LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
+        LaunchButton.VerticalAlignment = VerticalAlignment.Center;
+        LaunchButton.Margin = new Thickness(0, 60, 50, 0);
+        if (!System.IO.Path.Exists(ExePath)) LaunchButton.Disable();
+        Panel.SetZIndex(LaunchButton, 3);
+        grid.Children.Add(LaunchButton);
+        LaunchButton.Click += LaunchExe;
 
         Grid.SetRow(container, 0);
         Grid.SetRow(RemoveButton, 0);
-        Grid.SetRow(launchButton, 0);
+        // Grid.SetRow(launchButton, 0);
 
         Panel.SetZIndex(container, 1);
-        Panel.SetZIndex(launchButton, 3);
+        // Panel.SetZIndex(launchButton, 3);
 
         grid.Children.Add(container);
-        grid.Children.Add(launchButton);
+        // grid.Children.Add(launchButton);
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         titleTextBlock.Text = GameName;
