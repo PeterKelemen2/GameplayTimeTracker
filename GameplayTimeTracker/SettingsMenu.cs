@@ -272,16 +272,28 @@ public class SettingsMenu : UserControl
         if (IsToggled)
         {
             // Capture a new bitmap only when needed
-            var newBitmap = toCapFullSize
-                ? Utils.CaptureContainerGrid(1.0) // Full size capture
-                : Utils.CaptureContainerGrid(); // Partial capture with scaling
+            var newBitmap = ToClose
+                ? Utils.CaptureContainerGrid(1.0)
+                : Utils.CaptureContainerGrid();
 
-            if (bgImage != null)
+            // Dispose of the previous bitmap if it's no longer needed
+            if (menuBgBitmap != null && menuBgBitmap != newBitmap)
             {
-                bgImage.Width = WinWidth;
-                bgImage.Height = WinHeight;
-                bgImage.Source = newBitmap;
+                // Dispose of the old bitmap (if it's a BitmapSource that supports it)
+                (menuBgBitmap as IDisposable)?.Dispose();
             }
+
+            // Only update if the new bitmap is different or needs updating
+            // if (menuBgBitmap != newBitmap)
+            // {
+            //     menuBgBitmap = newBitmap;
+            //     bgImage.Source = menuBgBitmap;
+            // }
+            menuBgBitmap = newBitmap;
+            bgImage.Source = menuBgBitmap;
+            
+            bgImage.Width = WinWidth;
+            bgImage.Height = WinHeight;
         }
     }
 

@@ -215,30 +215,6 @@ public class Tile : UserControl
         {
             string filePath = openFileDialog.FileName;
             HandleNewExePath(filePath);
-            // if (!ExePath.Equals(filePath))
-            // {
-            //     if (_tileContainer.GetTilesExePath().Contains(filePath))
-            //     {
-            //         PopupMenu popupMenu = new PopupMenu(textArray: new[]
-            //             {
-            //                 "This executable is already in use by",
-            //                 $"{_tileContainer.GetTileNameByExePath(filePath)}",
-            //                 "Would you like to select another executable?"
-            //             },
-            //             h: 220,
-            //             textArrayFontSizes: new[] { 17, 20, 17 },
-            //             type: PopupType.YesNo,
-            //             yesClick: UpdateExe);
-            //         popupMenu.OpenMenu();
-            //     }
-            //     else
-            //     {
-            //         ExePath = filePath;
-            //         if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
-            //         SetLaunchButtonState();
-            //         _tileContainer.InitSave();
-            //     }
-            // }
         }
     }
 

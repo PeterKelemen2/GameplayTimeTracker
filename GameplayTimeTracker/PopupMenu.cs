@@ -411,24 +411,30 @@ public class PopupMenu : UserControl
         {
             // Capture a new bitmap only when needed
             var newBitmap = ToClose
-                ? Utils.CaptureContainerGrid(1.0) // Full size capture
-                : Utils.CaptureContainerGrid(); // Partial capture with scaling
+                ? Utils.CaptureContainerGrid(1.0)
+                : Utils.CaptureContainerGrid();
 
-            // Only update if the new bitmap is different or needs updating
-            if (menuBgBitmap != newBitmap)
+            // Dispose of the previous bitmap if it's no longer needed
+            if (menuBgBitmap != null && menuBgBitmap != newBitmap)
             {
-                // Optionally, dispose of the old bitmap reference if you don't need it anymore
-                menuBgBitmap = newBitmap;
-
-                // Update the image source with the new bitmap
-                bgImage.Source = menuBgBitmap;
+                // Dispose of the old bitmap (if it's a BitmapSource that supports it)
+                (menuBgBitmap as IDisposable)?.Dispose();
             }
 
-            // Ensure image dimensions are updated
+            // Only update if the new bitmap is different or needs updating
+            // if (menuBgBitmap != newBitmap)
+            // {
+            //     menuBgBitmap = newBitmap;
+            //     bgImage.Source = menuBgBitmap;
+            // }
+            menuBgBitmap = newBitmap;
+            bgImage.Source = menuBgBitmap;
+            
             bgImage.Width = WinWidth;
             bgImage.Height = WinHeight;
         }
     }
+
 
     private void CreateBlurOverlay()
     {
