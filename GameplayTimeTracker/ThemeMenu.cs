@@ -17,9 +17,9 @@ public class ThemeMenu : UserControl
     public String SelectedThemeName { get; set; }
     public SettingsMenu SettingsMenu { get; set; }
 
-    public Button switchTileColorsButton { get; set; }
-    public Button switchEditColorsButton { get; set; }
-    public Button switchBarsColorsButton { get; set; }
+    public CustomButton SwitchTileColorsButton { get; set; }
+    public CustomButton SwitchEditColorsButton { get; set; }
+    public CustomButton SwitchBarsColorsButton { get; set; }
 
     public ThemeMenu(SettingsMenu settingsMenu, StackPanel stackPanel, List<Theme> themes, String selectedThemeName)
     {
@@ -31,53 +31,30 @@ public class ThemeMenu : UserControl
         ButtonsGrid = new Grid();
         ButtonsGrid.Height = 40;
 
-        switchTileColorsButton = new Button
-        {
-            Content = "Tile Colors \u21c6",
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Height = 30,
-            Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Effect = Utils.dropShadowText,
-        };
-        switchTileColorsButton.Click += (sender, e) =>
+
+        SwitchTileColorsButton = new CustomButton(text: "Tile Colors \u21c6", width: 120, height: 30,
+            hA: HorizontalAlignment.Left, vA: VerticalAlignment.Top);
+        SwitchTileColorsButton.Click += (sender, e) =>
         {
             SwitchTileColorsMethod(sender, e, "tileColor1", "tileColor2");
         };
-        ButtonsGrid.Children.Add(switchTileColorsButton);
-
-        switchEditColorsButton = new Button
-        {
-            Content = "Edit Colors \u21c6",
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Height = 30,
-            Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Top,
-            Effect = Utils.dropShadowText,
-        };
-        switchEditColorsButton.Click += (sender, e) =>
+        ButtonsGrid.Children.Add(SwitchTileColorsButton);
+        
+        SwitchEditColorsButton = new CustomButton(text: "Edit Colors \u21c6", width: 120, height: 30,
+            hA: HorizontalAlignment.Center, vA: VerticalAlignment.Top);
+        SwitchEditColorsButton.Click += (sender, e) =>
         {
             SwitchTileColorsMethod(sender, e, "editColor1", "editColor2");
         };
-        ButtonsGrid.Children.Add(switchEditColorsButton);
-
-        switchBarsColorsButton = new Button
-        {
-            Content = "Bar Colors \u21c6",
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Height = 30,
-            Width = 120,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Top,
-            Effect = Utils.dropShadowText,
-        };
-        switchBarsColorsButton.Click += (sender, e) =>
+        ButtonsGrid.Children.Add(SwitchEditColorsButton);
+        
+        SwitchBarsColorsButton = new CustomButton(text: "Bar Colors \u21c6", width: 120, height: 30,
+            hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
+        SwitchBarsColorsButton.Click += (sender, e) =>
         {
             SwitchTileColorsMethod(sender, e, "leftColor", "rightColor");
         };
-        ButtonsGrid.Children.Add(switchBarsColorsButton);
+        ButtonsGrid.Children.Add(SwitchBarsColorsButton);
     }
 
     private void SwitchTileColorsMethod(object sender, RoutedEventArgs e, String c1, String c2)
