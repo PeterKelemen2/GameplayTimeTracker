@@ -164,22 +164,19 @@ public class Tile : UserControl
             }
         }
 
-        if (!IsRunning)
+        (double newH, double newM, double newS) =
+            Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
+        if (newH != TotalH || newM != TotalM || newS != TotalS)
         {
-            (double newH, double newM, double newS) =
-                Utils.DecodeTimeString(TileEditMenu.PlaytimeEditBox.Text, TotalH, TotalM, TotalS);
-            if (newH != TotalH || newM != TotalM || newS != TotalS)
-            {
-                (TotalH, TotalM, TotalS) = (newH, newM, newS + 1);
-                TotalPlaytime = GetTotalPlaytimeAsDouble();
-                TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
-                _tileContainer.UpdatePlaytimeBars();
-                UpdatePlaytimeText();
-                TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-                mainTotalTimeBlock.Text =
-                    $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
-                toSave = true;
-            }
+            (TotalH, TotalM, TotalS) = (newH, newM, newS + 1);
+            TotalPlaytime = GetTotalPlaytimeAsDouble();
+            TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
+            _tileContainer.UpdatePlaytimeBars();
+            UpdatePlaytimeText();
+            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+            mainTotalTimeBlock.Text =
+                $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+            toSave = true;
         }
 
         if (!ShortcutArgs.Equals(TileEditMenu.ArgsEditBox.Text))
