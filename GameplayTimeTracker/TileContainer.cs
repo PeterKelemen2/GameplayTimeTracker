@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using MonoMac.CoreWlan;
+using System.Windows.Documents;
 
 namespace GameplayTimeTracker;
 
@@ -22,13 +22,13 @@ public class TileContainer
     // public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
 
-    public TextBlock Total { get; set; }
+    // public TextBlock Total { get; set; }
+    public Run TotalTimeRun { get; set; }
 
     MainWindow _mainWindow;
 
     public TileContainer()
     {
-        Total = new TextBlock();
     }
 
     public List<string> GetTilesExePath()
@@ -138,7 +138,11 @@ public class TileContainer
             UpdatePlaytimeBars();
 
             newTile.ToggleBgImageColor(newTile.IsRunning);
-            Total.Text = $"Games managed: {tilesList.Count}";
+            // GameCountRun.Text = $"{tilesList.Count}";
+            // Total.Text = $"Games managed: {tilesList.Count}";
+            
+            Run Total = Utils.mainWindow.FindName("GameCountRun") as Run;
+            Total.Text = $"{tilesList.Count}";
             Console.WriteLine($"Tile added to TileContainer!");
         }
         catch (Exception e)
@@ -176,6 +180,7 @@ public class TileContainer
         bool isRemoved = false;
         try
         {
+            
             foreach (var tile in tilesList.ToList())
             {
                 if (tile.Id.Equals(id))
@@ -183,8 +188,9 @@ public class TileContainer
                     // tile.ToggleEdit();
                     tilesList.Remove(tile);
                     isRemoved = true;
-                    // TextBlock totalText = _mainWindow.FindName("GamesLoaded") as TextBlock;
-                    Total.Text = $"Games managed: {tilesList.Count}";
+
+                    Run Total = Utils.mainWindow.FindName("GameCountRun") as Run;
+                    Total.Text = $"{tilesList.Count}";
                 }
             }
         }
@@ -342,9 +348,10 @@ public class TileContainer
         }
 
         UpdatePlaytimeBars();
-        TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-        mainTotalTimeBlock.Text =
-            $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
+        // TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+        // mainTotalTimeBlock.Text =
+        //     $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
+        TotalTimeRun.Text = $"{Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
         InitSave();
         Console.WriteLine("Legacy data updated!");
     }

@@ -44,16 +44,19 @@ namespace GameplayTimeTracker
         private DragDropOverlay dragDropOverlay;
         private CustomButton SettingsButton;
         private CustomButton AddButton;
-        
+
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            TotalPlaytimeTextBlock.Text =
-                $"Total Playtime: {Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble())}";
+            // TotalPlaytimeTextBlock.Text =
+            //     $"Total Playtime: {Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble())}";
+            TotalTimeText.Text = Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble());
+            tileContainer.TotalTimeRun = TotalTimeText;
             tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
-            tileContainer.Total = GamesLoaded;
-            GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
+            // tileContainer.Total = GamesLoaded;
+            GameCountRun.Text = $"{tileContainer.tilesList.Count}";
+            // GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
         }
 
         private void InitSettings()
@@ -124,19 +127,21 @@ namespace GameplayTimeTracker
 
         private void CreateButtonsOnFooter()
         {
-            AddButton = new CustomButton(width: 40, height: 40, hA:HorizontalAlignment.Left, buttonImagePath:Utils.AddIcon);
-            AddButton.Margin = new Thickness(15,0,0,0);
+            AddButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
+                buttonImagePath: Utils.AddIcon);
+            AddButton.Margin = new Thickness(15, 0, 0, 0);
             AddButton.Click += AddExecButton_Click;
             Grid.SetRow(AddButton, 1);
             Grid.Children.Add(AddButton);
-            
-            SettingsButton = new CustomButton(width: 40, height: 40, hA:HorizontalAlignment.Left, buttonImagePath:Utils.CogIcon);
-            SettingsButton.Margin = new Thickness(70,0,0,0);
+
+            SettingsButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
+                buttonImagePath: Utils.CogIcon);
+            SettingsButton.Margin = new Thickness(70, 0, 0, 0);
             SettingsButton.Click += OpenSettingsWindow;
             Grid.SetRow(SettingsButton, 1);
             Grid.Children.Add(SettingsButton);
         }
-        
+
         private void CheckToUpdate()
         {
             if (handler.CheckForDataToUpdate() && settings.DataNeedsUpdating)
@@ -446,7 +451,7 @@ namespace GameplayTimeTracker
         {
             exitPopup.IsToggled = false;
         }
-        
+
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             tileContainer?.InitSave();

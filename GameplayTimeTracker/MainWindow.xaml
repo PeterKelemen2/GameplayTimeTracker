@@ -299,46 +299,24 @@
 
                 <!-- Other content in the bottom 1/4 -->
                 <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
-                    <!-- Add other UI elements here -->
-                    <!-- <Button Content="Add Executable" Style="{StaticResource RoundedButton}" -->
-                    <!--         HorizontalAlignment="Left" -->
-                    <!--         Margin="20,0,0,0" -->
-                    <!--         Height="30" -->
-                    <!--         Width="140" -->
-                    <!--         Click="AddExecButton_Click"> -->
-                    <!--     <Button.Effect> -->
-                    <!--         <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" /> -->
-                    <!--     </Button.Effect> -->
-                    <!-- </Button> -->
-                    <!-- -->
-                    <!-- <Button Content="Settings" Style="{StaticResource RoundedButton}" -->
-                    <!--         HorizontalAlignment="Left" -->
-                    <!--         Margin="180,0,0,0" -->
-                    <!--         Height="30" -->
-                    <!--         Width="140" -->
-                    <!--         Click="OpenSettingsWindow"> -->
-                    <!--     <Button.Effect> -->
-                    <!--         <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" /> -->
-                    <!--     </Button.Effect> -->
-                    <!-- </Button> -->
-
                     <TextBlock x:Name="GamesLoaded"
-                               Text="Games managed: 0"
                                Foreground="Black"
-                               HorizontalAlignment="Left"
+                               HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Margin="340,0,20,0"
-                               FontSize="16"
-                               FontWeight="Bold" />
+                               FontSize="16">
+                        <Run Text="Games managed:" FontWeight="Bold" />
+                        <Run x:Name="GameCountRun" Text="0" FontWeight="Normal" />
+                    </TextBlock>
 
                     <TextBlock x:Name="TotalPlaytimeTextBlock"
-                               Text="Total Playtime: 0 hours"
                                Foreground="Black"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
-                               Margin="0,0,20,0"
-                               FontSize="16"
-                               FontWeight="Bold" />
+                               Margin="0,0,15,0"
+                               FontSize="16">
+                        <Run Text="Total playtime:" FontWeight="Bold" />
+                        <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
+                    </TextBlock>
                 </Grid>
             </Grid>
         </Grid>

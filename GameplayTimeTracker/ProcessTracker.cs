@@ -89,9 +89,10 @@ public class ProcessTracker
                 {
                     _tileContainer.UpdatePlaytimeBars();
                     _tileContainer.InitSave();
-                    TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-                    mainTotalTimeBlock.Text =
-                        $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+                    // TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
+                    // mainTotalTimeBlock.Text =
+                    //     $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+                    _tileContainer.TotalTimeRun.Text = $"{Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
                 }
             }
             else

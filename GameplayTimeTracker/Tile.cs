@@ -3,6 +3,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using Application = System.Windows.Application;
@@ -173,9 +174,8 @@ public class Tile : UserControl
             TileEditMenu.PlaytimeEditBox.Text = Utils.GetPrettyTime(TotalPlaytime);
             _tileContainer.UpdatePlaytimeBars();
             UpdatePlaytimeText();
-            TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-            mainTotalTimeBlock.Text =
-                $"Total Playtime: {Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+            Run TotalTimeBlockText = Utils.mainWindow.FindName("TotalTimeText") as Run;
+            TotalTimeBlockText.Text = $"{Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
             toSave = true;
         }
 
