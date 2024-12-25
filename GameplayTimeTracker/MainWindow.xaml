@@ -300,27 +300,27 @@
                 <!-- Other content in the bottom 1/4 -->
                 <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
                     <!-- Add other UI elements here -->
-                    <Button Content="Add Executable" Style="{StaticResource RoundedButton}"
-                            HorizontalAlignment="Left"
-                            Margin="20,0,0,0"
-                            Height="30"
-                            Width="140"
-                            Click="AddExecButton_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
-                        </Button.Effect>
-                    </Button>
-
-                    <Button Content="Settings" Style="{StaticResource RoundedButton}"
-                            HorizontalAlignment="Left"
-                            Margin="180,0,0,0"
-                            Height="30"
-                            Width="140"
-                            Click="OpenSettingsWindow">
-                        <Button.Effect>
-                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" />
-                        </Button.Effect>
-                    </Button>
+                    <!-- <Button Content="Add Executable" Style="{StaticResource RoundedButton}" -->
+                    <!--         HorizontalAlignment="Left" -->
+                    <!--         Margin="20,0,0,0" -->
+                    <!--         Height="30" -->
+                    <!--         Width="140" -->
+                    <!--         Click="AddExecButton_Click"> -->
+                    <!--     <Button.Effect> -->
+                    <!--         <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" /> -->
+                    <!--     </Button.Effect> -->
+                    <!-- </Button> -->
+                    <!-- -->
+                    <!-- <Button Content="Settings" Style="{StaticResource RoundedButton}" -->
+                    <!--         HorizontalAlignment="Left" -->
+                    <!--         Margin="180,0,0,0" -->
+                    <!--         Height="30" -->
+                    <!--         Width="140" -->
+                    <!--         Click="OpenSettingsWindow"> -->
+                    <!--     <Button.Effect> -->
+                    <!--         <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="1" /> -->
+                    <!--     </Button.Effect> -->
+                    <!-- </Button> -->
 
                     <TextBlock x:Name="GamesLoaded"
                                Text="Games managed: 0"

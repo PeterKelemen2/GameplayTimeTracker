@@ -32,6 +32,10 @@
         <Content Include="assets\add.png">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Remove="assets\cog.png" />
+        <Content Include="assets\cog.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

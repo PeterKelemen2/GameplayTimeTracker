@@ -42,6 +42,9 @@ namespace GameplayTimeTracker
         private PopupMenu selfPopup;
         private SettingsMenu settingsMenu;
         private DragDropOverlay dragDropOverlay;
+        private CustomButton SettingsButton;
+        private CustomButton AddButton;
+        
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -114,10 +117,26 @@ namespace GameplayTimeTracker
 
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
+            CreateButtonsOnFooter();
             ShowTilesOnCanvas();
             CheckToUpdate();
         }
 
+        private void CreateButtonsOnFooter()
+        {
+            AddButton = new CustomButton(width: 40, height: 40, hA:HorizontalAlignment.Left, buttonImagePath:Utils.AddIcon);
+            AddButton.Margin = new Thickness(15,0,0,0);
+            AddButton.Click += AddExecButton_Click;
+            Grid.SetRow(AddButton, 1);
+            Grid.Children.Add(AddButton);
+            
+            SettingsButton = new CustomButton(width: 40, height: 40, hA:HorizontalAlignment.Left, buttonImagePath:Utils.CogIcon);
+            SettingsButton.Margin = new Thickness(70,0,0,0);
+            SettingsButton.Click += OpenSettingsWindow;
+            Grid.SetRow(SettingsButton, 1);
+            Grid.Children.Add(SettingsButton);
+        }
+        
         private void CheckToUpdate()
         {
             if (handler.CheckForDataToUpdate() && settings.DataNeedsUpdating)
