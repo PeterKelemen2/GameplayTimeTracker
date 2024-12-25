@@ -307,7 +307,6 @@ public class JsonHandler
         return paramsList;
     }
 
-    // Switch operator
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);

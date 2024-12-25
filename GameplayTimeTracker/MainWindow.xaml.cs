@@ -122,17 +122,25 @@ namespace GameplayTimeTracker
         {
             if (handler.CheckForDataToUpdate() && settings.DataNeedsUpdating)
             {
-                PopupMenu popupMenu =
-                    new PopupMenu(
-                        textArray: new[]
-                        {
-                            "It seems like your data needs updating!",
-                            "Would you like to update it now?",
-                            "Don't worry, your current data will be backed up!"
-                        },
-                        textArrayFontSizes: new[] { 20, 20, 20 },
-                        h: 260, type: PopupType.YesNo, yesClick: ToUpdate_Click);
-                popupMenu.OpenMenu();
+                if (tileContainer.tilesList.Count > 0)
+                {
+                    PopupMenu popupMenu =
+                        new PopupMenu(
+                            textArray: new[]
+                            {
+                                "It seems like your data needs updating!",
+                                "Would you like to update it now?",
+                                "Don't worry, your current data will be backed up!"
+                            },
+                            textArrayFontSizes: new[] { 20, 20, 20 },
+                            h: 260, type: PopupType.YesNo, yesClick: ToUpdate_Click);
+                    popupMenu.OpenMenu();
+                }
+                else
+                {
+                    settings.DataNeedsUpdating = false;
+                    handler.WriteSettingsToFile(settings);
+                }
             }
         }
 
