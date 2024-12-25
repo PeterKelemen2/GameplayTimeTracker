@@ -113,19 +113,7 @@ public class EditMenu : UserControl
         ArgsEditBox.KeyDown += editBox_KeyDown;
         Container.Children.Add(ArgsEditBlock);
         Container.Children.Add(ArgsEditBox);
-
-        // BrowseExeButton = SampleButton("New exe", col: 2, row: 1, topMarginModifier: 10);
-        // BrowseExeButton.Click += Parent.UpdateExe;
-        //
-        // OpenFolderButton = SampleButton("Open Folder", col: 2, row: 3, topMarginModifier: -10);
-        // OpenFolderButton.Click += Parent.OpenExeFolder;
-        //
-        // ChangeIconButton = SampleButton("Change Icon", col: 0, row: 1, topMarginModifier: 10, fromRight: true);
-        // ChangeIconButton.Click += Parent.UpdateIcons;
-        //
-        // SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true,
-        //     bType: ButtonType.Positive);
-        // SaveButton.Click += Parent.editSaveButton_Click;
+        
         BrowseExeButton = new CustomButton(text: "New exe", width: bWidth, height: bHeight, buttonImagePath: Utils.AddIcon,
             hA: HorizontalAlignment.Right);
         BrowseExeButton.Margin = new Thickness(0, -bHeight + 10, 180, 0);
@@ -146,7 +134,6 @@ public class EditMenu : UserControl
         SaveButton.Margin = new Thickness(0, bHeight + 30, colMargins[0], 0);
         SaveButton.Click += Parent.editSaveButton_Click;
 
-        // SaveButton.Click += ShowSaveIndicator;
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
         Container.Children.Add(ChangeIconButton);
@@ -222,12 +209,11 @@ public class EditMenu : UserControl
         {
             Text = text,
             Width = 180,
-            // MaxHeight = 0,
             Height = Utils.TextBoxHeight,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             TextAlignment = TextAlignment.Left,
-            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+            HorizontalContentAlignment = HorizontalAlignment.Left,
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = Utils.dropShadowIcon,
             Margin = new Thickness(colMargins[col], rowMargins[row], 0, 0)
@@ -259,11 +245,10 @@ public class EditMenu : UserControl
     {
         if (e.Key == Key.Enter)
         {
-            // Call your method here
             Parent.SaveEditedData();
             ShowSaveIndicatorMethod();
 
-            e.Handled = true; // Optional, prevents the beep sound
+            e.Handled = true;
         }
     }
 

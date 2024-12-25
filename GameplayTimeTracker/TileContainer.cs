@@ -12,11 +12,7 @@ namespace GameplayTimeTracker;
 public class TileContainer
 {
     private JsonHandler handler = new JsonHandler();
-    public double TileWidth { get; set; }
-    public List<Theme> themes { get; set; } = new();
     public List<Tile> tilesList { get; set; } = new();
-
-    public Theme currentTheme { get; set; } = new();
     public Run TotalTimeRun { get; set; }
     MainWindow _mainWindow;
 
@@ -46,16 +42,6 @@ public class TileContainer
             .Where(x => !string.IsNullOrEmpty(x.ExePath) && File.Exists(x.ExePath))
             .Select(x => FileVersionInfo.GetVersionInfo(x.ExePath).FileDescription)
             .ToList();
-    }
-
-    public void SetTilesList(List<Tile> newList)
-    {
-        tilesList = newList;
-    }
-
-    public void SetTile(Tile oldTile, Tile newTile)
-    {
-        oldTile = newTile;
     }
 
     public void InitSave()
@@ -131,7 +117,7 @@ public class TileContainer
             UpdatePlaytimeBars();
 
             newTile.ToggleBgImageColor(newTile.IsRunning);
-
+            
             Run Total = Utils.mainWindow.FindName("GameCountRun") as Run;
             Total.Text = $"{tilesList.Count}";
             Console.WriteLine($"Tile added to TileContainer!");
@@ -171,6 +157,7 @@ public class TileContainer
         bool isRemoved = false;
         try
         {
+            
             foreach (var tile in tilesList.ToList())
             {
                 if (tile.Id.Equals(id))
