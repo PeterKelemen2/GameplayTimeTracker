@@ -212,13 +212,9 @@ public class PopupMenu : UserControl
         WinWidth = e.NewSize.Width;
         WinHeight = e.NewSize.Height;
 
-        // rollInAnimation.From = new Thickness(0, 0, 0, -WinWidth);
-        // rollOutAnimation.To = new Thickness(0, 0, 0, WinWidth + H);
         rollOutTranslate.To = -WinHeight;
         rollInTranslate.From = WinHeight;
         SetBlurImage();
-        // Adjust the height of the rectangle dynamically
-        // H = WinHeight * 0.25; // For example, make the height 25% of the window height
 
         // Update the height of the menuRect if it has been created already
         if (MenuContainerGrid != null)

@@ -403,10 +403,12 @@ namespace GameplayTimeTracker
 
                 tileContainer.CloseAllPopups();
                 CloseSettingsMenu();
-
-                exitPopup = new PopupMenu(text: "Are you sure you want to exit?",
-                    yesClick: ExitButton_Click);
-                exitPopup.OpenMenu();
+                if (exitPopup == null || !exitPopup.IsToggled)
+                {
+                    exitPopup = new PopupMenu(text: "Are you sure you want to exit?",
+                        yesClick: ExitButton_Click, noClick: ExitButton_NoClick);
+                    exitPopup.OpenMenu();
+                }
 
                 // Reinitialize NotifyIcon if it's null
                 if (notificationHandler.m_notifyIcon == null)
@@ -421,6 +423,11 @@ namespace GameplayTimeTracker
             }
         }
 
+        private void ExitButton_NoClick(object sender, RoutedEventArgs e)
+        {
+            exitPopup.IsToggled = false;
+        }
+        
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             tileContainer?.InitSave();
