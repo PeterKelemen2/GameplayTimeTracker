@@ -219,28 +219,26 @@ public class PopupMenu : UserControl
         // Update the height of the menuRect if it has been created already
         if (MenuContainerGrid != null)
         {
+            double verticalMargin = WinHeight / 2 - H / 2; // Calculate this margin once
+
+            // Iterate through children and apply changes
             foreach (UIElement child in MenuContainerGrid.Children)
             {
-                if (child is Rectangle menuRect)
+                switch (child)
                 {
-                    menuRect.Height = H;
+                    case Rectangle menuRect:
+                        menuRect.Height = H;
+                        break;
+
+                    case TextBlock menuTitle:
+                        menuTitle.Margin = new Thickness(0, verticalMargin, 0, 0);
+                        break;
                 }
-
-                if (child is TextBlock menuTitle)
-                {
-                    menuTitle.Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0);
-                }
             }
 
-            if (yesButton != null)
-            {
-                yesButton.Margin = new Thickness(-100, 0, 0, WinHeight / 2 - H / 2);
-            }
-
-            if (noButton != null)
-            {
-                noButton.Margin = new Thickness(100, 0, 0, WinHeight / 2 - H / 2);
-            }
+            // Apply margins for buttons if they exist
+            if (yesButton != null) yesButton.Margin = new Thickness(-100, 0, 0, verticalMargin);
+            if (noButton != null) noButton.Margin = new Thickness(100, 0, 0, verticalMargin);
         }
     }
 
@@ -299,20 +297,6 @@ public class PopupMenu : UserControl
         };
         MenuContainerGrid.Children.Add(menuRect);
 
-        // menuTitle = new TextBlock
-        // {
-        //     Text = MenuText,
-        //     Foreground = new SolidColorBrush(Utils.FontColor),
-        //     HorizontalAlignment = HorizontalAlignment.Center,
-        //     VerticalAlignment = VerticalAlignment.Top,
-        //     FontSize = 20,
-        //     FontWeight = FontWeights.Bold,
-        //     TextWrapping = TextWrapping.Wrap,
-        //     Width = W - 2 * padding,
-        //     TextAlignment = TextAlignment.Center,
-        //     Margin = new Thickness(0, WinHeight / 2 - H / 2, 0, 0),
-        //     Effect = Utils.dropShadowText
-        // };
         SetMenuTextContent();
         MenuContainerGrid.Children.Add(menuTitle);
 

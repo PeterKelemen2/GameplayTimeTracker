@@ -185,12 +185,13 @@ public class Tile : UserControl
             toSave = true;
         }
 
-        if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
-        {
-            ExePath = TileEditMenu.PathEditBox.Text;
-            SetLaunchButtonState();
-            toSave = true;
-        }
+        // if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
+        // {
+        //     ExePath = TileEditMenu.PathEditBox.Text;
+        //     SetLaunchButtonState();
+        //     toSave = true;
+        // }
+        toSave = HandleNewExePath(TileEditMenu.PathEditBox.Text);
 
         if (toSave)
         {
@@ -213,33 +214,66 @@ public class Tile : UserControl
         if (openFileDialog.ShowDialog() == true)
         {
             string filePath = openFileDialog.FileName;
-            if (!ExePath.Equals(filePath))
-            {
-                if (_tileContainer.GetTilesExePath().Contains(filePath))
-                {
-                    PopupMenu popupMenu = new PopupMenu(textArray: new[]
-                        {
-                            "This executable is already in use by",
-                            $"{_tileContainer.GetTileNameByExePath(filePath)}",
-                            "Would you like to select another executable?"
-                        },
-                        h: 220,
-                        textArrayFontSizes: new[] { 17, 20, 17 },
-                        type: PopupType.YesNo,
-                        yesClick: UpdateExe);
-                    popupMenu.OpenMenu();
-                }
-                else
-                {
-                    ExePath = filePath;
-                    if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
-                    SetLaunchButtonState();
-                    _tileContainer.InitSave();
-                }
-            }
+            HandleNewExePath(filePath);
+            // if (!ExePath.Equals(filePath))
+            // {
+            //     if (_tileContainer.GetTilesExePath().Contains(filePath))
+            //     {
+            //         PopupMenu popupMenu = new PopupMenu(textArray: new[]
+            //             {
+            //                 "This executable is already in use by",
+            //                 $"{_tileContainer.GetTileNameByExePath(filePath)}",
+            //                 "Would you like to select another executable?"
+            //             },
+            //             h: 220,
+            //             textArrayFontSizes: new[] { 17, 20, 17 },
+            //             type: PopupType.YesNo,
+            //             yesClick: UpdateExe);
+            //         popupMenu.OpenMenu();
+            //     }
+            //     else
+            //     {
+            //         ExePath = filePath;
+            //         if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
+            //         SetLaunchButtonState();
+            //         _tileContainer.InitSave();
+            //     }
+            // }
         }
     }
 
+    private bool HandleNewExePath(string filePath)
+    {
+        if (!ExePath.Equals(filePath))
+        {
+            if (_tileContainer.GetTilesExePath().Contains(filePath))
+            {
+                PopupMenu popupMenu = new PopupMenu(textArray: new[]
+                    {
+                        "This executable is already in use by",
+                        $"{_tileContainer.GetTileNameByExePath(filePath)}",
+                        "Would you like to select another executable?"
+                    },
+                    h: 220,
+                    textArrayFontSizes: new[] { 17, 20, 17 },
+                    type: PopupType.YesNo,
+                    yesClick: UpdateExe);
+                popupMenu.OpenMenu();
+                return false;
+            }
+            else
+            {
+                ExePath = filePath;
+                if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
+                SetLaunchButtonState();
+                _tileContainer.InitSave();
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     private async void LaunchExe(object sender, RoutedEventArgs e)
     {
         try
@@ -466,6 +500,32 @@ public class Tile : UserControl
             UpdateImageVars();
         }
     }
+    
+    private BitmapImage LoadBitmapImage(string path)
+    {
+        using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.StreamSource = stream;
+            bitmap.EndInit();
+            return bitmap;
+        }
+    }
+    
+    private void ClearImageReferences()
+    {
+        bgImageGray = null;
+        bgImageColor = null;
+
+        bgImage.Source = null;
+        bgImage2.Source = null;
+        image.Source = null;
+
+        GC.Collect(); // Force garbage collection
+        GC.WaitForPendingFinalizers();
+    }
 
     private void SetupIconVars()
     {
@@ -475,12 +535,18 @@ public class Tile : UserControl
         {
             // Handle the case where the file does not exist
             Console.WriteLine("Error: Icon file not found at " + absoluteIconPath);
-            return; // Exit the method, or handle as needed
+            return;
         }
 
-        // Proceed if the file exists
-        bgImageGray = ConvertToGrayscale(new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute)));
-        bgImageColor = new BitmapImage(new Uri(absoluteIconPath, UriKind.Absolute));
+        // Load the images with OnLoad cache option
+        var imageColor = new BitmapImage();
+        imageColor.BeginInit();
+        imageColor.UriSource = new Uri(absoluteIconPath, UriKind.Absolute);
+        imageColor.CacheOption = BitmapCacheOption.OnLoad;
+        imageColor.EndInit();
+
+        bgImageColor = imageColor; // Color version
+        bgImageGray = ConvertToGrayscale(imageColor); // Grayscale version
     }
 
     // TODO: Needs fixing, uses too much memory
@@ -511,12 +577,16 @@ public class Tile : UserControl
 
     public void UpdateImageVars(bool toSave = true)
     {
-        SetupIconVars();
+        ClearImageReferences(); // Clear old images
+        SetupIconVars(); // Load new images
+
         bgImage.Source = bgImageGray;
         bgImage2.Source = bgImageColor;
         image.Source = bgImageColor;
+
         ToggleBgImageColor(IsRunning);
         if (toSave) _tileContainer.InitSave();
+
         Console.WriteLine($"Icon for {GameName} changed to {absoluteIconPath}");
     }
 
