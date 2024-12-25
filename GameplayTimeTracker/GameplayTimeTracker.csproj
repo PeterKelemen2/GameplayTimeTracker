@@ -27,6 +27,14 @@
         <Content Include="assets\GameplayTimeTracker.ico">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Remove="assets\folder.png" />
+        <Content Include="assets\folder.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="assets\add.png" />
+        <Content Include="assets\add.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

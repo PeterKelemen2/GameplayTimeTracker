@@ -28,6 +28,8 @@ public class Utils
     public const string EditIcon = "assets/edit.png";
     public const string RemIcon = "assets/remove.png";
     public const string SaveIcon = "assets/save.png";
+    public const string FolderIcon = "assets/folder.png";
+    public const string AddIcon = "assets/add.png";
 
     // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
