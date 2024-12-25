@@ -48,15 +48,11 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // TotalPlaytimeTextBlock.Text =
-            //     $"Total Playtime: {Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble())}";
             TotalTimeText.Text = Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble());
             tileContainer.TotalTimeRun = TotalTimeText;
             tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
-            // tileContainer.Total = GamesLoaded;
             GameCountRun.Text = $"{tileContainer.tilesList.Count}";
-            // GamesLoaded.Text = $"Games managed: {tileContainer.tilesList.Count}";
         }
 
         private void InitSettings()

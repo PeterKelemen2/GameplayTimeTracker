@@ -12,19 +12,12 @@ namespace GameplayTimeTracker;
 public class TileContainer
 {
     private JsonHandler handler = new JsonHandler();
-
     public double TileWidth { get; set; }
-
     public List<Theme> themes { get; set; } = new();
-
     public List<Tile> tilesList { get; set; } = new();
 
-    // public List<Tile> toMoveList { get; set; } = new();
     public Theme currentTheme { get; set; } = new();
-
-    // public TextBlock Total { get; set; }
     public Run TotalTimeRun { get; set; }
-
     MainWindow _mainWindow;
 
     public TileContainer()
@@ -138,9 +131,7 @@ public class TileContainer
             UpdatePlaytimeBars();
 
             newTile.ToggleBgImageColor(newTile.IsRunning);
-            // GameCountRun.Text = $"{tilesList.Count}";
-            // Total.Text = $"Games managed: {tilesList.Count}";
-            
+
             Run Total = Utils.mainWindow.FindName("GameCountRun") as Run;
             Total.Text = $"{tilesList.Count}";
             Console.WriteLine($"Tile added to TileContainer!");
@@ -180,7 +171,6 @@ public class TileContainer
         bool isRemoved = false;
         try
         {
-            
             foreach (var tile in tilesList.ToList())
             {
                 if (tile.Id.Equals(id))
@@ -239,7 +229,6 @@ public class TileContainer
         tileToUpdate.lastTimeGradientBar.Percent =
             Math.Round(tileToUpdate.LastPlaytime / tileToUpdate.TotalPlaytime, 2);
 
-        // Console.WriteLine($"Updating last gradient bar {tileToUpdate.GameName}");
         tileToUpdate.lastTimeGradientBar.UpdateBar();
     }
 
@@ -348,9 +337,6 @@ public class TileContainer
         }
 
         UpdatePlaytimeBars();
-        // TextBlock mainTotalTimeBlock = Utils.mainWindow.FindName("TotalPlaytimeTextBlock") as TextBlock;
-        // mainTotalTimeBlock.Text =
-        //     $"Total Playtime: {Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
         TotalTimeRun.Text = $"{Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
         InitSave();
         Console.WriteLine("Legacy data updated!");
@@ -359,11 +345,6 @@ public class TileContainer
     public void RestoreBackup()
     {
         JsonHandler handler = new JsonHandler();
-        // if (Path.Exists(Utils.BackupDataFilePath))
-        // {
-        //     handler.RestoreBackupDataFile();
-        //     AddRestoredEntries(handler);
-        // }
         handler.RestoreBackupDataFile();
         AddRestoredEntries(handler);
     }
