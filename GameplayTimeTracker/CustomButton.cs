@@ -19,7 +19,7 @@ public class CustomButton : UserControl
     public Color ButtonColor { get; set; }
     public Color ButtonHoverColor { get; set; }
     public Color ButtonPressedColor { get; set; }
-    public Grid Grid { get; private set; } // Make Grid a property with private set
+    public Grid Grid { get; set; }
 
     // Dependency Properties
     public static readonly DependencyProperty MarginProperty =
@@ -48,7 +48,9 @@ public class CustomButton : UserControl
         ButtonType type = ButtonType.Default,
         double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
-        string buttonImagePath = "", bool isActive = true)
+        string buttonImagePath = "", bool isActive = true,
+        HorizontalAlignment hA = HorizontalAlignment.Center,
+        VerticalAlignment vA = VerticalAlignment.Center)
     {
         ButtonImagePath = buttonImagePath;
         IsActive = isActive;
@@ -58,8 +60,8 @@ public class CustomButton : UserControl
         {
             Width = width,
             Height = height,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = hA,
+            VerticalAlignment = vA,
         };
 
         ButtonBase = new Rectangle

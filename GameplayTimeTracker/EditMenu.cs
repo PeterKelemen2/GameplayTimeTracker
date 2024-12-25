@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Gtk;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using Grid = System.Windows.Controls.Grid;
+using Key = System.Windows.Input.Key;
 using Style = System.Windows.Style;
 
 namespace GameplayTimeTracker;
@@ -32,14 +33,14 @@ public class EditMenu : UserControl
 
     public TextBlock PathEditBlock { get; set; }
     public TextBox PathEditBox { get; set; }
-    public Button BrowseExeButton { get; set; }
-    public Button OpenFolderButton { get; set; }
+    public CustomButton BrowseExeButton { get; set; }
+    public CustomButton OpenFolderButton { get; set; }
 
     public TextBlock ArgsEditBlock { get; set; }
     public TextBox ArgsEditBox { get; set; }
 
-    public Button ChangeIconButton { get; set; }
-    public Button SaveButton { get; set; }
+    public CustomButton ChangeIconButton { get; set; }
+    public CustomButton SaveButton { get; set; }
 
     public Double[] colMargins = { 20, 210, 430 }; // Left margin
     public Double[] rowMargins = { 15, 35, 80, 100 }; // Top margin
@@ -48,6 +49,12 @@ public class EditMenu : UserControl
     private double indent = 5;
     private double animationTime = 0.5;
     private bool IsAnimating = false;
+    private double FromValue;
+    private double ToValue;
+    private double bHeight = 35;
+    private double bWidth = 140;
+    
+
 
     public EditMenu(Tile parent)
     {
@@ -56,6 +63,8 @@ public class EditMenu : UserControl
         Height = parent.TileHeight - Utils.dropShadowIcon.BlurRadius;
         Title = parent.GameName;
         IsOpen = false;
+        FromValue = -Height;
+        ToValue = -Utils.dropShadowIcon.BlurRadius;
     }
 
     private void CreateMenuContent()
@@ -65,14 +74,13 @@ public class EditMenu : UserControl
             Width = Width,
             Height = Height,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(-5, -Height, 0, 0)
+            Margin = new Thickness(-5, 0, 0, 0)
         };
 
         BgRectangle = new Rectangle
         {
             Width = Width,
             Height = Height,
-            // Fill = Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2),
             Fill = Parent.HorizontalEditG
                 ? Utils.createLinGradBrushHor(Utils.EditColor1, Utils.EditColor2)
                 : Utils.createLinGradBrushVer(Utils.EditColor1, Utils.EditColor2),
@@ -106,16 +114,38 @@ public class EditMenu : UserControl
         Container.Children.Add(ArgsEditBlock);
         Container.Children.Add(ArgsEditBox);
 
-        BrowseExeButton = SampleButton("New exe", col: 2, row: 1, topMarginModifier: 10);
+        // BrowseExeButton = SampleButton("New exe", col: 2, row: 1, topMarginModifier: 10);
+        // BrowseExeButton.Click += Parent.UpdateExe;
+        //
+        // OpenFolderButton = SampleButton("Open Folder", col: 2, row: 3, topMarginModifier: -10);
+        // OpenFolderButton.Click += Parent.OpenExeFolder;
+        //
+        // ChangeIconButton = SampleButton("Change Icon", col: 0, row: 1, topMarginModifier: 10, fromRight: true);
+        // ChangeIconButton.Click += Parent.UpdateIcons;
+        //
+        // SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true,
+        //     bType: ButtonType.Positive);
+        // SaveButton.Click += Parent.editSaveButton_Click;
+        BrowseExeButton = new CustomButton(text: "New exe", width: bWidth, height: bHeight, buttonImagePath: Utils.AddIcon,
+            hA: HorizontalAlignment.Right);
+        BrowseExeButton.Margin = new Thickness(0, -bHeight + 10, 180, 0);
         BrowseExeButton.Click += Parent.UpdateExe;
-        OpenFolderButton = SampleButton("Open Folder", col: 2, row: 3, topMarginModifier: -10);
+        
+        OpenFolderButton = new CustomButton(text: "Open Folder", width: bWidth, height: bHeight, buttonImagePath: Utils.FolderIcon,
+            hA: HorizontalAlignment.Right);
+        OpenFolderButton.Margin = new Thickness(0, bHeight + 30, 180, 0);
         OpenFolderButton.Click += Parent.OpenExeFolder;
-
-        ChangeIconButton = SampleButton("Change Icon", col: 0, row: 1, topMarginModifier: 10, fromRight: true);
+        
+        ChangeIconButton = new CustomButton(text: "Change Icon", width: bWidth, height: bHeight, buttonImagePath: Utils.EditIcon,
+            hA: HorizontalAlignment.Right);
+        ChangeIconButton.Margin = new Thickness(0, -bHeight + 10, colMargins[0], 0);
         ChangeIconButton.Click += Parent.UpdateIcons;
-        SaveButton = SampleButton("Save", col: 0, row: 3, topMarginModifier: -10, fromRight: true);
-        SaveButton.Background = new SolidColorBrush(Colors.LightGreen);
+        
+        SaveButton = new CustomButton(text: "Save Data", width: bWidth, height: bHeight, buttonImagePath: Utils.SaveIcon,
+            hA: HorizontalAlignment.Right, type:ButtonType.Positive);
+        SaveButton.Margin = new Thickness(0, bHeight + 30, colMargins[0], 0);
         SaveButton.Click += Parent.editSaveButton_Click;
+
         // SaveButton.Click += ShowSaveIndicator;
         Container.Children.Add(BrowseExeButton);
         Container.Children.Add(OpenFolderButton);
@@ -141,8 +171,8 @@ public class EditMenu : UserControl
         CreateMenuContent();
         ThicknessAnimation marginAnimation = new ThicknessAnimation
         {
-            From = new Thickness(0, -Height, 0, 0),
-            To = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
+            From = new Thickness(Container.Margin.Left, FromValue, 0, 0),
+            To = new Thickness(Container.Margin.Left, ToValue, 0, 0),
             Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
             FillBehavior = FillBehavior.HoldEnd,
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
@@ -167,8 +197,8 @@ public class EditMenu : UserControl
 
         ThicknessAnimation marginAnimation = new ThicknessAnimation
         {
-            From = new Thickness(0, -Utils.dropShadowIcon.BlurRadius, 0, 0),
-            To = new Thickness(0, -Height, 0, 0),
+            From = new Thickness(Container.Margin.Left, ToValue, 0, 0),
+            To = new Thickness(Container.Margin.Left, FromValue, 0, 0),
             Duration = new Duration(TimeSpan.FromSeconds(animationTime)),
             FillBehavior = FillBehavior.HoldEnd,
             EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
@@ -223,28 +253,6 @@ public class EditMenu : UserControl
         };
 
         return sampleTextBlock;
-    }
-
-    private Button SampleButton(string text = "", double width = 120, double height = Utils.TextBoxHeight, int col = 0,
-        int row = 0, double leftMarginModifier = 0, double topMarginModifier = 0, bool fromRight = false)
-    {
-        var newButton = new Button
-        {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Content = text,
-            Height = height,
-            Width = width,
-            HorizontalAlignment = fromRight ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(
-                fromRight ? 0 : colMargins[col] + leftMarginModifier,
-                rowMargins[row] + topMarginModifier,
-                fromRight ? colMargins[col] + leftMarginModifier : 0,
-                0),
-            Effect = Utils.dropShadowIcon
-        };
-
-        return newButton;
     }
 
     private void editBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

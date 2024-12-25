@@ -18,9 +18,6 @@
         <Content Include="assets\save.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="assets\save_small.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <Content Include="assets\no_icon.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
