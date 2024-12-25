@@ -352,11 +352,13 @@ public class TileContainer
     public void RestoreBackup()
     {
         JsonHandler handler = new JsonHandler();
-        if (File.Exists(Utils.BackupDataFilePath))
-        {
-            handler.RestoreBackupDataFile();
-            AddRestoredEntries(handler);
-        }
+        // if (Path.Exists(Utils.BackupDataFilePath))
+        // {
+        //     handler.RestoreBackupDataFile();
+        //     AddRestoredEntries(handler);
+        // }
+        handler.RestoreBackupDataFile();
+        AddRestoredEntries(handler);
     }
 
     public void AddRestoredEntries(JsonHandler handler)
