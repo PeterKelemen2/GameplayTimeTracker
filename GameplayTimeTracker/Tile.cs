@@ -185,12 +185,6 @@ public class Tile : UserControl
             toSave = true;
         }
 
-        // if (!ExePath.Equals(TileEditMenu.PathEditBox.Text))
-        // {
-        //     ExePath = TileEditMenu.PathEditBox.Text;
-        //     SetLaunchButtonState();
-        //     toSave = true;
-        // }
         toSave = HandleNewExePath(TileEditMenu.PathEditBox.Text);
 
         if (toSave)
@@ -249,7 +243,7 @@ public class Tile : UserControl
 
         return false;
     }
-    
+
     private async void LaunchExe(object sender, RoutedEventArgs e)
     {
         try
@@ -476,20 +470,7 @@ public class Tile : UserControl
             UpdateImageVars();
         }
     }
-    
-    private BitmapImage LoadBitmapImage(string path)
-    {
-        using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.StreamSource = stream;
-            bitmap.EndInit();
-            return bitmap;
-        }
-    }
-    
+
     private void ClearImageReferences()
     {
         bgImageGray = null;
@@ -528,8 +509,14 @@ public class Tile : UserControl
     // TODO: Needs fixing, uses too much memory
     public BitmapSource ConvertToGrayscale(BitmapSource source)
     {
+        // Check if the source image is already in grayscale format.
+        if (source.Format == PixelFormats.Gray8 || source.Format == PixelFormats.Gray16)
+        {
+            return source; // No conversion needed
+        }
+
         var stride = (source.PixelWidth * source.Format.BitsPerPixel + 7) / 8;
-        var pixels = new byte[stride * source.PixelWidth];
+        var pixels = new byte[stride * source.PixelHeight];
 
         source.CopyPixels(pixels, stride, 0);
 
@@ -539,17 +526,23 @@ public class Tile : UserControl
             var blue = pixels[i];
             var green = pixels[i + 1];
             var red = pixels[i + 2];
+
+            // Desaturation formula to get gray value
             var gray = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
-            pixels[i] = gray;
-            pixels[i + 1] = gray;
-            pixels[i + 2] = gray;
+
+            // Set red, green, and blue to the same value (gray)
+            pixels[i] = gray; // Blue
+            pixels[i + 1] = gray; // Green
+            pixels[i + 2] = gray; // Red
+            // Alpha (i + 3) is unchanged, retaining transparency if needed
         }
 
         return BitmapSource.Create(
             source.PixelWidth, source.PixelHeight,
             source.DpiX, source.DpiY,
-            source.Format, null, pixels, stride);
+            PixelFormats.Bgra32, null, pixels, stride);
     }
+
 
     public void UpdateImageVars(bool toSave = true)
     {
