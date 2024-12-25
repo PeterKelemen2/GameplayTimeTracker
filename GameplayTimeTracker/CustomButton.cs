@@ -12,7 +12,7 @@ namespace GameplayTimeTracker;
 
 public class CustomButton : UserControl
 {
-    public bool IsDisabled { get; set; }
+    public bool IsActive { get; set; }
     public Rectangle ButtonBase;
     private string ButtonImagePath;
     public Image ButtonImage { get; set; }
@@ -48,11 +48,12 @@ public class CustomButton : UserControl
         ButtonType type = ButtonType.Default,
         double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
-        string buttonImagePath = "", bool isDisabled = false)
+        string buttonImagePath = "", bool isActive = true)
     {
         ButtonImagePath = buttonImagePath;
-        IsDisabled = isDisabled;
+        IsActive = isActive;
         SetButtonColors(type);
+
         Grid = new Grid
         {
             Width = width,
@@ -67,7 +68,7 @@ public class CustomButton : UserControl
             Height = height,
             RadiusX = borderRadius,
             RadiusY = borderRadius,
-            Fill = IsDisabled ? new SolidColorBrush(Colors.Gray) : new SolidColorBrush(ButtonColor),
+            Fill = IsActive ? new SolidColorBrush(ButtonColor) : new SolidColorBrush(Colors.Gray),
             Effect = Utils.dropShadowIcon
         };
         Grid.Children.Add(ButtonBase);
@@ -122,19 +123,26 @@ public class CustomButton : UserControl
             }
         }
 
+        Console.WriteLine("Button state:" + IsActive);
+        if (IsActive)
+        {
+            Grid.MouseEnter += OnMouseEnter;
+            Grid.MouseLeave += OnMouseLeave;
+            Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
+            Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
+            ButtonBase.Fill = new SolidColorBrush(ButtonColor);
+        }
+        // else
+        // {
+        //     Grid.MouseEnter -= OnMouseEnter;
+        //     Grid.MouseLeave -= OnMouseLeave;
+        //     Grid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
+        //     Grid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
+        //     ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
+        //     IsActive = false;
+        // }
+
         Content = Grid;
-        if (IsDisabled)
-        {
-            // Grid.MouseEnter += OnMouseEnter;
-            // Grid.MouseLeave += OnMouseLeave;
-            // Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
-            // Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
-            Disable();
-        }
-        else
-        {
-            Enable();
-        }
     }
 
     public void SetButtonColors(ButtonType type)
@@ -161,28 +169,34 @@ public class CustomButton : UserControl
 
     public void Enable()
     {
-        Grid.MouseEnter += OnMouseEnter;
-        Grid.MouseLeave += OnMouseLeave;
-        Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
-        Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
-        ButtonBase.Fill = new SolidColorBrush(ButtonColor);
-        IsDisabled = false;
+        if (!IsActive)
+        {
+            Grid.MouseEnter += OnMouseEnter;
+            Grid.MouseLeave += OnMouseLeave;
+            Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
+            Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
+            ButtonBase.Fill = new SolidColorBrush(ButtonColor);
+            IsActive = true;
+        }
+        // IsDisabled = false;
     }
 
     public void Disable()
     {
-        if (!IsDisabled)
+        if (IsActive)
         {
             Grid.MouseEnter -= OnMouseEnter;
             Grid.MouseLeave -= OnMouseLeave;
             Grid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
             Grid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
+            ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
+            IsActive = false;
         }
-        IsDisabled = true;
-        
-        ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
+        // IsDisabled = true;
+
+        // ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
     }
-    
+
 
     private double animTime = 0.1;
 

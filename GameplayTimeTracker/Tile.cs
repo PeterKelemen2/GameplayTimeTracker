@@ -769,7 +769,7 @@ public class Tile : UserControl
         grid.Children.Add(RemoveButton);
 
         LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40,
-            type: ButtonType.Positive, isDisabled: false);
+            type: ButtonType.Positive);
         LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
         LaunchButton.VerticalAlignment = VerticalAlignment.Center;
         LaunchButton.Margin = new Thickness(0, 60, 50, 0);
