@@ -352,7 +352,7 @@ public class Tile : UserControl
             if (TileEditMenu.IsOpen) TileEditMenu.CloseMenu();
         }
 
-        double animationDuration = 2.0; // Duration for the animations
+        double animationDuration = 0.7; // Duration for the animations
         double currentHeight = RenderSize.Height;
 
         if (RenderTransform is not ScaleTransform scaleTransform)
