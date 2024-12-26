@@ -303,8 +303,11 @@
                                Foreground="Black"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               TextAlignment="Center"
+                               Margin="0,-2,0,0"
                                FontSize="16">
-                        <Run Text="Games managed:" FontWeight="Bold" />
+                        <Run Text="Apps managed" FontWeight="Bold" />
+                        <LineBreak/>
                         <Run x:Name="GameCountRun" Text="0" FontWeight="Normal" />
                     </TextBlock>
 
@@ -312,9 +315,11 @@
                                Foreground="Black"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
-                               Margin="0,0,15,0"
+                               TextAlignment="Right"
+                               Margin="0,-2,15,0"
                                FontSize="16">
-                        <Run Text="Total playtime:" FontWeight="Bold" />
+                        <Run Text="Total Playtime" FontWeight="Bold" />
+                        <LineBreak/>
                         <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
                     </TextBlock>
                 </Grid>

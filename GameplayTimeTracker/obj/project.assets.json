@@ -5442,19 +5442,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+    "C:\\Users\\Peti\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTracker\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+      "projectUniqueName": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
       "projectName": "Gameplay Time Tracker",
-      "projectPath": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTracker\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
-      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\RiderProjects\\GameplayTimeTracker\\GameplayTimeTracker\\obj\\",
+      "projectPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
+      "packagesPath": "C:\\Users\\Peti\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\obj\\",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
-        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Peti\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0-windows"
@@ -5472,6 +5473,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -5538,7 +5544,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Administrator\\.dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\Peti\\.dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }
