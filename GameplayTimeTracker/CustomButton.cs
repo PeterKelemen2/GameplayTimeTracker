@@ -146,7 +146,8 @@ public class CustomButton : UserControl
 
         Content = Grid;
     }
-
+    
+    // TODO: Add custom buttons to theme changer
     public void SetButtonColors(ButtonType type)
     {
         switch (type)
