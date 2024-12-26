@@ -44,33 +44,57 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "dependencies": {
+            "AtkSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
+            },
+            "CairoSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
+            },
             "Extended.Wpf.Toolkit": {
               "target": "Package",
               "version": "[4.6.1, )"
+            },
+            "GLibSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
+            },
+            "GdkSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
+            },
+            "GioSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
+            },
+            "GtkSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[3.24.24.95, )"
             },
             "IconExtractor": {
               "target": "Package",
               "version": "[1.0.1, )"
             },
+            "MonoMac.NetStandard": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[0.0.4, )"
+            },
             "NotifyIcon.Windows": {
               "target": "Package",
               "version": "[1.23.10209.11223, )"
             },
-            "SharpDX": {
+            "PangoSharp": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "target": "Package",
-              "version": "[4.2.0, )"
-            },
-            "SharpDX.D3DCompiler": {
-              "target": "Package",
-              "version": "[4.2.0, )"
-            },
-            "SharpDX.Direct2D1": {
-              "target": "Package",
-              "version": "[4.2.0, )"
-            },
-            "SharpDX.Direct3D11": {
-              "target": "Package",
-              "version": "[4.2.0, )"
+              "version": "[3.24.24.95, )"
             },
             "Shellify": {
               "target": "Package",
@@ -83,6 +107,11 @@
             "WindowsShortcutFactory": {
               "target": "Package",
               "version": "[1.2.0, )"
+            },
+            "Xceed.Wpf.Themes.MaterialDesign": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "(, )"
             }
           },
           "imports": [
