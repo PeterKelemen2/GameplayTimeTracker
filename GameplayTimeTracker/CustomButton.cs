@@ -20,6 +20,7 @@ public class CustomButton : UserControl
     public Color ButtonHoverColor { get; set; }
     public Color ButtonPressedColor { get; set; }
     public Grid Grid { get; set; }
+    ButtonType Type { get; set; }
 
     // Dependency Properties
     public static readonly DependencyProperty MarginProperty =
@@ -54,7 +55,8 @@ public class CustomButton : UserControl
     {
         ButtonImagePath = buttonImagePath;
         IsActive = isActive;
-        SetButtonColors(type);
+        Type = type;
+
 
         Grid = new Grid
         {
@@ -74,6 +76,7 @@ public class CustomButton : UserControl
             Effect = Utils.dropShadowIcon
         };
         Grid.Children.Add(ButtonBase);
+        SetButtonColors();
 
         TextBlock buttonTextBlock = new TextBlock
         {
@@ -146,11 +149,11 @@ public class CustomButton : UserControl
 
         Content = Grid;
     }
-    
+
     // TODO: Add custom buttons to theme changer
-    public void SetButtonColors(ButtonType type)
+    public void SetButtonColors()
     {
-        switch (type)
+        switch (Type)
         {
             case ButtonType.Positive:
                 ButtonColor = Utils.PositiveButtonColor;
@@ -168,6 +171,8 @@ public class CustomButton : UserControl
                 ButtonPressedColor = Utils.DefButtonColorPress;
                 break;
         }
+
+        ButtonBase.Fill = new SolidColorBrush(ButtonColor);
     }
 
     public void Enable()

@@ -147,6 +147,14 @@ public class EditMenu : UserControl
         ShowSaveIndicatorMethod();
     }
 
+    public void UpdateButtonColors()
+    {
+        BrowseExeButton.SetButtonColors();
+        OpenFolderButton.SetButtonColors();
+        ChangeIconButton.SetButtonColors();
+        SaveButton.SetButtonColors();
+    }
+    
     public void OpenMenu()
     {
         if (IsOpen || IsAnimating)

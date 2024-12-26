@@ -111,6 +111,9 @@ public class ThemeMenu : UserControl
             jsonHandler.WriteSelectedThemeToFile(comboBox.SelectedItem.ToString());
             AddColorEntries();
             SettingsMenu.SetBlurImage();
+            SwitchTileColorsButton.SetButtonColors();
+            SwitchEditColorsButton.SetButtonColors();
+            SwitchBarsColorsButton.SetButtonColors();
         };
 
         foreach (var theme in Themes)
@@ -208,6 +211,11 @@ public class ThemeMenu : UserControl
             SaveChangedColor(comboBox.SelectedItem.ToString(), colorEntry.ColorName, colorEntry.ColorValue);
             Utils.SetColors(GetColorDictionary(comboBox.SelectedItem.ToString()));
             SettingsMenu.MainUpdateMethod();
+            
+            SwitchTileColorsButton.SetButtonColors();
+            SwitchEditColorsButton.SetButtonColors();
+            SwitchBarsColorsButton.SetButtonColors();
+            
             Console.WriteLine(
                 $"Updated ColorEntry {colorEntry.ColorName}: {colorEntry.ColorValue} | Theme: {comboBox.SelectedItem}");
         }

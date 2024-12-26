@@ -730,6 +730,13 @@ public class Tile : UserControl
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+        LaunchButton.SetButtonColors();
+        EditButton.SetButtonColors();
+        RemoveButton.SetButtonColors();
+        if (TileEditMenu != null && TileEditMenu.IsOpen)
+        {
+            TileEditMenu.UpdateButtonColors();
+        }
     }
 
     public void SetGradients()

@@ -182,6 +182,8 @@ namespace GameplayTimeTracker
             InitSettings();
             tileContainer.UpdateTilesColors();
             ShowTilesOnCanvas();
+            AddButton.SetButtonColors();
+            SettingsButton.SetButtonColors();
             Utils.toUpdate = false;
         }
 
