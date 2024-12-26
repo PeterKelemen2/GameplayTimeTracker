@@ -299,7 +299,7 @@
 
                 <!-- Other content in the bottom 1/4 -->
                 <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
-                    <TextBlock x:Name="GamesLoaded"
+                    <TextBlock x:Name="GamesLoadedBlock"
                                Foreground="Black"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"

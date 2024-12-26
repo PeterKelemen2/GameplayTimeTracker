@@ -184,6 +184,8 @@ namespace GameplayTimeTracker
             ShowTilesOnCanvas();
             AddButton.SetButtonColors();
             SettingsButton.SetButtonColors();
+            // TotalPlaytimeTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
+            // GamesLoadedBlock.Foreground = new SolidColorBrush(Utils.FontColor);
             Utils.toUpdate = false;
         }
 
