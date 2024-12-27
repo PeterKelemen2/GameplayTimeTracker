@@ -18,7 +18,7 @@ initiating the update.
 
 
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/3wDo2Qx.png" width="500"/>
+	<img alt="Screenshot" src="https://i.imgur.com/1jRT6Vo.png" width="500"/>
 </p>
 
 ## Configuration
@@ -102,7 +102,7 @@ Note: Only the `Edit` and `Remove` buttons are using the specified color values 
 
 Each monitored application is tracked with the following properties:
 <p align="center">
-	<img alt="Editing using the Custom theme" src="https://i.imgur.com/dkaNQOd.png" width="500"/>
+	<img alt="Editing using the Custom theme" src="https://i.imgur.com/E12tyFx.png" width="500"/>
 </p>
 
 - `gameName`
