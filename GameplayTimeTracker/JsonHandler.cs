@@ -307,6 +307,13 @@ public class JsonHandler
         return paramsList;
     }
 
+    public List<Entry> GetEntriesFromFile()
+    {
+        string jsonString = File.ReadAllText(Utils.DataFilePath);
+        List<Entry> entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+        return entries;
+    }
+
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
@@ -368,7 +375,7 @@ public class JsonHandler
             {
                 // Just to be safe, if new data file is not satisfactory
                 BackupDataFile();
-                
+
                 string selectedFilePath = openFileDialog.FileName;
 
                 // Read the selected JSON file

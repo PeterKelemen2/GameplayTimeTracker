@@ -52,6 +52,10 @@ namespace GameplayTimeTracker
             tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
             GameCountRun.Text = $"{tileContainer.tilesList.Count}";
+            
+            // Experimenting with new container
+            EntryContainer entryContainer = new();
+            
         }
 
         private void InitSettings()

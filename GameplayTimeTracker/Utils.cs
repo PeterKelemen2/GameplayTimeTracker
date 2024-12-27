@@ -72,8 +72,21 @@ public class Utils
 
     public static bool toUpdate = false;
 
+    public static int[] p = { 33, 11, 11, 10, 10 , 11, 45, 45, 17};
+
     public static System.Windows.Window mainWindow = Application.Current.MainWindow;
 
+    public static  string Truncate(string value, int length)
+    {
+        if (value.Length < length)
+        {
+            // Pad the string with spaces if it's shorter than the desired length
+            return value.PadRight(length);
+        }
+
+        return value.Substring(0, length); // Otherwise, truncate the string
+    }
+    
     public static Window GetMainWindow()
     {
         return mainWindow;
