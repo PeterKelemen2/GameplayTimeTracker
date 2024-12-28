@@ -70,6 +70,7 @@ public class ProcessTracker
         Console.WriteLine("=================");
         foreach (var entry in entryRepository.EntriesList)
         {
+            _jsonHandler.SaveEntriesToFile(entryRepository.EntriesList);
             var isRunning =
                 runningProcesses.Any(p => p.ProcessName.Equals(Path.GetFileNameWithoutExtension(entry.ExePath),
                     StringComparison.OrdinalIgnoreCase));

@@ -18,11 +18,24 @@ public class EntryRepository
         PrintEntryList();
     }
 
+    public void AddEntry(Entry entry)
+    {
+        EntriesList.Add(entry);
+    }
+
+    public void RemoveEntry(Entry entry)
+    {
+        if (EntriesList.Contains(entry))
+        {
+            EntriesList.Remove(entry);
+        }
+    }
+
     public List<string> GetExeNames()
     {
         return EntriesList.Select(entry => Path.GetFileName(entry.ExePath)).ToList();
     }
-    
+
     private void SetTimeArrays()
     {
         foreach (var entry in EntriesList)
@@ -68,5 +81,4 @@ public class EntryRepository
             entry.LastPerc = Math.Round(entry.LastTime / entry.TotalTime, 2);
         }
     }
-    
 }
