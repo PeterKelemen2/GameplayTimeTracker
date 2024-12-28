@@ -307,13 +307,14 @@ public class JsonHandler
         return paramsList;
     }
 
-    public List<Entry> GetEntriesFromFile()
+    public List<Entry> GetEntriesFromFile(string filePath)
     {
-        string jsonString = File.ReadAllText(Utils.DataFilePath);
+        string jsonString = File.ReadAllText(filePath);
         List<Entry> entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
         return entries;
     }
 
+    
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);

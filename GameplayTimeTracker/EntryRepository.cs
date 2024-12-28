@@ -4,19 +4,28 @@ using System.Linq;
 
 namespace GameplayTimeTracker;
 
-public class EntryContainer
+public class EntryRepository
 {
     public List<Entry> EntriesList { get; set; }
 
-    public EntryContainer()
+    public EntryRepository()
     {
         JsonHandler handler = new JsonHandler();
-        EntriesList = handler.GetEntriesFromFile();
+        EntriesList = handler.GetEntriesFromFile(Utils.DataFilePath);
         UpdateTotalPercs();
-
+        SetTimeArrays();
         PrintEntryList();
     }
 
+    private void SetTimeArrays()
+    {
+        foreach (var entry in EntriesList)
+        {
+            entry.TotalPlay = Utils.GetArrayFromDoubleTime(entry.TotalTime);
+            entry.LastPlay = Utils.GetArrayFromDoubleTime(entry.LastTime);
+        }
+    }
+    
     private void PrintEntryList()
     {
         int[] p = Utils.p;
@@ -37,7 +46,7 @@ public class EntryContainer
         }
 
         Console.WriteLine(row + " |");
-        
+
         foreach (var entry in EntriesList)
         {
             Console.WriteLine(entry.ToString());

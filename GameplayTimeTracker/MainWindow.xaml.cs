@@ -54,8 +54,8 @@ namespace GameplayTimeTracker
             GameCountRun.Text = $"{tileContainer.tilesList.Count}";
             
             // Experimenting with new container
-            EntryContainer entryContainer = new();
-            
+            // EntryRepository entryRepository = new();
+            EntryController entryController = new EntryController();
         }
 
         private void InitSettings()

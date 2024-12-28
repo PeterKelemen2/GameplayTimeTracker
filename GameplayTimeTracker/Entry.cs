@@ -16,7 +16,24 @@ namespace GameplayTimeTracker
         private double _lastTime;
         private double _totalPerc;
         private double _lastPerc;
+        private int[] _totalArray = new int[3]; // H M S
+        private int[] _lastArray = new int[3];
         private DateTime _lastDate;
+
+        [JsonPropertyName("totalPlay")]
+        public int[] TotalPlay
+        {
+            get => _totalArray;
+            set => SetField(ref _totalArray, value);
+        }
+
+        [JsonPropertyName("lastPlay")]
+        public int[] LastPlay
+        {
+            get => _lastArray;
+            set => SetField(ref _lastArray, value);
+        }
+
 
         [JsonPropertyName("gameName")]
         public string Name
@@ -79,13 +96,26 @@ namespace GameplayTimeTracker
             set => SetField(ref _lastDate, value);
         }
 
+        public double GetTotalPlaytimeAsDouble()
+        {
+            return TotalPlay[0] + (TotalPlay[1] / 60) + (TotalPlay[2] / 3600);
+            // return TotalH + (TotalM / 60) + (TotalS / 3600);
+        }
+
+        public double GetLastPlaytimeAsDouble()
+        {
+            return LastPlay[0] + (LastPlay[1] / 60) + (LastPlay[2] / 3600);
+        }
+
         public override string ToString()
         {
             int[] p = Utils.p;
             return
                 $" | {Utils.Truncate(Name, p[0])}" +
-                $" | {Utils.Truncate(TotalTime.ToString(), p[1])}" +
-                $" | {Utils.Truncate(LastTime.ToString(), p[2])}" +
+                $" | {Utils.Truncate(string.Join(", ", TotalPlay), p[1])}" +
+                $" | {Utils.Truncate(string.Join(", ", LastPlay), p[2])}" +
+                // $" | {Utils.Truncate(TotalTime.ToString(), p[1])}" +
+                // $" | {Utils.Truncate(LastTime.ToString(), p[2])}" +
                 $" | {Utils.Truncate(TotalPerc.ToString(), p[3])}" +
                 $" | {Utils.Truncate(LastPerc.ToString(), p[4])}" +
                 $" | {Utils.Truncate(LastDate.ToString("yyyy-MM-dd"), p[5])}" +
@@ -93,22 +123,6 @@ namespace GameplayTimeTracker
                 $" | {Utils.Truncate(Path.GetFileName(IconPath), p[7])}" +
                 $" | {Utils.Truncate(Arguments, p[8])} |";
         }
-
-        // Constructor with optional parameters
-        // public Entry(string name, double totalTime = 0, DateTime? lastDate = null, double lastTime = 0,
-        //     string iconPath = "", string exePath = "", string args = "")
-        // {
-        //     _name = name;
-        //     _totalTime = totalTime;
-        //     _lastDate = lastDate ?? DateTime.Now;
-        //     _lastTime = lastTime;
-        //     _iconPath = iconPath;
-        //     _exePath = exePath;
-        //     _arguments = args;
-        //
-        //     _totalPerc = 0;
-        //     _lastPerc = 0;
-        // }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

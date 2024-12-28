@@ -505,6 +505,16 @@ public class Utils
 
         return (hours, minutes, seconds);
     }
+
+    public static int[] GetArrayFromDoubleTime(double totalHours)
+    {
+        int hours = (int)totalHours; // Extract the whole number part for hours
+        double totalMinutes = (totalHours - hours) * 60; // Convert remaining fraction to minutes
+        int minutes = (int)totalMinutes; // Extract the whole number part for minutes
+        int seconds = (int)((totalMinutes - minutes) * 60); // Convert remaining fraction to seconds
+
+        return new[] { hours, minutes, seconds };
+    }
     
     public static (int Hours, int Minutes, int Seconds) ConvertMinutesToTime(double totalMinutes)
     {
