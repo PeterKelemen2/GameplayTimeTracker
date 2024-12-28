@@ -52,9 +52,9 @@ namespace GameplayTimeTracker
             TotalTimeText.Text = Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble());
             tileContainer.TotalTimeRun = TotalTimeText;
             tracker.InitializeProcessTracker(tileContainer, entryRepository);
-            
+
             // tracker.entryRepository = entryRepository;
-            
+
             UpdateStackPane();
             GameCountRun.Text = $"{tileContainer.tilesList.Count}";
         }
@@ -105,9 +105,9 @@ namespace GameplayTimeTracker
         public MainWindow()
         {
             InitializeComponent();
-            
+
             entryRepository = new EntryRepository();
-            
+
             notificationHandler = new NotificationHandler();
             InitSettings();
             handler.InitializeContainer(tileContainer, settings);
@@ -201,7 +201,7 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
-                
+
                 while (true)
                 {
                     stopwatch.Restart();
@@ -262,6 +262,13 @@ namespace GameplayTimeTracker
 
                 Utils.PrepIcon(exePath, iconPath);
                 iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+
+                Entry newEntry = new Entry();
+                newEntry.Name = fileName;
+                newEntry.ExePath = exePath;
+                newEntry.IconPath = iconPath;
+                newEntry.Arguments = arguments;
+                entryRepository.AddEntry(newEntry);
 
                 try
                 {

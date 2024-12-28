@@ -53,8 +53,10 @@ public class ProcessTracker
         _tileContainer = tileContainer;
         entryRepository = repository;
         _exeNames = _tileContainer.GetExecutableNames();
+        
         EntryExeNames = entryRepository.GetExeNames();
-        InitializeExeDictionary();
+        // InitializeExeDictionary();
+        
         _jsonHandler = new JsonHandler();
 
         foreach (var exeName in _exeNames)

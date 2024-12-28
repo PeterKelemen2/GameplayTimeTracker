@@ -13,9 +13,27 @@ public class EntryRepository
     {
         JsonHandler handler = new JsonHandler();
         EntriesList = handler.GetEntriesFromFile(Utils.DataFilePath);
+        CheckForOldTime();
         UpdateTotalPercs();
         SetTimeArrays();
         PrintEntryList();
+    }
+
+    private void CheckForOldTime()
+    {
+        int[] empty = new int[] { 0, 0, 0 };
+        foreach (var entry in EntriesList)
+        {
+            if (entry.TotalPlay == empty && entry.TotalTime > 0.0)
+            {
+                entry.TotalPlay = Utils.GetArrayFromDoubleTime(entry.TotalTime);
+            }
+
+            if (entry.LastPlay == empty && entry.LastTime > 0.0)
+            {
+                entry.LastPlay = Utils.GetArrayFromDoubleTime(entry.LastTime);
+            }
+        }
     }
 
     public void AddEntry(Entry entry)
