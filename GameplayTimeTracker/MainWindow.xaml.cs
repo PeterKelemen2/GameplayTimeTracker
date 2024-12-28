@@ -290,7 +290,8 @@ namespace GameplayTimeTracker
                         tileContainer.AddTile(newTile, newlyAdded: true);
                         // tileContainer.ListTiles();
                         ShowTilesOnCanvas();
-                        handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
+                        // handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
+                        handler.WriteEntriesToFile(entryRepository);
                     }
                     else
                     {
@@ -470,7 +471,8 @@ namespace GameplayTimeTracker
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            tileContainer?.InitSave();
+            // tileContainer?.InitSave();
+            handler.WriteEntriesToFile(entryRepository);
             // Close the application if Yes is clicked
             Application.Current.Shutdown();
         }

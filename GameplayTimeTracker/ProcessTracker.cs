@@ -146,7 +146,7 @@ public class ProcessTracker
                 if (tile.LastS % 60 == 0 || tile.TotalS % 60 == 0)
                 {
                     _tileContainer.UpdatePlaytimeBars();
-                    _tileContainer.InitSave();
+                    _tileContainer.Save();
                     _tileContainer.TotalTimeRun.Text = $"{Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
                 }
             }

@@ -267,7 +267,7 @@ public class JsonHandler
     public void SaveEntriesToFile(List<Entry> entries)
     {
         string defaultJson = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(Utils.ExperimentalDataFilePath, defaultJson);
+        File.WriteAllText(Utils.DataFilePath, defaultJson);
     }
 
     // Creates a list of parameters used for creating tiles in the container.
@@ -310,11 +310,13 @@ public class JsonHandler
     public void InitContainer(TileContainer cont, EntryRepository repo, Settings settings)
     {
         CheckForDataDirectory();
-        
+
         if (!File.Exists(Utils.DataFilePath))
         {
             File.WriteAllText(Utils.DataFilePath, "[]");
         }
+
+        cont.repository = repo;
         cont.tilesList.Clear();
         if (repo.EntriesList.Count > 0)
         {
@@ -353,6 +355,12 @@ public class JsonHandler
         string jsonString = File.ReadAllText(filePath);
         List<Entry> entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
         return entries;
+    }
+
+    public void WriteEntriesToFile(EntryRepository repository)
+    {
+        string jsonString = JsonSerializer.Serialize(repository.EntriesList, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Utils.DataFilePath, jsonString);
     }
 
 

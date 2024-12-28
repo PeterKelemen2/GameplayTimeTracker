@@ -160,7 +160,7 @@ public class Tile : UserControl
                 GameName = savedTitle;
                 TileEditMenu.TitleEditBox.Text = savedTitle;
                 titleTextBlock.Text = savedTitle;
-                _tileContainer.InitSave();
+                _tileContainer.Save();
                 PopupMenu popupMenu =
                     new PopupMenu(text: "An error occured when saving new title!", type: PopupType.OK);
                 popupMenu.OpenMenu();
@@ -192,7 +192,7 @@ public class Tile : UserControl
         if (toSave)
         {
             TileEditMenu.ToSave = true;
-            _tileContainer.InitSave();
+            _tileContainer.Save();
             Console.WriteLine("Data file saved!");
         }
     }
@@ -238,7 +238,7 @@ public class Tile : UserControl
                 ExePath = filePath;
                 if (TileEditMenu.IsOpen) TileEditMenu.PathEditBox.Text = $"{ExePath}";
                 SetLaunchButtonState();
-                _tileContainer.InitSave();
+                _tileContainer.Save();
                 return true;
             }
         }
@@ -556,7 +556,7 @@ public class Tile : UserControl
         image.Source = bgImageColor;
 
         ToggleBgImageColor(IsRunning);
-        if (toSave) _tileContainer.InitSave();
+        if (toSave) _tileContainer.Save();
 
         Console.WriteLine($"Icon for {GameName} changed to {absoluteIconPath}");
     }
@@ -652,7 +652,7 @@ public class Tile : UserControl
         LastPlayDate = DateTime.Now;
         UpdatePlaytimeText();
         _tileContainer.UpdateLastPlaytimeBarOfTile(Id);
-        _tileContainer.InitSave();
+        _tileContainer.Save();
     }
 
     public static readonly DependencyProperty GameNameProperty =

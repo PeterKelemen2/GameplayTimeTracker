@@ -14,6 +14,7 @@ public class TileContainer
     private JsonHandler handler = new JsonHandler();
     public List<Tile> tilesList { get; set; } = new();
     public Run TotalTimeRun { get; set; }
+    public EntryRepository repository;
     MainWindow _mainWindow;
 
     public TileContainer()
@@ -44,11 +45,12 @@ public class TileContainer
             .ToList();
     }
 
-    public void InitSave()
-    {
-        handler.WriteContentToFile(this, Utils.DataFilePath);
-        Console.WriteLine(" ==== Saved! ====");
-    }
+    // public void InitSave()
+    // {
+    //     // handler.WriteContentToFile(this, Utils.DataFilePath);
+    //     handler.WriteEntriesToFile(repository);
+    //     Console.WriteLine(" ==== Saved! ====");
+    // }
 
     // Sorts content of the tile list by a certain property in ascending or descending order.
     public List<Tile> SortedByProperty(string propertyName = "", bool ascending = true)
@@ -117,7 +119,7 @@ public class TileContainer
             UpdatePlaytimeBars();
 
             newTile.ToggleBgImageColor(newTile.IsRunning);
-            
+
             Run Total = Utils.mainWindow.FindName("GameCountRun") as Run;
             Total.Text = $"{tilesList.Count}";
             Console.WriteLine($"Tile added to TileContainer!");
@@ -157,7 +159,6 @@ public class TileContainer
         bool isRemoved = false;
         try
         {
-            
             foreach (var tile in tilesList.ToList())
             {
                 if (tile.Id.Equals(id))
@@ -180,7 +181,7 @@ public class TileContainer
             String message = isRemoved ? $"Tile with ID {id} removed." : $"Couldn't find Tile with ID {id}";
             Console.WriteLine(message);
 
-            InitSave();
+            handler.WriteEntriesToFile(repository);
         }
     }
 
@@ -325,7 +326,7 @@ public class TileContainer
 
         UpdatePlaytimeBars();
         TotalTimeRun.Text = $"{Utils.GetPrettyTime(GetTLTotalTimeDouble())}";
-        InitSave();
+        Save();
         Console.WriteLine("Legacy data updated!");
     }
 
@@ -334,6 +335,11 @@ public class TileContainer
         JsonHandler handler = new JsonHandler();
         handler.RestoreBackupDataFile();
         // AddRestoredEntries(handler);
+    }
+
+    public void Save()
+    {
+        handler.WriteEntriesToFile(repository);
     }
 
     // public void AddRestoredEntries(JsonHandler handler)

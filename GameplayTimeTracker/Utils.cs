@@ -36,7 +36,7 @@ public class Utils
     private const string SavedIconsFolderName = "Saved Icons";
     private const string BackupFolderName = "Backup Data";
     public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
-    public static string ExperimentalDataFilePath = Path.Combine(DocumentsPath, ExperimentalDataName);
+    // public static string ExperimentalDataFilePath = Path.Combine(DocumentsPath, ExperimentalDataName);
     public static string BackupDataFilePath = Path.Combine(DocumentsPath, BackupDataFileName);
     public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
