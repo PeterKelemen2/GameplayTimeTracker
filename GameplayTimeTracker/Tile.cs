@@ -3,6 +3,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
@@ -847,11 +848,15 @@ public class Tile : UserControl
         grid.Children.Add(container);
 
         titleTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        titleTextBlock.Text = GameName;
+        // titleTextBlock.Text = GameName;
         titleTextBlock.FontSize = Utils.TitleFontSize;
         titleTextBlock.Margin = new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2, 0, 0);
-        TextOptions.SetTextRenderingMode(titleTextBlock, TextRenderingMode.ClearType);
-        TextOptions.SetTextFormattingMode(titleTextBlock, TextFormattingMode.Ideal);
+        Binding titleBinding = new Binding("Name")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.TwoWay
+        };
+        titleTextBlock.SetBinding(TextBlock.TextProperty, titleBinding);
 
         runningTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         runningTextBlock.Text = "Running!";
@@ -896,9 +901,22 @@ public class Tile : UserControl
         // new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
+        // totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0);
+
+        // totalPlaytime = new TextBlock
+        // {
+        //     Foreground = new SolidColorBrush(Utils.FontColor),
+        //     FontSize = Utils.TextFontSize,
+        //     Margin = new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0),
+        // };
+        Binding totalTimeBinding = new Binding("TotalPlayFormatted")
+        {
+            Source = DataEntry, // Bind to DataEntry, not DataEntry.TotalPlayFormatted
+            Mode = BindingMode.OneWay // Updates the TextBlock when TotalPlayFormatted changes
+        };
+        totalPlaytime.SetBinding(TextBlock.TextProperty, totalTimeBinding);
 
         SetPlaytimeBars(tmm[2]);
 

@@ -139,8 +139,8 @@ public class ProcessTracker
                 if (!tile.lastPlaytimeTitle.Text.Equals(currSessionText)) tile.lastPlaytimeTitle.Text = currSessionText;
                 if (!tile.runningTextBlock.Text.Equals(runningText)) tile.runningTextBlock.Text = runningText;
 
-                tile.IncrementPlaytime();
-                tile.UpdatePlaytimeText();
+                // tile.IncrementPlaytime();
+                // tile.UpdatePlaytimeText();
 
                 // Only update if a minute is passed
                 if (tile.LastS % 60 == 0 || tile.TotalS % 60 == 0)

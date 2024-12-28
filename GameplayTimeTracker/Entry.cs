@@ -36,6 +36,12 @@ namespace GameplayTimeTracker
             set => SetField(ref _totalArray, value);
         }
 
+        [JsonIgnore]
+        public string TotalPlayFormatted =>
+            TotalPlay != null && TotalPlay.Length == 3
+                ? $"{_totalArray[0]}h {_totalArray[1]}m {_totalArray[2]}s"
+                : "0h 0m 0s";
+
         [JsonPropertyName("lastPlay")]
         public int[] LastPlay
         {
@@ -161,8 +167,6 @@ namespace GameplayTimeTracker
                 $" | {Utils.Truncate(Name, p[0])}" +
                 $" | {Utils.Truncate(string.Join(", ", TotalPlay), p[1])}" +
                 $" | {Utils.Truncate(string.Join(", ", LastPlay), p[2])}" +
-                // $" | {Utils.Truncate(TotalTime.ToString(), p[1])}" +
-                // $" | {Utils.Truncate(LastTime.ToString(), p[2])}" +
                 $" | {Utils.Truncate(TotalPerc.ToString(), p[3])}" +
                 $" | {Utils.Truncate(LastPerc.ToString(), p[4])}" +
                 $" | {Utils.Truncate(LastDate.ToString("yyyy-MM-dd"), p[5])}" +
