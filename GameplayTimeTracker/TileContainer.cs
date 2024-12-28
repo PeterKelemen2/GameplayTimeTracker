@@ -333,37 +333,39 @@ public class TileContainer
     {
         JsonHandler handler = new JsonHandler();
         handler.RestoreBackupDataFile();
-        AddRestoredEntries(handler);
+        // AddRestoredEntries(handler);
     }
 
-    public void AddRestoredEntries(JsonHandler handler)
-    {
-        List<Params> paramsList = handler.GetDataFromFile();
-        Settings settings = handler.GetSettingsFromFile();
-        foreach (var entry in paramsList)
-        {
-            var matchingTile = tilesList.FirstOrDefault(tile => tile.ExePath == entry.exePath);
-            Tile newTile = new Tile(
-                this,
-                entry.gameName,
-                entry.lastPlayDate.Year < 2000 || entry.lastPlayDate == null
-                    ? new DateTime(2, 1, 1)
-                    : entry.lastPlayDate,
-                settings.HorizontalTileGradient,
-                settings.HorizontalEditGradient,
-                settings.BigBgImages,
-                entry.totalTime,
-                entry.lastPlayedTime,
-                entry.iconPath,
-                entry.exePath,
-                entry.arguments == null ? "" : entry.arguments);
-            if (matchingTile != null)
-            {
-                tilesList.Remove(matchingTile);
-            }
-
-            AddTile(newTile, newlyAdded: true);
-        }
-        // InitSave();
-    }
+    // public void AddRestoredEntries(JsonHandler handler)
+    // {
+    //     List<Params> paramsList = handler.GetDataFromFile();
+    //     Settings settings = handler.GetSettingsFromFile();
+    //     
+    //     foreach (var entry in paramsList)
+    //     {
+    //         var matchingTile = tilesList.FirstOrDefault(tile => tile.ExePath == entry.exePath);
+    //         // Tile newTile = new Tile(
+    //         //     this,
+    //         //     entry.gameName,
+    //         //     entry.lastPlayDate.Year < 2000 || entry.lastPlayDate == null
+    //         //         ? new DateTime(2, 1, 1)
+    //         //         : entry.lastPlayDate,
+    //         //     settings.HorizontalTileGradient,
+    //         //     settings.HorizontalEditGradient,
+    //         //     settings.BigBgImages,
+    //         //     entry.totalTime,
+    //         //     entry.lastPlayedTime,
+    //         //     entry.iconPath,
+    //         //     entry.exePath,
+    //         //     entry.arguments == null ? "" : entry.arguments);
+    //         Tile newTile = new Tile(this, entry, matchingTile);
+    //         if (matchingTile != null)
+    //         {
+    //             tilesList.Remove(matchingTile);
+    //         }
+    //
+    //         AddTile(newTile, newlyAdded: true);
+    //     }
+    //     // InitSave();
+    // }
 }

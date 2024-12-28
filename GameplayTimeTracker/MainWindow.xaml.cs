@@ -110,7 +110,7 @@ namespace GameplayTimeTracker
 
             notificationHandler = new NotificationHandler();
             InitSettings();
-            handler.InitializeContainer(tileContainer, settings);
+            handler.InitializeContainer(tileContainer, entryRepository, settings);
             dragDropOverlay = new DragDropOverlay();
             DragDropGrid.Children.Add(dragDropOverlay);
             // CheckToUpdate();    
@@ -273,12 +273,14 @@ namespace GameplayTimeTracker
                 try
                 {
                     Console.WriteLine($"Trying to add: {fileName}");
-                    Tile newTile = new Tile(tileContainer, fileName, new DateTime(1999, 1, 1, 1, 1, 1),
-                        settings.HorizontalTileGradient,
-                        settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
-                        exePath: exePath,
-                        shortcutArgs: arguments.Length > 0 ? arguments : ""
-                    );
+                    // Tile newTile = new Tile(tileContainer, fileName, new DateTime(1999, 1, 1, 1, 1, 1),
+                    //     settings.HorizontalTileGradient,
+                    //     settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
+                    //     exePath: exePath,
+                    //     shortcutArgs: arguments.Length > 0 ? arguments : "",
+                    //     data: newEntry
+                    // );
+                    Tile newTile = new Tile(tileContainer, newEntry, settings);
 
                     newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
 

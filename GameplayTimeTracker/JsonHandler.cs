@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -270,37 +271,71 @@ public class JsonHandler
     }
 
     // Creates a list of parameters used for creating tiles in the container.
-    public void InitializeContainer(TileContainer container, Settings settings)
+    public void InitializeContainer(TileContainer container, EntryRepository repository, Settings settings)
+    {
+        // CheckForDataDirectory();
+
+        // if (!File.Exists(Utils.DataFilePath))
+        // {
+        //     File.WriteAllText(Utils.DataFilePath, "[]");
+        // }
+        //
+        // container.tilesList.Clear();
+        // string jsonString = File.ReadAllText(Utils.DataFilePath);
+        //
+        // List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
+        // if (paramsList != null && paramsList.Count > 0)
+        // {
+        //     foreach (var param in paramsList)
+        //     {
+        //         container.AddTile(new Tile(
+        //             container,
+        //             param.gameName,
+        //             param.lastPlayDate.Year < 2000 || param.lastPlayDate == null
+        //                 ? new DateTime(2, 1, 1)
+        //                 : param.lastPlayDate,
+        //             settings.HorizontalTileGradient,
+        //             settings.HorizontalEditGradient,
+        //             settings.BigBgImages,
+        //             param.totalTime,
+        //             param.lastPlayedTime,
+        //             param.iconPath,
+        //             param.exePath,
+        //             param.arguments == null ? "" : param.arguments));
+        //     }
+        // }
+        InitContainer(container, new EntryRepository(), settings);
+    }
+
+    public void InitContainer(TileContainer cont, EntryRepository repo, Settings settings)
     {
         CheckForDataDirectory();
-
+        
         if (!File.Exists(Utils.DataFilePath))
         {
             File.WriteAllText(Utils.DataFilePath, "[]");
         }
-
-        container.tilesList.Clear();
-        string jsonString = File.ReadAllText(Utils.DataFilePath);
-
-        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
-        if (paramsList != null && paramsList.Count > 0)
+        cont.tilesList.Clear();
+        if (repo.EntriesList.Count > 0)
         {
-            foreach (var param in paramsList)
+            foreach (var entry in repo.EntriesList)
             {
-                container.AddTile(new Tile(
-                    container,
-                    param.gameName,
-                    param.lastPlayDate.Year < 2000 || param.lastPlayDate == null
-                        ? new DateTime(2, 1, 1)
-                        : param.lastPlayDate,
-                    settings.HorizontalTileGradient,
-                    settings.HorizontalEditGradient,
-                    settings.BigBgImages,
-                    param.totalTime,
-                    param.lastPlayedTime,
-                    param.iconPath,
-                    param.exePath,
-                    param.arguments == null ? "" : param.arguments));
+                // Tile toAdd = new Tile(cont, 
+                //     entry.Name,
+                //     entry.LastDate.Year < 2000 || entry.LastDate == null
+                //     ? new DateTime(2, 1, 1)
+                //     : entry.LastDate,
+                //     settings.HorizontalTileGradient,
+                //     settings.HorizontalEditGradient,
+                //     settings.BigBgImages,
+                //     entry.TotalTime,
+                //     entry.LastTime,
+                //     entry.IconPath,
+                //     entry.ExePath,
+                //     entry.Arguments == null ? "" : entry.Arguments,
+                //     data: entry);
+                Tile toAdd = new Tile(cont, entry, settings);
+                cont.AddTile(toAdd);
             }
         }
     }

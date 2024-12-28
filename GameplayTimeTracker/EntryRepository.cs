@@ -15,30 +15,37 @@ public class EntryRepository
         EntriesList = handler.GetEntriesFromFile(Utils.DataFilePath);
         CheckForOldTime();
         UpdateTotalPercs();
-        SetTimeArrays();
+        // SetTimeArrays();
         PrintEntryList();
     }
 
     private void CheckForOldTime()
     {
-        int[] empty = new int[] { 0, 0, 0 };
+        int[] empty = { 0, 0, 0 };
+
         foreach (var entry in EntriesList)
         {
-            if (entry.TotalPlay == empty && entry.TotalTime > 0.0)
+            if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalTime > 0.0)
             {
                 entry.TotalPlay = Utils.GetArrayFromDoubleTime(entry.TotalTime);
             }
 
-            if (entry.LastPlay == empty && entry.LastTime > 0.0)
+            if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
             {
                 entry.LastPlay = Utils.GetArrayFromDoubleTime(entry.LastTime);
             }
         }
     }
 
+    private bool IsArrayEqual(int[] array1, int[] array2)
+    {
+        return array1 != null && array2 != null && array1.SequenceEqual(array2);
+    }
+
     public void AddEntry(Entry entry)
     {
         EntriesList.Add(entry);
+        UpdateTotalPercs();
     }
 
     public void RemoveEntry(Entry entry)
@@ -46,6 +53,7 @@ public class EntryRepository
         if (EntriesList.Contains(entry))
         {
             EntriesList.Remove(entry);
+            UpdateTotalPercs();
         }
     }
 

@@ -98,6 +98,8 @@ public class Tile : UserControl
     private double[] fColMarg;
     private double[] sColMarg;
 
+    public Entry DataEntry;
+
     public void OpenExeFolder(object sender, RoutedEventArgs e)
     {
         Process.Start("explorer.exe", $"/select,\"{ExePath}\"");
@@ -660,53 +662,64 @@ public class Tile : UserControl
     {
     }
 
-    public Tile(TileContainer tileContainer, string gameName, DateTime lastPlayDate, bool horizontalTile = true,
-        bool horizontalEdit = true, bool bigBgImages = false, double totalTime = 0, double lastPlayedTime = 0,
-        string? iconImagePath = SampleImagePath, string exePath = "", string shortcutArgs = "", double width = 760)
+    // public Tile(TileContainer tileContainer, string gameName, DateTime lastPlayDate, bool horizontalTile = true,
+    //     bool horizontalEdit = true, bool bigBgImages = false, double totalTime = 0, double lastPlayedTime = 0,
+    //     string? iconImagePath = SampleImagePath, string exePath = "", string shortcutArgs = "", double width = 760,
+    //     Entry data = null)
+    public Tile(TileContainer tileContainer, Entry data, Settings settings, double width = 760)
     {
+        _tileContainer = tileContainer;
+        DataEntry = data;
+
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Stretch;
-        WasRunning = false;
-        IsRunning = false;
 
-        _tileContainer = tileContainer;
-        GameName = gameName;
+        WasRunning = data.WasRunning;
+        IsRunning = data.IsRunning;
+
+        GameName = data != null ? DataEntry.Name : "No name";
         TileWidth = width;
         TileHeight = Utils.THeight;
         CornerRadius = Utils.BorderRadius;
 
-        Console.WriteLine(lastPlayDate.Year);
-        if (lastPlayDate.Year < 2000)
+        Console.WriteLine(DataEntry.LastDate.Year);
+        if (DataEntry.LastDate.Year < 2000)
         {
             LastPlayDateString = "Never";
         }
         else
         {
-            LastPlayDate = lastPlayDate;
+            LastPlayDate = DataEntry.LastDate;
             LastPlayDateString =
-                $"{lastPlayDate.ToShortDateString().Replace(" ", "")} {lastPlayDate.ToShortTimeString()}";
+                $"{LastPlayDate.ToShortDateString().Replace(" ", "")} {LastPlayDate.ToShortTimeString()}";
         }
 
-        TotalPlaytime = totalTime < 0 ? 0 : totalTime;
-        LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
-        TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
-        LastPlaytimePercent = LastPlaytime / TotalPlaytime;
+        // TotalPlaytime = totalTime < 0 ? 0 : totalTime;
+        // LastPlaytime = lastPlayedTime > TotalPlaytime ? TotalPlaytime : (lastPlayedTime < 0 ? 0 : lastPlayedTime);
+        // TotalPlaytimePercent = TotalPlaytime / tileContainer.GetTLTotalTimeDouble();
+        // LastPlaytimePercent = LastPlaytime / TotalPlaytime;
+        TotalPlaytime = DataEntry.TotalTime;
+        LastPlaytime = DataEntry.LastTime;
+        TotalPlaytimePercent = DataEntry.TotalPerc;
+        LastPlaytimePercent = DataEntry.LastPerc;
 
-        (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
-        (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
+        // (TotalH, TotalM, TotalS) = Utils.ConvertDoubleToTime(TotalPlaytime);
+        // (LastH, LastM, LastS) = Utils.ConvertDoubleToTime(LastPlaytime);
+        (TotalH, TotalM, TotalS) = (DataEntry.TotalPlay[0], DataEntry.TotalPlay[1], DataEntry.TotalPlay[2]);
+        (LastH, LastM, LastS) = (DataEntry.LastPlay[0], DataEntry.LastPlay[1], DataEntry.LastPlay[2]);
 
-        IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
+        // IconImagePath = iconImagePath == null ? SampleImagePath : iconImagePath;
+        IconImagePath = DataEntry.IconPath == null ? SampleImagePath : DataEntry.IconPath;
         if (!File.Exists(IconImagePath)) IconImagePath = SampleImagePath;
 
-        ExePath = exePath;
+        ExePath = DataEntry.ExePath;
         ExePathName = System.IO.Path.GetFileNameWithoutExtension(ExePath);
 
-        ShortcutArgs = shortcutArgs.Length > 0 ? shortcutArgs : "";
+        ShortcutArgs = DataEntry.Arguments;
 
-        HorizontalTileG = horizontalTile;
-        HorizontalEditG = horizontalEdit;
-        BigBgImages = bigBgImages;
-
+        HorizontalTileG = settings.HorizontalTileGradient;
+        HorizontalEditG = settings.HorizontalEditGradient;
+        BigBgImages = settings.BigBgImages;
         WasMoved = false;
         SetupIconVars();
     }
