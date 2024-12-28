@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace GameplayTimeTracker;
@@ -17,6 +18,11 @@ public class EntryRepository
         PrintEntryList();
     }
 
+    public List<string> GetExeNames()
+    {
+        return EntriesList.Select(entry => Path.GetFileName(entry.ExePath)).ToList();
+    }
+    
     private void SetTimeArrays()
     {
         foreach (var entry in EntriesList)

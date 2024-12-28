@@ -44,18 +44,19 @@ namespace GameplayTimeTracker
         private CustomButton SettingsButton;
         private CustomButton AddButton;
 
+        public EntryRepository entryRepository;
+
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
             TotalTimeText.Text = Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble());
             tileContainer.TotalTimeRun = TotalTimeText;
-            tracker.InitializeProcessTracker(tileContainer);
+            tracker.InitializeProcessTracker(tileContainer, entryRepository);
+            
+            // tracker.entryRepository = entryRepository;
+            
             UpdateStackPane();
             GameCountRun.Text = $"{tileContainer.tilesList.Count}";
-            
-            // Experimenting with new container
-            // EntryRepository entryRepository = new();
-            EntryController entryController = new EntryController();
         }
 
         private void InitSettings()
@@ -104,7 +105,9 @@ namespace GameplayTimeTracker
         public MainWindow()
         {
             InitializeComponent();
-
+            
+            entryRepository = new EntryRepository();
+            
             notificationHandler = new NotificationHandler();
             InitSettings();
             handler.InitializeContainer(tileContainer, settings);
@@ -198,13 +201,14 @@ namespace GameplayTimeTracker
             await Task.Run(() =>
             {
                 stopwatch.Start();
-
+                
                 while (true)
                 {
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         tracker.HandleProcesses();
+                        tracker.HandleProcessesNew();
                         RearrangeTiles();
                     });
 

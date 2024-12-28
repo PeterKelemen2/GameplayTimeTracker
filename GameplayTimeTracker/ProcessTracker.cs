@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Controls;
 
@@ -11,11 +12,16 @@ public class ProcessTracker
     // List<Tile> _tilesList;
     List<String> _exeNames;
     TileContainer _tileContainer;
+
+    public EntryRepository entryRepository;
+    List<string> EntryExeNames { get; set; }
+
     private string runningText = "Running!";
     private string currSessionText = "Current Session:";
     private string lastSessionText = "Last Session:";
     private string notRunningText = "";
     private Dictionary<string, bool> runningDictionary;
+    private JsonHandler _jsonHandler;
 
     public bool IsDictSet { get; set; }
 
@@ -42,16 +48,65 @@ public class ProcessTracker
     }
 
     // Sets up process tracker from the tile container
-    public void InitializeProcessTracker(TileContainer tileContainer)
+    public void InitializeProcessTracker(TileContainer tileContainer, EntryRepository repository)
     {
         _tileContainer = tileContainer;
+        entryRepository = repository;
         _exeNames = _tileContainer.GetExecutableNames();
+        EntryExeNames = entryRepository.GetExeNames();
         InitializeExeDictionary();
+        _jsonHandler = new JsonHandler();
 
         foreach (var exeName in _exeNames)
         {
             Console.WriteLine($"Exe name: {exeName}");
         }
+    }
+
+    public void HandleProcessesNew()
+    {
+        var runningProcesses = Process.GetProcesses();
+
+        Console.WriteLine("=================");
+        foreach (var entry in entryRepository.EntriesList)
+        {
+            var isRunning =
+                runningProcesses.Any(p => p.ProcessName.Equals(Path.GetFileNameWithoutExtension(entry.ExePath),
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (isRunning)
+            {
+                Console.WriteLine(entry);
+                // Setting things up if first start
+                if (entry.WasRunning == false)
+                {
+                    entry.WasRunning = true;
+                    entry.IsRunning = true;
+                    entry.ResetLastPlaytime();
+                    Console.WriteLine($"Setting new playtime for {entry.ExePath}");
+                }
+
+                entry.IncrementTime();
+
+                // Only update if a minute is passed
+                if (entry.LastPlay[2] % 60 == 0 || entry.TotalPlay[2] % 60 == 0)
+                {
+                    Console.WriteLine("A Minute passed");
+                    _jsonHandler.SaveEntriesToFile(entryRepository.EntriesList);
+                }
+            }
+            else
+            {
+                // If it was running, set it back to initial state
+                if (entry.IsRunning)
+                {
+                    entry.WasRunning = false;
+                    entry.IsRunning = false;
+                }
+            }
+        }
+
+        Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
     }
 
     // Checks if a tile is running and sets values accordingly

@@ -31,10 +31,12 @@ public class Utils
     // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
     private const string DataFileName = "data.json";
+    private const string ExperimentalDataName = "experimental_data.json";
     private const string BackupDataFileName = "backup_data.json";
     private const string SavedIconsFolderName = "Saved Icons";
     private const string BackupFolderName = "Backup Data";
     public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
+    public static string ExperimentalDataFilePath = Path.Combine(DocumentsPath, ExperimentalDataName);
     public static string BackupDataFilePath = Path.Combine(DocumentsPath, BackupDataFileName);
     public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);

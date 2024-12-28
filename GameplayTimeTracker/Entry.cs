@@ -20,6 +20,15 @@ namespace GameplayTimeTracker
         private int[] _lastArray = new int[3];
         private bool _isRunning;
         private DateTime _lastDate;
+        private bool _wasRunning;
+
+
+        [JsonPropertyName("gameName")]
+        public string Name
+        {
+            get => _name;
+            set => SetField(ref _name, value);
+        }
 
         [JsonPropertyName("totalPlay")]
         public int[] TotalPlay
@@ -35,14 +44,6 @@ namespace GameplayTimeTracker
             set => SetField(ref _lastArray, value);
         }
 
-
-        [JsonPropertyName("gameName")]
-        public string Name
-        {
-            get => _name;
-            set => SetField(ref _name, value);
-        }
-
         [JsonPropertyName("exePath")]
         public string ExePath
         {
@@ -50,18 +51,18 @@ namespace GameplayTimeTracker
             set => SetField(ref _exePath, value);
         }
 
-        [JsonPropertyName("iconPath")]
-        public string IconPath
-        {
-            get => _iconPath;
-            set => SetField(ref _iconPath, value);
-        }
-
         [JsonPropertyName("arguments")]
         public string Arguments
         {
             get => _arguments;
             set => SetField(ref _arguments, value);
+        }
+        
+        [JsonPropertyName("iconPath")]
+        public string IconPath
+        {
+            get => _iconPath;
+            set => SetField(ref _iconPath, value);
         }
 
         [JsonPropertyName("totalTime")]
@@ -78,12 +79,14 @@ namespace GameplayTimeTracker
             set => SetField(ref _lastTime, value);
         }
 
+        [JsonIgnore]
         public double TotalPerc
         {
             get => _totalPerc;
             set => SetField(ref _totalPerc, value);
         }
 
+        [JsonIgnore]
         public double LastPerc
         {
             get => _lastPerc;
@@ -97,10 +100,23 @@ namespace GameplayTimeTracker
             set => SetField(ref _lastDate, value);
         }
 
+        [JsonIgnore]
         public bool IsRunning
         {
             get => _isRunning;
             set => SetField(ref _isRunning, value);
+        }
+
+        [JsonIgnore]
+        public bool WasRunning
+        {
+            get => _wasRunning;
+            set => SetField(ref _wasRunning, value);
+        }
+
+        public void ResetLastPlaytime()
+        {
+            LastPlay = new int[3];
         }
 
         public void IncrementTime()

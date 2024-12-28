@@ -263,6 +263,12 @@ public class JsonHandler
         }
     }
 
+    public void SaveEntriesToFile(List<Entry> entries)
+    {
+        string defaultJson = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Utils.ExperimentalDataFilePath, defaultJson);
+    }
+
     // Creates a list of parameters used for creating tiles in the container.
     public void InitializeContainer(TileContainer container, Settings settings)
     {
@@ -314,7 +320,7 @@ public class JsonHandler
         return entries;
     }
 
-    
+
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
