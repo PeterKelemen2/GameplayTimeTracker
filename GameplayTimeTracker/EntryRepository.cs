@@ -25,7 +25,7 @@ public class EntryRepository
             entry.LastPlay = Utils.GetArrayFromDoubleTime(entry.LastTime);
         }
     }
-    
+
     private void PrintEntryList()
     {
         int[] p = Utils.p;
@@ -62,4 +62,5 @@ public class EntryRepository
             entry.LastPerc = Math.Round(entry.LastTime / entry.TotalTime, 2);
         }
     }
+    
 }

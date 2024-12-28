@@ -18,6 +18,7 @@ namespace GameplayTimeTracker
         private double _lastPerc;
         private int[] _totalArray = new int[3]; // H M S
         private int[] _lastArray = new int[3];
+        private bool _isRunning;
         private DateTime _lastDate;
 
         [JsonPropertyName("totalPlay")]
@@ -94,6 +95,34 @@ namespace GameplayTimeTracker
         {
             get => _lastDate;
             set => SetField(ref _lastDate, value);
+        }
+
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetField(ref _isRunning, value);
+        }
+
+        public void IncrementTime()
+        {
+            IncTArray(LastPlay);
+            IncTArray(TotalPlay);
+        }
+
+        private void IncTArray(int[] arr)
+        {
+            double min = 60 - 1;
+            arr[2]++; // Seconds
+            if (arr[2] > min)
+            {
+                arr[2] = 0;
+                arr[1]++; // Minutes
+                if (arr[1] > min)
+                {
+                    arr[1] = 0;
+                    arr[0]++; // Hours
+                }
+            }
         }
 
         public double GetTotalPlaytimeAsDouble()
