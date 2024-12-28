@@ -635,12 +635,12 @@ public class Tile : UserControl
 
     public double GetTotalPlaytimeAsDouble()
     {
-        return TotalH + (TotalM / 60) + (TotalS / 3600);
+        return TotalH + TotalM / 60.0 + TotalS / 3600.0;
     }
 
     public double GetLastPlaytimeAsDouble()
     {
-        return LastH + (LastM / 60) + (LastS / 3600);
+        return LastH + LastM / 60.0 + LastS / 3600.0;
     }
 
     // Resets all the values associated with an ongoing playtime calculation.

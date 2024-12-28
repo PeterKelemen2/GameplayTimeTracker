@@ -112,7 +112,7 @@ namespace GameplayTimeTracker
             get => _wasRunning;
             set => SetField(ref _wasRunning, value);
         }
-        
+
         // [JsonIgnore]
         // public EntryRepository EntryRepo { get; set; }
 
@@ -145,13 +145,13 @@ namespace GameplayTimeTracker
 
         public double GetTotalPlaytimeAsDouble()
         {
-            return TotalPlay[0] + (TotalPlay[1] / 60) + (TotalPlay[2] / 3600);
+            return Math.Round(TotalPlay[0] + TotalPlay[1] / 60.0 + TotalPlay[2] / 3600.0, 2);
             // return TotalH + (TotalM / 60) + (TotalS / 3600);
         }
 
         public double GetLastPlaytimeAsDouble()
         {
-            return LastPlay[0] + (LastPlay[1] / 60) + (LastPlay[2] / 3600);
+            return Math.Round(LastPlay[0] + LastPlay[1] / 60.0 + LastPlay[2] / 3600.0, 2);
         }
 
         public override string ToString()

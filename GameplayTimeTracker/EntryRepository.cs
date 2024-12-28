@@ -14,10 +14,6 @@ public class EntryRepository
     {
         JsonHandler handler = new JsonHandler();
         EntriesList = handler.GetEntriesFromFile(Utils.DataFilePath);
-        // foreach (Entry entry in EntriesList)
-        // {
-        //     entry.EntryRepo = this;
-        // }
 
         CheckForOldTime();
         UpdateTotalPercs();
@@ -107,11 +103,11 @@ public class EntryRepository
 
     private void UpdateTotalPercs()
     {
-        double globalTotalTime = EntriesList.Sum(entry => entry.TotalTime);
+        double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
         foreach (var entry in EntriesList)
         {
-            entry.TotalPerc = Math.Round(entry.TotalTime / globalTotalTime, 2);
-            entry.LastPerc = Math.Round(entry.LastTime / entry.TotalTime, 2);
+            entry.TotalPerc = Math.Round(entry.GetTotalPlaytimeAsDouble() / globalTotalTime, 2);
+            entry.LastPerc = Math.Round(entry.GetLastPlaytimeAsDouble() / entry.GetTotalPlaytimeAsDouble(), 2);
         }
     }
 }
