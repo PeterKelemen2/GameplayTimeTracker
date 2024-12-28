@@ -181,7 +181,7 @@ public class TileContainer
             String message = isRemoved ? $"Tile with ID {id} removed." : $"Couldn't find Tile with ID {id}";
             Console.WriteLine(message);
 
-            handler.WriteEntriesToFile(repository);
+            Save();
         }
     }
 
@@ -374,4 +374,9 @@ public class TileContainer
     //     }
     //     // InitSave();
     // }
+    public void RemoveEntryFromRepository(Entry dataEntry)
+    {
+        repository.RemoveEntry(dataEntry);
+        Save();
+    }
 }

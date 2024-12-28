@@ -304,7 +304,7 @@ public class JsonHandler
         //             param.arguments == null ? "" : param.arguments));
         //     }
         // }
-        InitContainer(container, new EntryRepository(), settings);
+        InitContainer(container, repository, settings);
     }
 
     public void InitContainer(TileContainer cont, EntryRepository repo, Settings settings)

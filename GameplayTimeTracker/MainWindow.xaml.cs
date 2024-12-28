@@ -268,6 +268,7 @@ namespace GameplayTimeTracker
                 newEntry.ExePath = exePath;
                 newEntry.IconPath = iconPath;
                 newEntry.Arguments = arguments;
+                // newEntry.EntryRepo = entryRepository;
                 entryRepository.AddEntry(newEntry);
 
                 try
@@ -472,7 +473,7 @@ namespace GameplayTimeTracker
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             // tileContainer?.InitSave();
-            handler.WriteEntriesToFile(entryRepository);
+            tileContainer.Save();
             // Close the application if Yes is clicked
             Application.Current.Shutdown();
         }

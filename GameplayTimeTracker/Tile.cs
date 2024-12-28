@@ -402,6 +402,8 @@ public class Tile : UserControl
             _tileContainer.RemoveTileById(Id);
             Console.WriteLine("Updating bars from Tile - Delete");
             _tileContainer.UpdatePlaytimeBars();
+            _tileContainer.RemoveEntryFromRepository(DataEntry);
+            // _tileContainer.Save();
 
             // If the tile's parent is a Panel, remove the tile from the panel's children
             if (Parent is Panel panel)

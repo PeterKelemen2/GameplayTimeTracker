@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Media.Animation;
 
 namespace GameplayTimeTracker;
 
@@ -13,6 +14,11 @@ public class EntryRepository
     {
         JsonHandler handler = new JsonHandler();
         EntriesList = handler.GetEntriesFromFile(Utils.DataFilePath);
+        // foreach (Entry entry in EntriesList)
+        // {
+        //     entry.EntryRepo = this;
+        // }
+
         CheckForOldTime();
         UpdateTotalPercs();
         // SetTimeArrays();
@@ -52,6 +58,7 @@ public class EntryRepository
     {
         if (EntriesList.Contains(entry))
         {
+            Console.WriteLine($"Removing entry {entry.Name}");
             EntriesList.Remove(entry);
             UpdateTotalPercs();
         }

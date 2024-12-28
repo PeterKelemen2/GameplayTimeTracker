@@ -22,7 +22,6 @@ namespace GameplayTimeTracker
         private DateTime _lastDate;
         private bool _wasRunning;
 
-
         [JsonPropertyName("gameName")]
         public string Name
         {
@@ -57,7 +56,7 @@ namespace GameplayTimeTracker
             get => _arguments;
             set => SetField(ref _arguments, value);
         }
-        
+
         [JsonPropertyName("iconPath")]
         public string IconPath
         {
@@ -113,6 +112,9 @@ namespace GameplayTimeTracker
             get => _wasRunning;
             set => SetField(ref _wasRunning, value);
         }
+        
+        // [JsonIgnore]
+        // public EntryRepository EntryRepo { get; set; }
 
         public void ResetLastPlaytime()
         {
