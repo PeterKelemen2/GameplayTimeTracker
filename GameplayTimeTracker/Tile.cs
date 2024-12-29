@@ -878,6 +878,7 @@ public class Tile : UserControl
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
         runningTextBlock.Margin =
             new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2 + Utils.TitleFontSize + 3, 0, 0);
+        // TODO: WHY ARE NO TEXTBLOCKS UPDATING AS THEY SHOULD?????
         Binding runningBinding = new Binding("IsRunning")
         {
             Source = DataEntry, 
