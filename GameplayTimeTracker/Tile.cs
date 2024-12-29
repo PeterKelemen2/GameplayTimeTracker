@@ -39,9 +39,9 @@ public class Tile : UserControl
     private TextBlock titleTextBlock;
     public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
-    private TextBlock totalPlaytime;
+    // private TextBlock totalPlaytime;
     public TextBlock lastPlaytimeTitle;
-    private TextBlock lastPlaytime;
+    // private TextBlock lastPlaytime;
     private TextBlock lastPlayDateTitleBlock;
     private TextBlock lastPlayDateBlock;
 
@@ -94,7 +94,9 @@ public class Tile : UserControl
     public double LastH { get; set; }
     public double LastM { get; set; }
     public double LastS { get; set; }
-
+    
+    public TextBlock LastPlaytimeblock { get; set; }
+    public TextBlock TotalPlaytimeblock { get; set; }
 
     private double[] fColMarg;
     private double[] sColMarg;
@@ -571,11 +573,11 @@ public class Tile : UserControl
         sColMarg = new[] { TileWidth * 0.545, 1 };
 
         totalPlaytimeTitle.Margin = new Thickness(fColMarg[0], totalPlaytimeTitle.Margin.Top, 0, 0);
-        totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top, 0, 0);
+        // totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top, 0, 0);
         totalTimeGradientBar.Margin = new Thickness(fColMarg[0], totalTimeGradientBar.Margin.Top, 0, 0);
         totalTimeGradientBar.UpdateBarSizeWidth(TileWidth);
 
-        lastPlaytime.Margin = new Thickness(sColMarg[0], lastPlaytime.Margin.Top, 0, 0);
+        // lastPlaytime.Margin = new Thickness(sColMarg[0], lastPlaytime.Margin.Top, 0, 0);
         lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], lastPlaytimeTitle.Margin.Top, 0, 0);
         lastTimeGradientBar.Margin = new Thickness(sColMarg[0], lastTimeGradientBar.Margin.Top, 0, 0);
         lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0], lastPlayDateTitleBlock.Margin.Top, 0, 0);
@@ -587,8 +589,8 @@ public class Tile : UserControl
 
     public void UpdatePlaytimeText()
     {
-        totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
-        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
+        // totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
+        // lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         lastPlayDateTitleBlock.Text = Started;
         lastPlayDateBlock.Text = LastPlayDate.Year < 2000
             ? "Never"
@@ -739,11 +741,11 @@ public class Tile : UserControl
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
 
         totalPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
-        totalPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        // totalPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
         totalTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
         lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
-        lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        // lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlayDateBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlayDateTitleBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
@@ -879,13 +881,13 @@ public class Tile : UserControl
         runningTextBlock.Margin =
             new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2 + Utils.TitleFontSize + 3, 0, 0);
         // TODO: WHY ARE NO TEXTBLOCKS UPDATING AS THEY SHOULD?????
-        Binding runningBinding = new Binding("IsRunning")
-        {
-            Source = DataEntry, 
-            Mode = BindingMode.OneWay
-        };
-
-        BindingOperations.SetBinding(runningTextBlock, TextBlock.TextProperty, runningBinding);
+        // Binding runningBinding = new Binding("IsRunning")
+        // {
+        //     Source = DataEntry, 
+        //     Mode = BindingMode.OneWay
+        // };
+        //
+        // BindingOperations.SetBinding(runningTextBlock, TextBlock.TextProperty, runningBinding);
         
         
         // Add the TextBlock to the grid
@@ -923,17 +925,17 @@ public class Tile : UserControl
             new Thickness(fColMarg[0], fColMarg[1] + tmm[0], 0, 0);
         // new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
-        totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        totalPlaytime.Text = $"test";
+        var TotalPlaytimeBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
+        // totalPlaytime.Text = $"test";
         // totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
-        totalPlaytime.Margin = Margin =
+        TotalPlaytimeBlock.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0);
         Binding totalTimeBinding = new Binding("TotalPlayFormatted")
         {
             Source = DataEntry, // Bind to DataEntry, not DataEntry.TotalPlayFormatted
             Mode = BindingMode.OneWay // Updates the TextBlock when TotalPlayFormatted changes
         };
-        totalPlaytime.SetBinding(TextBlock.TextProperty, totalTimeBinding);
+        TotalPlaytimeBlock.SetBinding(TextBlock.TextProperty, totalTimeBinding);
 
         SetPlaytimeBars(tmm[2]);
 
@@ -944,7 +946,7 @@ public class Tile : UserControl
         // lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
         // lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
         // lastPlaytime.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0);
-        lastPlaytime = new TextBlock
+        var LastPlaytimeBlock = new TextBlock
         {
             FontWeight = FontWeights.Regular,
             FontSize = Utils.TextFontSize,
@@ -954,14 +956,21 @@ public class Tile : UserControl
             Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0),
             Effect = Utils.dropShadowText,
         };
-        lastPlaytime.DataContext = DataEntry;
         Binding lastTimeBinding = new Binding("LastPlayFormatted")
         {
             Source = DataEntry,
             Mode = BindingMode.OneWay,
         };
-        lastPlaytime.SetBinding(TextBlock.TextProperty, lastTimeBinding);
-
+        LastPlaytimeBlock.SetBinding(TextBlock.TextProperty, lastTimeBinding);
+        // Binding marginBinding = new Binding("TileWidth")
+        // {
+        //     Source = this,  // Bind to the window itself
+        //     Converter = new PercentageToMarginConverter(0.35),  // Convert percentage to Margin
+        //     Mode = BindingMode.OneWay
+        // };
+        // lastPlaytime.SetBinding(MarginProperty, marginBinding);
+        
+        
         lastPlayDateTitleBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlayDateTitleBlock.Text = LastPlayDate.Year > 1999 ? Ended : Started;
         lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[3], 0, 0);
@@ -971,24 +980,26 @@ public class Tile : UserControl
         lastPlayDateBlock.Margin = new Thickness(sColMarg[0] + 60, fColMarg[1] + tmm[3], 0, 0);
 
         Panel.SetZIndex(totalPlaytimeTitle, 3);
-        Panel.SetZIndex(totalPlaytime, 3);
+        Panel.SetZIndex(TotalPlaytimeBlock, 3);
         Panel.SetZIndex(totalTimeGradientBar, 3);
 
         Grid.SetRow(totalPlaytimeTitle, 0);
-        Grid.SetRow(totalPlaytime, 0);
+        Grid.SetRow(TotalPlaytimeBlock, 0);
         Grid.SetRow(totalTimeGradientBar, 0);
 
         grid.Children.Add(totalPlaytimeTitle);
-        grid.Children.Add(totalPlaytime);
+        grid.Children.Add(TotalPlaytimeBlock);
         grid.Children.Add(totalTimeGradientBar);
         grid.Children.Add(lastPlaytimeTitle);
-        grid.Children.Add(lastPlaytime);
+        // grid.Children.Add(lastPlaytime);
+        grid.Children.Add(LastPlaytimeBlock);
         grid.Children.Add(lastTimeGradientBar);
         grid.Children.Add(lastPlayDateTitleBlock);
         grid.Children.Add(lastPlayDateBlock);
 
         Panel.SetZIndex(lastPlaytimeTitle, 3);
-        Panel.SetZIndex(lastPlaytime, 3);
+        Panel.SetZIndex(LastPlaytimeBlock, 3);
+        // Panel.SetZIndex(lastPlaytime, 3);
         Panel.SetZIndex(lastTimeGradientBar, 3);
         Panel.SetZIndex(lastPlayDateTitleBlock, 3);
         Panel.SetZIndex(lastPlayDateBlock, 3);

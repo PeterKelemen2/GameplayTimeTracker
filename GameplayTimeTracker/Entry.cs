@@ -143,6 +143,7 @@ namespace GameplayTimeTracker
         public void ResetLastPlaytime()
         {
             LastPlay = new int[3];
+            LastDate = DateTime.Now;
         }
 
         public void IncrementTime()
