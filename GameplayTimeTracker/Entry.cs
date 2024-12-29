@@ -29,25 +29,43 @@ namespace GameplayTimeTracker
             set => SetField(ref _name, value);
         }
 
-        [JsonPropertyName("totalPlay")]
         public int[] TotalPlay
         {
             get => _totalArray;
-            set => SetField(ref _totalArray, value);
+            set
+            {
+                if (SetField(ref _totalArray, value))
+                {
+                    OnPropertyChanged(nameof(TotalPlayFormatted)); // Ensure this is called to notify changes
+                }
+            }
         }
 
         [JsonIgnore]
         public string TotalPlayFormatted =>
             TotalPlay != null && TotalPlay.Length == 3
-                ? $"{_totalArray[0]}h {_totalArray[1]}m {_totalArray[2]}s"
+                ? $"{TotalPlay[0]}h {TotalPlay[1]}m {TotalPlay[2]}s"
                 : "0h 0m 0s";
 
         [JsonPropertyName("lastPlay")]
         public int[] LastPlay
         {
             get => _lastArray;
-            set => SetField(ref _lastArray, value);
+            set
+            {
+                if (SetField(ref _lastArray, value))
+                {
+                    // Notify that the formatted playtime has changed
+                    OnPropertyChanged(nameof(LastPlayFormatted));
+                }
+            }
         }
+
+        [JsonIgnore]
+        public string LastPlayFormatted =>
+            LastPlay != null && LastPlay.Length == 3
+                ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
+                : "0h 0m 0s";
 
         [JsonPropertyName("exePath")]
         public string ExePath
@@ -135,19 +153,25 @@ namespace GameplayTimeTracker
 
         private void IncTArray(int[] arr)
         {
-            double min = 60 - 1;
-            arr[2]++; // Seconds
-            if (arr[2] > min)
+            int[] newArray = (int[])arr.Clone(); // Clone the array
+            newArray[2]++; // Increment seconds
+            if (newArray[2] >= 60)
             {
-                arr[2] = 0;
-                arr[1]++; // Minutes
-                if (arr[1] > min)
+                newArray[2] = 0;
+                newArray[1]++; // Increment minutes
+                if (newArray[1] >= 60)
                 {
-                    arr[1] = 0;
-                    arr[0]++; // Hours
+                    newArray[1] = 0;
+                    newArray[0]++; // Increment hours
                 }
             }
+
+            if (arr == LastPlay)
+                LastPlay = newArray; // Reassign to trigger notification
+            else if (arr == TotalPlay)
+                TotalPlay = newArray; // Reassign to trigger notification
         }
+
 
         public double GetTotalPlaytimeAsDouble()
         {
@@ -187,8 +211,9 @@ namespace GameplayTimeTracker
             return true;
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        public virtual void OnPropertyChanged(string propertyName)
         {
+            Console.WriteLine($"PropertyChanged: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

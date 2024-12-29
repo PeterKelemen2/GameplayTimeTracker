@@ -90,6 +90,9 @@ public class ProcessTracker
                 }
 
                 entry.IncrementTime();
+                // entry.OnPropertyChanged(nameof(entry.LastPlayFormatted));
+                // entry.OnPropertyChanged(nameof(entry.TotalPlayFormatted));
+                Console.WriteLine($"Running for {entry.LastPlayFormatted}");
 
                 // Only update if a minute is passed
                 if (entry.LastPlay[2] % 60 == 0 || entry.TotalPlay[2] % 60 == 0)
@@ -137,7 +140,7 @@ public class ProcessTracker
 
                 // Only change text if it's not already the correct string
                 if (!tile.lastPlaytimeTitle.Text.Equals(currSessionText)) tile.lastPlaytimeTitle.Text = currSessionText;
-                if (!tile.runningTextBlock.Text.Equals(runningText)) tile.runningTextBlock.Text = runningText;
+                // if (!tile.runningTextBlock.Text.Equals(runningText)) tile.runningTextBlock.Text = runningText;
 
                 // tile.IncrementPlaytime();
                 // tile.UpdatePlaytimeText();
@@ -158,7 +161,7 @@ public class ProcessTracker
                     tile.WasRunning = false;
                     tile.IsRunning = false;
                     tile.lastPlaytimeTitle.Text = lastSessionText;
-                    tile.runningTextBlock.Text = notRunningText;
+                    // tile.runningTextBlock.Text = notRunningText;
                     tile.UpdateDateInfo();
                     tile.ToggleBgImageColor(isRunning);
                 }

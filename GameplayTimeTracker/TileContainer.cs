@@ -113,7 +113,7 @@ public class TileContainer
 
             newTile.Index = tilesList.Count;
             tilesList.Add(newTile);
-            newTile.InitializeTile();
+            // newTile.InitializeTile();
 
             // This accounts for change in percentages when adding new tile
             UpdatePlaytimeBars();

@@ -651,7 +651,7 @@ public class Utils
     {
         var sampleTextBlock = new TextBlock
         {
-            Text = "",
+            // Text = "",
             FontWeight = FontWeights.Bold,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -669,7 +669,7 @@ public class Utils
     {
         return new TextBlock
         {
-            Text = original.Text,
+            // Text = original.Text,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Regular,
             FontSize = original.FontSize,
             Foreground = original.Foreground.Clone(), // Clone the brush if needed

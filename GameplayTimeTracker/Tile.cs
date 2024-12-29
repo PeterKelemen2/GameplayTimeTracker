@@ -673,6 +673,8 @@ public class Tile : UserControl
     {
         _tileContainer = tileContainer;
         DataEntry = data;
+        this.DataContext = DataEntry;
+
 
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Stretch;
@@ -725,6 +727,7 @@ public class Tile : UserControl
         BigBgImages = settings.BigBgImages;
         WasMoved = false;
         SetupIconVars();
+        InitializeTile();
     }
 
     public void UpdateTileColors()
@@ -784,7 +787,18 @@ public class Tile : UserControl
 
         SetGradients();
 
-        sampleTextBlock = Utils.NewTextBlock();
+        sampleTextBlock = new TextBlock
+        {
+            // Text = "",
+            FontWeight = FontWeights.Bold,
+            FontSize = Utils.TextFontSize,
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin =
+                new Thickness(0, 0, 0, 0),
+            Effect = Utils.dropShadowText,
+        };
 
         sampleTextBox = Utils.NewTextBoxEdit();
         sampleTextBox.Style = (Style)Application.Current.FindResource("RoundedTextBox");
@@ -859,12 +873,20 @@ public class Tile : UserControl
         titleTextBlock.SetBinding(TextBlock.TextProperty, titleBinding);
 
         runningTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
-        runningTextBlock.Text = "Running!";
+        // runningTextBlock.Text = "Running!";
         runningTextBlock.FontSize = Utils.TitleFontSize - 4;
         runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
         runningTextBlock.Margin =
             new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2 + Utils.TitleFontSize + 3, 0, 0);
+        Binding runningBinding = new Binding("IsRunning")
+        {
+            Source = DataEntry, 
+            Mode = BindingMode.OneWay
+        };
 
+        BindingOperations.SetBinding(runningTextBlock, TextBlock.TextProperty, runningBinding);
+        
+        
         // Add the TextBlock to the grid
         Grid.SetRow(titleTextBlock, 0);
         Grid.SetRow(runningTextBlock, 0);
@@ -901,16 +923,10 @@ public class Tile : UserControl
         // new Thickness(fColMarg[0], fColMarg[1] - 10, 0, 0);
 
         totalPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
+        totalPlaytime.Text = $"test";
         // totalPlaytime.Text = $"{TotalH}h {TotalM}m {TotalS}s";
         totalPlaytime.Margin = Margin =
             new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0);
-
-        // totalPlaytime = new TextBlock
-        // {
-        //     Foreground = new SolidColorBrush(Utils.FontColor),
-        //     FontSize = Utils.TextFontSize,
-        //     Margin = new Thickness(fColMarg[0], fColMarg[1] + tmm[1], 0, 0),
-        // };
         Binding totalTimeBinding = new Binding("TotalPlayFormatted")
         {
             Source = DataEntry, // Bind to DataEntry, not DataEntry.TotalPlayFormatted
@@ -924,9 +940,26 @@ public class Tile : UserControl
         lastPlaytimeTitle.Text = "Last Session:";
         lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[0], 0, 0);
 
-        lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
-        lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
-        lastPlaytime.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0);
+        // lastPlaytime = Utils.CloneTextBlock(sampleTextBlock, isBold: false);
+        // lastPlaytime.Text = $"{LastH}h {LastM}m {LastS}s";
+        // lastPlaytime.Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0);
+        lastPlaytime = new TextBlock
+        {
+            FontWeight = FontWeights.Regular,
+            FontSize = Utils.TextFontSize,
+            Foreground = new SolidColorBrush(Utils.FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(sColMarg[0], fColMarg[1] + tmm[1], 0, 0),
+            Effect = Utils.dropShadowText,
+        };
+        lastPlaytime.DataContext = DataEntry;
+        Binding lastTimeBinding = new Binding("LastPlayFormatted")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        lastPlaytime.SetBinding(TextBlock.TextProperty, lastTimeBinding);
 
         lastPlayDateTitleBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         lastPlayDateTitleBlock.Text = LastPlayDate.Year > 1999 ? Ended : Started;

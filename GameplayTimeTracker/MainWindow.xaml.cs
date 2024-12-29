@@ -309,7 +309,6 @@ namespace GameplayTimeTracker
             }
         }
 
-
         private void AddExecButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
