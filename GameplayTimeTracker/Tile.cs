@@ -37,7 +37,7 @@ public class Tile : UserControl
     public Image bgImage2;
     public Grid iconContainerGrid;
     private TextBlock titleTextBlock;
-    public TextBlock runningTextBlock;
+    // public TextBlock runningTextBlock;
     private TextBlock totalPlaytimeTitle;
     // private TextBlock totalPlaytime;
     public TextBlock lastPlaytimeTitle;
@@ -95,9 +95,12 @@ public class Tile : UserControl
     public double LastM { get; set; }
     public double LastS { get; set; }
     
-    public TextBlock LastPlaytimeblock { get; set; }
-    public TextBlock TotalPlaytimeblock { get; set; }
+    public TextBlock LastPlaytimeBlock { get; set; }
+    public TextBlock TotalPlaytimeBlock { get; set; }
+    public TextBlock RunningTextBlock { get; set; }
 
+    public bool IsInitialized { get; set; }
+    
     private double[] fColMarg;
     private double[] sColMarg;
 
@@ -573,11 +576,11 @@ public class Tile : UserControl
         sColMarg = new[] { TileWidth * 0.545, 1 };
 
         totalPlaytimeTitle.Margin = new Thickness(fColMarg[0], totalPlaytimeTitle.Margin.Top, 0, 0);
-        // totalPlaytime.Margin = new Thickness(fColMarg[0], totalPlaytime.Margin.Top, 0, 0);
+        TotalPlaytimeBlock.Margin = new Thickness(fColMarg[0], TotalPlaytimeBlock.Margin.Top, 0, 0);
         totalTimeGradientBar.Margin = new Thickness(fColMarg[0], totalTimeGradientBar.Margin.Top, 0, 0);
         totalTimeGradientBar.UpdateBarSizeWidth(TileWidth);
 
-        // lastPlaytime.Margin = new Thickness(sColMarg[0], lastPlaytime.Margin.Top, 0, 0);
+        LastPlaytimeBlock.Margin = new Thickness(sColMarg[0], LastPlaytimeBlock.Margin.Top, 0, 0);
         lastPlaytimeTitle.Margin = new Thickness(sColMarg[0], lastPlaytimeTitle.Margin.Top, 0, 0);
         lastTimeGradientBar.Margin = new Thickness(sColMarg[0], lastTimeGradientBar.Margin.Top, 0, 0);
         lastPlayDateTitleBlock.Margin = new Thickness(sColMarg[0], lastPlayDateTitleBlock.Margin.Top, 0, 0);
@@ -673,6 +676,7 @@ public class Tile : UserControl
     //     Entry data = null)
     public Tile(TileContainer tileContainer, Entry data, Settings settings, double width = 760)
     {
+        IsInitialized = false;
         _tileContainer = tileContainer;
         DataEntry = data;
         this.DataContext = DataEntry;
@@ -738,19 +742,19 @@ public class Tile : UserControl
         container.Fill = gradientBrush;
 
         titleTextBlock.Foreground = new SolidColorBrush(Utils.FontColor);
-        runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+        RunningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
 
         totalPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
-        // totalPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        TotalPlaytimeBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         totalTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
         lastPlaytimeTitle.Foreground = new SolidColorBrush(Utils.FontColor);
-        // lastPlaytime.Foreground = new SolidColorBrush(Utils.FontColor);
+        LastPlaytimeBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlayDateBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastPlayDateTitleBlock.Foreground = new SolidColorBrush(Utils.FontColor);
         lastTimeGradientBar.barForeground.Fill = Utils.createLinGradBrushHor(Utils.LeftColor, Utils.RightColor);
 
-        runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
+        RunningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
         LaunchButton.SetButtonColors();
         EditButton.SetButtonColors();
         RemoveButton.SetButtonColors();
@@ -874,31 +878,37 @@ public class Tile : UserControl
         };
         titleTextBlock.SetBinding(TextBlock.TextProperty, titleBinding);
 
-        runningTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
+        // RunningTextBlock = Utils.CloneTextBlock(sampleTextBlock, isBold: true);
         // runningTextBlock.Text = "Running!";
-        runningTextBlock.FontSize = Utils.TitleFontSize - 4;
-        runningTextBlock.Foreground = new SolidColorBrush(Utils.RunningColor);
-        runningTextBlock.Margin =
-            new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2 + Utils.TitleFontSize + 3, 0, 0);
-        // TODO: WHY ARE NO TEXTBLOCKS UPDATING AS THEY SHOULD?????
-        // Binding runningBinding = new Binding("IsRunning")
-        // {
-        //     Source = DataEntry, 
-        //     Mode = BindingMode.OneWay
-        // };
-        //
-        // BindingOperations.SetBinding(runningTextBlock, TextBlock.TextProperty, runningBinding);
+        RunningTextBlock = new TextBlock
+        {
+            FontWeight = FontWeights.Regular,
+            FontSize = Utils.TitleFontSize - 4,
+            Foreground = new SolidColorBrush(Utils.RunningColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(Utils.TextMargin * 2, Utils.TextMargin / 2 + Utils.TitleFontSize + 3, 0, 0),
+            Effect = Utils.dropShadowText,
+        };
+        RunningTextBlock.DataContext = DataEntry; 
+        // TODO: This is not working, figure this out
+        Binding runningBinding = new Binding("RunningFormatted")
+        {
+            Source = DataEntry, 
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         
         
         // Add the TextBlock to the grid
         Grid.SetRow(titleTextBlock, 0);
-        Grid.SetRow(runningTextBlock, 0);
+        Grid.SetRow(RunningTextBlock, 0);
         grid.Children.Add(titleTextBlock);
-        grid.Children.Add(runningTextBlock);
+        grid.Children.Add(RunningTextBlock);
         Panel.SetZIndex(titleTextBlock, 3);
-        Panel.SetZIndex(runningTextBlock, 3);
+        Panel.SetZIndex(RunningTextBlock, 3);
 
-        if (!IsRunning) runningTextBlock.Text = "";
+        if (!IsRunning) RunningTextBlock.Text = "";
 
         // Create the Image and other UI elements, positioning them in the second row as well
         if (IconImagePath != null)
@@ -1013,6 +1023,7 @@ public class Tile : UserControl
 
         // Set the Grid as the content of the UserControl
         Content = grid;
+        IsInitialized = true;
     }
 
     public Grid GetBgImagesInGrid(bool bigImages)

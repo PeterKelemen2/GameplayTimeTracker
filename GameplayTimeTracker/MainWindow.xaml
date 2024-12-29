@@ -10,7 +10,7 @@
         Width="800"
         MinWidth="800"
         Closing="OnCloseNotify"
-        SizeChanged="OnSizeChanged"
+        
         StateChanged="OnStateChanged"
         IsVisibleChanged="OnIsVisibleChanged"
         Icon="pack://application:,,,/assets/GameplayTimeTracker.ico">

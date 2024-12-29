@@ -125,6 +125,8 @@ namespace GameplayTimeTracker
             CreateButtonsOnFooter();
             ShowTilesOnCanvas();
             CheckToUpdate();
+            // TODO: Figure this out
+            // SizeChanged += OnSizeChanged;
         }
 
         private void CreateButtonsOnFooter()

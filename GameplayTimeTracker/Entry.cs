@@ -66,6 +66,10 @@ namespace GameplayTimeTracker
             LastPlay != null && LastPlay.Length == 3
                 ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
                 : "0h 0m 0s";
+        
+        [JsonIgnore]
+        public string RunningFormatted =>
+            IsRunning ? "Running!" : "";
 
         [JsonPropertyName("exePath")]
         public string ExePath
@@ -127,7 +131,14 @@ namespace GameplayTimeTracker
         public bool IsRunning
         {
             get => _isRunning;
-            set => SetField(ref _isRunning, value);
+            set
+            {
+                if (_isRunning != value)
+                {
+                    _isRunning = value;
+                    OnPropertyChanged(nameof(IsRunning));
+                }
+            }
         }
 
         [JsonIgnore]
