@@ -57,14 +57,16 @@ public class ProcessTracker
     // Checks if a tile is running and sets values accordingly
     public void HandleProcesses()
     {
-        var runningProcesses = Process.GetProcesses();
+        var runningProcesses = Process.GetProcesses()
+            .Select(p => p.ProcessName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         Console.WriteLine("=================");
         foreach (var tile in _tileContainer.tilesList)
         {
-            var isRunning =
-                runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
-
+            // var isRunning =
+            //     runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
+            bool isRunning = runningProcesses.Contains(tile.ExePathName);
             if (isRunning)
             {
                 // Setting things up if first start
