@@ -8,64 +8,56 @@ namespace GameplayTimeTracker;
 
 public class ProcessTracker
 {
-    // List<Tile> _tilesList;
-    List<String> _exeNames;
     TileContainer _tileContainer;
     private string runningText = "Running!";
     private string currSessionText = "Current Session:";
     private string lastSessionText = "Last Session:";
     private string notRunningText = "";
-    private Dictionary<string, bool> runningDictionary;
-
-    public bool IsDictSet { get; set; }
+    Stopwatch stopwatch = new();
+    HashSet<string> targetProcesses = new();
 
     public ProcessTracker()
     {
-    }
-
-    // Creates a dictionary with the name and running state of each tile to track
-    public void InitializeExeDictionary()
-    {
-        foreach (var tile in _tileContainer.tilesList)
-        {
-            if (runningDictionary != null)
-            {
-                if (!runningDictionary.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(tile.ExePath)))
-                {
-                    // string newKey = System.IO.Path.GetFileNameWithoutExtension(tile.ExePath);
-                    runningDictionary.Add(tile.GameName, tile.IsRunning);
-                }
-            }
-        }
-
-        IsDictSet = true;
     }
 
     // Sets up process tracker from the tile container
     public void InitializeProcessTracker(TileContainer tileContainer)
     {
         _tileContainer = tileContainer;
-        _exeNames = _tileContainer.GetExecutableNames();
-        InitializeExeDictionary();
-
-        foreach (var exeName in _exeNames)
-        {
-            Console.WriteLine($"Exe name: {exeName}");
-        }
+        targetProcesses = _tileContainer.tilesList
+            .Select(t => t.ExePathName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
 
+    public void SetTargetProcesses()
+    {
+        targetProcesses = _tileContainer.tilesList
+            .Select(t => t.ExePathName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+    }
+    
+    
     // Checks if a tile is running and sets values accordingly
     public void HandleProcesses()
     {
+        stopwatch.Restart();
+        // var runningProcesses = Process.GetProcesses()
+        //     .Select(p => p.ProcessName)
+        //     .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // var runningProcesses = targetProcesses.Where(ProcessIsRunning).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        
         var runningProcesses = Process.GetProcesses()
+            .Where(p => targetProcesses.Contains(p.ProcessName, StringComparer.OrdinalIgnoreCase))
             .Select(p => p.ProcessName)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
+        
+        stopwatch.Stop();
         Console.WriteLine("=================");
+        Console.WriteLine($"Running processes queried in {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")} ms.");
+        
+        stopwatch.Restart();
         foreach (var tile in _tileContainer.tilesList)
         {
-            // var isRunning =
-            //     runningProcesses.Any(p => p.ProcessName.Equals(tile.ExePathName, StringComparison.OrdinalIgnoreCase));
             bool isRunning = runningProcesses.Contains(tile.ExePathName);
             if (isRunning)
             {
@@ -109,6 +101,8 @@ public class ProcessTracker
             }
         }
 
+        stopwatch.Stop();
+        Console.WriteLine($"Looking for running entries took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")} ms.");
         Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}");
     }
 }

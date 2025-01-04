@@ -271,6 +271,7 @@ namespace GameplayTimeTracker
                           Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
                     {
                         tileContainer.AddTile(newTile, newlyAdded: true);
+                        tracker.SetTargetProcesses();
                         // tileContainer.ListTiles();
                         ShowTilesOnCanvas();
                         handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
