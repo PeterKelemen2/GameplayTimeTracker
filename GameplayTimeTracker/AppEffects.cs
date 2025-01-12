@@ -6,7 +6,7 @@ using System.Windows.Media.Effects;
 
 namespace GameplayTimeTracker;
 
-public static class Effects
+public static class AppEffects
 {
     public static BlurEffect fakeShadow = new BlurEffect
     {
