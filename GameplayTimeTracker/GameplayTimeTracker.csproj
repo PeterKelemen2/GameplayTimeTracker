@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
-        <AssemblyName>Gameplay Time Tracker</AssemblyName>
+        <AssemblyName>GameplayTimeTracker</AssemblyName>
         <AssemblyVersion>2.0.0</AssemblyVersion>
         <ApplicationIcon>assets\GameplayTimeTracker.ico</ApplicationIcon>
     </PropertyGroup>

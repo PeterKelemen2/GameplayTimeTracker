@@ -2217,7 +2217,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
-      "projectName": "Gameplay Time Tracker",
+      "projectName": "GameplayTimeTracker",
       "projectPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\GameplayTimeTracker.csproj",
       "packagesPath": "C:\\Users\\Peti\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Peti\\RiderProjects\\GameplayTimeTracker2\\GameplayTimeTracker\\obj\\",
