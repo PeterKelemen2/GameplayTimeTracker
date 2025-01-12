@@ -10,7 +10,43 @@
         Width="800"
         MinWidth="800"
         Icon="pack://application:,,,/assets/GameplayTimeTracker.ico">
-    <Grid>
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
+        
+        <ScrollViewer x:Name="MainScrollViewer"
+                      Grid.Row="0"
+                      VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
+        </ScrollViewer>
+        
+        <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
+            <TextBlock x:Name="GamesLoadedBlock"
+                       Foreground="Black"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       Margin="0,-2,0,0"
+                       FontSize="16">
+                <Run Text="Apps managed" FontWeight="Bold" />
+                <LineBreak/>
+                <Run x:Name="GameCountRun" Text="0" FontWeight="Normal" />
+            </TextBlock>
 
+            <TextBlock x:Name="TotalPlaytimeTextBlock"
+                       Foreground="Black"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       TextAlignment="Right"
+                       Margin="0,-2,15,0"
+                       FontSize="16">
+                <Run Text="Total Playtime" FontWeight="Bold" />
+                <LineBreak/>
+                <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
+            </TextBlock>
+        </Grid>
     </Grid>
 </Window>

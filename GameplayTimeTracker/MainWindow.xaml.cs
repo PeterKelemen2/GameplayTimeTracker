@@ -11,13 +11,15 @@ using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindow()
     {
         InitializeComponent();
+        Loaded += OnLoaded;
+    }
+
+    public void OnLoaded(object sender, RoutedEventArgs e)
+    {
     }
 }
