@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace GameplayTimeTracker;
 
-public static class Files
+public static class AppFiles
 {
     public static string DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
         Assembly.GetExecutingAssembly().GetName().Name);
