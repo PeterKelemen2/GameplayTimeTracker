@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -22,6 +23,7 @@ public class CustomButton : UserControl
     public Grid Grid { get; set; }
     ButtonType Type { get; set; }
 
+
     // Dependency Properties
     public static readonly DependencyProperty MarginProperty =
         DependencyProperty.Register("Margin", typeof(Thickness), typeof(CustomButton),
@@ -34,6 +36,10 @@ public class CustomButton : UserControl
     public static readonly DependencyProperty HeightProperty =
         DependencyProperty.Register("Height", typeof(double), typeof(CustomButton),
             new PropertyMetadata(40.0, OnHeightChanged));
+
+    public static readonly DependencyProperty EffectProperty =
+        DependencyProperty.Register("Effect", typeof(Effect), typeof(CustomButton),
+            new PropertyMetadata(null, OnEffectChanged));
 
     public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(
         "Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CustomButton));
@@ -73,7 +79,6 @@ public class CustomButton : UserControl
             RadiusX = borderRadius,
             RadiusY = borderRadius,
             Fill = IsActive ? new SolidColorBrush(ButtonColor) : new SolidColorBrush(Colors.Gray),
-            // Effect = Utils.dropShadowIcon
         };
         Grid.Children.Add(ButtonBase);
         SetButtonColors();
@@ -292,6 +297,15 @@ public class CustomButton : UserControl
         }
     }
 
+    private static void OnEffectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CustomButton customButton && customButton.Grid != null)
+        {
+            var newEffect = (Effect)e.NewValue;
+            customButton.Grid.Effect = newEffect;
+        }
+    }
+
     // Properties to access the dependency properties
     public new Thickness Margin
     {
@@ -309,5 +323,11 @@ public class CustomButton : UserControl
     {
         get => (double)GetValue(HeightProperty);
         set => SetValue(HeightProperty, value);
+    }
+
+    public Effect Effect
+    {
+        get => (Effect)GetValue(EffectProperty);
+        set => SetValue(EffectProperty, value);
     }
 }

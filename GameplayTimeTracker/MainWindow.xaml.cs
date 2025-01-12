@@ -25,6 +25,7 @@ public partial class MainWindow : Window
         CustomButton AddButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
             buttonImagePath: Files.AddIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
+        AddButton.Effect = Effects.dropShadowIcon;
         AddButton.Click += AddEntry_Click;
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
