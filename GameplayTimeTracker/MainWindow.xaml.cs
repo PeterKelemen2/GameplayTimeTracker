@@ -29,6 +29,14 @@ public partial class MainWindow : Window
         AddButton.Click += AddEntry_Click;
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
+        
+        CustomButton SettingsButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
+            buttonImagePath: Files.CogIcon);
+        SettingsButton.Margin = new Thickness(70, 0, 0, 0);
+        SettingsButton.Effect = Effects.dropShadowIcon;
+        SettingsButton.Click += Settings_Click;
+        Grid.SetRow(SettingsButton, 1);
+        MainGrid.Children.Add(SettingsButton);
     }
 
     public void AddEntry_Click(object sender, RoutedEventArgs e)
