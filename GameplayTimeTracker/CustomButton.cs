@@ -155,19 +155,19 @@ public class CustomButton : UserControl
         switch (Type)
         {
             case ButtonType.Positive:
-                // ButtonColor = Utils.PositiveButtonColor;
-                // ButtonHoverColor = Utils.PositiveButtonColorHover;
-                // ButtonPressedColor = Utils.PositiveButtonColorPress;
+                ButtonColor = AppColors.PositiveButton;
+                ButtonHoverColor = AppColors.PositiveButtonHover;
+                ButtonPressedColor = AppColors.PositiveButtonPress;
                 break;
             case ButtonType.Negative:
-                // ButtonColor = Utils.NegativeButtonColor;
-                // ButtonHoverColor = Utils.NegativeButtonColorHover;
-                // ButtonPressedColor = Utils.NegativeButtonColorPress;
+                ButtonColor = AppColors.NegativeButton;
+                ButtonHoverColor = AppColors.NegativeButtonHover;
+                ButtonPressedColor = AppColors.NegativeButtonPress;
                 break;
             default:
-                // ButtonColor = Utils.DefButtonColor;
-                // ButtonHoverColor = Utils.DefButtonColorHover;
-                // ButtonPressedColor = Utils.DefButtonColorPress;
+                ButtonColor = AppColors.DefButton;
+                ButtonHoverColor = AppColors.DefButtonHover;
+                ButtonPressedColor = AppColors.DefButtonPress;
                 break;
         }
 
