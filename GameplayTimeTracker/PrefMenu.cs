@@ -19,23 +19,19 @@ public class PrefMenu : UserControl
     public bool StartWithSystem { get; set; }
     public Action<bool, bool> TileGradUpdateMethod;
     public Action<bool> TileBgImagesMethod;
-    public Action<SettingsMenu> RestoreBackupMethod;
     public Action ShowTilesMethod;
-    SettingsMenu settingsMenu;
     private CustomButton createBackupButton;
     private CustomButton restoreBackupButton;
 
 
     public PrefMenu(StackPanel stackPanel, Settings settings, Action<bool, bool> tileGradUpdateMethod,
-        Action<bool> tileBgImagesMethod, Action<SettingsMenu> restoreBackupMethod = null, Action showTiles = null, SettingsMenu sMenu = null)
+        Action<bool> tileBgImagesMethod, Action showTiles = null)
     {
         Panel = stackPanel;
         CurrentSettings = settings;
         TileGradUpdateMethod = tileGradUpdateMethod;
         TileBgImagesMethod = tileBgImagesMethod;
-        RestoreBackupMethod = restoreBackupMethod;
         ShowTilesMethod = showTiles;
-        settingsMenu = sMenu;
         // CreateMenu();
         Prefs = new Dictionary<string, bool>();
         Prefs.Add("Start with system", CurrentSettings.StartWithSystem);
@@ -67,7 +63,6 @@ public class PrefMenu : UserControl
             new CustomButton(text: "Restore Backup data", width: 170, height: 40, type: ButtonType.Default,
                 isBold: true);
         restoreBackupButton.Margin = new Thickness(10);
-        restoreBackupButton.Click += Restore_Click;
         Panel.Children.Add(restoreBackupButton);
 
 
@@ -117,15 +112,6 @@ public class PrefMenu : UserControl
         CreateMenuMethod();
     }
 
-    public void Restore_Click(object sender, RoutedEventArgs e)
-    {
-        if (RestoreBackupMethod != null)
-        {
-            RestoreBackupMethod(settingsMenu);
-            ShowTilesMethod();
-        }
-    }
-
     public void CreateBackup_Click(object sender, RoutedEventArgs e)
     {
         JsonHandler handler = new JsonHandler();
@@ -143,7 +129,6 @@ public class PrefMenu : UserControl
                 type: PopupType.OK);
         }
 
-        settingsMenu.CloseMenuMethod();
         popup.OpenMenu();
     }
 }

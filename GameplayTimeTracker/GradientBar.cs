@@ -25,9 +25,8 @@ public class GradientBar : UserControl
     public Rectangle barForeground;
     private LinearGradientBrush gradientBrush;
     public Grid grid = new();
-    private Tile TileParent;
 
-    public GradientBar(Tile tileParent,
+    public GradientBar(
         double percent,
         double gWidth = 150,
         double gHeight = 30,
@@ -35,8 +34,7 @@ public class GradientBar : UserControl
         double radius = 10)
     {
         // Width = width;
-        TileParent = tileParent;
-        GWidth = TileParent.TileWidth * 0.25;
+        GWidth = 100;
         // GWidth = gWidth;
         GHeight = gHeight;
         Percent = percent;

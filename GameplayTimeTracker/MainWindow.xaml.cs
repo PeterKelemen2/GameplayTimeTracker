@@ -27,7 +27,6 @@ namespace GameplayTimeTracker
         private bool isBlurToggled = false;
         private bool isAnimating = false;
 
-        TileContainer tileContainer = new();
 
         public JsonHandler handler = new();
         ProcessTracker tracker = new();
@@ -39,7 +38,6 @@ namespace GameplayTimeTracker
 
         private PopupMenu exitPopup;
         private PopupMenu selfPopup;
-        private SettingsMenu settingsMenu;
         private DragDropOverlay dragDropOverlay;
         private CustomButton SettingsButton;
         private CustomButton AddButton;
@@ -47,11 +45,7 @@ namespace GameplayTimeTracker
 
         public void OnLoaded(object sender, RoutedEventArgs e)
         {
-            TotalTimeText.Text = Utils.GetPrettyTime(tileContainer.GetTLTotalTimeDouble());
-            tileContainer.TotalTimeRun = TotalTimeText;
-            tracker.InitializeProcessTracker(tileContainer);
             UpdateStackPane();
-            GameCountRun.Text = $"{tileContainer.tilesList.Count}";
         }
 
         private void InitSettings()
@@ -103,7 +97,6 @@ namespace GameplayTimeTracker
 
             notificationHandler = new NotificationHandler();
             InitSettings();
-            handler.InitializeContainer(tileContainer, settings);
             dragDropOverlay = new DragDropOverlay();
             DragDropGrid.Children.Add(dragDropOverlay);
             // CheckToUpdate();    
@@ -132,7 +125,7 @@ namespace GameplayTimeTracker
             SettingsButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
                 buttonImagePath: Utils.CogIcon);
             SettingsButton.Margin = new Thickness(70, 0, 0, 0);
-            SettingsButton.Click += OpenSettingsWindow;
+            // SettingsButton.Click += OpenSettingsWindow;
             Grid.SetRow(SettingsButton, 1);
             Grid.Children.Add(SettingsButton);
         }
@@ -141,25 +134,25 @@ namespace GameplayTimeTracker
         {
             if (handler.CheckForDataToUpdate() && settings.DataNeedsUpdating)
             {
-                if (tileContainer.tilesList.Count > 0)
-                {
-                    PopupMenu popupMenu =
-                        new PopupMenu(
-                            textArray: new[]
-                            {
-                                "It seems like your data needs updating!",
-                                "Would you like to update it now?",
-                                "Don't worry, your current data will be backed up!"
-                            },
-                            textArrayFontSizes: new[] { 20, 20, 20 },
-                            h: 260, type: PopupType.YesNo, yesClick: ToUpdate_Click);
-                    popupMenu.OpenMenu();
-                }
-                else
-                {
-                    settings.DataNeedsUpdating = false;
-                    handler.WriteSettingsToFile(settings);
-                }
+                // if ()
+                // {
+                //     PopupMenu popupMenu =
+                //         new PopupMenu(
+                //             textArray: new[]
+                //             {
+                //                 "It seems like your data needs updating!",
+                //                 "Would you like to update it now?",
+                //                 "Don't worry, your current data will be backed up!"
+                //             },
+                //             textArrayFontSizes: new[] { 20, 20, 20 },
+                //             h: 260, type: PopupType.YesNo, yesClick: ToUpdate_Click);
+                //     popupMenu.OpenMenu();
+                // }
+                // else
+                // {
+                //     settings.DataNeedsUpdating = false;
+                //     handler.WriteSettingsToFile(settings);
+                // }
             }
         }
 
@@ -171,7 +164,7 @@ namespace GameplayTimeTracker
         public void UpdateData()
         {
             handler.BackupDataFile();
-            tileContainer.UpdateLegacyTime();
+            // tileContainer.UpdateLegacyTime();
             settings.DataNeedsUpdating = false;
             handler.WriteSettingsToFile(settings);
         }
@@ -179,7 +172,7 @@ namespace GameplayTimeTracker
         private void UpdateColors()
         {
             InitSettings();
-            tileContainer.UpdateTilesColors();
+            // tileContainer.UpdateTilesColors();
             ShowTilesOnCanvas();
             AddButton.SetButtonColors();
             SettingsButton.SetButtonColors();
@@ -200,8 +193,8 @@ namespace GameplayTimeTracker
                     stopwatch.Restart();
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        tracker.HandleProcesses();
-                        RearrangeTiles();
+                        // tracker.HandleProcesses();
+                        // RearrangeTiles();
                     });
 
                     stopwatch.Stop();
@@ -237,58 +230,58 @@ namespace GameplayTimeTracker
                 exePath += filePath;
             }
 
-            if (tileContainer.IsExePathPresent(exePath))
-            {
-                PopupMenu popupMenu = new(text: $"{exePath} is already on the list",
-                    type: PopupType.OK);
-                popupMenu.OpenMenu();
-            }
-            else
-            {
-                Console.WriteLine($"Creating icon for {exePath}");
-                string fileName = Path.GetFileName(exePath);
-                fileName = fileName.Substring(0, fileName.Length - 4);
-
-                string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
-                string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
-
-                Utils.PrepIcon(exePath, iconPath);
-                iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
-
-                try
-                {
-                    Console.WriteLine($"Trying to add: {fileName}");
-                    Tile newTile = new Tile(tileContainer, fileName, new DateTime(1999, 1, 1, 1, 1, 1),
-                        settings.HorizontalTileGradient,
-                        settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
-                        exePath: exePath,
-                        shortcutArgs: arguments.Length > 0 ? arguments : ""
-                    );
-
-                    newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
-
-                    if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
-                          Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
-                    {
-                        tileContainer.AddTile(newTile, newlyAdded: true);
-                        tracker.SetTargetProcesses();
-                        // tileContainer.ListTiles();
-                        ShowTilesOnCanvas();
-                        handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
-                    }
-                    else
-                    {
-                        selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: PopupType.OK);
-                        selfPopup.OpenMenu();
-                    }
-                }
-                catch (Exception e)
-                {
-                    PopupMenu popupMenu = new(text: $"Something went wrong adding {filePath}", type: PopupType.OK);
-                    popupMenu.OpenMenu();
-                    Console.WriteLine(e);
-                }
-            }
+            // if (tileContainer.IsExePathPresent(exePath))
+            // {
+            //     PopupMenu popupMenu = new(text: $"{exePath} is already on the list",
+            //         type: PopupType.OK);
+            //     popupMenu.OpenMenu();
+            // }
+            // else
+            // {
+            //     Console.WriteLine($"Creating icon for {exePath}");
+            //     string fileName = Path.GetFileName(exePath);
+            //     fileName = fileName.Substring(0, fileName.Length - 4);
+            //
+            //     string uniqueFileName = $"{fileName}-{Guid.NewGuid().ToString()}.png";
+            //     string iconPath = Path.Combine(Utils.SavedIconsPath, uniqueFileName);
+            //
+            //     Utils.PrepIcon(exePath, iconPath);
+            //     iconPath = Utils.IsValidImage(iconPath) ? iconPath : SampleImagePath;
+            //
+            //     try
+            //     {
+            //         Console.WriteLine($"Trying to add: {fileName}");
+            //         // Tile newTile = new Tile(tileContainer, fileName, new DateTime(1999, 1, 1, 1, 1, 1),
+            //         //     settings.HorizontalTileGradient,
+            //         //     settings.HorizontalEditGradient, settings.BigBgImages, iconImagePath: iconPath,
+            //         //     exePath: exePath,
+            //         //     shortcutArgs: arguments.Length > 0 ? arguments : ""
+            //         // );
+            //
+            //         // newTile.Margin = new Thickness(Utils.TileLeftMargin, 5, 0, 5);
+            //
+            //         if (!(Path.GetFileName(filePath).Equals("GameplayTimeTracker.exe") ||
+            //               Path.GetFileName(filePath).Equals("Gameplay Time Tracker.exe")))
+            //         {
+            //             // tileContainer.AddTile(newTile, newlyAdded: true);
+            //             // tracker.SetTargetProcesses();
+            //             // tileContainer.ListTiles();
+            //             ShowTilesOnCanvas();
+            //             // handler.WriteContentToFile(tileContainer, Utils.DataFilePath);
+            //         }
+            //         else
+            //         {
+            //             selfPopup = new PopupMenu(text: "Sorry, can't keep tabs on myself", type: PopupType.OK);
+            //             selfPopup.OpenMenu();
+            //         }
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         PopupMenu popupMenu = new(text: $"Something went wrong adding {filePath}", type: PopupType.OK);
+            //         popupMenu.OpenMenu();
+            //         Console.WriteLine(e);
+            //     }
+            // }
         }
 
 
@@ -313,87 +306,87 @@ namespace GameplayTimeTracker
             }
         }
 
-        private void UpdateTileIndexes()
-        {
-            tileContainer.tilesList = tileContainer.SortedByProperty("IsRunning", false);
-            for (int i = 0; i < tileContainer.tilesList.Count; i++)
-            {
-                tileContainer.tilesList[i].Index = i;
-            }
-        }
+        // private void UpdateTileIndexes()
+        // {
+        //     tileContainer.tilesList = tileContainer.SortedByProperty("IsRunning", false);
+        //     for (int i = 0; i < tileContainer.tilesList.Count; i++)
+        //     {
+        //         tileContainer.tilesList[i].Index = i;
+        //     }
+        // }
 
-        private void RearrangeTiles()
-        {
-            UpdateTileIndexes();
-
-            int animationsPending = 0; // Track pending animations
-
-            for (int i = 0; i < tileContainer.tilesList.Count; i++)
-            {
-                var tile = tileContainer.tilesList[i];
-                if (MainStackPanel.Children.Contains(tile))
-                {
-                    int oldIndex = MainStackPanel.Children.IndexOf(tile);
-                    if (tile.Index != oldIndex)
-                    {
-                        double offset = (tile.Index - oldIndex) * (tile.RenderSize.Height + 10);
-
-                        // Create and configure the animation
-                        var animation = new DoubleAnimation
-                        {
-                            From = 0,
-                            To = offset,
-                            Duration = TimeSpan.FromSeconds(0.25),
-                            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-                        };
-
-                        tile.RenderTransform = new TranslateTransform();
-                        TranslateTransform transform = (TranslateTransform)tile.RenderTransform;
-
-                        // Increment pending animations counter
-                        animationsPending++;
-                        animation.Completed += (s, e) =>
-                        {
-                            animationsPending--; // Decrement counter
-
-                            // When all animations are completed
-                            if (animationsPending == 0)
-                            {
-                                // Rearrange tiles after all animations are finished
-                                Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    for (int j = 0; j < tileContainer.tilesList.Count; j++)
-                                    {
-                                        var t = tileContainer.tilesList[j];
-                                        if (MainStackPanel.Children.Contains(t))
-                                        {
-                                            MainStackPanel.Children.Remove(t);
-                                            MainStackPanel.Children.Insert(t.Index, t);
-                                        }
-
-                                        // Reset the transform to clear offset
-                                        t.RenderTransform = null;
-                                    }
-                                }), DispatcherPriority.Background);
-                            }
-                        };
-                        // Start the animation on the tile
-                        transform.BeginAnimation(TranslateTransform.YProperty, animation);
-                    }
-                }
-            }
-        }
+        // private void RearrangeTiles()
+        // {
+        //     UpdateTileIndexes();
+        //
+        //     int animationsPending = 0; // Track pending animations
+        //
+        //     for (int i = 0; i < tileContainer.tilesList.Count; i++)
+        //     {
+        //         var tile = tileContainer.tilesList[i];
+        //         if (MainStackPanel.Children.Contains(tile))
+        //         {
+        //             int oldIndex = MainStackPanel.Children.IndexOf(tile);
+        //             if (tile.Index != oldIndex)
+        //             {
+        //                 double offset = (tile.Index - oldIndex) * (tile.RenderSize.Height + 10);
+        //
+        //                 // Create and configure the animation
+        //                 var animation = new DoubleAnimation
+        //                 {
+        //                     From = 0,
+        //                     To = offset,
+        //                     Duration = TimeSpan.FromSeconds(0.25),
+        //                     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        //                 };
+        //
+        //                 tile.RenderTransform = new TranslateTransform();
+        //                 TranslateTransform transform = (TranslateTransform)tile.RenderTransform;
+        //
+        //                 // Increment pending animations counter
+        //                 animationsPending++;
+        //                 animation.Completed += (s, e) =>
+        //                 {
+        //                     animationsPending--; // Decrement counter
+        //
+        //                     // When all animations are completed
+        //                     if (animationsPending == 0)
+        //                     {
+        //                         // Rearrange tiles after all animations are finished
+        //                         Dispatcher.BeginInvoke(new Action(() =>
+        //                         {
+        //                             for (int j = 0; j < tileContainer.tilesList.Count; j++)
+        //                             {
+        //                                 var t = tileContainer.tilesList[j];
+        //                                 if (MainStackPanel.Children.Contains(t))
+        //                                 {
+        //                                     MainStackPanel.Children.Remove(t);
+        //                                     MainStackPanel.Children.Insert(t.Index, t);
+        //                                 }
+        //
+        //                                 // Reset the transform to clear offset
+        //                                 t.RenderTransform = null;
+        //                             }
+        //                         }), DispatcherPriority.Background);
+        //                     }
+        //                 };
+        //                 // Start the animation on the tile
+        //                 transform.BeginAnimation(TranslateTransform.YProperty, animation);
+        //             }
+        //         }
+        //     }
+        // }
 
         public void ShowTilesOnCanvas()
         {
             MainStackPanel.Children.Clear();
-            foreach (var tile in tileContainer.tilesList)
-            {
-                double lm = (Width - tile.TileWidth) * 0.5 + ScrollViewer.Padding.Left - 1;
-                tile.Margin = new Thickness(lm, 5, 0, 5);
-
-                MainStackPanel.Children.Add(tile);
-            }
+            // foreach (var tile in tileContainer.tilesList)
+            // {
+            //     double lm = (Width - tile.TileWidth) * 0.5 + ScrollViewer.Padding.Left - 1;
+            //     tile.Margin = new Thickness(lm, 5, 0, 5);
+            //
+            //     MainStackPanel.Children.Add(tile);
+            // }
         }
 
         public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
@@ -408,16 +401,16 @@ namespace GameplayTimeTracker
             OverlayBottom.Width = scrollViewer.ViewportWidth * 2;
         }
 
-        private void CloseSettingsMenu()
-        {
-            if (settingsMenu != null)
-            {
-                if (settingsMenu.IsToggled)
-                {
-                    settingsMenu.CloseMenuMethod();
-                }
-            }
-        }
+        // private void CloseSettingsMenu()
+        // {
+        //     if (settingsMenu != null)
+        //     {
+        //         if (settingsMenu.IsToggled)
+        //         {
+        //             settingsMenu.CloseMenuMethod();
+        //         }
+        //     }
+        // }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -425,8 +418,7 @@ namespace GameplayTimeTracker
             {
                 e.Cancel = true;
 
-                tileContainer.CloseAllPopups();
-                CloseSettingsMenu();
+                // CloseSettingsMenu();
                 if (exitPopup == null || !exitPopup.IsToggled)
                 {
                     exitPopup = new PopupMenu(text: "Are you sure you want to exit?",
@@ -454,7 +446,7 @@ namespace GameplayTimeTracker
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            tileContainer?.InitSave();
+            // tileContainer?.InitSave();
             // Close the application if Yes is clicked
             Application.Current.Shutdown();
         }
@@ -472,21 +464,6 @@ namespace GameplayTimeTracker
         private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             notificationHandler.OnIsVisibleChanged(sender, e);
-        }
-
-        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
-        {
-            settingsMenu = new SettingsMenu(containerGrid: ContainerGrid,
-                menuGrid: SettingsGrid,
-                settings: handler.GetSettingsFromFile(),
-                tileContainer,
-                updateMethod: UpdateColors,
-                tileGradMethod: tileContainer.UpdateTilesGradients,
-                tileBgImagesMethod: tileContainer.UpdateTileBgImages,
-                showTilesOnCanvasMethod: ShowTilesOnCanvas
-                // updateLegacyMethod: tileContainer.UpdateLegacyTime
-            );
-            settingsMenu.OpenMenu();
         }
 
         private void Grid_DragEnter(object sender, DragEventArgs e)
@@ -549,9 +526,7 @@ namespace GameplayTimeTracker
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double newWidth = ActualWidth - 2 * Utils.TileLeftMargin - 1.5 * SystemParameters.VerticalScrollBarWidth;
-            Console.WriteLine(ActualWidth);
-            tileContainer.UpdateTilesWidth(newWidth);
+            Console.WriteLine($"Size changed to {e.NewSize.Width}x{e.NewSize.Height}");
         }
     }
 }

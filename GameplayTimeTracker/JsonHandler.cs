@@ -264,71 +264,12 @@ public class JsonHandler
     }
 
     // Creates a list of parameters used for creating tiles in the container.
-    public void InitializeContainer(TileContainer container, Settings settings)
-    {
-        CheckForDataDirectory();
+    
 
-        if (!File.Exists(Utils.DataFilePath))
-        {
-            File.WriteAllText(Utils.DataFilePath, "[]");
-        }
-
-        container.tilesList.Clear();
-        string jsonString = File.ReadAllText(Utils.DataFilePath);
-
-        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
-        if (paramsList != null && paramsList.Count > 0)
-        {
-            foreach (var param in paramsList)
-            {
-                container.AddTile(new Tile(
-                    container,
-                    param.gameName,
-                    param.lastPlayDate.Year < 2000 || param.lastPlayDate == null
-                        ? new DateTime(2, 1, 1)
-                        : param.lastPlayDate,
-                    settings.HorizontalTileGradient,
-                    settings.HorizontalEditGradient,
-                    settings.BigBgImages,
-                    param.totalTime,
-                    param.lastPlayedTime,
-                    param.iconPath,
-                    param.exePath,
-                    param.arguments == null ? "" : param.arguments));
-            }
-        }
-    }
-
-    public List<Params> GetDataFromFile()
-    {
-        string jsonString = File.ReadAllText(Utils.DataFilePath);
-
-        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
-        return paramsList;
-    }
-
+    
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
-    }
-
-    // By using a list of parameters from the container, it writes the data to the file
-    public void WriteContentToFile(TileContainer container, string outputPath)
-    {
-        List<Params> paramsList = new List<Params>();
-
-        foreach (var tile in container.tilesList)
-        {
-            tile.TotalPlaytime = tile.GetTotalPlaytimeAsDouble();
-            tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
-            paramsList.Add(new Params(tile.GameName, tile.LastPlayDate, tile.TotalPlaytime, tile.LastPlaytime,
-                tile.IconImagePath,
-                tile.ExePath, tile.ShortcutArgs));
-        }
-
-        string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(outputPath, jsonString);
-        Console.WriteLine($"!! Saved data to {outputPath} !!");
     }
 
     public bool BackupDataFile()
