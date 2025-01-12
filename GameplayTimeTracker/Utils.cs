@@ -31,10 +31,12 @@ public class Utils
     // public const string AppIconPath = "assets/GameplayTimeTracker.ico";
     private const string SettingsFileName = "settings.json";
     private const string DataFileName = "data.json";
+    private const string ExperimentalDataName = "experimental_data.json";
     private const string BackupDataFileName = "backup_data.json";
     private const string SavedIconsFolderName = "Saved Icons";
     private const string BackupFolderName = "Backup Data";
     public static string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
+    // public static string ExperimentalDataFilePath = Path.Combine(DocumentsPath, ExperimentalDataName);
     public static string BackupDataFilePath = Path.Combine(DocumentsPath, BackupDataFileName);
     public static string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
@@ -72,8 +74,21 @@ public class Utils
 
     public static bool toUpdate = false;
 
+    public static int[] p = { 33, 11, 11, 10, 10 , 11, 45, 45, 17};
+
     public static System.Windows.Window mainWindow = Application.Current.MainWindow;
 
+    public static  string Truncate(string value, int length)
+    {
+        if (value.Length < length)
+        {
+            // Pad the string with spaces if it's shorter than the desired length
+            return value.PadRight(length);
+        }
+
+        return value.Substring(0, length); // Otherwise, truncate the string
+    }
+    
     public static Window GetMainWindow()
     {
         return mainWindow;
@@ -492,6 +507,16 @@ public class Utils
 
         return (hours, minutes, seconds);
     }
+
+    public static int[] GetArrayFromDoubleTime(double totalHours)
+    {
+        int hours = (int)totalHours; // Extract the whole number part for hours
+        double totalMinutes = (totalHours - hours) * 60; // Convert remaining fraction to minutes
+        int minutes = (int)totalMinutes; // Extract the whole number part for minutes
+        int seconds = (int)((totalMinutes - minutes) * 60); // Convert remaining fraction to seconds
+
+        return new[] { hours, minutes, seconds };
+    }
     
     public static (int Hours, int Minutes, int Seconds) ConvertMinutesToTime(double totalMinutes)
     {
@@ -626,7 +651,7 @@ public class Utils
     {
         var sampleTextBlock = new TextBlock
         {
-            Text = "",
+            // Text = "",
             FontWeight = FontWeights.Bold,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -644,7 +669,7 @@ public class Utils
     {
         return new TextBlock
         {
-            Text = original.Text,
+            // Text = original.Text,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Regular,
             FontSize = original.FontSize,
             Foreground = original.Foreground.Clone(), // Clone the brush if needed

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -263,13 +264,128 @@ public class JsonHandler
         }
     }
 
-    // Creates a list of parameters used for creating tiles in the container.
-    
+    public void SaveEntriesToFile(List<Entry> entries)
+    {
+        string defaultJson = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Utils.DataFilePath, defaultJson);
+    }
 
-    
+    // Creates a list of parameters used for creating tiles in the container.
+    public void InitializeContainer(TileContainer container, EntryRepository repository, Settings settings)
+    {
+        // CheckForDataDirectory();
+
+        // if (!File.Exists(Utils.DataFilePath))
+        // {
+        //     File.WriteAllText(Utils.DataFilePath, "[]");
+        // }
+        //
+        // container.tilesList.Clear();
+        // string jsonString = File.ReadAllText(Utils.DataFilePath);
+        //
+        // List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
+        // if (paramsList != null && paramsList.Count > 0)
+        // {
+        //     foreach (var param in paramsList)
+        //     {
+        //         container.AddTile(new Tile(
+        //             container,
+        //             param.gameName,
+        //             param.lastPlayDate.Year < 2000 || param.lastPlayDate == null
+        //                 ? new DateTime(2, 1, 1)
+        //                 : param.lastPlayDate,
+        //             settings.HorizontalTileGradient,
+        //             settings.HorizontalEditGradient,
+        //             settings.BigBgImages,
+        //             param.totalTime,
+        //             param.lastPlayedTime,
+        //             param.iconPath,
+        //             param.exePath,
+        //             param.arguments == null ? "" : param.arguments));
+        //     }
+        // }
+        InitContainer(container, repository, settings);
+    }
+
+    public void InitContainer(TileContainer cont, EntryRepository repo, Settings settings)
+    {
+        CheckForDataDirectory();
+
+        if (!File.Exists(Utils.DataFilePath))
+        {
+            File.WriteAllText(Utils.DataFilePath, "[]");
+        }
+
+        cont.repository = repo;
+        cont.tilesList.Clear();
+        if (repo.EntriesList.Count > 0)
+        {
+            foreach (var entry in repo.EntriesList)
+            {
+                // Tile toAdd = new Tile(cont, 
+                //     entry.Name,
+                //     entry.LastDate.Year < 2000 || entry.LastDate == null
+                //     ? new DateTime(2, 1, 1)
+                //     : entry.LastDate,
+                //     settings.HorizontalTileGradient,
+                //     settings.HorizontalEditGradient,
+                //     settings.BigBgImages,
+                //     entry.TotalTime,
+                //     entry.LastTime,
+                //     entry.IconPath,
+                //     entry.ExePath,
+                //     entry.Arguments == null ? "" : entry.Arguments,
+                //     data: entry);
+                Tile toAdd = new Tile(cont, entry, settings);
+                cont.AddTile(toAdd);
+            }
+        }
+    }
+
+    public List<Params> GetDataFromFile()
+    {
+        string jsonString = File.ReadAllText(Utils.DataFilePath);
+
+        List<Params> paramsList = JsonSerializer.Deserialize<List<Params>>(jsonString);
+        return paramsList;
+    }
+
+    public List<Entry> GetEntriesFromFile(string filePath)
+    {
+        string jsonString = File.ReadAllText(filePath);
+        List<Entry> entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+        return entries;
+    }
+
+    public void WriteEntriesToFile(EntryRepository repository)
+    {
+        string jsonString = JsonSerializer.Serialize(repository.EntriesList, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Utils.DataFilePath, jsonString);
+    }
+
+
     public bool CheckForDataToUpdate()
     {
         return Assembly.GetExecutingAssembly().GetName().Version > new Version(1, 3, 1);
+    }
+
+    // By using a list of parameters from the container, it writes the data to the file
+    public void WriteContentToFile(TileContainer container, string outputPath)
+    {
+        List<Params> paramsList = new List<Params>();
+
+        foreach (var tile in container.tilesList)
+        {
+            tile.TotalPlaytime = tile.GetTotalPlaytimeAsDouble();
+            tile.LastPlaytime = tile.GetLastPlaytimeAsDouble();
+            paramsList.Add(new Params(tile.GameName, tile.LastPlayDate, tile.TotalPlaytime, tile.LastPlaytime,
+                tile.IconImagePath,
+                tile.ExePath, tile.ShortcutArgs));
+        }
+
+        string jsonString = JsonSerializer.Serialize(paramsList, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(outputPath, jsonString);
+        Console.WriteLine($"!! Saved data to {outputPath} !!");
     }
 
     public bool BackupDataFile()
@@ -309,7 +425,7 @@ public class JsonHandler
             {
                 // Just to be safe, if new data file is not satisfactory
                 BackupDataFile();
-                
+
                 string selectedFilePath = openFileDialog.FileName;
 
                 // Read the selected JSON file
