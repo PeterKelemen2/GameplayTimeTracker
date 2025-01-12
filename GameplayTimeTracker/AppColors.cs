@@ -7,7 +7,7 @@ namespace GameplayTimeTracker;
 public static class AppColors
 {
     public static Color Background = (Color)ColorConverter.ConvertFromString("#1E2030");
-    public static Color Footer = (Color)ColorConverter.ConvertFromString("#90EE90");
+    public static Color Footer = (Color)ColorConverter.ConvertFromString("#6A6F99");
     public static Color Font = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color Running = (Color)ColorConverter.ConvertFromString("#C3E88D");
 

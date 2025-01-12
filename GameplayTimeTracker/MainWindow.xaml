@@ -23,7 +23,7 @@
             <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
         </ScrollViewer>
         
-        <Grid Grid.Row="1" x:Name="Footer" Background="LightGreen">
+        <Grid Grid.Row="1" x:Name="Footer">
             <TextBlock x:Name="GamesLoadedBlock"
                        Foreground="Black"
                        HorizontalAlignment="Center"
