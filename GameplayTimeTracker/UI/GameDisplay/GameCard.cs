@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -30,8 +31,7 @@ public class GameCard : UserControl
 
     public ProgressBar TotalProgressBar { get; set; }
     public ProgressBar LastProgressBar { get; set; }
-
-
+    
     public CustomButton LaunchButton { get; set; }
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
@@ -99,7 +99,7 @@ public class GameCard : UserControl
         // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
 
-        TotalProgressBar = new ProgressBar(150, 30, 5, 10, 0.25);
+        TotalProgressBar = new ProgressBar(150, 30, 5, 10);
         ContainerGrid.Children.Add(TotalProgressBar);
 
         CreateButtons();
