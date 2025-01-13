@@ -1,26 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.VisualBasic.CompilerServices;
+using MonoMac.CoreWlan;
 
 namespace GameplayTimeTracker;
 
-public class DataHandler
+public static class DataHandler
 {
-    public DataHandler()
+  
+    public static List<Entry> GetEntriesFromFile(string filePath)
     {
-    }
-    
-    public List<Entry> GetEntriesFromFile(string filePath)
-    {
-        string jsonString = File.ReadAllText(filePath);
-        List<Entry> entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+        List<Entry> entries = new();
+        if (File.Exists(filePath))
+        {
+            string jsonString = File.ReadAllText(filePath);
+            entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+        }
+        else
+        {
+            WriteEntriesToFile(entries);
+        }
         return entries;
     }
 
-    public void WriteEntriesToFile(EntryRepository repository)
+    public static void WriteEntriesToFile(List<Entry> entries)
     {
-        string jsonString = JsonSerializer.Serialize(repository.EntriesList, new JsonSerializerOptions { WriteIndented = true });
+        if (!Path.Exists(AppFiles.DocumentsPath))
+        {
+            Directory.CreateDirectory(AppFiles.DocumentsPath);
+        }
+        string jsonString = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(AppFiles.DataFilePath, jsonString);
     }
 }

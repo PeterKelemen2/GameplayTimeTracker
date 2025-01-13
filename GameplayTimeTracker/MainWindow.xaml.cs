@@ -14,6 +14,7 @@ namespace GameplayTimeTracker;
 
 public partial class MainWindow : Window
 {
+    private EntryRepository entryRepository;
     public MainWindow()
     {
         InitializeComponent();
@@ -24,13 +25,22 @@ public partial class MainWindow : Window
     {
         CreateFooterButtons();
         SetBaseColors();
+        entryRepository = new EntryRepository();
+        Entry entry = new Entry();
+        entry.Name = "TestName";
+        entry.Arguments = "TestArguments";
+        entry.TotalPlay = new[] { 12, 2, 45 };
+        entry.LastPlay = new[] { 8, 6, 33 };
+        entry.IconPath = "C:\\Users\\Peti\\Documents\\Gameplay Time Tracker\\SteamGridDB Images\\20530_icon.png";
+        entry.ExePath = "C:\\Program Files\\VSCodium\\VSCodium.exe";
+        entryRepository.AddEntry(entry);
+        
+        entryRepository.PrintEntryList();
     }
 
     private void SetBaseColors()
     {
         Footer.Background = new SolidColorBrush(AppColors.Footer);
-        // GamesLoadedBlock.Foreground = new SolidColorBrush(AppColors.Font);
-        // TotalPlaytimeTextBlock.Foreground = new SolidColorBrush(AppColors.Font);
         MainScrollViewer.Background = new SolidColorBrush(AppColors.Background);
     }
 

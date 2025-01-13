@@ -12,8 +12,7 @@ public class EntryRepository
 
     public EntryRepository()
     {
-        DataHandler handler = new DataHandler();
-        EntriesList = handler.GetEntriesFromFile(AppFiles.DataFilePath);
+        EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
 
         CheckForOldTime();
         UpdateTotalPercs();
@@ -74,7 +73,7 @@ public class EntryRepository
         }
     }
 
-    private void PrintEntryList()
+    public void PrintEntryList()
     {
         int[] p = Common.p;
         string header = $" | {Common.Truncate("Name", p[0])}" +
