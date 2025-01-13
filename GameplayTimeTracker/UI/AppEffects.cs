@@ -36,13 +36,13 @@ public static class AppEffects
         Direction = 200,
     };
 
-    public static DropShadowEffect dropShadowTextEdit = new DropShadowEffect
+    public static DropShadowEffect dropShadowGameIcon = new DropShadowEffect
     {
-        BlurRadius = 5,
-        ShadowDepth = 0,
-        Color = Colors.LightBlue,
-        Opacity = 1,
-        Direction = 200,
+        BlurRadius = 0,
+        ShadowDepth = 10,
+        Color = Colors.Black,
+        Opacity = 0.4,
+        Direction = -45,
     };
 
     public static DropShadowEffect dropShadowIcon = new DropShadowEffect

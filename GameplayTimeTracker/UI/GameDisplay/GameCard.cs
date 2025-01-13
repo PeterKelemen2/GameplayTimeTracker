@@ -73,9 +73,23 @@ public class GameCard : UserControl
                 new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
             }
         };
-
         HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height), CardRectangle.RadiusX, CardRectangle.RadiusY);
+        RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
+        
+        IconImage = new Image
+        {
+            Source = new BitmapImage(new Uri(DataEntry.IconPath, UriKind.RelativeOrAbsolute)),
+            Height = ContainerGrid.Height * 0.6,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Stretch = Stretch.Uniform,
+            Opacity = 1.0, // Full opacity (OpacityMask will control the effect)
+            Margin = new Thickness(ContainerGrid.Height * 0.2, 20, 0, 0),
+            Effect = AppEffects.dropShadowGameIcon,
+            
+        };
+        RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
+        ContainerGrid.Children.Add(IconImage);
 
         CreateButtons();
 
