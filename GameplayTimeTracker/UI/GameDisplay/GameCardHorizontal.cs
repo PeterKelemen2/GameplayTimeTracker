@@ -40,7 +40,10 @@ public class GameCardHorizontal : GameCard
         RunningTextBlock.VerticalAlignment = VerticalAlignment.Top;
         RunningTextBlock.Margin =
             new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
-        
+
+        TotalProgressBar.Margin = new Thickness(0, 0, TotalProgressBar.BgWidth * 1.5, 0);
+        LastProgressBar.Margin = new Thickness(LastProgressBar.BgWidth * 1.5, 0, 0, 0);
+
         IconImage.Height = ContainerGrid.Height * 0.6;
         IconImage.HorizontalAlignment = HorizontalAlignment.Left;
         IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0);

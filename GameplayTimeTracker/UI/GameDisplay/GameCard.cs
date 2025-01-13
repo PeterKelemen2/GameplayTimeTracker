@@ -99,9 +99,14 @@ public class GameCard : UserControl
         // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
 
-        TotalProgressBar = new ProgressBar(150, 30, 5, 10);
+        TotalProgressBar = new ProgressBar(150, 30, 5, 10,DataEntry.TotalPerc);
         ContainerGrid.Children.Add(TotalProgressBar);
+        
+        LastProgressBar = new ProgressBar(150, 30, 5, 10,DataEntry.LastPerc);
+        ContainerGrid.Children.Add(LastProgressBar);
 
+        
+        
         CreateButtons();
 
         Content = ContainerGrid;
