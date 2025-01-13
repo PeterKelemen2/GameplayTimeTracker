@@ -28,6 +28,10 @@ public class GameCard : UserControl
     public Image HeroImage { get; set; }
     public Image IconImage { get; set; }
 
+    public ProgressBar TotalProgressBar { get; set; }
+    public ProgressBar LastProgressBar { get; set; }
+
+
     public CustomButton LaunchButton { get; set; }
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
@@ -94,6 +98,9 @@ public class GameCard : UserControl
         // };
         // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
+
+        TotalProgressBar = new ProgressBar(150, 30, 5, 10, 25);
+        ContainerGrid.Children.Add(TotalProgressBar);
 
         CreateButtons();
 
