@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using Microsoft.VisualBasic.CompilerServices;
-using MonoMac.CoreWlan;
 
 namespace GameplayTimeTracker;
 
