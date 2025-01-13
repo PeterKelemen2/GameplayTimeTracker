@@ -142,7 +142,6 @@ public class GameCard : UserControl
         };
         LastPlayedBlock.Inlines.Add(new Run("2025.01.13 12:43") { FontWeight = FontWeights.Regular });
         
-        
         TotalStack = new StackPanel();
         TotalStack.Children.Add(TotalPlaytimeBlock);
         TotalStack.Children.Add(TotalProgressBar);

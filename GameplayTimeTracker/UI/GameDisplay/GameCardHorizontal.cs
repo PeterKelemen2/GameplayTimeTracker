@@ -69,7 +69,7 @@ public class GameCardHorizontal : GameCard
         HeroImage.HorizontalAlignment = HorizontalAlignment.Left;
         HeroImage.OpacityMask = new LinearGradientBrush
         {
-            StartPoint = new Point(0, 0), // Start from the left
+            StartPoint = new Point(0.33, 0), // Start from the left
             EndPoint = new Point(1, 0), // End on the right
             GradientStops = new GradientStopCollection
             {
