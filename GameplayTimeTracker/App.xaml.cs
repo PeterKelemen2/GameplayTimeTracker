@@ -8,9 +8,7 @@ using System.Windows;
 
 namespace GameplayTimeTracker
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+
     public partial class App : Application
     {
     }

@@ -13,6 +13,14 @@ namespace GameplayTimeTracker;
 
 public class CustomButton : UserControl
 {
+    public enum ButtonType
+    {
+        Default,
+        Positive,
+        Negative
+    }
+
+    public ButtonType BType { get; set; }
     public bool IsActive { get; set; }
     public Rectangle ButtonBase;
     private string ButtonImagePath;
@@ -21,7 +29,7 @@ public class CustomButton : UserControl
     public Color ButtonHoverColor { get; set; }
     public Color ButtonPressedColor { get; set; }
     public Grid Grid { get; set; }
-    ButtonType Type { get; set; }
+    // ButtonType Type { get; set; }
 
 
     // Dependency Properties
@@ -61,8 +69,7 @@ public class CustomButton : UserControl
     {
         ButtonImagePath = buttonImagePath;
         IsActive = isActive;
-        Type = type;
-
+        BType = type;
 
         Grid = new Grid
         {
@@ -102,6 +109,7 @@ public class CustomButton : UserControl
         {
             if (File.Exists(buttonImagePath))
             {
+                Console.WriteLine(buttonImagePath);
                 ButtonImage = new Image();
                 ButtonImage.Source = new BitmapImage(new Uri(buttonImagePath, UriKind.RelativeOrAbsolute));
                 ButtonImage.Width = height / 2;
@@ -131,6 +139,10 @@ public class CustomButton : UserControl
                     Grid.Children.Add(ButtonImage);
                 }
             }
+            else
+            {
+                Console.WriteLine($"Could not find file: {buttonImagePath}");
+            }
         }
 
         Console.WriteLine("Button state:" + IsActive);
@@ -157,7 +169,7 @@ public class CustomButton : UserControl
 
     public void SetButtonColors()
     {
-        switch (Type)
+        switch (BType)
         {
             case ButtonType.Positive:
                 ButtonColor = AppColors.PositiveButton;
