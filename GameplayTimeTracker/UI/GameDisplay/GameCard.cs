@@ -38,20 +38,21 @@ public class GameCard : UserControl
         DataEntry = dataEntry;
         ParentStackPanel = parentStackPanel;
 
-        ContainerGrid = new Grid
-        {
-            Width = ParentStackPanel.ActualWidth - Common.CardPadding * 2,
-            Height = 150,
-            Margin = new Thickness(10, 10, 10, 0)
-        };
+        // ContainerGrid = new Grid
+        // {
+        //     Width = ParentStackPanel.ActualWidth - Common.CardPadding * 2,
+        //     Height = 150,
+        //     Margin = new Thickness(10, 10, 10, 0)
+        // };
+        ContainerGrid = new Grid();
 
-        Rectangle CardRectangle = new Rectangle
+        CardRectangle = new Rectangle
         {
-            Width = ContainerGrid.Width,
-            Height = ContainerGrid.Height,
+            // Width = ContainerGrid.Width,
+            // Height = ContainerGrid.Height,
             RadiusX = 10,
             RadiusY = 10,
-            Fill = AppColors.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2),
+            // Fill = AppColors.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2),
             Effect = AppEffects.dropShadowIcon,
         };
         ContainerGrid.Children.Add(CardRectangle);
@@ -59,32 +60,32 @@ public class GameCard : UserControl
         HeroImage = new Image
         {
             Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
-            Height = ContainerGrid.Height,
+            // Height = ContainerGrid.Height,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
         };
-        HeroImage.OpacityMask = new LinearGradientBrush
-        {
-            StartPoint = new Point(0, 0), // Start from the left
-            EndPoint = new Point(1, 0), // End on the right
-            GradientStops = new GradientStopCollection
-            {
-                new GradientStop(Colors.Black, 0.0), // Full opacity on the left
-                new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
-            }
-        };
-        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
-            CardRectangle.RadiusX, CardRectangle.RadiusY);
+        // HeroImage.OpacityMask = new LinearGradientBrush
+        // {
+        //     StartPoint = new Point(0, 0), // Start from the left
+        //     EndPoint = new Point(1, 0), // End on the right
+        //     GradientStops = new GradientStopCollection
+        //     {
+        //         new GradientStop(Colors.Black, 0.0), // Full opacity on the left
+        //         new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
+        //     }
+        // };
+        // HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
+        //     CardRectangle.RadiusX, CardRectangle.RadiusY);
         RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
 
         IconImage = new Image
         {
             Source = new BitmapImage(new Uri(DataEntry.IconPath, UriKind.RelativeOrAbsolute)),
-            Height = ContainerGrid.Height * 0.6,
+            // Height = ContainerGrid.Height * 0.6,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
-            Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0),
+            // Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0),
             Effect = AppEffects.DropShadowGameIcon,
         };
         RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
@@ -140,7 +141,7 @@ public class GameCard : UserControl
 
         EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.EditIcon,
             type: CustomButton.ButtonType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
-        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
+        // EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
         EditButton.Effect = bEffect;
         // EditButton.Click += ToggleEdit_Click;
         Panel.SetZIndex(EditButton, 3);
@@ -148,7 +149,7 @@ public class GameCard : UserControl
 
         RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.RemoveIcon,
             type: CustomButton.ButtonType.Negative, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
-        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
+        // RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
         RemoveButton.Effect = bEffect;
         // RemoveButton.Click += OpenDeleteDialog;
         Panel.SetZIndex(RemoveButton, 3);
@@ -156,7 +157,7 @@ public class GameCard : UserControl
 
         LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40, type: CustomButton.ButtonType.Positive,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
-        LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
+        // LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
         LaunchButton.Effect = bEffect;
         // LaunchButton.Click += LaunchExe;
         // SetLaunchButtonState();
