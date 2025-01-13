@@ -22,11 +22,6 @@ public static class AppEffects
         RenderingBias = RenderingBias.Performance
     };
 
-    public static OuterGlowBitmapEffect outerGlowEffect = new OuterGlowBitmapEffect
-    {
-        GlowSize = 10
-    };
-
     public static DropShadowEffect dropShadowText = new DropShadowEffect
     {
         BlurRadius = 8,
@@ -36,13 +31,29 @@ public static class AppEffects
         Direction = 200,
     };
 
-    public static DropShadowEffect dropShadowGameIcon = new DropShadowEffect
+    public static DropShadowEffect DropShadowTitle = new DropShadowEffect
+    {
+        BlurRadius = 0,
+        ShadowDepth = 3,
+        Color = Colors.Black,
+        Opacity = 1,
+        Direction = -45,
+    };
+
+    public static DropShadowEffect DropShadowGameIcon = new DropShadowEffect
     {
         BlurRadius = 0,
         ShadowDepth = 10,
         Color = Colors.Black,
         Opacity = 0.4,
         Direction = -45,
+    };
+
+    public static DropShadowEffect DropOuterGlow = new DropShadowEffect
+    {
+        BlurRadius = 5,
+        ShadowDepth = 0,
+        Color = Colors.Black,
     };
 
     public static DropShadowEffect dropShadowIcon = new DropShadowEffect

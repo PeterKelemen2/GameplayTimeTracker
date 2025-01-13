@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -61,36 +62,52 @@ public class GameCard : UserControl
             Height = ContainerGrid.Height,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
-            Opacity = 1.0, // Full opacity (OpacityMask will control the effect)
         };
         HeroImage.OpacityMask = new LinearGradientBrush
         {
             StartPoint = new Point(0, 0), // Start from the left
-            EndPoint = new Point(1, 0),   // End on the right
+            EndPoint = new Point(1, 0), // End on the right
             GradientStops = new GradientStopCollection
             {
-                new GradientStop(Colors.Black, 0.0),  // Full opacity on the left
+                new GradientStop(Colors.Black, 0.0), // Full opacity on the left
                 new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
             }
         };
-        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height), CardRectangle.RadiusX, CardRectangle.RadiusY);
+        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
+            CardRectangle.RadiusX, CardRectangle.RadiusY);
         RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
-        
+
         IconImage = new Image
         {
             Source = new BitmapImage(new Uri(DataEntry.IconPath, UriKind.RelativeOrAbsolute)),
             Height = ContainerGrid.Height * 0.6,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
-            Opacity = 1.0, // Full opacity (OpacityMask will control the effect)
             Margin = new Thickness(ContainerGrid.Height * 0.2, 20, 0, 0),
-            Effect = AppEffects.dropShadowGameIcon,
-            
+            Effect = AppEffects.DropShadowGameIcon,
         };
         RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(IconImage);
 
+        TitleBlock = new TextBlock
+        {
+            FontWeight = FontWeights.Bold,
+            FontSize = Common.TitleFontSize,
+            Foreground = new SolidColorBrush(AppColors.Font),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin =
+                new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX / 2, 0, 0),
+            Effect = AppEffects.DropOuterGlow,
+        };
+        Binding titleBinding = new Binding("Name")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.TwoWay
+        };
+        TitleBlock.SetBinding(TextBlock.TextProperty, titleBinding);
+        ContainerGrid.Children.Add(TitleBlock);
         CreateButtons();
 
         Content = ContainerGrid;
