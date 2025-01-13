@@ -52,6 +52,39 @@ public class GameCard : UserControl
         };
         ContainerGrid.Children.Add(CardRectangle);
 
+        CreateButtons();
+
+
         Content = ContainerGrid;
+    }
+
+    private void CreateButtons()
+    {
+        var bEffect = AppEffects.dropShadowIcon;
+        
+        EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.EditIcon,
+            type: CustomButton.ButtonType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
+        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
+        EditButton.Effect = bEffect;
+        // EditButton.Click += ToggleEdit_Click;
+        Panel.SetZIndex(EditButton, 3);
+        ContainerGrid.Children.Add(EditButton);
+
+        RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.RemoveIcon,
+            type: CustomButton.ButtonType.Negative, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
+        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
+        RemoveButton.Effect = bEffect;
+        // RemoveButton.Click += OpenDeleteDialog;
+        Panel.SetZIndex(RemoveButton, 3);
+        ContainerGrid.Children.Add(RemoveButton);
+
+        LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40, type: CustomButton.ButtonType.Positive,
+            hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
+        LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
+        LaunchButton.Effect = bEffect;
+        // LaunchButton.Click += LaunchExe;
+        // SetLaunchButtonState();
+        Panel.SetZIndex(LaunchButton, 3);
+        ContainerGrid.Children.Add(LaunchButton);
     }
 }

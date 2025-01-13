@@ -11,6 +11,7 @@ namespace GameplayTimeTracker
         private string _name;
         private string _exePath;
         private string _iconPath;
+        private string _heroPath;
         private string _arguments;
         private double _totalTime;
         private double _lastTime;
@@ -90,6 +91,13 @@ namespace GameplayTimeTracker
         {
             get => _iconPath;
             set => SetField(ref _iconPath, value);
+        }
+        
+        [JsonPropertyName("heroPath")]
+        public string HeroPath
+        {
+            get => _heroPath;
+            set => SetField(ref _heroPath, value);
         }
 
         [JsonPropertyName("totalTime")]
