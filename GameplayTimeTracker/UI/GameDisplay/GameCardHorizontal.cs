@@ -30,12 +30,23 @@ public class GameCardHorizontal : GameCard
         RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
         LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
 
-        
-        HeroImage.Height = ContainerGrid.Height;
+        TitleBlock.FontSize = Common.TitleFontSize;
+        TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        TitleBlock.VerticalAlignment = VerticalAlignment.Top;
+        TitleBlock.Margin = new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX / 2, 0, 0);
 
+        RunningTextBlock.FontSize = Common.TitleFontSize - 4;
+        RunningTextBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        RunningTextBlock.VerticalAlignment = VerticalAlignment.Top;
+        RunningTextBlock.Margin =
+            new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
+        
         IconImage.Height = ContainerGrid.Height * 0.6;
+        IconImage.HorizontalAlignment = HorizontalAlignment.Left;
         IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0);
 
+        HeroImage.Height = ContainerGrid.Height;
+        HeroImage.HorizontalAlignment = HorizontalAlignment.Left;
         HeroImage.OpacityMask = new LinearGradientBrush
         {
             StartPoint = new Point(0, 0), // Start from the left
@@ -46,7 +57,6 @@ public class GameCardHorizontal : GameCard
                 new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
             }
         };
-
         HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
             CardRectangle.RadiusX, CardRectangle.RadiusY);
     }
