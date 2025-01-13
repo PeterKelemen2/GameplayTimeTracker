@@ -84,7 +84,7 @@ public class GameCard : UserControl
             Height = ContainerGrid.Height * 0.6,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
-            Margin = new Thickness(ContainerGrid.Height * 0.2, 20, 0, 0),
+            Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0),
             Effect = AppEffects.DropShadowGameIcon,
         };
         RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
@@ -108,6 +108,27 @@ public class GameCard : UserControl
         };
         TitleBlock.SetBinding(TextBlock.TextProperty, titleBinding);
         ContainerGrid.Children.Add(TitleBlock);
+
+        RunningTextBlock = new TextBlock
+        {
+            FontWeight = FontWeights.Bold,
+            FontSize = Common.TitleFontSize - 4,
+            Foreground = new SolidColorBrush(AppColors.Running),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX + Common.TitleFontSize -3 , 0, 0),
+            Effect = AppEffects.dropShadowText,
+        };
+        RunningTextBlock.Text = "Running!";
+        // RunningTextBlock.DataContext = DataEntry; 
+        // Binding runningBinding = new Binding("RunningFormatted")
+        // {
+        //     Source = DataEntry, 
+        //     Mode = BindingMode.OneWay,
+        // };
+        // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
+        ContainerGrid.Children.Add(RunningTextBlock);
+
         CreateButtons();
 
         Content = ContainerGrid;
