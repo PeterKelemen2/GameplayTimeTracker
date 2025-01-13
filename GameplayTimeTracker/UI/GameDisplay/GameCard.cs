@@ -61,19 +61,21 @@ public class GameCard : UserControl
             Height = ContainerGrid.Height,
             HorizontalAlignment = HorizontalAlignment.Left,
             Stretch = Stretch.Uniform,
-            Opacity = 0.8,
+            Opacity = 1.0, // Full opacity (OpacityMask will control the effect)
         };
-        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height), CardRectangle.RadiusX,
-            CardRectangle.RadiusY);
-        Border HeroImageBorder = new Border
+        HeroImage.OpacityMask = new LinearGradientBrush
         {
-            Width = CardRectangle.Width,
-            Height = ContainerGrid.Height,
-            Child = HeroImage,
-            // Background = new SolidColorBrush(Colors.Aqua),
-            CornerRadius = new CornerRadius(CardRectangle.RadiusX),
+            StartPoint = new Point(0, 0), // Start from the left
+            EndPoint = new Point(1, 0),   // End on the right
+            GradientStops = new GradientStopCollection
+            {
+                new GradientStop(Colors.Black, 0.0),  // Full opacity on the left
+                new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
+            }
         };
-        ContainerGrid.Children.Add(HeroImageBorder);
+
+        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height), CardRectangle.RadiusX, CardRectangle.RadiusY);
+        ContainerGrid.Children.Add(HeroImage);
 
         CreateButtons();
 
