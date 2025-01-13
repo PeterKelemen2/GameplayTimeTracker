@@ -2,10 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Gtk;
+using Grid = System.Windows.Controls.Grid;
+using Image = System.Windows.Controls.Image;
 
 namespace GameplayTimeTracker;
 
@@ -20,9 +24,12 @@ public class GameCard : UserControl
     public double CornerRadius { get; set; }
 
     public Grid ContainerGrid { get; set; }
+    public StackPanel TotalStack { get; set; }
+    public StackPanel LastStack { get; set; }
     public Rectangle CardRectangle { get; set; }
     public TextBlock TitleBlock { get; set; }
     public TextBlock LastPlaytimeBlock { get; set; }
+    public TextBlock LastPlayedBlock { get; set; }
     public TextBlock TotalPlaytimeBlock { get; set; }
     public TextBlock RunningTextBlock { get; set; }
 
@@ -31,7 +38,7 @@ public class GameCard : UserControl
 
     public ProgressBar TotalProgressBar { get; set; }
     public ProgressBar LastProgressBar { get; set; }
-    
+
     public CustomButton LaunchButton { get; set; }
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
@@ -99,14 +106,54 @@ public class GameCard : UserControl
         // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
 
-        TotalProgressBar = new ProgressBar(150, 30, 5, 10,DataEntry.TotalPerc);
-        ContainerGrid.Children.Add(TotalProgressBar);
-        
-        LastProgressBar = new ProgressBar(150, 30, 5, 10,DataEntry.LastPerc);
-        ContainerGrid.Children.Add(LastProgressBar);
+        TotalProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.TotalPerc);
+        LastProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.LastPerc);
 
+        TotalPlaytimeBlock = new TextBlock
+        {
+            Text = "Total Playtime\n",
+            Foreground = new SolidColorBrush(AppColors.Font),
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left,
+            Effect = AppEffects.DropOuterGlow,
+        };
+        TotalPlaytimeBlock.Inlines.Add(new Run("4h 5m 6s") { FontWeight = FontWeights.Regular });
+
+        LastPlaytimeBlock = new TextBlock
+        {
+            Text = "Last Playtime\n",
+            Foreground = new SolidColorBrush(AppColors.Font),
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left,
+            Effect = AppEffects.DropOuterGlow,
+        };
+        LastPlaytimeBlock.Inlines.Add(new Run("1h 2m 3s") { FontWeight = FontWeights.Regular });
+        
+        LastPlayedBlock = new TextBlock
+        {
+            Text = "Started: ",
+            Foreground = new SolidColorBrush(AppColors.Font),
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left,
+            Effect = AppEffects.DropOuterGlow,
+        };
+        LastPlayedBlock.Inlines.Add(new Run("2025.01.13 12:43") { FontWeight = FontWeights.Regular });
         
         
+        TotalStack = new StackPanel();
+        TotalStack.Children.Add(TotalPlaytimeBlock);
+        TotalStack.Children.Add(TotalProgressBar);
+        ContainerGrid.Children.Add(TotalStack);
+        
+        LastStack = new StackPanel();
+        LastStack.Children.Add(LastPlaytimeBlock);
+        LastStack.Children.Add(LastProgressBar);
+        LastStack.Children.Add(LastPlayedBlock);
+        ContainerGrid.Children.Add(LastStack);
+
         CreateButtons();
 
         Content = ContainerGrid;
