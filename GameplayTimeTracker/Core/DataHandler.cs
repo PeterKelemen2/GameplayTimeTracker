@@ -17,18 +17,18 @@ public static class DataHandler
         }
         else
         {
-            WriteEntriesToFile(entries);
+            WriteEntriesToFile(entries, AppFiles.DataFilePath);
         }
         return entries;
     }
 
-    public static void WriteEntriesToFile(List<Entry> entries)
+    public static void WriteEntriesToFile(List<Entry> entries, string filePath)
     {
         if (!Path.Exists(AppFiles.DocumentsPath))
         {
             Directory.CreateDirectory(AppFiles.DocumentsPath);
         }
         string jsonString = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(AppFiles.DataFilePath, jsonString);
+        File.WriteAllText(filePath, jsonString);
     }
 }

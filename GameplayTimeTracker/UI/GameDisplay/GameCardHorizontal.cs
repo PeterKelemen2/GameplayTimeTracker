@@ -1,6 +1,8 @@
-﻿namespace GameplayTimeTracker.UI.ScrollContent;
+﻿namespace GameplayTimeTracker;
 
-public class GameCardHorizontal
+public class GameCardHorizontal: GameCard
 {
-    
+    public GameCardHorizontal(Entry dataEntry, GameCardRepository gameCardRepository) : base(dataEntry, gameCardRepository)
+    {
+    }
 }

@@ -2,6 +2,8 @@
 
 public static class Common
 {
+    public const string RunningText = "Running!";
+    
     public static int[] p = { 33, 11, 11, 10, 10 , 11, 45, 45, 17};
     public static  string Truncate(string value, int length)
     {

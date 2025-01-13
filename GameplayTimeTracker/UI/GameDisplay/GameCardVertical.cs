@@ -1,4 +1,4 @@
-﻿namespace GameplayTimeTracker.UI.ScrollContent;
+﻿namespace GameplayTimeTracker;
 
 public class GameCardVertical
 {

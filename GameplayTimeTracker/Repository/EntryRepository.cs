@@ -44,6 +44,12 @@ public class EntryRepository
 
     public void AddEntry(Entry entry)
     {
+        if (EntriesList.Any(e => e.ExePath == entry.ExePath))
+        {
+            Console.WriteLine("An entry with this ExePath already exists.");
+            return;
+        }
+
         EntriesList.Add(entry);
         UpdateTotalPercs();
     }
