@@ -27,9 +27,10 @@ public partial class MainWindow : Window
         // entry.TotalPlay = new[] { 12, 2, 45 };
         // entry.LastPlay = new[] { 8, 6, 33 };
         // entry.IconPath = "C:\\Users\\Peti\\Documents\\Gameplay Time Tracker\\SteamGridDB Images\\20530_icon.png";
+        // entry.HeroPath = "C:\\Users\\Peti\\Documents\\Gameplay Time Tracker\\SteamGridDB Images\\20530_hero.png";
         // entry.ExePath = "C:\\Program Files\\VSCodium\\VSCodium.exe";
         // entryRepository.AddEntry(entry);
-        //
+        
         // entryRepository.PrintEntryList();
         // DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
 

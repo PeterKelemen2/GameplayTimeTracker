@@ -90,15 +90,24 @@ namespace GameplayTimeTracker
         public string IconPath
         {
             get => _iconPath;
-            set => SetField(ref _iconPath, value);
+            set
+            {
+                string imagePath = File.Exists(value) ? value : "Assets/no_icon.png";
+                SetField(ref _iconPath, imagePath);
+            }
         }
-        
+
         [JsonPropertyName("heroPath")]
         public string HeroPath
         {
             get => _heroPath;
-            set => SetField(ref _heroPath, value);
+            set
+            {
+                string imagePath = File.Exists(value) ? value : "Assets/no_icon.png";
+                SetField(ref _heroPath, imagePath);
+            }
         }
+
 
         [JsonPropertyName("totalTime")]
         public double TotalTime
@@ -155,9 +164,6 @@ namespace GameplayTimeTracker
             get => _wasRunning;
             set => SetField(ref _wasRunning, value);
         }
-
-        // [JsonIgnore]
-        // public EntryRepository EntryRepo { get; set; }
 
         public void ResetLastPlaytime()
         {

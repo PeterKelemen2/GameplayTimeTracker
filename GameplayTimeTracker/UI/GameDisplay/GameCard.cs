@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
@@ -52,8 +55,27 @@ public class GameCard : UserControl
         };
         ContainerGrid.Children.Add(CardRectangle);
 
-        CreateButtons();
+        HeroImage = new Image
+        {
+            Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
+            Height = ContainerGrid.Height,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Stretch = Stretch.Uniform,
+            Opacity = 0.8,
+        };
+        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height), CardRectangle.RadiusX,
+            CardRectangle.RadiusY);
+        Border HeroImageBorder = new Border
+        {
+            Width = CardRectangle.Width,
+            Height = ContainerGrid.Height,
+            Child = HeroImage,
+            // Background = new SolidColorBrush(Colors.Aqua),
+            CornerRadius = new CornerRadius(CardRectangle.RadiusX),
+        };
+        ContainerGrid.Children.Add(HeroImageBorder);
 
+        CreateButtons();
 
         Content = ContainerGrid;
     }
@@ -61,7 +83,7 @@ public class GameCard : UserControl
     private void CreateButtons()
     {
         var bEffect = AppEffects.dropShadowIcon;
-        
+
         EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.EditIcon,
             type: CustomButton.ButtonType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
         EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
