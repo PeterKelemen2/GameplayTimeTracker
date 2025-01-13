@@ -1,6 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Effects;
+using Toolbelt.Drawing;
 
 namespace GameplayTimeTracker;
 
@@ -25,8 +36,8 @@ public static class AppColors
 
     public static Color ProgressBar1 = (Color)ColorConverter.ConvertFromString("#89ACF2");
     public static Color ProgressBar2 = (Color)ColorConverter.ConvertFromString("#B7BDF8");
-    public static Color TileColor1 = (Color)ColorConverter.ConvertFromString("#414769");
-    public static Color TileColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
+    public static Color CardColor1 = (Color)ColorConverter.ConvertFromString("#414769");
+    public static Color CardColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color EditColor1 = (Color)ColorConverter.ConvertFromString("#7DD6EB");
     public static Color EditColor2 = (Color)ColorConverter.ConvertFromString("#7EAFE0");
     
@@ -37,8 +48,8 @@ public static class AppColors
         Dictionary<string, string> colors = new Dictionary<string, string>
         {
             { "bgColor", "#1E2030" },
-            { "tileColor1", "#414769" },
-            { "tileColor2", "#2E324A" },
+            { "cardColor1", "#414769" },
+            { "cardColor2", "#2E324A" },
             { "leftColor", "#89ACF2" },
             { "rightColor", "#B7BDF8" },
             { "editColor1", "#7DD6EB" },
@@ -110,5 +121,25 @@ public static class AppColors
             (byte)Math.Clamp((g + m) * 255, 0, 255),
             (byte)Math.Clamp((b + m) * 255, 0, 255)
         );
+    }
+    
+    public static LinearGradientBrush CreateLinGradBrushVer(Color c1, Color c2)
+    {
+        LinearGradientBrush brush = new LinearGradientBrush();
+        brush.StartPoint = new Point(0, 0);
+        brush.EndPoint = new Point(0, 1);
+        brush.GradientStops.Add(new GradientStop(c1, 0.0));
+        brush.GradientStops.Add(new GradientStop(c2, 1.0));
+        return brush;
+    }
+
+    public static LinearGradientBrush CreateLinGradBrushHor(Color c1, Color c2)
+    {
+        LinearGradientBrush brush = new LinearGradientBrush();
+        brush.StartPoint = new Point(0, 0);
+        brush.EndPoint = new Point(1, 0);
+        brush.GradientStops.Add(new GradientStop(c1, 0.0));
+        brush.GradientStops.Add(new GradientStop(c2, 1.0));
+        return brush;
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace GameplayTimeTracker;
+﻿using System;
+using System.Windows.Controls;
 
-public class GameCardHorizontal: GameCard
+namespace GameplayTimeTracker;
+
+public class GameCardHorizontal : GameCard
 {
-    public GameCardHorizontal(Entry dataEntry, GameCardRepository gameCardRepository) : base(dataEntry, gameCardRepository)
+    public GameCardHorizontal(Entry dataEntry, GameCardRepository gameCardRepository, StackPanel parentStackPanel) :
+        base(dataEntry, gameCardRepository, parentStackPanel)
     {
     }
 }
