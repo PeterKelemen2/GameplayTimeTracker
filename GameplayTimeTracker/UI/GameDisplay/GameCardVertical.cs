@@ -77,20 +77,23 @@ public class GameCardVertical : GameCard
         IconImage.VerticalAlignment = VerticalAlignment.Top;
         IconImage.Margin = new Thickness(0, 30, 0, 0);
 
-        HeroImage.Height = ContainerGrid.Height;
-        HeroImage.HorizontalAlignment = HorizontalAlignment.Left;
+        HeroImage.Height = 150;
+        HeroImage.Stretch = Stretch.UniformToFill;
+        HeroImage.HorizontalAlignment = HorizontalAlignment.Center;
         HeroImage.VerticalAlignment = VerticalAlignment.Top;
         HeroImage.OpacityMask = new LinearGradientBrush
         {
-            StartPoint = new Point(0, 0.5),
-            EndPoint = new Point(0, 1),
+            StartPoint = new Point(0, 0.3),
+            EndPoint = new Point(0, 0.9),
             GradientStops = new GradientStopCollection
             {
                 new GradientStop(Colors.Black, 0.0), // Full opacity on the left
                 new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
             }
         };
-        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
+        Console.WriteLine(HeroImage.ActualWidth);
+        HeroImage.Clip = new RectangleGeometry(
+            new Rect(97, 0, CardRectangle.Width, HeroImage.Height),
             CardRectangle.RadiusX, CardRectangle.RadiusY);
     }
 }
