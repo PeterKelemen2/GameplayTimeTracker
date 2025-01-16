@@ -97,11 +97,11 @@ public class GameCard : UserControl
             Foreground = new SolidColorBrush(AppColors.Running),
             Effect = AppEffects.dropShadowText,
         };
-        RunningTextBlock.Text = "Running!";
-        RunningTextBlock.DataContext = DataEntry; 
+        // RunningTextBlock.Text = "Running!";
+        RunningTextBlock.DataContext = DataEntry;
         Binding runningBinding = new Binding("RunningFormatted")
         {
-            Source = DataEntry, 
+            Source = DataEntry,
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
@@ -119,7 +119,14 @@ public class GameCard : UserControl
             TextAlignment = TextAlignment.Left,
             Effect = AppEffects.DropOuterGlow,
         };
-        TotalPlaytimeBlock.Inlines.Add(new Run("4h 5m 6s") { FontWeight = FontWeights.Regular });
+        var totalTimeRun = new Run { FontWeight = FontWeights.Regular };
+        TotalPlaytimeBlock.Inlines.Add(totalTimeRun);
+        Binding totalPlayBinding = new Binding("TotalPlayFormatted")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(totalTimeRun, Run.TextProperty, totalPlayBinding);
 
         LastPlaytimeBlock = new TextBlock
         {
@@ -130,8 +137,15 @@ public class GameCard : UserControl
             TextAlignment = TextAlignment.Left,
             Effect = AppEffects.DropOuterGlow,
         };
-        LastPlaytimeBlock.Inlines.Add(new Run("1h 2m 3s") { FontWeight = FontWeights.Regular });
-        
+        var lastTimeRun = new Run { FontWeight = FontWeights.Regular };
+        LastPlaytimeBlock.Inlines.Add(lastTimeRun);
+        Binding lastPlayBinding = new Binding("LastPlayFormatted")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(lastTimeRun, Run.TextProperty, lastPlayBinding);
+
         LastPlayedBlock = new TextBlock
         {
             Text = "Started: ",
@@ -142,12 +156,12 @@ public class GameCard : UserControl
             Effect = AppEffects.DropOuterGlow,
         };
         LastPlayedBlock.Inlines.Add(new Run("2025.01.13 12:43") { FontWeight = FontWeights.Regular });
-        
+
         TotalStack = new StackPanel();
         TotalStack.Children.Add(TotalPlaytimeBlock);
         TotalStack.Children.Add(TotalProgressBar);
         ContainerGrid.Children.Add(TotalStack);
-        
+
         LastStack = new StackPanel();
         LastStack.Children.Add(LastPlaytimeBlock);
         LastStack.Children.Add(LastProgressBar);
@@ -157,8 +171,9 @@ public class GameCard : UserControl
         CreateButtons();
 
         Content = ContainerGrid;
-        
+
         StartRunningOscillation();
+        StartTimeIncrement();
     }
 
     private void CreateButtons()
@@ -187,8 +202,9 @@ public class GameCard : UserControl
         Panel.SetZIndex(LaunchButton, 3);
         ContainerGrid.Children.Add(LaunchButton);
     }
-    
+
     private DispatcherTimer progressBarTimer;
+
     private void StartRunningOscillation()
     {
         progressBarTimer = new DispatcherTimer
@@ -196,11 +212,20 @@ public class GameCard : UserControl
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        progressBarTimer.Tick += (sender, e) =>
-        {
-            DataEntry.IsRunning = !DataEntry.IsRunning;
-        };
+        progressBarTimer.Tick += (sender, e) => { DataEntry.IsRunning = !DataEntry.IsRunning; };
 
         progressBarTimer.Start();
+    }
+
+    private DispatcherTimer timeTimer;
+
+    private void StartTimeIncrement()
+    {
+        timeTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        timeTimer.Tick += (sender, e) => { DataEntry.IncrementTime(); };
+        timeTimer.Start();
     }
 }
