@@ -37,50 +37,52 @@ public class GameCardVertical : GameCard
         RemoveButton.Margin = new Thickness(0, 0, bMargin, bMargin);
         LaunchButton.Margin = new Thickness(bMargin, 0, 0, bMargin);
 
-        TitleBlock.FontSize = Common.TitleFontSize;
-        TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        TitleBlock.FontSize = Common.TitleFontSize * 1.5;
+        TitleBlock.FontWeight = FontWeights.Regular;
+        TitleBlock.HorizontalAlignment = HorizontalAlignment.Center;
         TitleBlock.VerticalAlignment = VerticalAlignment.Top;
-        TitleBlock.Margin = new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX / 2, 0, 0);
+        TitleBlock.Margin = new Thickness(0, ContainerGrid.Height * 0.25, 0, 0);
 
         RunningTextBlock.FontSize = Common.TitleFontSize - 4;
-        RunningTextBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        RunningTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
         RunningTextBlock.VerticalAlignment = VerticalAlignment.Top;
         RunningTextBlock.Margin =
-            new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
+            new Thickness(0, ContainerGrid.Height * 0.25 + 30, 0, 0);
 
-        double stackMargin = 200;
         TotalPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         TotalProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
-        TotalStack.HorizontalAlignment = HorizontalAlignment.Left;
+        TotalStack.HorizontalAlignment = HorizontalAlignment.Center;
         foreach (UIElement child in TotalStack.Children)
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
 
-        TotalStack.Margin = new Thickness(stackMargin, 20, 0, 0);
+        TotalStack.Margin = new Thickness(0, 150, 0, 0);
 
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         LastPlayedOnBlock.FontSize = Common.TitleFontSize - 2;
         LastProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
-        LastStack.HorizontalAlignment = HorizontalAlignment.Right;
+        LastStack.HorizontalAlignment = HorizontalAlignment.Center;
         foreach (UIElement child in LastStack.Children)
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
 
         LastStack.Width = 160;
-        LastStack.Margin = new Thickness(0, 20, stackMargin, 0);
+        LastStack.Margin = new Thickness(0, 240, 0, 0);
 
-        IconImage.Height = ContainerGrid.Height * 0.6;
-        IconImage.HorizontalAlignment = HorizontalAlignment.Left;
-        IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0);
+        IconImage.Height = ContainerGrid.Width * 0.33;
+        IconImage.HorizontalAlignment = HorizontalAlignment.Center;
+        IconImage.VerticalAlignment = VerticalAlignment.Top;
+        IconImage.Margin = new Thickness(0, 30, 0, 0);
 
         HeroImage.Height = ContainerGrid.Height;
         HeroImage.HorizontalAlignment = HorizontalAlignment.Left;
+        HeroImage.VerticalAlignment = VerticalAlignment.Top;
         HeroImage.OpacityMask = new LinearGradientBrush
         {
-            StartPoint = new Point(0.33, 0), // Start from the left
-            EndPoint = new Point(1, 0), // End on the right
+            StartPoint = new Point(0, 0), // Start from the left
+            EndPoint = new Point(0, 1), // End on the right
             GradientStops = new GradientStopCollection
             {
                 new GradientStop(Colors.Black, 0.0), // Full opacity on the left

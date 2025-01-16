@@ -31,6 +31,7 @@ public class GameCardHorizontal : GameCard
         LaunchButton.Margin = new Thickness(0, 0, 30, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
 
         TitleBlock.FontSize = Common.TitleFontSize;
+        TitleBlock.FontWeight = FontWeights.Bold;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
         TitleBlock.VerticalAlignment = VerticalAlignment.Top;
         TitleBlock.Margin = new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX / 2, 0, 0);
@@ -49,6 +50,7 @@ public class GameCardHorizontal : GameCard
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
+
         TotalStack.Margin = new Thickness(stackMargin, 20, 0, 0);
 
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
