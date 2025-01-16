@@ -20,7 +20,7 @@ public class GameCardHorizontal : GameCard
     {
         ContainerGrid.Width = 830;
         ContainerGrid.Height = 150;
-        ContainerGrid.Margin = new Thickness(10, 10, 0, 0);
+        // ContainerGrid.Margin = new Thickness(0, 10, 0, 0);
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;

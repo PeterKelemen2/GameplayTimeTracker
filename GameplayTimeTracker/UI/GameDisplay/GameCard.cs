@@ -53,6 +53,7 @@ public class GameCard : UserControl
         ParentPanel = parentPanel;
 
         ContainerGrid = new Grid();
+        ContainerGrid.Margin = new Thickness(5);
 
         CardRectangle = new Rectangle
         {

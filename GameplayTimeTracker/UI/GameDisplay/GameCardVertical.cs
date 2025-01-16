@@ -20,7 +20,7 @@ public class GameCardVertical : GameCard
     {
         ContainerGrid.Width = 270;
         ContainerGrid.Height = 420;
-        ContainerGrid.Margin = new Thickness(10, 10, 0, 0);
+        // ContainerGrid.Margin = new Thickness(10, 10, 0, 0);
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
