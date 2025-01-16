@@ -37,7 +37,7 @@ public class GameCardVertical : GameCard
         RemoveButton.Margin = new Thickness(0, 0, bMargin, bMargin);
         LaunchButton.Margin = new Thickness(bMargin, 0, 0, bMargin);
 
-        TitleBlock.FontSize = Common.TitleFontSize * 1.2;
+        TitleBlock.FontSize = Common.TitleFontSize * 1.3;
         TitleBlock.FontWeight = FontWeights.Regular;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Center;
         TitleBlock.VerticalAlignment = VerticalAlignment.Top;
