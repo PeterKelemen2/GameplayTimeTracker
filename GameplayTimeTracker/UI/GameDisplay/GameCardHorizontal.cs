@@ -18,7 +18,7 @@ public class GameCardHorizontal : GameCard
 
     private void GameCardHorizontal_Loaded(object sender, RoutedEventArgs e)
     {
-        ContainerGrid.Width = ParentPanel.ActualWidth - Common.CardPadding * 2;
+        ContainerGrid.Width = 760;
         ContainerGrid.Height = 150;
         ContainerGrid.Margin = new Thickness(10, 10, 10, 0);
 
@@ -26,9 +26,9 @@ public class GameCardHorizontal : GameCard
         CardRectangle.Height = ContainerGrid.Height;
         CardRectangle.Fill = AppColors.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
 
-        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
-        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
-        LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
+        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 80, 0);
+        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 30, 0);
+        LaunchButton.Margin = new Thickness(0, 0, 30, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
 
         TitleBlock.FontSize = Common.TitleFontSize;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
