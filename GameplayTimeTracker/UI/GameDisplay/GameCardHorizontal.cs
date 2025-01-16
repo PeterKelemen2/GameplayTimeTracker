@@ -18,7 +18,7 @@ public class GameCardHorizontal : GameCard
 
     private void GameCardHorizontal_Loaded(object sender, RoutedEventArgs e)
     {
-        ContainerGrid.Width = 760;
+        ContainerGrid.Width = 850;
         ContainerGrid.Height = 150;
         ContainerGrid.Margin = new Thickness(10, 10, 10, 0);
 

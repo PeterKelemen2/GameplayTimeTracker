@@ -8,7 +8,6 @@ using System.Windows.Shapes;
 
 namespace GameplayTimeTracker;
 
-
 public class GameCardVertical : GameCard
 {
     public GameCardVertical(Entry dataEntry, GameCardRepository gameCardRepository, Panel parentPanel) :
@@ -16,20 +15,27 @@ public class GameCardVertical : GameCard
     {
         Loaded += GameCardVertical_Loaded;
     }
-    
+
     private void GameCardVertical_Loaded(object sender, RoutedEventArgs e)
     {
-        ContainerGrid.Width = ParentPanel.ActualWidth - Common.CardPadding * 2;
-        ContainerGrid.Height = 150;
+        ContainerGrid.Width = 270;
+        ContainerGrid.Height = 400;
         ContainerGrid.Margin = new Thickness(10, 10, 10, 0);
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
-        CardRectangle.Fill = AppColors.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
+        CardRectangle.Fill = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2);
 
-        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 100, 0);
-        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 50, 0);
-        LaunchButton.Margin = new Thickness(0, 0, 50, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
+        EditButton.VerticalAlignment = VerticalAlignment.Bottom;
+        EditButton.HorizontalAlignment = HorizontalAlignment.Right;
+        RemoveButton.VerticalAlignment = VerticalAlignment.Bottom;
+        RemoveButton.HorizontalAlignment = HorizontalAlignment.Right;
+        LaunchButton.VerticalAlignment = VerticalAlignment.Bottom;
+        LaunchButton.HorizontalAlignment = HorizontalAlignment.Left;
+        double bMargin = 10;
+        EditButton.Margin = new Thickness(0, 0, EditButton.Grid.Width + bMargin * 2, bMargin);
+        RemoveButton.Margin = new Thickness(0, 0, bMargin, bMargin);
+        LaunchButton.Margin = new Thickness(bMargin, 0, 0, bMargin);
 
         TitleBlock.FontSize = Common.TitleFontSize;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
@@ -50,6 +56,7 @@ public class GameCardVertical : GameCard
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
+
         TotalStack.Margin = new Thickness(stackMargin, 20, 0, 0);
 
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;

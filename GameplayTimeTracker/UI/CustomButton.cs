@@ -44,7 +44,7 @@ public class CustomButton : UserControl
     public static readonly DependencyProperty HeightProperty =
         DependencyProperty.Register("Height", typeof(double), typeof(CustomButton),
             new PropertyMetadata(40.0, OnHeightChanged));
-
+    
     public static readonly DependencyProperty EffectProperty =
         DependencyProperty.Register("Effect", typeof(Effect), typeof(CustomButton),
             new PropertyMetadata(null, OnEffectChanged));
