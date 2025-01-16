@@ -20,7 +20,7 @@
                       Grid.Row="0"
                       VerticalScrollBarVisibility="Hidden"
                       HorizontalScrollBarVisibility="Disabled">
-            <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="#1E2030" />
+            <WrapPanel x:Name="MainStackPanel" Orientation="Horizontal" Background="#1E2030" />
         </ScrollViewer>
         
         <Grid Grid.Row="1" x:Name="Footer">

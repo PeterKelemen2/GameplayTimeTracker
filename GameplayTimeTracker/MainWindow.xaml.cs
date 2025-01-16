@@ -37,7 +37,7 @@ public partial class MainWindow : Window
         GameCardRepository gameCardRepository = new GameCardRepository();
         foreach (var entry in entryRepository.EntriesList)
         {
-            GameCardHorizontal gch = new GameCardHorizontal(entry, gameCardRepository, MainStackPanel);
+            GameCard gch = new GameCardVertical(entry, gameCardRepository, MainStackPanel);
             gameCardRepository.GameCards.Add(gch);
             MainStackPanel.Children.Add(gch);
         }

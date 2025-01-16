@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -6,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Gtk;
@@ -16,7 +18,7 @@ namespace GameplayTimeTracker;
 
 public class GameCard : UserControl
 {
-    public StackPanel ParentStackPanel { get; set; }
+    public Panel ParentPanel { get; set; }
     private GameCardRepository GameCardRepository;
     public Entry DataEntry { get; set; }
 
@@ -44,11 +46,11 @@ public class GameCard : UserControl
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
 
-    public GameCard(Entry dataEntry, GameCardRepository gameCardRepository, StackPanel parentStackPanel)
+    public GameCard(Entry dataEntry, GameCardRepository gameCardRepository, Panel parentPanel)
     {
         GameCardRepository = gameCardRepository;
         DataEntry = dataEntry;
-        ParentStackPanel = parentStackPanel;
+        ParentPanel = parentPanel;
 
         ContainerGrid = new Grid();
 
@@ -165,7 +167,7 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(lastPlayedOnRun, Run.TextProperty, lastPlayStateBinding);
-        
+
         Binding lastPlayDateBinding = new Binding("LastDateFormatted")
         {
             Source = DataEntry,
@@ -228,9 +230,7 @@ public class GameCard : UserControl
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        progressBarTimer.Tick += (sender, e) => { DataEntry.IsRunning = !DataEntry.IsRunning;
-            Console.WriteLine(LastStack.ActualWidth);
-        };
+        progressBarTimer.Tick += (sender, e) => { DataEntry.IsRunning = !DataEntry.IsRunning; };
 
         progressBarTimer.Start();
     }
