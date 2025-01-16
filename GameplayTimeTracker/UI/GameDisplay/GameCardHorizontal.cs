@@ -59,6 +59,8 @@ public class GameCardHorizontal : GameCard
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
+
+        LastStack.Width = 160;
         LastStack.Margin = new Thickness(0, 20, stackMargin, 0);
 
         IconImage.Height = ContainerGrid.Height * 0.6;

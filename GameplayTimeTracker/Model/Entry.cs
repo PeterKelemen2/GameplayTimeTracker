@@ -175,8 +175,8 @@ namespace GameplayTimeTracker
         public string LastDateFormatted =>
             LastDate.Year > 1000
                 ? (LastDate.Date == DateTime.Now.Date 
-                    ? $"Today, {LastDate.ToString("HH:mm:ss")}" 
-                    : LastDate.ToString("yyyy.MM.dd HH:mm:ss"))
+                    ? $"Today, {LastDate.ToString("HH:mm")}" 
+                    : LastDate.ToString("yyyy.MM.dd HH:mm"))
                 : "Never";
 
         // public string LastDateFormatted =>

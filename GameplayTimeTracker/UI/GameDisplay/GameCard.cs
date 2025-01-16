@@ -189,7 +189,7 @@ public class GameCard : UserControl
         Content = ContainerGrid;
 
         StartRunningOscillation();
-        // StartTimeIncrement();
+        StartTimeIncrement();
     }
 
     private void CreateButtons()
@@ -228,7 +228,9 @@ public class GameCard : UserControl
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        progressBarTimer.Tick += (sender, e) => { DataEntry.IsRunning = !DataEntry.IsRunning; };
+        progressBarTimer.Tick += (sender, e) => { DataEntry.IsRunning = !DataEntry.IsRunning;
+            Console.WriteLine(LastStack.ActualWidth);
+        };
 
         progressBarTimer.Start();
     }
