@@ -26,10 +26,12 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
             {
                 _percentage = value;
                 OnPropertyChanged(nameof(Percentage)); // Notify that the percentage changed
-                UpdateBarWidth(); // Update the BarRect width when Percentage changes
+                UpdateBarRectWidth(); // Update the BarRect width when Percentage changes
             }
         }
     }
+    
+    
 
     public double InnerMaxWidth { get; set; }
 
@@ -82,12 +84,24 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
         };
         ContainerGrid.Children.Add(BarRect);
 
-        UpdateBarWidth();
+        UpdateBarRectWidth();
         Content = ContainerGrid;
         // StartProgressBarOscillation();
     }
 
-    private void UpdateBarWidth()
+    public void UpdateBgWidth(double newWidth)
+    {
+        if (newWidth != BgWidth)
+        {
+            BgWidth = newWidth;
+            ContainerGrid.Width = BgWidth;
+            BackgroundRect.Width = BgWidth;
+            InnerMaxWidth = BgWidth - 2 * BarPadding;
+            UpdateBarRectWidth();
+        }
+    }
+    
+    private void UpdateBarRectWidth()
     {
         if (BarRect != null)
         {

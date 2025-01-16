@@ -19,8 +19,8 @@ public class GameCardVertical : GameCard
     private void GameCardVertical_Loaded(object sender, RoutedEventArgs e)
     {
         ContainerGrid.Width = 270;
-        ContainerGrid.Height = 400;
-        ContainerGrid.Margin = new Thickness(10, 10, 10, 0);
+        ContainerGrid.Height = 420;
+        ContainerGrid.Margin = new Thickness(10, 10, 0, 0);
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
@@ -51,6 +51,7 @@ public class GameCardVertical : GameCard
 
         TotalPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         TotalProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
+        TotalProgressBar.UpdateBgWidth(200);
         TotalStack.HorizontalAlignment = HorizontalAlignment.Center;
         foreach (UIElement child in TotalStack.Children)
         {
@@ -62,13 +63,13 @@ public class GameCardVertical : GameCard
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         LastPlayedOnBlock.FontSize = Common.TitleFontSize - 2;
         LastProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
+        LastProgressBar.UpdateBgWidth(200);
         LastStack.HorizontalAlignment = HorizontalAlignment.Center;
         foreach (UIElement child in LastStack.Children)
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
 
-        LastStack.Width = 160;
         LastStack.Margin = new Thickness(0, 240, 0, 0);
 
         IconImage.Height = ContainerGrid.Width * 0.33;
@@ -81,8 +82,8 @@ public class GameCardVertical : GameCard
         HeroImage.VerticalAlignment = VerticalAlignment.Top;
         HeroImage.OpacityMask = new LinearGradientBrush
         {
-            StartPoint = new Point(0, 0), // Start from the left
-            EndPoint = new Point(0, 1), // End on the right
+            StartPoint = new Point(0, 0.5),
+            EndPoint = new Point(0, 1),
             GradientStops = new GradientStopCollection
             {
                 new GradientStop(Colors.Black, 0.0), // Full opacity on the left
