@@ -20,6 +20,7 @@ namespace GameplayTimeTracker
         private int[] _totalArray = new int[3]; // H M S
         private int[] _lastArray = new int[3];
         private bool _isRunning;
+        private string _runningString;
         private DateTime _lastDate;
         private bool _wasRunning;
 
@@ -67,10 +68,20 @@ namespace GameplayTimeTracker
             LastPlay != null && LastPlay.Length == 3
                 ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
                 : "0h 0m 0s";
-        
+
         [JsonIgnore]
-        public string RunningFormatted =>
-            IsRunning ? "Running!" : "";
+        public string RunningFormatted
+        {
+            get => _runningString;
+            set
+            {
+                if (_runningString != value)
+                {
+                    _runningString = value;
+                    OnPropertyChanged(nameof(RunningFormatted));
+                }
+            }
+        }
 
         [JsonPropertyName("exePath")]
         public string ExePath
@@ -147,14 +158,12 @@ namespace GameplayTimeTracker
         [JsonIgnore]
         public bool IsRunning
         {
-            get => _isRunning;
+            get => _runningString == "Running!";
             set
             {
-                if (_isRunning != value)
-                {
-                    _isRunning = value;
-                    OnPropertyChanged(nameof(IsRunning));
-                }
+                _runningString = value ? "Running!" : "";
+                OnPropertyChanged(nameof(IsRunning));
+                OnPropertyChanged(nameof(RunningFormatted));
             }
         }
 

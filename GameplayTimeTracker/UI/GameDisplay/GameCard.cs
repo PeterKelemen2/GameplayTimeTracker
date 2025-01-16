@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Gtk;
 using Grid = System.Windows.Controls.Grid;
 using Image = System.Windows.Controls.Image;
@@ -97,13 +98,13 @@ public class GameCard : UserControl
             Effect = AppEffects.dropShadowText,
         };
         RunningTextBlock.Text = "Running!";
-        // RunningTextBlock.DataContext = DataEntry; 
-        // Binding runningBinding = new Binding("RunningFormatted")
-        // {
-        //     Source = DataEntry, 
-        //     Mode = BindingMode.OneWay,
-        // };
-        // BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
+        RunningTextBlock.DataContext = DataEntry; 
+        Binding runningBinding = new Binding("RunningFormatted")
+        {
+            Source = DataEntry, 
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
 
         TotalProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.TotalPerc);
@@ -156,6 +157,8 @@ public class GameCard : UserControl
         CreateButtons();
 
         Content = ContainerGrid;
+        
+        StartRunningOscillation();
     }
 
     private void CreateButtons()
@@ -183,5 +186,21 @@ public class GameCard : UserControl
         // SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);
         ContainerGrid.Children.Add(LaunchButton);
+    }
+    
+    private DispatcherTimer progressBarTimer;
+    private void StartRunningOscillation()
+    {
+        progressBarTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+
+        progressBarTimer.Tick += (sender, e) =>
+        {
+            DataEntry.IsRunning = !DataEntry.IsRunning;
+        };
+
+        progressBarTimer.Start();
     }
 }
