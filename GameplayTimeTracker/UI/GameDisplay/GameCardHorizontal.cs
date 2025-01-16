@@ -52,7 +52,7 @@ public class GameCardHorizontal : GameCard
         TotalStack.Margin = new Thickness(stackMargin, 20, 0, 0);
 
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
-        LastPlayedBlock.FontSize = Common.TitleFontSize - 2;
+        LastPlayedOnBlock.FontSize = Common.TitleFontSize - 2;
         LastProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
         LastStack.HorizontalAlignment = HorizontalAlignment.Right;
         foreach (UIElement child in LastStack.Children)

@@ -30,7 +30,7 @@ public class GameCard : UserControl
     public Rectangle CardRectangle { get; set; }
     public TextBlock TitleBlock { get; set; }
     public TextBlock LastPlaytimeBlock { get; set; }
-    public TextBlock LastPlayedBlock { get; set; }
+    public TextBlock LastPlayedOnBlock { get; set; }
     public TextBlock TotalPlaytimeBlock { get; set; }
     public TextBlock RunningTextBlock { get; set; }
 
@@ -146,16 +146,32 @@ public class GameCard : UserControl
         };
         BindingOperations.SetBinding(lastTimeRun, Run.TextProperty, lastPlayBinding);
 
-        LastPlayedBlock = new TextBlock
+        LastPlayedOnBlock = new TextBlock
         {
-            Text = "Started: ",
             Foreground = new SolidColorBrush(AppColors.Font),
             FontWeight = FontWeights.Bold,
             VerticalAlignment = VerticalAlignment.Top,
             TextAlignment = TextAlignment.Left,
             Effect = AppEffects.DropOuterGlow,
         };
-        LastPlayedBlock.Inlines.Add(new Run("2025.01.13 12:43") { FontWeight = FontWeights.Regular });
+        var lastPlayDateRun = new Run { FontWeight = FontWeights.Regular };
+        var lastPlayedOnRun = new Run { FontWeight = FontWeights.Bold };
+        LastPlayedOnBlock.Inlines.Add(lastPlayedOnRun);
+        LastPlayedOnBlock.Inlines.Add(lastPlayDateRun);
+
+        Binding lastPlayStateBinding = new Binding("LastRunningStateFormatted")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(lastPlayedOnRun, Run.TextProperty, lastPlayStateBinding);
+        
+        Binding lastPlayDateBinding = new Binding("LastDateFormatted")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(lastPlayDateRun, Run.TextProperty, lastPlayDateBinding);
 
         TotalStack = new StackPanel();
         TotalStack.Children.Add(TotalPlaytimeBlock);
@@ -165,7 +181,7 @@ public class GameCard : UserControl
         LastStack = new StackPanel();
         LastStack.Children.Add(LastPlaytimeBlock);
         LastStack.Children.Add(LastProgressBar);
-        LastStack.Children.Add(LastPlayedBlock);
+        LastStack.Children.Add(LastPlayedOnBlock);
         ContainerGrid.Children.Add(LastStack);
 
         CreateButtons();
@@ -173,7 +189,7 @@ public class GameCard : UserControl
         Content = ContainerGrid;
 
         StartRunningOscillation();
-        StartTimeIncrement();
+        // StartTimeIncrement();
     }
 
     private void CreateButtons()

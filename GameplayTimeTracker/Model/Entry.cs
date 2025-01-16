@@ -21,7 +21,9 @@ namespace GameplayTimeTracker
         private int[] _lastArray = new int[3];
         private bool _isRunning;
         private string _runningString;
+        private string _lastPlayStateString = "Started: ";
         private DateTime _lastDate;
+        private string _lastDateString = "Never";
         private bool _wasRunning;
 
         [JsonPropertyName("gameName")]
@@ -79,6 +81,20 @@ namespace GameplayTimeTracker
                 {
                     _runningString = value;
                     OnPropertyChanged(nameof(RunningFormatted));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string LastRunningStateFormatted
+        {
+            get => _lastPlayStateString;
+            set
+            {
+                if (_lastPlayStateString != value)
+                {
+                    _lastPlayStateString = value;
+                    OnPropertyChanged(nameof(LastRunningStateFormatted));
                 }
             }
         }
@@ -156,14 +172,37 @@ namespace GameplayTimeTracker
         }
 
         [JsonIgnore]
+        public string LastDateFormatted =>
+            LastDate.Year > 1000
+                ? (LastDate.Date == DateTime.Now.Date 
+                    ? $"Today, {LastDate.ToString("HH:mm:ss")}" 
+                    : LastDate.ToString("yyyy.MM.dd HH:mm:ss"))
+                : "Never";
+
+        // public string LastDateFormatted =>
+        //     LastDate.Year > 1000
+        //         ? LastDate.ToString("yyyy.MM.dd HH:mm:ss")
+        //         : "Never";
+
+        // public string LastPlayFormatted =>
+        //     LastPlay != null && LastPlay.Length == 3
+        //         ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
+        //         : "0h 0m 0s";
+
+        [JsonIgnore]
         public bool IsRunning
         {
             get => _runningString == "Running!";
             set
             {
                 _runningString = value ? "Running!" : "";
+                _lastPlayStateString = value ? "Started: " : "Ended: ";
+                LastDate = value ? DateTime.Now : LastDate;
+
                 OnPropertyChanged(nameof(IsRunning));
                 OnPropertyChanged(nameof(RunningFormatted));
+                OnPropertyChanged(nameof(LastDateFormatted));
+                OnPropertyChanged(nameof(LastRunningStateFormatted));
             }
         }
 
