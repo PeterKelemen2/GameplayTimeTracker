@@ -37,8 +37,9 @@ public class CustomMenu : UserControl
     public CustomMenu(double width = 300, double height = 400)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
-        ContentPanel = (Panel)RootPanel.FindName("MainGrid");
-        ContentPanel.SizeChanged += ContentGrid_SizeChanged;
+        RootPanel.SizeChanged += ContentGrid_SizeChanged;
+        // ContentPanel = (Panel)RootPanel.FindName("MainGrid");
+        // ContentPanel.SizeChanged += ContentGrid_SizeChanged;
 
         ContainerGrid = new Grid
         {
@@ -90,10 +91,11 @@ public class CustomMenu : UserControl
             RootPanel.Children.Add(ContainerGrid);
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
+            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
+            // These are way too slow:
             // BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
             // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
             // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
 
             IsOpen = true;
         }
@@ -115,12 +117,11 @@ public class CustomMenu : UserControl
             }
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
+            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
+            // These are way too slow:
             // BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
             // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
             // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
-
-            // CloseMenuStoryboard.Begin();
         }
     }
 
