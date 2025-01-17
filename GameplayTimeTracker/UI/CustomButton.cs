@@ -29,6 +29,7 @@ public class CustomButton : UserControl
     public Color ButtonHoverColor { get; set; }
     public Color ButtonPressedColor { get; set; }
     public Grid Grid { get; set; }
+    public Effect ButtonEffect { get; set; }
     // ButtonType Type { get; set; }
 
 
@@ -44,7 +45,7 @@ public class CustomButton : UserControl
     public static readonly DependencyProperty HeightProperty =
         DependencyProperty.Register("Height", typeof(double), typeof(CustomButton),
             new PropertyMetadata(40.0, OnHeightChanged));
-    
+
     public static readonly DependencyProperty EffectProperty =
         DependencyProperty.Register("Effect", typeof(Effect), typeof(CustomButton),
             new PropertyMetadata(null, OnEffectChanged));
@@ -64,12 +65,14 @@ public class CustomButton : UserControl
         double borderRadius = 7,
         string text = "", double fontSize = 16, bool isBold = true,
         string buttonImagePath = "", bool isActive = true,
+        Effect effect = null,
         HorizontalAlignment hA = HorizontalAlignment.Center,
         VerticalAlignment vA = VerticalAlignment.Center)
     {
         ButtonImagePath = buttonImagePath;
         IsActive = isActive;
         BType = type;
+        ButtonEffect ??= effect;
 
         Grid = new Grid
         {
@@ -77,6 +80,7 @@ public class CustomButton : UserControl
             Height = height,
             HorizontalAlignment = hA,
             VerticalAlignment = vA,
+            Effect = ButtonEffect,
         };
 
         ButtonBase = new Rectangle
