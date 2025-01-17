@@ -24,14 +24,14 @@ public class CustomMenu : UserControl
 
     private DoubleAnimation FlyInAnimation = new DoubleAnimation
     {
-        To = 0, Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
+        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     private DoubleAnimation FlyOutAnimation = new DoubleAnimation
     {
-        From = 0, Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
     };
 
     public CustomMenu(double width = 300, double height = 400)
@@ -79,8 +79,8 @@ public class CustomMenu : UserControl
 
         MenuContentGrid.Children.Add(MenuContentBg);
 
-        FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height / 2;
-        FlyOutAnimation.To = -(ContainerGrid.Height - MenuContentGrid.Height / 2);
+        FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height * 0.5;
+        FlyOutAnimation.To = -(ContainerGrid.Height + MenuContentGrid.Height * 0.5);
     }
 
     public void Open()
