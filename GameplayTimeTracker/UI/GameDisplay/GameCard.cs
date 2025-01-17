@@ -57,8 +57,8 @@ public class GameCard : UserControl
 
         CardRectangle = new Rectangle
         {
-            RadiusX = 10,
-            RadiusY = 10,
+            RadiusX = Common.BorderRadius,
+            RadiusY = Common.BorderRadius,
             Effect = AppEffects.dropShadowIcon,
         };
         ContainerGrid.Children.Add(CardRectangle);
