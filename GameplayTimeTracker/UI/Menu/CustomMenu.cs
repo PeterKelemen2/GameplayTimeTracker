@@ -11,7 +11,7 @@ public class CustomMenu : UserControl
 
     public CustomMenu()
     {
-        Panel ParentPanel = (Panel)mainWindow.FindName("MainGrid");
+        Panel ParentPanel = (Panel)mainWindow.FindName("Root");
         Grid ContainerGrid = new Grid
         {
             Width = mainWindow.Width,

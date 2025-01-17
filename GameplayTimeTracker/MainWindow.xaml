@@ -10,47 +10,49 @@
         Width="870"
         MinWidth="870"
         Icon="pack://application:,,,/Assets/GameplayTimeTracker.ico">
-    <Grid x:Name="MainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="70" />
-        </Grid.RowDefinitions>
+    <Grid x:Name="Root">
+        <Grid x:Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="70" />
+            </Grid.RowDefinitions>
 
-        <ScrollViewer x:Name="MainScrollViewer"
-                      Grid.Row="0"
-                      VerticalScrollBarVisibility="Hidden"
-                      HorizontalScrollBarVisibility="Disabled">
-            <Border Padding="5">
-                <WrapPanel x:Name="MainPanel" Orientation="Horizontal" Background="#1E2030"
-                           HorizontalAlignment="Center" />
-            </Border>
+            <ScrollViewer x:Name="MainScrollViewer"
+                          Grid.Row="0"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Disabled">
+                <Border Padding="5">
+                    <WrapPanel x:Name="MainPanel" Orientation="Horizontal" Background="#1E2030"
+                               HorizontalAlignment="Center" />
+                </Border>
 
-        </ScrollViewer>
+            </ScrollViewer>
 
-        <Grid Grid.Row="1" x:Name="Footer">
-            <TextBlock x:Name="GamesLoadedBlock"
-                       Foreground="Black"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       TextAlignment="Center"
-                       Margin="0,-2,0,0"
-                       FontSize="16">
-                <Run Text="Apps managed" FontWeight="Bold" />
-                <LineBreak />
-                <Run x:Name="GameCountRun" Text="0" FontWeight="Normal" />
-            </TextBlock>
+            <Grid Grid.Row="1" x:Name="Footer">
+                <TextBlock x:Name="GamesLoadedBlock"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           Margin="0,-2,0,0"
+                           FontSize="16">
+                    <Run Text="Apps managed" FontWeight="Bold" />
+                    <LineBreak />
+                    <Run x:Name="GameCountRun" Text="0" FontWeight="Normal" />
+                </TextBlock>
 
-            <TextBlock x:Name="TotalPlaytimeTextBlock"
-                       Foreground="Black"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       TextAlignment="Right"
-                       Margin="0,-2,15,0"
-                       FontSize="16">
-                <Run Text="Total Playtime" FontWeight="Bold" />
-                <LineBreak />
-                <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
-            </TextBlock>
+                <TextBlock x:Name="TotalPlaytimeTextBlock"
+                           Foreground="Black"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           TextAlignment="Right"
+                           Margin="0,-2,15,0"
+                           FontSize="16">
+                    <Run Text="Total Playtime" FontWeight="Bold" />
+                    <LineBreak />
+                    <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
+                </TextBlock>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
