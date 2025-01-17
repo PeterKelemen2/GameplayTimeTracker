@@ -17,9 +17,9 @@ public class CustomMenu : UserControl
     private Window mainWindow = Application.Current.MainWindow;
     private Panel RootPanel;
     private Panel ContentPanel;
-    private Grid ContainerGrid;
+    public Grid ContainerGrid;
     private Rectangle BgRectangle;
-    private Grid MenuContentGrid;
+    public Grid MenuContentGrid;
     private Rectangle MenuContentBg;
 
     private DoubleAnimation FlyInAnimation = new DoubleAnimation
@@ -43,8 +43,8 @@ public class CustomMenu : UserControl
 
         ContainerGrid = new Grid
         {
-            Width = mainWindow.ActualWidth,
-            Height = mainWindow.ActualHeight,
+            Width = RootPanel.ActualWidth,
+            Height = RootPanel.ActualHeight,
         };
 
         BgRectangle = new Rectangle
@@ -61,6 +61,7 @@ public class CustomMenu : UserControl
         {
             Width = width,
             Height = height,
+            HorizontalAlignment = HorizontalAlignment.Center,
         };
         ContainerGrid.Children.Add(MenuContentGrid);
         var translateTransform = new TranslateTransform(0, 0);
@@ -80,8 +81,6 @@ public class CustomMenu : UserControl
 
         FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height / 2;
         FlyOutAnimation.To = -(ContainerGrid.Height - MenuContentGrid.Height / 2);
-
-        Open();
     }
 
     public void Open()
