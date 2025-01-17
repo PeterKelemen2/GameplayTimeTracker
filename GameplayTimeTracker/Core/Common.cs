@@ -3,17 +3,15 @@
 public static class Common
 {
     public const string RunningText = "Running!";
-
-    public static double CardPadding = 10;
-    public static double TitleFontSize = 17;
-    public static double EditTitleFontSize = 21;
-    public static double TextFontSize = 14;
-    public static double BorderRadius = 10;
-    public static double TextBoxHeight = 28;
+    public const double CardPadding = 10;
+    public const double TitleFontSize = 17;
+    public const double EditTitleFontSize = 21;
+    public const double TextFontSize = 14;
+    public const double BorderRadius = 10;
+    public const double TextBoxHeight = 28;
 
     public static int[] p = { 33, 11, 11, 10, 10, 11, 45, 45, 17 };
     
-
     public static string Truncate(string value, int length)
     {
         if (value.Length < length)

@@ -212,7 +212,18 @@ public class GameCard : UserControl
         RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.RemoveIcon,
             type: CustomButton.ButtonType.Negative, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
         RemoveButton.Effect = bEffect;
-        // RemoveButton.Click += OpenDeleteDialog;
+        RemoveButton.Click += (s, e) =>
+        {
+            PromptMenu deletePrompt = new PromptMenu(
+                textArray: new[] { "Are you sure to delete:", $"{DataEntry.Name}" },
+                sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
+                boldArray: new[] { false, true },
+                spaceBetween: 5,
+                type: PromptMenu.PromptType.YesNo,
+                yesHandler: (s, e) => { Console.WriteLine("Yes clicked"); },
+                noHandler: (s, e) => { Console.WriteLine("No clicked"); });
+            deletePrompt.Open();
+        };
         Panel.SetZIndex(RemoveButton, 3);
         ContainerGrid.Children.Add(RemoveButton);
 

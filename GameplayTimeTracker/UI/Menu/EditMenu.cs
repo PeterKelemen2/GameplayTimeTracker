@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -65,7 +66,7 @@ public class EditMenu : CustomMenu
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         OpenFolderButton.Effect = AppEffects.DropShadowMedium;
         OpenFolderButton.Margin = new Thickness(0, 5, LeftMargin, 5);
-        // OpenFolderButton.Click += Parent.OpenExeFolder;
+        OpenFolderButton.Click += (s, e) => { Process.Start("explorer.exe", $"/select,\"{Entry.ExePath}\""); };
         gridTime.Children.Add(editTimeTextBlock);
         gridTime.Children.Add(editTimeTextBox);
         gridTime.Children.Add(OpenFolderButton);
