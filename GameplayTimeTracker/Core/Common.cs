@@ -9,8 +9,10 @@ public static class Common
     public static double EditTitleFontSize = 21;
     public static double TextFontSize = 14;
     public static double BorderRadius = 10;
+    public static double TextBoxHeight = 28;
 
     public static int[] p = { 33, 11, 11, 10, 10, 11, 45, 45, 17 };
+    
 
     public static string Truncate(string value, int length)
     {

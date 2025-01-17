@@ -73,4 +73,10 @@ public static class AppEffects
         BlurRadius = 20,
         ShadowDepth = 0
     };
+    
+    public static DropShadowEffect DropShadowMedium = new DropShadowEffect
+    {
+        BlurRadius = 15,
+        ShadowDepth = 0
+    };
 }

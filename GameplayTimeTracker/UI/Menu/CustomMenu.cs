@@ -20,7 +20,9 @@ public class CustomMenu : UserControl
     public Grid ContainerGrid;
     private Rectangle BgRectangle;
     public Grid MenuContentGrid;
-    private Rectangle MenuContentBg;
+    public Rectangle MenuContentBg;
+    public BlurEffect BlurEffect;
+    public bool PerformanceMode = true;
 
     private DoubleAnimation FlyInAnimation = new DoubleAnimation
     {
@@ -34,12 +36,17 @@ public class CustomMenu : UserControl
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
     };
 
-    public CustomMenu(double width = 300, double height = 400)
+    public CustomMenu(double width = 300, double height = 400, bool performanceMode = true)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
+        ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
+        PerformanceMode = performanceMode;
         // ContentPanel = (Panel)RootPanel.FindName("MainGrid");
         // ContentPanel.SizeChanged += ContentGrid_SizeChanged;
+
+        BlurEffect = new BlurEffect { Radius = 0 };
+        ContentPanel.Effect = BlurEffect;
 
         ContainerGrid = new Grid
         {
@@ -73,7 +80,7 @@ public class CustomMenu : UserControl
             Height = height,
             RadiusX = Common.BorderRadius,
             RadiusY = Common.BorderRadius,
-            Fill = AppColors.CreateLinGradBrushVer(AppColors.CardColor2, AppColors.CardColor1),
+            Fill = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
             Effect = AppEffects.DropShadowRectangle
         };
 
@@ -91,10 +98,13 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
-            // These are way too slow:
-            // BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
-            // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
-            // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+
+            if (!PerformanceMode)
+            {
+                BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
+                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
+                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+            }
 
             IsOpen = true;
         }
@@ -117,10 +127,12 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
-            // These are way too slow:
-            // BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
-            // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
-            // ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+            if (!PerformanceMode)
+            {
+                BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
+                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
+                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+            }
         }
     }
 
