@@ -219,7 +219,7 @@ public class GameCard : UserControl
         LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40, type: CustomButton.ButtonType.Positive,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         LaunchButton.Effect = bEffect;
-        // LaunchButton.Click += LaunchExe;
+        LaunchButton.Click += (s, e) => Launcher.Launch(DataEntry);
         // SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);
         ContainerGrid.Children.Add(LaunchButton);
