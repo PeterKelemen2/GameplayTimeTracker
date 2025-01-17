@@ -45,7 +45,7 @@ public class AppAnimations
         From = scaleAnimValue,
         To = 1.0,
         Duration = new Duration(TimeSpan.FromSeconds(scaleAnimDuration)),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     public static DoubleAnimation BgBlurInEffectAnim = new DoubleAnimation
@@ -63,7 +63,7 @@ public class AppAnimations
         To = 0,
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         AutoReverse = false,
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     public static DoubleAnimation MenuBgOpacityIn = new DoubleAnimation
@@ -81,6 +81,6 @@ public class AppAnimations
         To = 0.0,
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         AutoReverse = false,
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 }

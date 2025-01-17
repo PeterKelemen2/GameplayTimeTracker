@@ -68,7 +68,7 @@ public static class AppEffects
         ShadowDepth = 0
     };
 
-    public static DropShadowEffect dropShadowRectangle = new DropShadowEffect
+    public static DropShadowEffect DropShadowRectangle = new DropShadowEffect
     {
         BlurRadius = 20,
         ShadowDepth = 0

@@ -15,10 +15,12 @@ public class CustomMenu : UserControl
     private Panel ContentPanel;
     private Grid ContainerGrid;
     private Rectangle BgRectangle;
+    private Grid MenuContentGrid;
+    private Rectangle MenuContentBg;
 
     BlurEffect blurEffect = new BlurEffect { Radius = 0, RenderingBias = RenderingBias.Quality };
 
-    public CustomMenu()
+    public CustomMenu(double width = 300, double height = 400)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)RootPanel.FindName("MainGrid");
@@ -39,6 +41,24 @@ public class CustomMenu : UserControl
         };
         BgRectangle.MouseDown += Close_Click;
         ContainerGrid.Children.Add(BgRectangle);
+
+        MenuContentGrid = new Grid
+        {
+            Width = width,
+            Height = height,
+        };
+        ContainerGrid.Children.Add(MenuContentGrid);
+
+        MenuContentBg = new Rectangle
+        {
+            Width = width,
+            Height = height,
+            RadiusX = Common.BorderRadius,
+            RadiusY = Common.BorderRadius,
+            Fill = new SolidColorBrush(AppColors.Background),
+            Effect = AppEffects.DropShadowRectangle
+        };
+        MenuContentGrid.Children.Add(MenuContentBg);
     }
 
     public void Open()
