@@ -12,6 +12,8 @@ public class CustomMenu : UserControl
     public CustomMenu()
     {
         Panel ParentPanel = (Panel)mainWindow.FindName("Root");
+        Panel ContentPanel = (Panel)ParentPanel.FindName("MainGrid");
+        
         Grid ContainerGrid = new Grid
         {
             Width = mainWindow.Width,
@@ -23,10 +25,14 @@ public class CustomMenu : UserControl
         {
             Width = ContainerGrid.Width,
             Height = ContainerGrid.Height,
-            Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fcba03")) // Test color
+            Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fcba03")), // Test color
+            Opacity = 0.5,
         };
         ContainerGrid.Children.Add(BgRectangle);
 
         ParentPanel.Children.Add(ContainerGrid);
+    
+        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
+        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
     }
 }

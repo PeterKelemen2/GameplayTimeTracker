@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        MainGrid.SizeChanged += MainGrid_SizeChanged;
         Loaded += OnLoaded;
     }
 
@@ -69,5 +70,17 @@ public partial class MainWindow : Window
     public void Settings_Click(object sender, RoutedEventArgs e)
     {
         Console.WriteLine("Opening Settings menu");
+    }
+    
+    private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        var grid = sender as Grid;
+        var scaleTransform = grid.RenderTransform as ScaleTransform;
+
+        if (scaleTransform != null)
+        {
+            scaleTransform.CenterX = grid.ActualWidth / 2;
+            scaleTransform.CenterY = grid.ActualHeight / 2;
+        }
     }
 }

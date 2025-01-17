@@ -16,7 +16,11 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="70" />
             </Grid.RowDefinitions>
-
+            
+            <Grid.RenderTransform>
+                <ScaleTransform x:Name="ScaleTransform" />
+            </Grid.RenderTransform>
+            
             <ScrollViewer x:Name="MainScrollViewer"
                           Grid.Row="0"
                           VerticalScrollBarVisibility="Hidden"
