@@ -192,8 +192,8 @@ public class GameCard : UserControl
 
         Content = ContainerGrid;
 
-        StartRunningOscillation();
-        StartTimeIncrement();
+        // StartRunningOscillation();
+        // StartTimeIncrement();
     }
 
     private void CreateButtons()

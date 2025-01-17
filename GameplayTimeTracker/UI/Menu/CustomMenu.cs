@@ -10,6 +10,7 @@ namespace GameplayTimeTracker.Menu;
 
 public class CustomMenu : UserControl
 {
+    private bool IsOpen = false;
     private Window mainWindow = Application.Current.MainWindow;
     private Panel RootPanel;
     private Panel ContentPanel;
@@ -64,11 +65,15 @@ public class CustomMenu : UserControl
 
     public void Open()
     {
-        RootPanel.Children.Add(ContainerGrid);
-        BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
-        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
-        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
-        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+        if (!IsOpen)
+        {
+            RootPanel.Children.Add(ContainerGrid);
+            BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
+            blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
+            ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
+            ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+            IsOpen = true;
+        }
     }
 
     private void Close_Click(object sender, RoutedEventArgs e)
@@ -78,15 +83,19 @@ public class CustomMenu : UserControl
 
     public void Close()
     {
-        if (RootPanel.Children.Contains(ContainerGrid))
+        if (IsOpen)
         {
-            AppAnimations.ScaleDownAnim.Completed += (s, a) => { RootPanel.Children.Remove(ContainerGrid); };
-        }
+            if (RootPanel.Children.Contains(ContainerGrid))
+            {
+                AppAnimations.ScaleDownAnim.Completed += (s, a) => { RootPanel.Children.Remove(ContainerGrid); };
+                IsOpen = false;
+            }
 
-        BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
-        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
-        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
-        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+            BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
+            blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
+            ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
+            ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+        }
     }
 
     private void ContentGrid_SizeChanged(object sender, SizeChangedEventArgs e)
