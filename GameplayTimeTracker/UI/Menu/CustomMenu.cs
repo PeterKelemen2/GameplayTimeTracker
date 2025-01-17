@@ -16,7 +16,7 @@ public class CustomMenu : UserControl
     private Grid ContainerGrid;
     private Rectangle BgRectangle;
 
-    BlurEffect blurEffect = new BlurEffect { Radius = 0 };
+    BlurEffect blurEffect = new BlurEffect { Radius = 0, RenderingBias = RenderingBias.Quality };
 
     public CustomMenu()
     {
@@ -36,18 +36,23 @@ public class CustomMenu : UserControl
             Width = ContainerGrid.Width,
             Height = ContainerGrid.Height,
             Fill = new SolidColorBrush(Colors.Black),
-            Opacity = 0.5,
         };
+        BgRectangle.MouseDown += Close_Click;
         ContainerGrid.Children.Add(BgRectangle);
     }
 
     public void Open()
     {
         RootPanel.Children.Add(ContainerGrid);
-
+        BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
         blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+    }
+
+    private void Close_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 
     public void Close()
@@ -57,6 +62,7 @@ public class CustomMenu : UserControl
             AppAnimations.ScaleDownAnim.Completed += (s, a) => { RootPanel.Children.Remove(ContainerGrid); };
         }
 
+        BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
         blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);

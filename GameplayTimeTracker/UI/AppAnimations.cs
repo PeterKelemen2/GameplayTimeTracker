@@ -6,13 +6,16 @@ namespace GameplayTimeTracker;
 
 public class AppAnimations
 {
-    private static double scaleAnimDuration = 2;
+    private static double scaleAnimDuration = 1;
+
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
     private static double scaleAnimValue = 1.07;
     private static double blurAnimValue = 15;
+    private static double menuBgOpacity = 0.2;
+
     // private static double[] blurAnimValues = { 0, 30 };
-    
-    
+
+
     public static DoubleAnimation dragFadeInAnimation = new DoubleAnimation
     {
         From = 0,
@@ -53,11 +56,29 @@ public class AppAnimations
         AutoReverse = false,
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
-    
+
     public static DoubleAnimation BgBlurOutEffectAnim = new DoubleAnimation
     {
         From = blurAnimValue,
         To = 0,
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
+        AutoReverse = false,
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+    };
+
+    public static DoubleAnimation MenuBgOpacityIn = new DoubleAnimation
+    {
+        From = 0.0,
+        To = menuBgOpacity,
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
+        AutoReverse = false,
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
+
+    public static DoubleAnimation MenuBgOpacityOut = new DoubleAnimation
+    {
+        From = menuBgOpacity,
+        To = 0.0,
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         AutoReverse = false,
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }

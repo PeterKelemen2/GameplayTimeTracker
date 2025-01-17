@@ -33,8 +33,6 @@ public partial class MainWindow : Window
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
-
-        CustomMenu testCustomMenu = new CustomMenu();
     }
 
     private void SetBaseColors()
@@ -64,14 +62,15 @@ public partial class MainWindow : Window
 
     public void AddEntry_Click(object sender, RoutedEventArgs e)
     {
-        Console.WriteLine("Adding entry");
+        CustomMenu addEntryConfigMenu = new CustomMenu();
+        addEntryConfigMenu.Open();
     }
 
     public void Settings_Click(object sender, RoutedEventArgs e)
     {
         Console.WriteLine("Opening Settings menu");
     }
-    
+
     private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         var grid = sender as Grid;
