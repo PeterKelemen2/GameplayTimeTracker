@@ -11,44 +11,54 @@ namespace GameplayTimeTracker.Menu;
 public class CustomMenu : UserControl
 {
     private Window mainWindow = Application.Current.MainWindow;
+    private Panel RootPanel;
+    private Panel ContentPanel;
+    private Grid ContainerGrid;
+    private Rectangle BgRectangle;
+
+    BlurEffect blurEffect = new BlurEffect { Radius = 0 };
 
     public CustomMenu()
     {
-        // Find the Root and MainGrid panels
-        Panel RootPanel = (Panel)mainWindow.FindName("Root");
-        Panel ContentPanel = (Panel)RootPanel.FindName("MainGrid");
+        RootPanel = (Panel)mainWindow.FindName("Root");
+        ContentPanel = (Panel)RootPanel.FindName("MainGrid");
 
-        // Create a BlurEffect and apply it to MainGrid
-        BlurEffect blurEffect = new BlurEffect
-        {
-            Radius = 0 // Start with no blur
-        };
         ContentPanel.Effect = blurEffect;
 
-        // Animate the BlurEffect's Radius
-        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
-
-        // Create the menu background
-        Grid ContainerGrid = new Grid
+        ContainerGrid = new Grid
         {
             Width = mainWindow.Width,
             Height = mainWindow.Height,
         };
 
-        Rectangle BgRectangle = new Rectangle
+        BgRectangle = new Rectangle
         {
             Width = ContainerGrid.Width,
             Height = ContainerGrid.Height,
-            Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fcba03")), // Test color
+            Fill = new SolidColorBrush(Colors.Black),
             Opacity = 0.5,
         };
         ContainerGrid.Children.Add(BgRectangle);
+    }
 
-        // Add the menu background to the Root panel
+    public void Open()
+    {
         RootPanel.Children.Add(ContainerGrid);
 
-        // Animate scaling of the MainGrid (optional)
+        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+    }
+
+    public void Close()
+    {
+        if (RootPanel.Children.Contains(ContainerGrid))
+        {
+            AppAnimations.ScaleDownAnim.Completed += (s, a) => { RootPanel.Children.Remove(ContainerGrid); };
+        }
+
+        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
+        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
+        ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
     }
 }
