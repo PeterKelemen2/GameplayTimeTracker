@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,8 +39,6 @@ public class CustomMenu : UserControl
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
         PerformanceMode = performanceMode;
-        // ContentPanel = (Panel)RootPanel.FindName("MainGrid");
-        // ContentPanel.SizeChanged += ContentGrid_SizeChanged;
 
         BlurEffect = new BlurEffect { Radius = 0 };
         ContentPanel.Effect = BlurEffect;
@@ -61,7 +56,7 @@ public class CustomMenu : UserControl
             Fill = new SolidColorBrush(Colors.Black),
             Opacity = 0,
         };
-        BgRectangle.MouseDown += Close_Click;
+        BgRectangle.MouseDown += (_, _) => { Close(); };
         ContainerGrid.Children.Add(BgRectangle);
 
         MenuContentGrid = new Grid
@@ -108,11 +103,6 @@ public class CustomMenu : UserControl
 
             IsOpen = true;
         }
-    }
-
-    private void Close_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
     }
 
     public void Close()

@@ -218,7 +218,7 @@ public class GameCard : UserControl
                 textArray: new[] { "Are you sure to delete:", $"{DataEntry.Name}" },
                 sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
                 boldArray: new[] { false, true },
-                spaceBetween: 5,
+                lineSpacing: 5,
                 type: PromptMenu.PromptType.YesNo,
                 yesHandler: (s, e) => { Console.WriteLine("Yes clicked"); },
                 noHandler: (s, e) => { Console.WriteLine("No clicked"); });
