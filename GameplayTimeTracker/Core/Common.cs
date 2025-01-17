@@ -6,6 +6,7 @@ public static class Common
 
     public static double CardPadding = 10;
     public static double TitleFontSize = 17;
+    public static double EditTitleFontSize = 21;
     public static double TextFontSize = 14;
     public static double BorderRadius = 10;
 

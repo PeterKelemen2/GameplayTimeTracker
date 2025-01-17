@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using GameplayTimeTracker.Menu;
 using Gtk;
 using Grid = System.Windows.Controls.Grid;
 using Image = System.Windows.Controls.Image;
@@ -21,6 +22,7 @@ public class GameCard : UserControl
     public Panel ParentPanel { get; set; }
     private GameCardRepository GameCardRepository;
     public Entry DataEntry { get; set; }
+    public EditMenu EditMenu { get; set; }
 
     public double CardWidth { get; set; }
     public double CardHeight { get; set; }
@@ -203,7 +205,7 @@ public class GameCard : UserControl
         EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.EditIcon,
             type: CustomButton.ButtonType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
         EditButton.Effect = bEffect;
-        // EditButton.Click += ToggleEdit_Click;
+        EditButton.Click += ToggleEdit_Click;
         Panel.SetZIndex(EditButton, 3);
         ContainerGrid.Children.Add(EditButton);
 
@@ -221,6 +223,12 @@ public class GameCard : UserControl
         // SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);
         ContainerGrid.Children.Add(LaunchButton);
+    }
+
+    private void ToggleEdit_Click(object sender, RoutedEventArgs e)
+    {
+        EditMenu = new EditMenu(DataEntry);
+        EditMenu.Open();
     }
 
     private DispatcherTimer progressBarTimer;
