@@ -24,6 +24,7 @@ public class CustomMenu : UserControl
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)RootPanel.FindName("MainGrid");
+        ContentPanel.SizeChanged += ContentGrid_SizeChanged;
 
         ContentPanel.Effect = blurEffect;
 
@@ -86,5 +87,17 @@ public class CustomMenu : UserControl
         blurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
         ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+    }
+
+    private void ContentGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        var panel = sender as Panel;
+        if (panel != null)
+        {
+            ContainerGrid.Width = panel.ActualWidth;
+            ContainerGrid.Height = panel.ActualHeight;
+            BgRectangle.Width = panel.ActualWidth;
+            BgRectangle.Height = panel.ActualHeight;
+        }
     }
 }
