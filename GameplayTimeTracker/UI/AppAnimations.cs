@@ -11,7 +11,7 @@ public class AppAnimations
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
     private static double scaleAnimValue = 1.07;
     private static double blurAnimValue = 15;
-    private static double menuBgOpacity = 0.3;
+    private static double menuBgOpacity = 0.6;
 
     // private static double[] blurAnimValues = { 0, 30 };
 
