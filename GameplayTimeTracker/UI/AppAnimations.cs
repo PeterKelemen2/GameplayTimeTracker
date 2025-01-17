@@ -50,17 +50,17 @@ public class AppAnimations
     public static DoubleAnimation BgBlurInEffectAnim = new DoubleAnimation
     {
         From = 0,
-        To = 15,
-        Duration = TimeSpan.FromSeconds(1),
+        To = blurAnimValue,
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         // AutoReverse = false,
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     public static DoubleAnimation BgBlurOutEffectAnim = new DoubleAnimation
     {
-        From = 15,
+        From = blurAnimValue,
         To = 0,
-        Duration = TimeSpan.FromSeconds(2),
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         // AutoReverse = false,
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
