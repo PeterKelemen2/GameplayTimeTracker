@@ -63,7 +63,7 @@ public partial class MainWindow : Window
     public void AddEntry_Click(object sender, RoutedEventArgs e)
     {
         CustomMenu addEntryConfigMenu = new CustomMenu();
-        addEntryConfigMenu.Open();
+        // addEntryConfigMenu.Open();
     }
 
     public void Settings_Click(object sender, RoutedEventArgs e)
