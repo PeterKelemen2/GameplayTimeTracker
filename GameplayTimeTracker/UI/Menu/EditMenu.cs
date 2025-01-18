@@ -46,14 +46,13 @@ public class EditMenu : CustomMenu
         Grid gridName = new Grid
             { Width = MenuContentBg.Width, Height = bHeight + 25, HorizontalAlignment = HorizontalAlignment.Left };
         TextBlock editNameTextBlock = CreateTextBlock("Name");
-        TextBox editNameTextBox = CreateTextBox(Entry.Name);
+        TextBox editNameTextBox = CreateTextBox();
+        Binding nameBinding = new Binding("Name") { Source = Entry, Mode = BindingMode.TwoWay, };
+        BindingOperations.SetBinding(editNameTextBox, TextBox.TextProperty, nameBinding);
         var ChangeIconButton = new CustomButton(text: "Change Icon", width: bWidth, height: bHeight,
             buttonImagePath: AppFiles.EditIcon, effect: AppEffects.DropShadowMedium,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         ChangeIconButton.Margin = new Thickness(0, 5, LeftMargin, 5);
-        Binding nameBinding = new Binding("Name") { Source = Entry, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(editNameTextBox, TextBox.TextProperty, nameBinding);
-
         gridName.Children.Add(editNameTextBlock);
         gridName.Children.Add(editNameTextBox);
         gridName.Children.Add(ChangeIconButton);
@@ -62,8 +61,14 @@ public class EditMenu : CustomMenu
         Grid gridTime = new Grid
             { Width = MenuContentBg.Width, Height = bHeight + 25, HorizontalAlignment = HorizontalAlignment.Left };
         TextBlock editTimeTextBlock = CreateTextBlock("Playtime");
-        TextBox editTimeTextBox = CreateTextBox(Entry.TotalPlayFormatted);
-
+        TextBox editTimeTextBox = CreateTextBox();
+        Binding timeBinding = new Binding("TotalPlay")
+        {
+            Source = Entry,
+            Mode = BindingMode.TwoWay,
+            Converter = new TimeArrayConverter()
+        };
+        BindingOperations.SetBinding(editTimeTextBox, TextBox.TextProperty, timeBinding);
         var ChangeHeroButton = new CustomButton(text: "Change Hero", width: bWidth, height: bHeight,
             buttonImagePath: AppFiles.EditIcon, effect: AppEffects.DropShadowMedium,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
@@ -76,7 +81,7 @@ public class EditMenu : CustomMenu
         Grid gridPath = new Grid
             { Width = MenuContentBg.Width, Height = bHeight + 25, HorizontalAlignment = HorizontalAlignment.Left };
         TextBlock editPathTextBlock = CreateTextBlock("Path");
-        TextBox editPathTextBox = CreateTextBox(Entry.ExePath);
+        TextBox editPathTextBox = CreateTextBox();
         Binding exeBinding = new Binding("ExePath") { Source = Entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(editPathTextBox, TextBox.TextProperty, exeBinding);
         var BrowseExeButton = new CustomButton(text: "New exe", width: bWidth, height: bHeight,
@@ -93,7 +98,7 @@ public class EditMenu : CustomMenu
         Grid gridArguments = new Grid
             { Width = MenuContentBg.Width, Height = bHeight + 25, HorizontalAlignment = HorizontalAlignment.Left };
         TextBlock editArgsTextBlock = CreateTextBlock("Arguments");
-        TextBox editArgsTextBox = CreateTextBox(Entry.Arguments);
+        TextBox editArgsTextBox = CreateTextBox();
         Binding argsBinding = new Binding("Arguments") { Source = Entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(editArgsTextBox, TextBox.TextProperty, argsBinding);
         var OpenFolderButton = new CustomButton(text: "Open Folder", width: bWidth, height: bHeight,
