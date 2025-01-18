@@ -70,6 +70,8 @@ public class GameCard : UserControl
             Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
             Stretch = Stretch.Uniform,
         };
+        Binding heroBinding = new Binding("HeroPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
+        BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
         RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
 
@@ -79,6 +81,8 @@ public class GameCard : UserControl
             Stretch = Stretch.Uniform,
             Effect = AppEffects.DropShadowGameIcon,
         };
+        Binding iconBinding = new Binding("IconPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
+        BindingOperations.SetBinding(IconImage, Image.SourceProperty, iconBinding);
         RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(IconImage);
 
