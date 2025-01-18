@@ -53,6 +53,7 @@ public class EditMenu : CustomMenu
             buttonImagePath: AppFiles.EditIcon, effect: AppEffects.DropShadowMedium,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         ChangeIconButton.Margin = new Thickness(0, 5, LeftMargin, 5);
+        ChangeIconButton.Click += (_, _) => { EditHelper.UpdateIcon(entry); };
         gridName.Children.Add(editNameTextBlock);
         gridName.Children.Add(editNameTextBox);
         gridName.Children.Add(ChangeIconButton);
@@ -73,6 +74,7 @@ public class EditMenu : CustomMenu
             buttonImagePath: AppFiles.EditIcon, effect: AppEffects.DropShadowMedium,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         ChangeHeroButton.Margin = new Thickness(0, 5, LeftMargin, 5);
+        ChangeHeroButton.Click += (_, _) => { EditHelper.UpdateHero(entry); };
         gridTime.Children.Add(editTimeTextBlock);
         gridTime.Children.Add(editTimeTextBox);
         gridTime.Children.Add(ChangeHeroButton);
@@ -89,7 +91,6 @@ public class EditMenu : CustomMenu
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         BrowseExeButton.Margin = new Thickness(0, 5, LeftMargin, 5);
         BrowseExeButton.Click += (_, _) => { EditHelper.UpdateExe(entry); };
-        // ChangeIconButton.Click += Parent.UpdateIcons;
         gridPath.Children.Add(editPathTextBlock);
         gridPath.Children.Add(editPathTextBox);
         gridPath.Children.Add(BrowseExeButton);
