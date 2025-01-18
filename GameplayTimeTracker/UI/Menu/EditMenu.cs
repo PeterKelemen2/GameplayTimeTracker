@@ -51,7 +51,7 @@ public class EditMenu : CustomMenu
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         BrowseExeButton.Effect = AppEffects.DropShadowMedium;
         BrowseExeButton.Margin = new Thickness(0, 5, LeftMargin, 5);
-        // BrowseExeButton.Click += Parent.UpdateExe;
+        BrowseExeButton.Click += (_, _) => { EditHelper.UpdateExe(entry); };
         gridName.Children.Add(editNameTextBlock);
         gridName.Children.Add(editNameTextBox);
         gridName.Children.Add(BrowseExeButton);
