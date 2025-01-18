@@ -40,7 +40,7 @@ namespace GameplayTimeTracker
             {
                 if (SetField(ref _totalArray, value))
                 {
-                    OnPropertyChanged(nameof(TotalPlayFormatted)); // Ensure this is called to notify changes
+                    OnPropertyChanged(nameof(TotalPlayFormatted));
                 }
             }
         }
@@ -178,16 +178,6 @@ namespace GameplayTimeTracker
                     ? $"Today, {LastDate.ToString("HH:mm")}" 
                     : LastDate.ToString("yyyy.MM.dd HH:mm"))
                 : "Never";
-
-        // public string LastDateFormatted =>
-        //     LastDate.Year > 1000
-        //         ? LastDate.ToString("yyyy.MM.dd HH:mm:ss")
-        //         : "Never";
-
-        // public string LastPlayFormatted =>
-        //     LastPlay != null && LastPlay.Length == 3
-        //         ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
-        //         : "0h 0m 0s";
 
         [JsonIgnore]
         public bool IsRunning
