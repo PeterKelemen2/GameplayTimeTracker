@@ -61,6 +61,7 @@ public class EntryRepository
             Console.WriteLine($"Removing entry {entry.Name}");
             EntriesList.Remove(entry);
             UpdateTotalPercs();
+            PrintEntryList();
         }
     }
 

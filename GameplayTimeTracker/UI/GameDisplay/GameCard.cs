@@ -21,6 +21,7 @@ public class GameCard : UserControl
 {
     public Panel ParentPanel { get; set; }
     private GameCardRepository GameCardRepository;
+    private EntryRepository DataEntryRepository;
     public Entry DataEntry { get; set; }
     public EditMenu EditMenu { get; set; }
 
@@ -48,10 +49,12 @@ public class GameCard : UserControl
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
 
-    public GameCard(Entry dataEntry, GameCardRepository gameCardRepository, Panel parentPanel)
+    public GameCard(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+        Panel parentPanel)
     {
-        GameCardRepository = gameCardRepository;
         DataEntry = dataEntry;
+        DataEntryRepository = dataEntryRepository;
+        GameCardRepository = gameCardRepository;
         ParentPanel = parentPanel;
 
         ContainerGrid = new Grid();
@@ -224,7 +227,7 @@ public class GameCard : UserControl
                 boldArray: new[] { false, true },
                 lineSpacing: 5,
                 type: PromptMenu.PromptType.YesNo,
-                yesHandler: (s, e) => { Console.WriteLine("Yes clicked"); },
+                yesHandler: (s, e) => { DeleteInstance(); },
                 noHandler: (s, e) => { Console.WriteLine("No clicked"); });
             deletePrompt.Open();
         };
@@ -238,6 +241,13 @@ public class GameCard : UserControl
         // SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);
         ContainerGrid.Children.Add(LaunchButton);
+    }
+
+    private void DeleteInstance()
+    {
+        DataEntryRepository.RemoveEntry(DataEntry);
+        GameCardRepository.RemoveCard(this);
+        ParentPanel.Children.Remove(this);
     }
 
     private void ToggleEdit_Click(object sender, RoutedEventArgs e)

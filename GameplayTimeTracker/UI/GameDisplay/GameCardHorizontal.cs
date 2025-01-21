@@ -10,8 +10,9 @@ namespace GameplayTimeTracker;
 
 public class GameCardHorizontal : GameCard
 {
-    public GameCardHorizontal(Entry dataEntry, GameCardRepository gameCardRepository, Panel parentPanel) :
-        base(dataEntry, gameCardRepository, parentPanel)
+    public GameCardHorizontal(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+        Panel parentPanel) :
+        base(dataEntry, dataEntryRepository, gameCardRepository, parentPanel)
     {
         Loaded += GameCardHorizontal_Loaded;
     }

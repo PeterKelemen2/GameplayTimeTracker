@@ -10,4 +10,9 @@ public class GameCardRepository
     {
         GameCards = new List<GameCard>();
     }
+
+    public void RemoveCard(GameCard card)
+    {
+        GameCards.Remove(card);
+    }
 }
