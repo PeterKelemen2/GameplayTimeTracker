@@ -30,7 +30,7 @@ public class CustomMenu : UserControl
     private DoubleAnimation FlyOutAnimation = new DoubleAnimation
     {
         Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     public CustomMenu(double width = 300, double height = 400, bool performanceMode = true)
@@ -81,8 +81,10 @@ public class CustomMenu : UserControl
 
         MenuContentGrid.Children.Add(MenuContentBg);
 
-        FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height * 0.5;
-        FlyOutAnimation.To = -(ContainerGrid.Height + MenuContentGrid.Height * 0.5);
+        // FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height * 0.5;
+        // FlyOutAnimation.To = -(ContainerGrid.Height + MenuContentGrid.Height * 0.5);
+        FlyInAnimation.From = mainWindow.Height;
+        FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
     }
 
     public void Open()
@@ -93,7 +95,7 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
-            // MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
+            MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
             if (!PerformanceMode)
             {
@@ -119,7 +121,7 @@ public class CustomMenu : UserControl
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
             MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
-            
+
             if (!PerformanceMode)
             {
                 BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
@@ -138,8 +140,8 @@ public class CustomMenu : UserControl
             ContainerGrid.Height = panel.ActualHeight;
             BgRectangle.Width = panel.ActualWidth;
             BgRectangle.Height = panel.ActualHeight;
-            FlyInAnimation.From = ContainerGrid.Height;
-            FlyOutAnimation.To = -(ContainerGrid.Height - MenuContentGrid.Height / 2);
+            FlyInAnimation.From = mainWindow.Height;
+            FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
         }
     }
 }

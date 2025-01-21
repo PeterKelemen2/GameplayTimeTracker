@@ -107,14 +107,14 @@ public class AppAnimations
         From = 0,
         To = 1,
         Duration = TimeSpan.FromSeconds(fadeAnimDuration),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
     };
 
     public static DoubleAnimation FadeOut = new DoubleAnimation
     {
         From = 1,
         To = 0,
-        Duration = TimeSpan.FromSeconds(fadeAnimDuration * 2),
+        Duration = TimeSpan.FromSeconds(fadeAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 }
