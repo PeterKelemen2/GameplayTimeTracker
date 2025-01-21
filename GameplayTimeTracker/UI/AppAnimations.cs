@@ -7,7 +7,7 @@ namespace GameplayTimeTracker;
 public class AppAnimations
 {
     public static double scaleAnimDuration = 1;
-    public static double deleteAnimDuration = 2;
+    public static double deleteAnimDuration = 1;
 
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
     private static double scaleAnimValue = 1.07;
@@ -83,27 +83,11 @@ public class AppAnimations
         AutoReverse = false,
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
-
-    public static DoubleAnimation DeleteScaleDownAnimation = new DoubleAnimation
-    {
-        From = 1,
-        To = 0,
-        Duration = TimeSpan.FromSeconds(deleteAnimDuration),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-    };
     
     public static DoubleAnimation DeleteOpacityAnimation = new DoubleAnimation
     {
         From = 1,
         To = 0,
-        Duration = TimeSpan.FromSeconds(deleteAnimDuration),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-    };
-    
-    public static DoubleAnimation DeleteSizeDownAnimation = new DoubleAnimation
-    {
-        // From = 1,
-        To = 0.01,
         Duration = TimeSpan.FromSeconds(deleteAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
