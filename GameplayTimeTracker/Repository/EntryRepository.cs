@@ -12,7 +12,8 @@ public class EntryRepository
     public EntryRepository()
     {
         EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
-
+        foreach (Entry entry in EntriesList) entry.Repository = this;
+        foreach (Entry entry in EntriesList) Console.WriteLine(entry.Repository);
         CheckForOldTime();
         UpdateTotalPercs();
         // SetTimeArrays();
@@ -50,7 +51,9 @@ public class EntryRepository
             return;
         }
 
+        entry.Repository = this;
         EntriesList.Add(entry);
+
         UpdateTotalPercs();
     }
 
@@ -106,7 +109,7 @@ public class EntryRepository
         }
     }
 
-    private void UpdateTotalPercs()
+    public void UpdateTotalPercs()
     {
         double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
         foreach (var entry in EntriesList)

@@ -10,8 +10,8 @@ namespace GameplayTimeTracker
     {
         private string _name;
         private string _exePath;
-        private string _iconPath;
-        private string _heroPath;
+        private string _iconPath = "Assets/no_icon.png";
+        private string _heroPath = "Assets/no_icon.png";
         private string _arguments;
         private double _totalTime;
         private double _lastTime;
@@ -25,6 +25,8 @@ namespace GameplayTimeTracker
         private DateTime _lastDate;
         private string _lastDateString = "Never";
         private bool _wasRunning;
+
+        [JsonIgnore] public EntryRepository Repository;
 
         [JsonPropertyName("gameName")]
         public string Name
@@ -41,6 +43,7 @@ namespace GameplayTimeTracker
                 if (SetField(ref _totalArray, value))
                 {
                     OnPropertyChanged(nameof(TotalPlayFormatted));
+                    // if (Repository != null) Repository.UpdateTotalPercs();
                 }
             }
         }
@@ -174,8 +177,8 @@ namespace GameplayTimeTracker
         [JsonIgnore]
         public string LastDateFormatted =>
             LastDate.Year > 1000
-                ? (LastDate.Date == DateTime.Now.Date 
-                    ? $"Today, {LastDate.ToString("HH:mm")}" 
+                ? (LastDate.Date == DateTime.Now.Date
+                    ? $"Today, {LastDate.ToString("HH:mm")}"
                     : LastDate.ToString("yyyy.MM.dd HH:mm"))
                 : "Never";
 
@@ -278,6 +281,11 @@ namespace GameplayTimeTracker
         public virtual void OnPropertyChanged(string propertyName)
         {
             Console.WriteLine($"PropertyChanged: {propertyName}");
+            // if (propertyName.Equals("TotalPlay"))
+            // {
+            //     
+            // }
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

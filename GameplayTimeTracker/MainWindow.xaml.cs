@@ -27,7 +27,7 @@ public partial class MainWindow : Window
         SetBaseColors();
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
-        
+
         foreach (var entry in entryRepository.EntriesList)
         {
             // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel);
@@ -66,12 +66,13 @@ public partial class MainWindow : Window
     public void AddEntry_Click(object sender, RoutedEventArgs e)
     {
         Entry newEntry = new Entry();
+        newEntry.Repository = entryRepository;
         newEntry.ExePath = Common.GetDialogPath(Common.exeFilter);
-        CustomMenu addEntryConfigMenu = new AddMenu(entry: newEntry);
+        CustomMenu addEntryConfigMenu = new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
         addEntryConfigMenu.Open();
-        GameCard gc = new GameCardVertical(newEntry, entryRepository, gameCardRepository, MainPanel);
-        gameCardRepository.GameCards.Add(gc);
-        MainPanel.Children.Add(gc);
+        // GameCard gc = new GameCardHorizontal(newEntry, entryRepository, gameCardRepository, MainPanel);
+        // gameCardRepository.GameCards.Add(gc);
+        // MainPanel.Children.Add(gc);
     }
 
     public void Settings_Click(object sender, RoutedEventArgs e)
