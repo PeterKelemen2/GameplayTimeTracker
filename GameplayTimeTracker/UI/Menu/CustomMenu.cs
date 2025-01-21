@@ -93,6 +93,7 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
+            // MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
             if (!PerformanceMode)
             {
@@ -117,6 +118,8 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
             MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
+            MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
+            
             if (!PerformanceMode)
             {
                 BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
