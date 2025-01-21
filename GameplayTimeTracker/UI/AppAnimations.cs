@@ -117,4 +117,16 @@ public class AppAnimations
         Duration = TimeSpan.FromSeconds(fadeAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
+
+    public static DoubleAnimation FlyInAnimation = new DoubleAnimation
+    {
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
+
+    public static DoubleAnimation FlyOutAnimation = new DoubleAnimation
+    {
+        Duration = TimeSpan.FromSeconds(scaleAnimDuration),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
 }

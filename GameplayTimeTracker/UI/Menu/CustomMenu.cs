@@ -21,18 +21,6 @@ public class CustomMenu : UserControl
     public BlurEffect BlurEffect;
     public bool PerformanceMode = true;
 
-    private DoubleAnimation FlyInAnimation = new DoubleAnimation
-    {
-        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-    };
-
-    private DoubleAnimation FlyOutAnimation = new DoubleAnimation
-    {
-        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration),
-        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-    };
-
     public CustomMenu(double width = 300, double height = 400, bool performanceMode = true)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
@@ -83,8 +71,8 @@ public class CustomMenu : UserControl
 
         // FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height * 0.5;
         // FlyOutAnimation.To = -(ContainerGrid.Height + MenuContentGrid.Height * 0.5);
-        FlyInAnimation.From = mainWindow.Height;
-        FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
+        AppAnimations.FlyInAnimation.From = mainWindow.Height;
+        AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
     }
 
     public void Open()
@@ -94,7 +82,7 @@ public class CustomMenu : UserControl
             RootPanel.Children.Add(ContainerGrid);
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyInAnimation);
+            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, AppAnimations.FlyInAnimation);
             MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
             if (!PerformanceMode)
@@ -119,7 +107,7 @@ public class CustomMenu : UserControl
             }
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, FlyOutAnimation);
+            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, AppAnimations.FlyOutAnimation);
             MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
 
             if (!PerformanceMode)
@@ -140,8 +128,8 @@ public class CustomMenu : UserControl
             ContainerGrid.Height = panel.ActualHeight;
             BgRectangle.Width = panel.ActualWidth;
             BgRectangle.Height = panel.ActualHeight;
-            FlyInAnimation.From = mainWindow.Height;
-            FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
+            AppAnimations.FlyInAnimation.From = mainWindow.Height;
+            AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
         }
     }
 }
