@@ -54,4 +54,22 @@ public static class UIHelper
 
         return sampleTextBlock;
     }
+
+    public static CustomButton CreateBrowseButtonRB(double w, double h, double m)
+    {
+        CustomButton button = new CustomButton(width: w, height: h, borderRadius: 3,
+            hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom, buttonImagePath: AppFiles.FolderIcon);
+        button.Margin = new Thickness(0, 0, m, m);
+        return button;
+    }
+
+    public static Grid CreateAddEntryGrid(string text, Thickness textMargin, string boxText = "", double boxWidth = 220)
+    {
+        Grid grid = new Grid { HorizontalAlignment = HorizontalAlignment.Center };
+        TextBlock textBlock = UIHelper.CreateTextBlock(text, margin: textMargin);
+        TextBox textBox = UIHelper.CreateTextBox(boxText, width: boxWidth);
+        grid.Children.Add(textBlock);
+        grid.Children.Add(textBox);
+        return grid;
+    }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using System.Windows;
+using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace GameplayTimeTracker;
 
@@ -13,8 +15,10 @@ public static class Common
     public const double TextBoxHeight = 28;
 
     public static int[] p = { 33, 11, 11, 10, 10, 11, 45, 45, 17 };
-    
-    public static string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+
+    public static string imageFilter =
+        "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+
     public static string exeFilter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
 
     public static string Truncate(string value, int length)
@@ -50,5 +54,16 @@ public static class Common
         }
 
         return filePath;
+    }
+
+
+    public static TextBox FindTextBox(Grid parentGrid)
+    {
+        foreach (UIElement child in parentGrid.Children)
+        {
+            if (child is TextBox textBox) return textBox;
+        }
+
+        return null;
     }
 }
