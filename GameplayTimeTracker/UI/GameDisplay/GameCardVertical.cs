@@ -19,6 +19,7 @@ public class GameCardVertical : GameCard
 
     private void GameCardVertical_Loaded(object sender, RoutedEventArgs e)
     {
+        IsVertical = true;
         ContainerGrid.Width = 270;
         ContainerGrid.Height = 420;
         // ContainerGrid.Margin = new Thickness(10, 10, 0, 0);

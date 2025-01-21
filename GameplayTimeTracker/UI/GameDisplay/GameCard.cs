@@ -28,6 +28,7 @@ public class GameCard : UserControl
     public double CardWidth { get; set; }
     public double CardHeight { get; set; }
     public double CornerRadius { get; set; }
+    public bool IsVertical { get; set; }
 
     public Grid ContainerGrid { get; set; }
     public StackPanel TotalStack { get; set; }
@@ -246,9 +247,57 @@ public class GameCard : UserControl
     private void DeleteInstance()
     {
         DataEntryRepository.RemoveEntry(DataEntry);
-        GameCardRepository.RemoveCard(this);
-        ParentPanel.Children.Remove(this);
+
+        ScaleTransform scaleTransform = new ScaleTransform(1, 1);
+        ContainerGrid.RenderTransform = scaleTransform;
+
+        // Handle animation completion locally to avoid potential memory leaks
+        EventHandler animationCompletedHandler = null;
+        animationCompletedHandler = (s, e) =>
+        {
+            AppAnimations.DeleteOpacityAnimation.Completed -= animationCompletedHandler; // Unsubscribe after execution
+            GameCardRepository.RemoveCard(this);
+            ParentPanel.Children.Remove(this);
+        };
+        AppAnimations.DeleteOpacityAnimation.Completed += animationCompletedHandler;
+
+        AppAnimations.DeleteThicknessAnimation.From = ContainerGrid.Margin;
+
+        if (IsVertical)
+        {
+            AnimateWidth(scaleTransform);
+        }
+        else
+        {
+            AnimateHeight(scaleTransform);
+        }
+
+        StartAnimations();
     }
+
+    // Animates width-related properties for vertical orientation.
+    private void AnimateWidth(ScaleTransform scaleTransform)
+    {
+        AppAnimations.DeleteSizeDownAnimation.From = ContainerGrid.Width;
+        ContainerGrid.BeginAnimation(WidthProperty, AppAnimations.DeleteSizeDownAnimation);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.DeleteScaleDownAnimation);
+    }
+
+    // Animates height-related properties for horizontal orientation.
+    private void AnimateHeight(ScaleTransform scaleTransform)
+    {
+        AppAnimations.DeleteSizeDownAnimation.From = ContainerGrid.Height;
+        ContainerGrid.BeginAnimation(HeightProperty, AppAnimations.DeleteSizeDownAnimation);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.DeleteScaleDownAnimation);
+    }
+
+    // Starts the common animations for margin and opacity.
+    private void StartAnimations()
+    {
+        ContainerGrid.BeginAnimation(MarginProperty, AppAnimations.DeleteThicknessAnimation);
+        ContainerGrid.BeginAnimation(OpacityProperty, AppAnimations.DeleteOpacityAnimation);
+    }
+
 
     private void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {

@@ -10,7 +10,8 @@ namespace GameplayTimeTracker;
 
 public class GameCardHorizontal : GameCard
 {
-    public GameCardHorizontal(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+    public GameCardHorizontal(Entry dataEntry, EntryRepository dataEntryRepository,
+        GameCardRepository gameCardRepository,
         Panel parentPanel) :
         base(dataEntry, dataEntryRepository, gameCardRepository, parentPanel)
     {
@@ -19,6 +20,7 @@ public class GameCardHorizontal : GameCard
 
     private void GameCardHorizontal_Loaded(object sender, RoutedEventArgs e)
     {
+        IsVertical = false;
         ContainerGrid.Width = 830;
         ContainerGrid.Height = 150;
         // ContainerGrid.Margin = new Thickness(0, 10, 0, 0);
