@@ -23,13 +23,13 @@ public class CustomMenu : UserControl
 
     private DoubleAnimation FlyInAnimation = new DoubleAnimation
     {
-        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
+        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
     private DoubleAnimation FlyOutAnimation = new DoubleAnimation
     {
-        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration / 2),
+        Duration = TimeSpan.FromSeconds(AppAnimations.scaleAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
 
