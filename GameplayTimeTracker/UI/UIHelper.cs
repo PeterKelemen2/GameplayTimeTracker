@@ -63,11 +63,18 @@ public static class UIHelper
         return button;
     }
 
-    public static Grid CreateAddEntryGrid(string text, Thickness textMargin, string boxText = "", double boxWidth = 220)
+    public static Grid CreateAddEntryGrid(string text, Thickness textMargin, string boxText = "", double boxWidth = 220,
+        string binding = "", Entry entry = null)
     {
         Grid grid = new Grid { HorizontalAlignment = HorizontalAlignment.Center };
-        TextBlock textBlock = UIHelper.CreateTextBlock(text, margin: textMargin);
-        TextBox textBox = UIHelper.CreateTextBox(boxText, width: boxWidth);
+        TextBlock textBlock = CreateTextBlock(text, margin: textMargin);
+        TextBox textBox = CreateTextBox(boxText, width: boxWidth);
+        if (binding != "" && entry != null)
+        {
+            Binding exeBinding = new Binding(binding) { Source = entry, Mode = BindingMode.TwoWay, };
+            BindingOperations.SetBinding(textBox, TextBox.TextProperty, exeBinding);
+        }
+
         grid.Children.Add(textBlock);
         grid.Children.Add(textBox);
         return grid;

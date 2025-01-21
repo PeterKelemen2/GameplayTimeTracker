@@ -12,6 +12,7 @@ namespace GameplayTimeTracker;
 public partial class MainWindow : Window
 {
     private EntryRepository entryRepository;
+    private GameCardRepository gameCardRepository;
 
     public MainWindow()
     {
@@ -25,8 +26,8 @@ public partial class MainWindow : Window
         CreateFooterButtons();
         SetBaseColors();
         entryRepository = new EntryRepository();
-
-        GameCardRepository gameCardRepository = new GameCardRepository();
+        gameCardRepository = new GameCardRepository();
+        
         foreach (var entry in entryRepository.EntriesList)
         {
             // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel);
@@ -59,13 +60,18 @@ public partial class MainWindow : Window
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
         SettingsButton.Click += Settings_Click;
         Grid.SetRow(SettingsButton, 1);
-        MainGrid.Children.Add(SettingsButton); 
+        MainGrid.Children.Add(SettingsButton);
     }
 
     public void AddEntry_Click(object sender, RoutedEventArgs e)
     {
-        CustomMenu addEntryConfigMenu = new AddMenu();
+        Entry newEntry = new Entry();
+        newEntry.ExePath = Common.GetDialogPath(Common.exeFilter);
+        CustomMenu addEntryConfigMenu = new AddMenu(entry: newEntry);
         addEntryConfigMenu.Open();
+        GameCard gc = new GameCardVertical(newEntry, entryRepository, gameCardRepository, MainPanel);
+        gameCardRepository.GameCards.Add(gc);
+        MainPanel.Children.Add(gc);
     }
 
     public void Settings_Click(object sender, RoutedEventArgs e)
