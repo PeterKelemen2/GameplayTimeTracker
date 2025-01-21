@@ -13,4 +13,9 @@ public class AppSettings
 
     [JsonPropertyName("Prefer Local App Image")]
     public bool PreferLocalAppImage { get; set; } = false;
+
+    public override string ToString()
+    {
+        return $"SETTINGS: Start: {StartWithSystem}, API Key: {SGDBApiKey}, Prefer Local: {PreferLocalAppImage}";
+    }
 }

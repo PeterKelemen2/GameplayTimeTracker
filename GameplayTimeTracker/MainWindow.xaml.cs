@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Menu;
+using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker;
 
@@ -33,6 +34,9 @@ public partial class MainWindow : Window
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
+
+        AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
+        Console.WriteLine(settings);
     }
 
     private void SetBaseColors()
