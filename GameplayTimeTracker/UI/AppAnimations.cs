@@ -7,7 +7,7 @@ namespace GameplayTimeTracker;
 public class AppAnimations
 {
     public static double scaleAnimDuration = 1;
-    public static double deleteAnimDuration = 1;
+    public static double deleteAnimDuration = 0.6;
 
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
     private static double scaleAnimValue = 1.07;
