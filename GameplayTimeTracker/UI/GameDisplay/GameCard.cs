@@ -210,15 +210,15 @@ public class GameCard : UserControl
     {
         var bEffect = AppEffects.dropShadowIcon;
 
-        EditButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.EditIcon,
-            type: CustomButton.ButtonType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
+        EditButton = new CustomButton(w: 40, h: 40, bImgPath: AppFiles.EditIcon,
+            type: BType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
         EditButton.Effect = bEffect;
         EditButton.Click += ToggleEdit_Click;
         Panel.SetZIndex(EditButton, 3);
         ContainerGrid.Children.Add(EditButton);
 
-        RemoveButton = new CustomButton(width: 40, height: 40, buttonImagePath: AppFiles.RemoveIcon,
-            type: CustomButton.ButtonType.Negative, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
+        RemoveButton = new CustomButton(w: 40, h: 40, bImgPath: AppFiles.RemoveIcon,
+            type: BType.Negative, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
         RemoveButton.Effect = bEffect;
         RemoveButton.Click += (s, e) =>
         {
@@ -235,7 +235,7 @@ public class GameCard : UserControl
         Panel.SetZIndex(RemoveButton, 3);
         ContainerGrid.Children.Add(RemoveButton);
 
-        LaunchButton = new CustomButton(text: "Launch", width: 90, height: 40, type: CustomButton.ButtonType.Positive,
+        LaunchButton = new CustomButton(text: "Launch", w: 90, h: 40, type: BType.Positive,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         LaunchButton.Effect = bEffect;
         LaunchButton.Click += (s, e) => Launcher.Launch(DataEntry);

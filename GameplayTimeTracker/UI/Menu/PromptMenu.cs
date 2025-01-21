@@ -47,18 +47,18 @@ public class PromptMenu : CustomMenu
 
         if (type == PromptType.YesNo)
         {
-            AddButton("Yes", 60, yesHandler, CustomButton.ButtonType.Positive);
-            AddButton("No", -60, noHandler, CustomButton.ButtonType.Negative);
+            AddButton("Yes", 60, yesHandler, BType.Positive);
+            AddButton("No", -60, noHandler, BType.Negative);
         }
         else
         {
-            AddButton("Ok", 0, null, CustomButton.ButtonType.Default);
+            AddButton("Ok", 0, null, BType.Default);
         }
     }
 
-    private void AddButton(string text, double horizontalMargin, RoutedEventHandler handler, CustomButton.ButtonType buttonType)
+    private void AddButton(string text, double horizontalMargin, RoutedEventHandler handler, BType buttonType)
     {
-        var button = new CustomButton(text: text, width: 100, height: 35, hA: HorizontalAlignment.Center,
+        var button = new CustomButton(text: text, w: 100, h: 35, hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Bottom, type: buttonType, effect: AppEffects.DropShadowMedium)
         {
             Margin = new Thickness(-horizontalMargin, 0, horizontalMargin, 20)

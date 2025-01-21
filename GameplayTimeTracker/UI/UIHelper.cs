@@ -57,8 +57,8 @@ public static class UIHelper
 
     public static CustomButton CreateBrowseButtonRB(double w, double h, double m)
     {
-        CustomButton button = new CustomButton(width: w, height: h, borderRadius: 3,
-            hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom, buttonImagePath: AppFiles.FolderIcon);
+        CustomButton button = new CustomButton(w: w, h: h, bRad: 3,
+            hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom, bImgPath: AppFiles.FolderIcon);
         button.Margin = new Thickness(0, 0, m, m);
         return button;
     }

@@ -63,13 +63,13 @@ public class AddMenu : CustomMenu
         heroGrid.Children.Add(heroBrowseButton);
         stackPanel.Children.Add(heroGrid);
 
-        CustomButton fetchButton = new CustomButton(width: 110, text: "Get Images", effect: AppEffects.dropShadowIcon);
+        CustomButton fetchButton = new CustomButton(w: 110, text: "Get Images", effect: AppEffects.dropShadowIcon);
         fetchButton.Margin = new Thickness(0, 10, 0, 10);
         stackPanel.Children.Add(fetchButton);
 
         CustomButton saveButton =
-            new CustomButton(width: 110, height: 40, text: "Add Entry", effect: AppEffects.dropShadowIcon,
-                type: CustomButton.ButtonType.Positive);
+            new CustomButton(w: 110, h: 40, text: "Add Entry", effect: AppEffects.dropShadowIcon,
+                type: BType.Positive);
         saveButton.Margin = new Thickness(0, 20, 0, 10);
         stackPanel.Children.Add(saveButton);
     }

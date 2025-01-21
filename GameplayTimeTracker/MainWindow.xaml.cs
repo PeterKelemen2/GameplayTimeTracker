@@ -47,18 +47,16 @@ public partial class MainWindow : Window
 
     private void CreateFooterButtons()
     {
-        CustomButton AddButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
-            buttonImagePath: AppFiles.AddIcon);
+        CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
+            bImgPath: AppFiles.AddIcon, effect: AppEffects.dropShadowIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
-        AddButton.Effect = AppEffects.dropShadowIcon;
         AddButton.Click += AddEntry_Click;
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
 
-        CustomButton SettingsButton = new CustomButton(width: 40, height: 40, hA: HorizontalAlignment.Left,
-            buttonImagePath: AppFiles.CogIcon);
+        CustomButton SettingsButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
+            bImgPath: AppFiles.CogIcon, effect: AppEffects.dropShadowIcon);
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
-        SettingsButton.Effect = AppEffects.dropShadowIcon;
         SettingsButton.Click += Settings_Click;
         Grid.SetRow(SettingsButton, 1);
         MainGrid.Children.Add(SettingsButton); 

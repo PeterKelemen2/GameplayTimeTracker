@@ -13,14 +13,7 @@ namespace GameplayTimeTracker;
 
 public class CustomButton : UserControl
 {
-    public enum ButtonType
-    {
-        Default,
-        Positive,
-        Negative
-    }
-
-    public ButtonType BType { get; set; }
+    public BType ButtonType { get; set; }
     public bool IsActive { get; set; }
     public Rectangle ButtonBase;
     private string ButtonImagePath;
@@ -30,8 +23,6 @@ public class CustomButton : UserControl
     public Color ButtonPressedColor { get; set; }
     public Grid Grid { get; set; }
     public Effect ButtonEffect { get; set; }
-    // ButtonType Type { get; set; }
-
 
     // Dependency Properties
     public static readonly DependencyProperty MarginProperty =
@@ -60,35 +51,31 @@ public class CustomButton : UserControl
         remove => RemoveHandler(ClickEvent, value);
     }
 
-    public CustomButton(double width = 100, double height = 30,
-        ButtonType type = ButtonType.Default,
-        double borderRadius = 7,
+    public CustomButton(double w = 100, double h = 30,
+        BType type = BType.Default,
+        double bRad = 7,
         string text = "", double fontSize = 16, bool isBold = true,
-        string buttonImagePath = "", bool isActive = true,
+        string bImgPath = "", bool isActive = true,
         Effect effect = null,
         HorizontalAlignment hA = HorizontalAlignment.Center,
         VerticalAlignment vA = VerticalAlignment.Center)
     {
-        ButtonImagePath = buttonImagePath;
+        ButtonImagePath = bImgPath;
         IsActive = isActive;
-        BType = type;
+        ButtonType = type;
         ButtonEffect ??= effect;
 
         Grid = new Grid
         {
-            Width = width,
-            Height = height,
-            HorizontalAlignment = hA,
-            VerticalAlignment = vA,
+            Width = w, Height = h,
+            HorizontalAlignment = hA,  VerticalAlignment = vA,
             Effect = ButtonEffect,
         };
 
         ButtonBase = new Rectangle
         {
-            Width = width,
-            Height = height,
-            RadiusX = borderRadius,
-            RadiusY = borderRadius,
+            Width = w, Height = h,
+            RadiusX = bRad,  RadiusY = bRad,
             Fill = IsActive ? new SolidColorBrush(ButtonColor) : new SolidColorBrush(Colors.Gray),
         };
         Grid.Children.Add(ButtonBase);
@@ -109,15 +96,14 @@ public class CustomButton : UserControl
             Grid.Children.Add(buttonTextBlock);
         }
 
-        if (!buttonImagePath.Equals(""))
+        if (!bImgPath.Equals(""))
         {
-            if (File.Exists(buttonImagePath))
+            if (File.Exists(bImgPath))
             {
-                Console.WriteLine(buttonImagePath);
+                Console.WriteLine(bImgPath);
                 ButtonImage = new Image();
-                ButtonImage.Source = new BitmapImage(new Uri(buttonImagePath, UriKind.RelativeOrAbsolute));
-                ButtonImage.Width = height / 2;
-                ButtonImage.Height = height / 2;
+                ButtonImage.Source = new BitmapImage(new Uri(bImgPath, UriKind.RelativeOrAbsolute));
+                ButtonImage.Width = h / 2; ButtonImage.Height = h / 2;
                 ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
                 RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
 
@@ -145,7 +131,7 @@ public class CustomButton : UserControl
             }
             else
             {
-                Console.WriteLine($"Could not find file: {buttonImagePath}");
+                Console.WriteLine($"Could not find file: {bImgPath}");
             }
         }
 
@@ -173,14 +159,14 @@ public class CustomButton : UserControl
 
     public void SetButtonColors()
     {
-        switch (BType)
+        switch (ButtonType)
         {
-            case ButtonType.Positive:
+            case BType.Positive:
                 ButtonColor = AppColors.PositiveButton;
                 ButtonHoverColor = AppColors.PositiveButtonHover;
                 ButtonPressedColor = AppColors.PositiveButtonPress;
                 break;
-            case ButtonType.Negative:
+            case BType.Negative:
                 ButtonColor = AppColors.NegativeButton;
                 ButtonHoverColor = AppColors.NegativeButtonHover;
                 ButtonPressedColor = AppColors.NegativeButtonPress;
