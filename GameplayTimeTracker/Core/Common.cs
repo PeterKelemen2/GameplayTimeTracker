@@ -1,4 +1,6 @@
-﻿namespace GameplayTimeTracker;
+﻿using Microsoft.Win32;
+
+namespace GameplayTimeTracker;
 
 public static class Common
 {
@@ -12,6 +14,9 @@ public static class Common
 
     public static int[] p = { 33, 11, 11, 10, 10, 11, 45, 45, 17 };
     
+    public static string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+    public static string exeFilter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+
     public static string Truncate(string value, int length)
     {
         if (value.Length < length)
@@ -31,5 +36,19 @@ public static class Common
         int seconds = (int)((totalMinutes - minutes) * 60); // Convert remaining fraction to seconds
 
         return new[] { hours, minutes, seconds };
+    }
+
+    public static string GetDialogPath(string filter)
+    {
+        string filePath = "";
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = filter;
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            filePath = openFileDialog.FileName;
+        }
+
+        return filePath;
     }
 }

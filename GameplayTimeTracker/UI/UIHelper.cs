@@ -14,7 +14,7 @@ namespace GameplayTimeTracker;
 public static class UIHelper
 {
     public static TextBox CreateTextBox(string text = "", HorizontalAlignment hA = HorizontalAlignment.Left,
-        VerticalAlignment vA = VerticalAlignment.Bottom, double width = 180,Thickness margin = new())
+        VerticalAlignment vA = VerticalAlignment.Bottom, double width = 180, Thickness margin = new())
     {
         TextBox sample = new TextBox
         {
@@ -27,7 +27,7 @@ public static class UIHelper
             HorizontalContentAlignment = HorizontalAlignment.Left,
             VerticalContentAlignment = VerticalAlignment.Center,
             Effect = AppEffects.dropShadowIcon,
-            Margin = margin
+            Margin = margin,
             // Margin = new Thickness(leftMargin, 0, 0, 5)
         };
         sample.Style = (Style)Application.Current.FindResource("RoundedTextBox");

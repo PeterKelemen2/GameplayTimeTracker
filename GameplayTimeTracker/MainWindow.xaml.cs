@@ -61,7 +61,7 @@ public partial class MainWindow : Window
         SettingsButton.Effect = AppEffects.dropShadowIcon;
         SettingsButton.Click += Settings_Click;
         Grid.SetRow(SettingsButton, 1);
-        MainGrid.Children.Add(SettingsButton);
+        MainGrid.Children.Add(SettingsButton); 
     }
 
     public void AddEntry_Click(object sender, RoutedEventArgs e)
