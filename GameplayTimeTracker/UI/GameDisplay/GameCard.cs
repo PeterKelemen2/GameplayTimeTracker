@@ -291,8 +291,10 @@ public class GameCard : UserControl
 
     private void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {
-        EditMenu = new EditMenu(DataEntry);
-        EditMenu.Open();
+        // EditMenu = new EditMenu(DataEntry);
+        // EditMenu.Open();
+        EntryConfigMenu configMenu = new EntryConfigMenu(DataEntry);
+        configMenu.Open();
     }
 
     private DispatcherTimer progressBarTimer;
