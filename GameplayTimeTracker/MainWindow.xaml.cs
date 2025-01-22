@@ -10,6 +10,7 @@ using System.Windows.Media;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
+using Shellify;
 
 namespace GameplayTimeTracker;
 
@@ -55,7 +56,7 @@ public partial class MainWindow : Window
         CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
             bImgPath: AppFiles.AddIcon, effect: AppEffects.dropShadowIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
-        AddButton.Click += AddEntry_Click;
+        AddButton.Click += (_, _) => { AddEntry(); };
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
 
@@ -67,26 +68,59 @@ public partial class MainWindow : Window
         MainGrid.Children.Add(SettingsButton);
     }
 
-    public void AddEntry_Click(object sender, RoutedEventArgs e)
+    public void AddEntry()
     {
-        string exePath = Common.GetDialogPath(Common.exeFilter);
-        Console.WriteLine(exePath);
-        if (exePath.EndsWith(".exe") || exePath.EndsWith(".EXE"))
-        {
-            Entry newEntry = new Entry();
-            newEntry.Repository = entryRepository;
-            newEntry.ExePath = exePath;
-            string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
-            name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
-            newEntry.Name = name;
+        string arguments = "";
+        string exePath = "";
+        string path = Common.GetDialogPath(Common.exeFilter);
 
-            CustomMenu addEntryConfigMenu =
-                new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
-            addEntryConfigMenu.Open();
-        }
-        else
+        if (Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
         {
-            Console.WriteLine("Wrong file format or cancelled.");
+            var shortcut = ShellLinkFile.Load(path);
+            exePath += shortcut.LinkInfo.LocalBasePath;
+            arguments += shortcut.Arguments;
+        }
+        else if (Path.GetExtension(path).Equals(".exe", StringComparison.OrdinalIgnoreCase))
+        {
+            exePath += path;
+        }
+
+        if (!exePath.Equals(""))
+        {
+            if (!entryRepository.IsExePresent(exePath))
+            {
+                Entry newEntry = new Entry();
+                newEntry.Repository = entryRepository;
+                newEntry.ExePath = exePath;
+                newEntry.Arguments = arguments;
+                string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
+                name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
+                newEntry.Name = name;
+
+                CustomMenu addEntryConfigMenu =
+                    new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
+                addEntryConfigMenu.Open();
+            }
+            else
+            {
+                PromptMenu duplicatePrompt =
+                    new PromptMenu(
+                        // height: 200,
+                        width: 400,
+                        textArray: new[]
+                        {
+                            "Sorry, this executable is already in use by",
+                            entryRepository.GetNameByExePath(exePath),
+                            "Would you like to select another file?"
+                        },
+                        sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
+                        boldArray: new[] { false, true },
+                        lineSpacing: 5,
+                        type: PromptMenu.PromptType.YesNo,
+                        yesHandler: (s, e) => { AddEntry(); }
+                    );
+                duplicatePrompt.Open();
+            }
         }
     }
 

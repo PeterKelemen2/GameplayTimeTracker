@@ -19,7 +19,7 @@ public static class Common
     public static string imageFilter =
         "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
 
-    public static string exeFilter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
+    public static string exeFilter = "Executable files (*.exe, *.lnk)|*.exe;*.lnk|All files (*.*)|*.*";
 
     public static string Truncate(string value, int length)
     {

@@ -30,7 +30,8 @@ public class PromptMenu : CustomMenu
             TextAlignment = TextAlignment.Center,
             Margin = new Thickness(0, 20, 0, 0),
             Foreground = new SolidColorBrush(AppColors.Font),
-            TextWrapping = TextWrapping.Wrap
+            TextWrapping = TextWrapping.Wrap,
+            Padding = new Thickness(10, 0, 10, 0),
         };
 
         for (int i = 0; i < textArray.Length; i++)

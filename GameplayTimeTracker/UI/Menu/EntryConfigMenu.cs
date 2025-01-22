@@ -32,7 +32,8 @@ public class EntryConfigMenu : CustomMenu
 
         Grid nameGrid = UIHelper.CreateAddEntryGrid("Name", new Thickness(5, 0, 0, 30));
         var nameBox = Common.FindTextBox(nameGrid);
-        Binding nameBinding = new Binding("Name") { Source = entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged};
+        Binding nameBinding = new Binding("Name")
+            { Source = entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
         BindingOperations.SetBinding(nameBox, TextBox.TextProperty, nameBinding);
         stackPanel.Children.Add(nameGrid);
 
@@ -62,6 +63,8 @@ public class EntryConfigMenu : CustomMenu
         var argsBox = Common.FindTextBox(argsGrid);
         Binding argsBinding = new Binding("Arguments") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(argsBox, TextBox.TextProperty, argsBinding);
+
+
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
         imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
         stackPanel.Children.Add(imagesTextBlock);

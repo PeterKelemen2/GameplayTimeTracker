@@ -121,4 +121,14 @@ public class EntryRepository
             entry.LastPerc = Math.Round(entry.GetLastPlaytimeAsDouble() / entry.GetTotalPlaytimeAsDouble(), 2);
         }
     }
+
+    public bool IsExePresent(string exePath)
+    {
+        return EntriesList.Any(x => x.ExePath.Equals(exePath, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public string GetNameByExePath(string exePath)
+    {
+        return EntriesList.FirstOrDefault(x => x.ExePath.Equals(exePath, StringComparison.OrdinalIgnoreCase))?.Name;
+    }
 }
