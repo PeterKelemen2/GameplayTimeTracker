@@ -9,17 +9,24 @@ namespace GameplayTimeTracker.Menu;
 
 public class PromptMenu : CustomMenu
 {
-    public enum PromptType { YesNo, Ok }
+    public enum PromptType
+    {
+        YesNo,
+        Ok
+    }
+
+    public Grid ButtonsGrid;
 
     public PromptMenu(
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
-        double width = 300, double height = 200, PromptType type = PromptType.Ok,
+        double width = 300, PromptType type = PromptType.Ok,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
         bool performanceMode = true)
-        : base(width, height, performanceMode)
+        : base(width, performanceMode)
     {
         sizeArray = (sizeArray ?? new double[0])
-            .Concat(Enumerable.Repeat(Common.EditTitleFontSize, Math.Max(0, textArray.Length - (sizeArray?.Length ?? 0))))
+            .Concat(Enumerable.Repeat(Common.EditTitleFontSize,
+                Math.Max(0, textArray.Length - (sizeArray?.Length ?? 0))))
             .ToArray();
         boldArray = Enumerable.Range(0, textArray.Length)
             .Select(i => boldArray != null && i < boldArray.Length && boldArray[i])
@@ -42,10 +49,13 @@ public class PromptMenu : CustomMenu
                 FontSize = sizeArray[i],
                 FontWeight = boldArray[i] ? FontWeights.Bold : FontWeights.Regular
             });
-            promptTextBlock.Inlines.Add(new Run { Text = ".\n", Foreground = Brushes.Transparent, FontSize = lineSpacing });
+            promptTextBlock.Inlines.Add(new Run
+                { Text = ".\n", Foreground = Brushes.Transparent, FontSize = lineSpacing });
         }
-        MenuContentGrid.Children.Add(promptTextBlock);
 
+        MenuContentPanel.Children.Add(promptTextBlock);
+
+        ButtonsGrid = new Grid { Height = 60 };
         if (type == PromptType.YesNo)
         {
             AddButton("Yes", 60, yesHandler, BType.Positive);
@@ -55,6 +65,8 @@ public class PromptMenu : CustomMenu
         {
             AddButton("Ok", 0, null, BType.Default);
         }
+
+        MenuContentPanel.Children.Add(ButtonsGrid);
     }
 
     private void AddButton(string text, double horizontalMargin, RoutedEventHandler handler, BType buttonType)
@@ -69,6 +81,6 @@ public class PromptMenu : CustomMenu
             (handler ?? ((s, e) => Console.WriteLine($"No Event set for {text} Button")))(s, e);
             Close();
         };
-        MenuContentGrid.Children.Add(button);
+        ButtonsGrid.Children.Add(button);
     }
 }

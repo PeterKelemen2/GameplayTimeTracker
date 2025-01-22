@@ -15,8 +15,8 @@ namespace GameplayTimeTracker.Menu;
 public class EditMenu : EntryConfigMenu
 {
     public EditMenu(Entry entry,
-        double width = 350, double height = 590, bool performanceMode = true)
-        : base(entry, width, height, performanceMode)
+        double width = 350, bool performanceMode = true)
+        : base(entry, width, performanceMode)
     {
         TitleTextBlock.FontWeight = FontWeights.Regular;
         TitleTextBlock.Text = "Editing ";
@@ -25,6 +25,7 @@ public class EditMenu : EntryConfigMenu
 
         var RefreshImagesButton =
             new CustomButton(w: 120, h: 40, text: "SGDB Refresh", effect: AppEffects.dropShadowIcon);
+        RefreshImagesButton.Margin = new Thickness(0, 0, 0, 20);
         RefreshImagesButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
         stackPanel.Children.Add(RefreshImagesButton);
     }

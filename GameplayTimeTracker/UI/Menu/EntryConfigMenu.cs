@@ -14,14 +14,14 @@ public class EntryConfigMenu : CustomMenu
     public TextBox HeroBox { get; set; }
 
     public EntryConfigMenu(Entry entry,
-        double width = 350, double height = 550, bool performanceMode = true)
-        : base(width, height, performanceMode)
+        double width = 350, bool performanceMode = true)
+        : base(width, performanceMode)
     {
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
         stackPanel = new();
-        MenuContentGrid.Children.Add(stackPanel);
+        MenuContentPanel.Children.Add(stackPanel);
 
         TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);

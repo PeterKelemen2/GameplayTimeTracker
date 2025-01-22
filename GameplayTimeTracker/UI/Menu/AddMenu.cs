@@ -12,10 +12,11 @@ namespace GameplayTimeTracker.Menu;
 public class AddMenu : EntryConfigMenu
 {
     public AddMenu(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo, Panel panel,
-        double width = 350, double height = 550, bool performanceMode = true)
-        : base(entry, width, height, performanceMode)
+        double width = 350, bool performanceMode = true)
+        : base(entry, width, performanceMode)
     {
         TitleTextBlock.Text = "Configure new entry";
+        ConfirmButton.Margin = new Thickness(0, 20, 0, 20);
         ConfirmButton.Click += (_, _) =>
         {
             AddConfiguredEntry(entry, entryRepo, cardRepo, panel);

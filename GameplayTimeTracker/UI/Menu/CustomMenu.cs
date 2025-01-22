@@ -16,12 +16,12 @@ public class CustomMenu : UserControl
     private Panel ContentPanel;
     public Grid ContainerGrid;
     private Rectangle BgRectangle;
-    public Grid MenuContentGrid;
-    public Rectangle MenuContentBg;
+    public Panel MenuContentPanel;
+    private Border MenuContentBorder;
     public BlurEffect BlurEffect;
     public bool PerformanceMode = true;
 
-    public CustomMenu(double width = 300, double height = 400, bool performanceMode = true)
+    public CustomMenu(double width = 300, bool performanceMode = true)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
@@ -47,32 +47,25 @@ public class CustomMenu : UserControl
         BgRectangle.MouseDown += (_, _) => { Close(); };
         ContainerGrid.Children.Add(BgRectangle);
 
-        MenuContentGrid = new Grid
+        MenuContentPanel = new StackPanel
         {
             Width = width,
-            Height = height,
+            VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
         };
-        ContainerGrid.Children.Add(MenuContentGrid);
-        var translateTransform = new TranslateTransform(0, 0);
-        MenuContentGrid.RenderTransform = translateTransform;
-
-        MenuContentBg = new Rectangle
+        MenuContentBorder = new Border
         {
-            Width = width,
-            Height = height,
-            RadiusX = Common.BorderRadius,
-            RadiusY = Common.BorderRadius,
-            Fill = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
+            Background = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            CornerRadius = new CornerRadius(15),
+            Child = MenuContentPanel,
             Effect = AppEffects.DropShadowRectangle
         };
+        ContainerGrid.Children.Add(MenuContentBorder);
 
-        MenuContentGrid.Children.Add(MenuContentBg);
-
-        // FlyInAnimation.From = ContainerGrid.Height + MenuContentGrid.Height * 0.5;
-        // FlyOutAnimation.To = -(ContainerGrid.Height + MenuContentGrid.Height * 0.5);
-        AppAnimations.FlyInAnimation.From = mainWindow.Height;
-        AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
+        var translateTransform = new TranslateTransform(0, 0);
+        MenuContentBorder.RenderTransform = translateTransform;
     }
 
     public void Open()
@@ -81,9 +74,14 @@ public class CustomMenu : UserControl
         {
             RootPanel.Children.Add(ContainerGrid);
 
+            AppAnimations.FlyInAnimation.From = mainWindow.Height;
+            AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentPanel.ActualHeight * 0.5);
+
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, AppAnimations.FlyInAnimation);
-            MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
+            MenuContentBorder.RenderTransform.BeginAnimation(TranslateTransform.YProperty,
+                AppAnimations.FlyInAnimation);
+            MenuContentBorder.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
+            MenuContentPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
             if (!PerformanceMode)
             {
@@ -107,8 +105,10 @@ public class CustomMenu : UserControl
             }
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityOut);
-            MenuContentGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, AppAnimations.FlyOutAnimation);
-            MenuContentGrid.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
+            MenuContentBorder.RenderTransform.BeginAnimation(TranslateTransform.YProperty,
+                AppAnimations.FlyOutAnimation);
+            MenuContentBorder.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
+            MenuContentPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
 
             if (!PerformanceMode)
             {
@@ -129,7 +129,7 @@ public class CustomMenu : UserControl
             BgRectangle.Width = panel.ActualWidth;
             BgRectangle.Height = panel.ActualHeight;
             AppAnimations.FlyInAnimation.From = mainWindow.Height;
-            AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentGrid.Height * 0.5);
+            AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentPanel.ActualHeight * 0.5);
         }
     }
 }
