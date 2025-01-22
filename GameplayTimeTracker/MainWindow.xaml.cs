@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -6,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
+using GameplayTimeTracker.SGDB;
 
 namespace GameplayTimeTracker;
 
@@ -63,16 +66,25 @@ public partial class MainWindow : Window
         MainGrid.Children.Add(SettingsButton);
     }
 
-    public void AddEntry_Click(object sender, RoutedEventArgs e)
+    public async void AddEntry_Click(object sender, RoutedEventArgs e)
     {
-        Entry newEntry = new Entry();
-        newEntry.Repository = entryRepository;
-        newEntry.ExePath = Common.GetDialogPath(Common.exeFilter);
-        CustomMenu addEntryConfigMenu = new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
-        addEntryConfigMenu.Open();
-        // GameCard gc = new GameCardHorizontal(newEntry, entryRepository, gameCardRepository, MainPanel);
-        // gameCardRepository.GameCards.Add(gc);
-        // MainPanel.Children.Add(gc);
+        string exePath = Common.GetDialogPath(Common.exeFilter);
+        Console.WriteLine(exePath);
+        if (exePath.EndsWith(".exe"))
+        {
+            Entry newEntry = new Entry();
+            newEntry.Repository = entryRepository;
+            newEntry.ExePath = exePath;
+            newEntry.Name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
+
+            CustomMenu addEntryConfigMenu =
+                new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
+            addEntryConfigMenu.Open();
+        }
+        else
+        {
+            Console.WriteLine("Wrong file format or cancelled.");
+        }
     }
 
     public void Settings_Click(object sender, RoutedEventArgs e)

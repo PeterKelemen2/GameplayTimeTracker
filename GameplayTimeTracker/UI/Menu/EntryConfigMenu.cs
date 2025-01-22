@@ -6,7 +6,7 @@ namespace GameplayTimeTracker.Menu;
 
 public class EntryConfigMenu : CustomMenu
 {
-    private StackPanel stackPanel { get; set; }
+    public StackPanel stackPanel { get; set; }
     public TextBlock TitleTextBlock { get; set; }
     public CustomButton ConfirmButton { get; set; }
     public TextBox ExeBox { get; set; }
