@@ -63,7 +63,11 @@ public partial class MainWindow : Window
         CustomButton SettingsButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
             bImgPath: AppFiles.CogIcon, effect: AppEffects.dropShadowIcon);
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
-        SettingsButton.Click += Settings_Click;
+        SettingsButton.Click += (_, _) =>
+        {
+            SettingsMenu settingsMenu = new SettingsMenu();
+            settingsMenu.Open();
+        };
         Grid.SetRow(SettingsButton, 1);
         MainGrid.Children.Add(SettingsButton);
     }
@@ -122,11 +126,6 @@ public partial class MainWindow : Window
                 duplicatePrompt.Open();
             }
         }
-    }
-
-    public void Settings_Click(object sender, RoutedEventArgs e)
-    {
-        Console.WriteLine("Opening Settings menu");
     }
 
     private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
