@@ -12,8 +12,11 @@ public class EntryRepository
     public EntryRepository()
     {
         EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
-        foreach (Entry entry in EntriesList) entry.Repository = this;
-        foreach (Entry entry in EntriesList) Console.WriteLine(entry.Repository);
+        foreach (Entry entry in EntriesList)
+        {
+            entry.Repository = this;
+        }
+
         CheckForOldTime();
         UpdateTotalPercs();
         // SetTimeArrays();
@@ -117,5 +120,12 @@ public class EntryRepository
             entry.TotalPerc = Math.Round(entry.GetTotalPlaytimeAsDouble() / globalTotalTime, 2);
             entry.LastPerc = Math.Round(entry.GetLastPlaytimeAsDouble() / entry.GetTotalPlaytimeAsDouble(), 2);
         }
+    }
+
+    public void SetTotalPlayPercentage(string name)
+    {
+        Entry selected = EntriesList.FirstOrDefault(entry => entry.Name == name);
+        double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
+        selected.TotalPerc = Math.Round(selected.GetTotalPlaytimeAsDouble() / globalTotalTime, 2);
     }
 }

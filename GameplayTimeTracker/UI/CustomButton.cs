@@ -100,7 +100,7 @@ public class CustomButton : UserControl
         {
             if (File.Exists(bImgPath))
             {
-                Console.WriteLine(bImgPath);
+                // Console.WriteLine(bImgPath);
                 ButtonImage = new Image();
                 ButtonImage.Source = new BitmapImage(new Uri(bImgPath, UriKind.RelativeOrAbsolute));
                 ButtonImage.Width = h / 2; ButtonImage.Height = h / 2;
@@ -135,7 +135,7 @@ public class CustomButton : UserControl
             }
         }
 
-        Console.WriteLine("Button state:" + IsActive);
+        // Console.WriteLine("Button state:" + IsActive);
         if (IsActive)
         {
             Grid.MouseEnter += OnMouseEnter;

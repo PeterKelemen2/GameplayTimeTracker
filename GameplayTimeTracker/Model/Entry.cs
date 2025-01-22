@@ -25,8 +25,14 @@ namespace GameplayTimeTracker
         private DateTime _lastDate;
         private string _lastDateString = "Never";
         private bool _wasRunning;
+        private EntryRepository _repository;
 
-        [JsonIgnore] public EntryRepository Repository;
+        [JsonIgnore]
+        public EntryRepository Repository
+        {
+            get => _repository;
+            set => SetField(ref _repository, value);
+        }
 
         [JsonPropertyName("gameName")]
         public string Name
@@ -43,7 +49,12 @@ namespace GameplayTimeTracker
                 if (SetField(ref _totalArray, value))
                 {
                     OnPropertyChanged(nameof(TotalPlayFormatted));
-                    // if (Repository != null) Repository.UpdateTotalPercs();
+                    if (Repository != null)
+                    {
+                        // Repository.SetTotalPlayPercentage(_name);
+                        Repository.UpdateTotalPercs();
+                        Repository.PrintEntryList();
+                    }
                 }
             }
         }
@@ -138,7 +149,6 @@ namespace GameplayTimeTracker
             }
         }
 
-
         [JsonPropertyName("totalTime")]
         public double TotalTime
         {
@@ -157,7 +167,13 @@ namespace GameplayTimeTracker
         public double TotalPerc
         {
             get => _totalPerc;
-            set => SetField(ref _totalPerc, value);
+            set
+            {
+                if (SetField(ref _totalPerc, value))
+                {
+                    Console.WriteLine(TotalPerc);
+                }
+            }
         }
 
         [JsonIgnore]
@@ -243,7 +259,6 @@ namespace GameplayTimeTracker
         public double GetTotalPlaytimeAsDouble()
         {
             return Math.Round(TotalPlay[0] + TotalPlay[1] / 60.0 + TotalPlay[2] / 3600.0, 2);
-            // return TotalH + (TotalM / 60) + (TotalS / 3600);
         }
 
         public double GetLastPlaytimeAsDouble()
@@ -287,6 +302,11 @@ namespace GameplayTimeTracker
             // }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void PrintRepo()
+        {
+            Repository.PrintEntryList();
         }
     }
 }
