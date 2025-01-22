@@ -54,7 +54,15 @@ public class EntryConfigMenu : CustomMenu
         Binding exeBinding = new Binding("ExePath") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(ExeBox, TextBox.TextProperty, exeBinding);
         CustomButton exeBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        exeBrowseButton.Click += (_, _) => { ExeBox.Text = Common.GetDialogPath(Common.exeFilter); };
+        exeBrowseButton.Click += (_, _) =>
+        {
+            string newPath = Common.GetDialogPath(Common.exeFilter);
+            if (!newPath.Equals(""))
+            {
+                ExeBox.Text = newPath;
+                entry.ExePath = newPath;
+            }
+        };
         exeGrid.Children.Add(exeBrowseButton);
         stackPanel.Children.Add(exeGrid);
 
