@@ -10,8 +10,8 @@ namespace GameplayTimeTracker
     {
         private string _name;
         private string _exePath;
-        private string _iconPath = "Assets/no_icon.png";
-        private string _heroPath = "Assets/no_icon.png";
+        private string _iconPath = AppFiles.DefaultIconPath;
+        private string _heroPath = AppFiles.DefaultHeroPath;
         private string _arguments;
         private double _totalTime;
         private double _lastTime;
@@ -144,7 +144,7 @@ namespace GameplayTimeTracker
             get => _heroPath;
             set
             {
-                string imagePath = File.Exists(value) ? value : "Assets/no_icon.png";
+                string imagePath = File.Exists(value) ? value : "Assets/DefaultHero.png";
                 SetField(ref _heroPath, imagePath);
             }
         }
