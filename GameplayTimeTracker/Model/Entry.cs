@@ -321,7 +321,7 @@ namespace GameplayTimeTracker
             Repository.PrintEntryList();
         }
 
-        public async Task RefreshSGDBImages()
+        public async Task RefreshImagesFromSGDB()
         {
             AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();

@@ -38,6 +38,8 @@ public static class SGDBFetch
             {
                 if (icon.Format == SteamGridDbFormats.Ico)
                 {
+                    // await SGDBDownloader.DownloadImageAsync(icon.FullImageUrl,
+                    //     Path.Combine(AppFiles.SGDBFolder, files["icon"]));
                     await SGDBDownloader.DownloadAndProcessIcoAsync(icon.FullImageUrl,
                         Path.Combine(AppFiles.SGDBFolder, files["icon"]));
                 }

@@ -25,7 +25,7 @@ public class EditMenu : EntryConfigMenu
 
         var RefreshImagesButton =
             new CustomButton(w: 120, h: 40, text: "SGDB Refresh", effect: AppEffects.dropShadowIcon);
-        RefreshImagesButton.Click += (_, __) => { entry.RefreshSGDBImages(); };
+        RefreshImagesButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
         stackPanel.Children.Add(RefreshImagesButton);
     }
 }
