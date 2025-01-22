@@ -95,7 +95,8 @@ public class GameCard : UserControl
             FontWeight = FontWeights.Bold,
             Foreground = new SolidColorBrush(AppColors.Font),
             Effect = AppEffects.DropOuterGlow,
-            TextTrimming = TextTrimming.CharacterEllipsis
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Padding = new Thickness(10, 0, 10, 0)
         };
         Binding titleBinding = new Binding("Name")
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -66,16 +67,18 @@ public partial class MainWindow : Window
         MainGrid.Children.Add(SettingsButton);
     }
 
-    public async void AddEntry_Click(object sender, RoutedEventArgs e)
+    public void AddEntry_Click(object sender, RoutedEventArgs e)
     {
         string exePath = Common.GetDialogPath(Common.exeFilter);
         Console.WriteLine(exePath);
-        if (exePath.EndsWith(".exe"))
+        if (exePath.EndsWith(".exe") || exePath.EndsWith(".EXE"))
         {
             Entry newEntry = new Entry();
             newEntry.Repository = entryRepository;
             newEntry.ExePath = exePath;
-            newEntry.Name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
+            string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
+            name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
+            newEntry.Name = name;
 
             CustomMenu addEntryConfigMenu =
                 new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
