@@ -16,7 +16,7 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
     public double CornerRadius { get; set; }
 
     private double _percentage;
-
+    private double resolution = 100;
 
     public static readonly DependencyProperty PercentageProperty =
         DependencyProperty.Register(
@@ -25,19 +25,6 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
             typeof(ProgressBar),
             new PropertyMetadata(0.0, OnPercentageChanged));
 
-    // public double Percentage
-    // {
-    //     get => _percentage;
-    //     set
-    //     {
-    //         if (_percentage != value)
-    //         {
-    //             _percentage = value;
-    //             OnPropertyChanged(nameof(Percentage)); // Notify that the percentage changed
-    //         }
-    //     }
-    // }
-    
     public double Percentage
     {
         get => (double)GetValue(PercentageProperty);
@@ -62,7 +49,7 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
         BgHeight = height;
         BarPadding = padding;
         CornerRadius = cornerRadius;
-        Percentage = percentage;
+        // Percentage = percentage;
         InnerMaxWidth = width - padding * 2;
 
         ContainerGrid = new Grid
@@ -115,12 +102,10 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
     {
         if (BarRect != null)
         {
-            Percentage = Math.Clamp(Percentage, 0, 1);
-            double newWidth = InnerMaxWidth * Percentage;
-            if (newWidth > 0.0 && Math.Abs(BarRect.Width - newWidth) >= InnerMaxWidth * 0.01)
-            {
+            double clampedValue = Math.Clamp(Percentage, 0, 1);
+            double newWidth = InnerMaxWidth * clampedValue;
+            if (newWidth > 0.0 && Math.Abs(BarRect.Width - newWidth) >= InnerMaxWidth * (1 / resolution))
                 BarRect.Width = newWidth;
-            }
         }
     }
 

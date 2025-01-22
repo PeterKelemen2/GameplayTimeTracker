@@ -18,7 +18,7 @@ public class EntryRepository
         }
 
         CheckForOldTime();
-        UpdateTotalPercs();
+        UpdateTotalPercentages();
         // SetTimeArrays();
         PrintEntryList();
     }
@@ -57,7 +57,7 @@ public class EntryRepository
         entry.Repository = this;
         EntriesList.Add(entry);
 
-        UpdateTotalPercs();
+        UpdateTotalPercentages();
     }
 
     public void RemoveEntry(Entry entry)
@@ -66,7 +66,7 @@ public class EntryRepository
         {
             Console.WriteLine($"Removing entry {entry.Name}");
             EntriesList.Remove(entry);
-            UpdateTotalPercs();
+            UpdateTotalPercentages();
             PrintEntryList();
         }
     }
@@ -112,7 +112,7 @@ public class EntryRepository
         }
     }
 
-    public void UpdateTotalPercs()
+    public void UpdateTotalPercentages()
     {
         double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
         foreach (var entry in EntriesList)
@@ -120,12 +120,5 @@ public class EntryRepository
             entry.TotalPerc = Math.Round(entry.GetTotalPlaytimeAsDouble() / globalTotalTime, 2);
             entry.LastPerc = Math.Round(entry.GetLastPlaytimeAsDouble() / entry.GetTotalPlaytimeAsDouble(), 2);
         }
-    }
-
-    public void SetTotalPlayPercentage(string name)
-    {
-        Entry selected = EntriesList.FirstOrDefault(entry => entry.Name == name);
-        double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
-        selected.TotalPerc = Math.Round(selected.GetTotalPlaytimeAsDouble() / globalTotalTime, 2);
     }
 }

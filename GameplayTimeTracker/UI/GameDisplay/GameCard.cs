@@ -121,15 +121,22 @@ public class GameCard : UserControl
         BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         ContainerGrid.Children.Add(RunningTextBlock);
 
-        // TODO: Figure out this binding
-        TotalProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.TotalPerc);
-        Binding totalPlayPercentageBinding = new Binding("TotalPerc")
+        TotalProgressBar = new ProgressBar(150, 30, 5, 10);
+        // TotalProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.TotalPerc);
+        Binding totalPlayPercentBinding = new Binding("TotalPerc")
         {
             Source = DataEntry,
             Mode = BindingMode.OneWay,
         };
-        BindingOperations.SetBinding(TotalProgressBar, ProgressBar.PercentageProperty, totalPlayPercentageBinding);
-        LastProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.LastPerc);
+        BindingOperations.SetBinding(TotalProgressBar, ProgressBar.PercentageProperty, totalPlayPercentBinding);
+        LastProgressBar = new ProgressBar(150, 30, 5, 10);
+        // LastProgressBar = new ProgressBar(150, 30, 5, 10, DataEntry.LastPerc);
+        Binding lastPlayPercentBinding = new Binding("LastPerc")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(LastProgressBar, ProgressBar.PercentageProperty, lastPlayPercentBinding);
 
         TotalPlaytimeBlock = new TextBlock
         {

@@ -51,8 +51,7 @@ namespace GameplayTimeTracker
                     OnPropertyChanged(nameof(TotalPlayFormatted));
                     if (Repository != null)
                     {
-                        // Repository.SetTotalPlayPercentage(_name);
-                        Repository.UpdateTotalPercs();
+                        Repository.UpdateTotalPercentages();
                         LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
                         Repository.PrintEntryList();
                     }
@@ -170,9 +169,10 @@ namespace GameplayTimeTracker
             get => _totalPerc;
             set
             {
-                if (SetField(ref _totalPerc, value))
+                if (_totalPerc != value)
                 {
-                    Console.WriteLine(TotalPerc);
+                    _totalPerc = value;
+                    OnPropertyChanged(nameof(TotalPerc));
                 }
             }
         }
@@ -181,7 +181,15 @@ namespace GameplayTimeTracker
         public double LastPerc
         {
             get => _lastPerc;
-            set => SetField(ref _lastPerc, value);
+            // set => SetField(ref _lastPerc, value);
+            set
+            {
+                if (_lastPerc != value)
+                {
+                    _lastPerc = value;
+                    OnPropertyChanged(nameof(LastPerc));
+                }
+            }
         }
 
         [JsonPropertyName("lastPlayDate")]
