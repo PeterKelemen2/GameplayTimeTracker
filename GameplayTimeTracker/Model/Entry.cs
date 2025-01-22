@@ -53,6 +53,7 @@ namespace GameplayTimeTracker
                     {
                         // Repository.SetTotalPlayPercentage(_name);
                         Repository.UpdateTotalPercs();
+                        LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
                         Repository.PrintEntryList();
                     }
                 }
