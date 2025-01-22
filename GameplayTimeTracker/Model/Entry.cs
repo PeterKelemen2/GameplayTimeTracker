@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using GameplayTimeTracker.Settings;
+using GameplayTimeTracker.SGDB;
 
 namespace GameplayTimeTracker
 {
@@ -316,6 +319,20 @@ namespace GameplayTimeTracker
         public void PrintRepo()
         {
             Repository.PrintEntryList();
+        }
+
+        public async Task RefreshSGDBImages()
+        {
+            AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
+            Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
+
+            if (!settings.SGDBApiKey.Equals(string.Empty))
+            {
+                await SGDBFetch.FetchSGDBAsync(settings.SGDBApiKey, Name, iconFiles);
+            }
+
+            IconPath = iconFiles["icon"];
+            HeroPath = iconFiles["hero"];
         }
     }
 }

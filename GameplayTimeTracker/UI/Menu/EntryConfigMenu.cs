@@ -32,7 +32,7 @@ public class EntryConfigMenu : CustomMenu
 
         Grid nameGrid = UIHelper.CreateAddEntryGrid("Name", new Thickness(5, 0, 0, 30));
         var nameBox = Common.FindTextBox(nameGrid);
-        Binding nameBinding = new Binding("Name") { Source = entry, Mode = BindingMode.TwoWay, };
+        Binding nameBinding = new Binding("Name") { Source = entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged};
         BindingOperations.SetBinding(nameBox, TextBox.TextProperty, nameBinding);
         stackPanel.Children.Add(nameGrid);
 
@@ -103,7 +103,7 @@ public class EntryConfigMenu : CustomMenu
         stackPanel.Children.Add(heroGrid);
 
         ConfirmButton =
-            new CustomButton(w: 110, h: 40, text: "Finish", effect: AppEffects.dropShadowIcon,
+            new CustomButton(w: 120, h: 40, text: "Finish", effect: AppEffects.dropShadowIcon,
                 type: BType.Positive);
         ConfirmButton.Margin = new Thickness(0, 20, 0, 10);
         // ConfirmButton.Click += (_, _) => { AddConfiguredEntry(entry, entryRepo, cardRepo, panel); };
