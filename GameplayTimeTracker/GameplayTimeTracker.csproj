@@ -55,9 +55,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="Assets\no_icon.png" />
-      <Content Include="Assets\no_icon.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\remove.png" />
       <Content Include="Assets\remove.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

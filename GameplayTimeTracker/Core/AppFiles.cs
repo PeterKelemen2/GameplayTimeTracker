@@ -9,7 +9,7 @@ public static class AppFiles
     public static string DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
         Assembly.GetExecutingAssembly().GetName().Name);
 
-    public const string DefaultIconPath = "Assets/no_icon.png";
+    public const string DefaultIconPath = "Assets/DefaultIcon.png";
     public const string DefaultHeroPath = "Assets/DefaultHero.png";
     public const string EditIcon = "Assets/edit.png";
     public const string RemoveIcon = "Assets/remove.png";
