@@ -37,7 +37,7 @@ public class EntryConfigMenu : CustomMenu
         BindingOperations.SetBinding(nameBox, TextBox.TextProperty, nameBinding);
         stackPanel.Children.Add(nameGrid);
 
-        Grid timeGrid = UIHelper.CreateAddEntryGrid("Playtime", new Thickness(5, 0, 0, 30));
+        Grid timeGrid = UIHelper.CreateAddEntryGrid("Playtime", new Thickness(5, 10, 0, 30));
         var timeBox = Common.FindTextBox(timeGrid);
         Binding timeBinding = new Binding("TotalPlay")
         {
