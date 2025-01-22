@@ -15,9 +15,8 @@ public class PrefEntry : UserControl
     public bool PrefValue { get; set; }
     private double padding = 15;
 
-    public PrefEntry(StackPanel parent, string prefName, bool prefValue)
+    public PrefEntry(string prefName, bool prefValue)
     {
-        ParentPanel = parent;
         PrefName = prefName;
         PrefValue = prefValue;
 
@@ -48,11 +47,10 @@ public class PrefEntry : UserControl
             HorizontalAlignment = HorizontalAlignment.Right,
             Margin = new Thickness(0, 0, padding, 0),
         };
-        // checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
+        checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
 
         containerGrid.Children.Add(checkBox);
 
         Content = containerGrid;
-        // ParentPanel.Children.Add(containerGrid);
     }
 }
