@@ -23,9 +23,12 @@ public static class AppFiles
     public const string DataFileName = "data.json";
     public const string SavedIconsFolderName = "Saved Icons";
     public const string BackupFolderName = "Backup Data";
+    public const string SGDBFolderName = "SteamGridDB Images";
 
     public static readonly string DataFilePath = Path.Combine(DocumentsPath, DataFileName);
     public static readonly string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static readonly string SavedIconsPath = Path.Combine(DocumentsPath, SavedIconsFolderName);
     public static readonly string BackupDataFolder = Path.Combine(DocumentsPath, BackupFolderName);
+    public static readonly string SGDBFolder = Path.Combine(DocumentsPath, SGDBFolderName);
+    
 }
