@@ -11,7 +11,7 @@ public class AddMenu : EntryConfigMenu
         double width = 350, double height = 550, bool performanceMode = true)
         : base(entry, width, height, performanceMode)
     {
-        TitleTextBlock.Text = "Configure New Entry";
+        TitleTextBlock.Text = "Configure new entry";
         ConfirmButton.Click += (_, _) => { AddConfiguredEntry(entry, entryRepo, cardRepo, panel); };
     }
 

@@ -293,7 +293,7 @@ public class GameCard : UserControl
     {
         // EditMenu = new EditMenu(DataEntry);
         // EditMenu.Open();
-        EntryConfigMenu configMenu = new EntryConfigMenu(DataEntry);
+        EntryConfigMenu configMenu = new EditMenu(DataEntry);
         configMenu.Open();
     }
 
