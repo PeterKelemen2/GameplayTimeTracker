@@ -34,23 +34,23 @@ public static class DataHandler
         File.WriteAllText(filePath, jsonString);
     }
 
-    public static AppSettings GetSettingsFromFile(string filePath)
+    public static AppSettings GetSettingsFromFile()
     {
         AppSettings settings = new();
-        if (File.Exists(filePath))
+        if (File.Exists(AppFiles.SettingsFilePath))
         {
-            string jsonString = File.ReadAllText(filePath);
+            string jsonString = File.ReadAllText(AppFiles.SettingsFilePath);
             settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
         }
         else
         {
-            WriteSettingsToFile(settings, AppFiles.SettingsFilePath);
+            WriteSettingsToFile(settings);
         }
 
         return settings;
     }
 
-    public static void WriteSettingsToFile(AppSettings settings, string filePath)
+    public static void WriteSettingsToFile(AppSettings settings)
     {
         if (!Path.Exists(AppFiles.DocumentsPath))
         {
@@ -58,6 +58,6 @@ public static class DataHandler
         }
 
         string jsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, jsonString);
+        File.WriteAllText(AppFiles.SettingsFilePath, jsonString);
     }
 }

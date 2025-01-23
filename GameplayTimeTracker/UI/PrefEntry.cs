@@ -15,14 +15,14 @@ public class PrefEntry : UserControl
     public bool PrefValue { get; set; }
     private double padding = 15;
 
-    public PrefEntry(string prefName, bool prefValue)
+    public PrefEntry(string prefName, bool prefValue, double width = 380)
     {
         PrefName = prefName;
         PrefValue = prefValue;
 
         containerGrid = new Grid
         {
-            Width = 200,
+            Width = width,
             Height = 50,
             Margin = new Thickness(0),
             HorizontalAlignment = HorizontalAlignment.Center,

@@ -13,7 +13,8 @@ namespace GameplayTimeTracker;
 
 public static class UIHelper
 {
-    public static TextBox CreateTextBox(string text = "", HorizontalAlignment hA = HorizontalAlignment.Left,
+    public static TextBox CreateTextBox(string placeholder = "", string text = "",
+        HorizontalAlignment hA = HorizontalAlignment.Left,
         VerticalAlignment vA = VerticalAlignment.Bottom, double width = 180, Thickness margin = new())
     {
         TextBox sample = new TextBox
@@ -30,9 +31,35 @@ public static class UIHelper
             Margin = margin,
             // Margin = new Thickness(leftMargin, 0, 0, 5)
         };
+        if (placeholder != "")
+        {
+            sample.Text = placeholder;
+            sample.Foreground = Brushes.Gray;
+            sample.GotFocus += (_, _) => { TextBox_GotFocus(sample, placeholder); };
+            sample.LostFocus += (_, _) => { TextBox_LostFocus(sample, placeholder); };
+        }
+
         sample.Style = (Style)Application.Current.FindResource("RoundedTextBox");
 
         return sample;
+    }
+
+    private static void TextBox_GotFocus(TextBox box, string placeholder)
+    {
+        if (box.Text.Equals(placeholder))
+        {
+            box.Text = "";
+            box.Foreground = Brushes.Black; // Normal text color
+        }
+    }
+
+    private static void TextBox_LostFocus(TextBox box, string placeholder)
+    {
+        if (string.IsNullOrWhiteSpace(box.Text))
+        {
+            box.Text = placeholder;
+            box.Foreground = Brushes.Gray; // Placeholder text color
+        }
     }
 
     public static TextBlock CreateTextBlock(string text = "", HorizontalAlignment hA = HorizontalAlignment.Left,

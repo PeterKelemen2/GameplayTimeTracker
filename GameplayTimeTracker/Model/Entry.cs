@@ -307,7 +307,7 @@ namespace GameplayTimeTracker
 
         public virtual void OnPropertyChanged(string propertyName)
         {
-            Console.WriteLine($"PropertyChanged: {propertyName}");
+            Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
             // if (propertyName.Equals("TotalPlay"))
             // {
             //     
@@ -323,7 +323,7 @@ namespace GameplayTimeTracker
 
         public async Task RefreshImagesFromSGDB()
         {
-            AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
+            AppSettings settings = DataHandler.GetSettingsFromFile();
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
 
             if (!settings.SGDBApiKey.Equals(string.Empty))

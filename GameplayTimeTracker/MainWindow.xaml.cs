@@ -18,10 +18,14 @@ public partial class MainWindow : Window
 {
     private EntryRepository entryRepository;
     private GameCardRepository gameCardRepository;
+    private AppSettings Settings;
 
     public MainWindow()
     {
         InitializeComponent();
+        Settings = DataHandler.GetSettingsFromFile();
+        Console.WriteLine(Settings);
+
         MainGrid.SizeChanged += MainGrid_SizeChanged;
         Loaded += OnLoaded;
     }
@@ -40,9 +44,6 @@ public partial class MainWindow : Window
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
-
-        AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
-        Console.WriteLine(settings);
     }
 
     private void SetBaseColors()
@@ -65,7 +66,7 @@ public partial class MainWindow : Window
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
         SettingsButton.Click += (_, _) =>
         {
-            SettingsMenu settingsMenu = new SettingsMenu();
+            SettingsMenu settingsMenu = new SettingsMenu(Settings);
             settingsMenu.Open();
         };
         Grid.SetRow(SettingsButton, 1);

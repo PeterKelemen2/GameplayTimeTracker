@@ -23,7 +23,7 @@ public class AddMenu : EntryConfigMenu
             Close();
         };
 
-        AppSettings settings = DataHandler.GetSettingsFromFile(AppFiles.SettingsFilePath);
+        AppSettings settings = DataHandler.GetSettingsFromFile();
         Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
 
         if (!settings.SGDBApiKey.Equals(string.Empty))
