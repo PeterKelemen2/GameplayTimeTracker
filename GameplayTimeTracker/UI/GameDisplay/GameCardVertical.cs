@@ -26,7 +26,7 @@ public class GameCardVertical : GameCard
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
-        CardRectangle.Fill = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2);
+        CardRectangle.Fill = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2);
 
         EditButton.VerticalAlignment = VerticalAlignment.Bottom;
         EditButton.HorizontalAlignment = HorizontalAlignment.Right;

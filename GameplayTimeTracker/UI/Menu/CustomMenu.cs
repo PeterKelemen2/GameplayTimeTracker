@@ -55,7 +55,7 @@ public class CustomMenu : UserControl
         };
         MenuContentBorder = new Border
         {
-            Background = AppColors.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
+            Background = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             CornerRadius = new CornerRadius(15),

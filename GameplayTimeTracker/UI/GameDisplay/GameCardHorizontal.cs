@@ -27,7 +27,7 @@ public class GameCardHorizontal : GameCard
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
-        CardRectangle.Fill = AppColors.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
+        CardRectangle.Fill = ColorHelper.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
 
         EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 80, 0);
         RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 30, 0);
