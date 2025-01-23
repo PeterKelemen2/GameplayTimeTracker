@@ -30,14 +30,27 @@ public class AppTheme : INotifyPropertyChanged
         get => _colors;
         set
         {
-            if (SetField(ref _colors, value))
-            {
-                _colors = value;
-                OnPropertyChanged(nameof(Colors));
-            }
+            _colors = value;
+            OnPropertyChanged(nameof(Colors));
+            Console.WriteLine($"Colors changed: {_colors}");
+            // if (SetField(ref _colors, value))
+            // {
+            //     _colors = value;
+            //     OnPropertyChanged(nameof(Colors));
+            //     Console.WriteLine($"Colors changed: {_colors}");
+            // }
         }
     }
-
+    
+    public void UpdateColor(string key, string newValue)
+    {
+        if (_colors.ContainsKey(key))
+        {
+            _colors[key] = newValue;
+            OnPropertyChanged(nameof(Colors));
+            OnPropertyChanged($"Color[{key}]");  // Notify changes for specific color key
+        }
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -53,7 +66,7 @@ public class AppTheme : INotifyPropertyChanged
 
     public virtual void OnPropertyChanged(string propertyName)
     {
-        Console.WriteLine($"Settings - PropertyChanged: {propertyName}");
+        Console.WriteLine($"Theme ({_themeName}) - PropertyChanged: {propertyName}");
 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
@@ -19,18 +20,19 @@ public partial class MainWindow : Window
     private EntryRepository entryRepository;
     private GameCardRepository gameCardRepository;
     private AppSettings Settings;
+    private AppTheme TestTheme;
 
     public MainWindow()
     {
         InitializeComponent();
         Settings = DataHandler.GetSettingsFromFile();
         DataHandler.ManageStartupShortcut(Settings.StartWithSystem);
-        
-        AppTheme TestTheme = new AppTheme();
+
+        TestTheme = new AppTheme();
         TestTheme.ThemeName = "Test";
         TestTheme.Colors = AppColors.GetColorsDict();
         Settings.ThemesList.Add(TestTheme);
-        
+
         Console.WriteLine(Settings);
 
         MainGrid.SizeChanged += MainGrid_SizeChanged;
@@ -55,7 +57,17 @@ public partial class MainWindow : Window
 
     private void SetBaseColors()
     {
-        Footer.Background = new SolidColorBrush(AppColors.Footer);
+        Binding footerBinding = new Binding
+        {
+            Source = TestTheme.Colors,
+            Path = new PropertyPath("[Footer]"),
+            Converter = new ColorDictionaryToBrushConverter(),
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(Footer, BackgroundProperty, footerBinding);
+
+        TestTheme.UpdateColor("Footer", "#3BC9E3");
+
         MainScrollViewer.Background = new SolidColorBrush(AppColors.Background);
     }
 

@@ -10,15 +10,8 @@ public static class AppColors
     public static Color Font = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color Running = (Color)ColorConverter.ConvertFromString("#C3E88D");
     public static Color DefButton = (Color)ColorConverter.ConvertFromString("#3BC9E3");
-    // public static Color DefButtonHover => ColorHelper.AdjustBrightness(DefButton, 1.2);
-    // public static Color DefButtonPress => ColorHelper.AdjustBrightness(DefButton, 0.8);
     public static Color PositiveButton = (Color)ColorConverter.ConvertFromString("#90EE90");
-    // public static Color PositiveButtonHover => ColorHelper.AdjustBrightness(PositiveButton, 1.2);
-    // public static Color PositiveButtonPress => ColorHelper.AdjustBrightness(PositiveButton, 0.8);
     public static Color NegativeButton = (Color)ColorConverter.ConvertFromString("#ED0C0C");
-    // public static Color NegativeButtonHover => ColorHelper.AdjustBrightness(NegativeButton, 1.2);
-    // public static Color NegativeButtonPress => ColorHelper.AdjustBrightness(NegativeButton, 0.8);
-
     public static Color ProgressBar1 = (Color)ColorConverter.ConvertFromString("#89ACF2");
     public static Color ProgressBar2 = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public static Color CardColor1 = (Color)ColorConverter.ConvertFromString("#414769");
@@ -29,6 +22,7 @@ public static class AppColors
     {
         Dictionary<string, string> colors = new Dictionary<string, string>
         {
+            { "Footer", "#6A6F99" },
             { "Background ", "#1E2030" },
             { "Card 1", "#414769" },
             { "Card 2", "#2E324A" },
@@ -36,10 +30,9 @@ public static class AppColors
             { "Progress Bar 2", "#B7BDF8" },
             { "Font", "#DAE4FF" },
             { "Running", "#C3E88D" },
-            { "Footer", "#90EE90" },
-            { "Button", $"{DefButton.ToString()}" },
-            { "Positive Button", $"{PositiveButton.ToString()}" },
-            { "Negative Button", $"{NegativeButton.ToString()}" },
+            { "Button", "#3BC9E3" },
+            { "Positive Button", "#90EE90" },
+            { "Negative Button", "#ED0C0C" },
             { "Shadow", "#151515" },
         };
         return colors;
