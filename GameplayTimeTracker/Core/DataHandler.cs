@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 using GameplayTimeTracker.Settings;
+using WindowsShortcutFactory;
 
 namespace GameplayTimeTracker;
 
@@ -59,5 +63,45 @@ public static class DataHandler
 
         string jsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(AppFiles.SettingsFilePath, jsonString);
+    }
+
+    public static void ManageStartupShortcut(bool enable)
+    {
+        string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
+            $"{Assembly.GetExecutingAssembly().GetName().Name}.lnk");
+
+        if (enable)
+        {
+            if (!File.Exists(shortcutPath))
+            {
+                string exeLocation = Process.GetCurrentProcess().MainModule.FileName;
+                string workingDirectory = Path.GetDirectoryName(exeLocation);
+                using var shortcut = new WindowsShortcut
+                {
+                    Path = exeLocation,
+                    WorkingDirectory = workingDirectory,
+                    Description = "Gameplay Time Tracker Shortcut",
+                };
+                shortcut.Save(shortcutPath);
+                Console.WriteLine("Shortcut created successfully.");
+            }
+            else Console.WriteLine("Already in autostart!");
+        }
+        else
+        {
+            if (File.Exists(shortcutPath))
+            {
+                try
+                {
+                    File.Delete(shortcutPath);
+                    Console.WriteLine("Shortcut removed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to remove shortcut: {ex.Message}");
+                }
+            }
+            else Console.WriteLine("Shortcut does not exist.");
+        }
     }
 }

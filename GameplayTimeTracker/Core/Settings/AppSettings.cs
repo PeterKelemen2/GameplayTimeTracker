@@ -15,11 +15,18 @@ public class AppSettings : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     [JsonPropertyName("Start with System")]
-    // public bool StartWithSystem { get; set; } = true;
     public bool StartWithSystem
     {
         get => _startWithSystem;
-        set => SetField(ref _startWithSystem, value);
+        set
+        {
+            if (_startWithSystem != value)
+            {
+                _startWithSystem = value;
+                OnPropertyChanged(nameof(StartWithSystem));
+                DataHandler.ManageStartupShortcut(_startWithSystem);
+            }
+        }
     }
 
     [JsonPropertyName("SteamGridDB API key")]
@@ -47,7 +54,15 @@ public class AppSettings : INotifyPropertyChanged
     public string CurrentTheme
     {
         get => _currentTheme;
-        set => SetField(ref _currentTheme, value);
+        // set => SetField(ref _currentTheme, value);
+        set
+        {
+            if (_currentTheme != value)
+            {
+                _currentTheme = value;
+                OnPropertyChanged(nameof(CurrentTheme));
+            }
+        }
     }
 
     public override string ToString()
