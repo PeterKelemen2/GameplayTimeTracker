@@ -25,10 +25,13 @@ public class PrefMenu : UserControl
         BindingOperations.SetBinding(pref2.checkBox, CheckBox.IsCheckedProperty, preferSGDBBinding);
         Panel.Children.Add(pref2);
 
-        TextBox sgdbApiKeyBox = UIHelper.CreateTextBox(placeholder: "API Key");
+        TextBlock sgdbApiKeyBlock =
+            UIHelper.CreateTextBlock(text: "SteamGridDB API Key", margin: new Thickness(40, 0, 0, 0), isBold: false);
+        TextBox sgdbApiKeyBox = UIHelper.CreateTextBox();
         Binding sgdbApiKeyBinding = new Binding("SGDBApiKey") { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(sgdbApiKeyBox, TextBox.TextProperty, sgdbApiKeyBinding);
         sgdbApiKeyBox.Margin = new Thickness(40, 0, 0, 0);
+        Panel.Children.Add(sgdbApiKeyBlock);
         Panel.Children.Add(sgdbApiKeyBox);
 
         PrefEntry pref3 = new PrefEntry("Quick Add", settings.QuickAdd);

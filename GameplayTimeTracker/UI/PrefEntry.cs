@@ -36,6 +36,7 @@ public class PrefEntry : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(padding, 0, 0, 0),
+            Effect = AppEffects.dropShadowText,
         };
         containerGrid.Children.Add(textBlock);
 
