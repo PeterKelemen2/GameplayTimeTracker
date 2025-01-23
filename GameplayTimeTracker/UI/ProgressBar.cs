@@ -33,8 +33,8 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
 
     public double InnerMaxWidth { get; set; }
     private Grid ContainerGrid { get; set; }
-    private Rectangle BackgroundRect { get; set; }
-    private Rectangle BarRect { get; set; }
+    public Rectangle BackgroundRect { get; set; }
+    public Rectangle BarRect { get; set; }
 
     private DispatcherTimer progressBarTimer;
     private bool isProgressingUp = true;
@@ -64,7 +64,7 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
             Height = BgHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
-            Fill = new SolidColorBrush(AppColors.Background),
+            // Fill = new SolidColorBrush(AppColors.Background),
             Effect = AppEffects.dropShadowText,
         };
         ContainerGrid.Children.Add(BackgroundRect);

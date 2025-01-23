@@ -54,8 +54,8 @@ public partial class MainWindow : Window
 
     private void SetBaseColorBindings()
     {
-        BindingHelper.SetColorBinding(Footer, BackgroundProperty, Settings.CurrentTheme.Colors, "Footer");
-        BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, Settings.CurrentTheme.Colors, "Background");
+        BindingHelper.SetColorBinding(Footer, BackgroundProperty, Settings, "Footer");
+        BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, Settings, "Background");
     }
 
     private void CreateFooterButtons()
