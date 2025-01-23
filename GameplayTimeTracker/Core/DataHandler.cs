@@ -50,7 +50,14 @@ public static class DataHandler
         {
             WriteSettingsToFile(settings);
         }
-        
+
+        if (settings.ThemesList.Count == 0)
+        {
+            AppTheme theme = new AppTheme();
+            settings.ThemesList.Add(theme);
+            settings.CurrentTheme = theme;
+        }
+
         return settings;
     }
 

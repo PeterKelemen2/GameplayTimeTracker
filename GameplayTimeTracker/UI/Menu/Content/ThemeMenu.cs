@@ -9,51 +9,47 @@ namespace GameplayTimeTracker.Menu.Content;
 
 public class ThemeMenu : UserControl
 {
-    public StackPanel Panel = new StackPanel();
+    public StackPanel Panel = new();
+    public ComboBox ThemeComboBox = new();
+    private AppSettings appSettings;
+    private ScrollViewer colorEntryScrollViewer;
+    private StackPanel colorEntryPanel;
 
     public ThemeMenu(AppSettings settings)
     {
+        appSettings = settings;
         Panel = new StackPanel();
 
-        StackPanel colorEntryPanel = new StackPanel();
-        ScrollViewer colorEntryScrollViewer = new ScrollViewer
+        colorEntryScrollViewer = new ScrollViewer
         {
             Height = 400,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
             VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
             Padding = new Thickness(5),
         };
+        // CreateColorEntries();
+        CreateComboBox();
+        Panel.Children.Add(colorEntryScrollViewer);
+    }
 
-        // foreach (var theme in settings.ThemesList)
-        // {
-        //     Console.WriteLine($"Theme: {theme.ThemeName}");
-        //     foreach (var color in theme.Colors)
-        //     {
-        //         ColorEntry colorEntry =
-        //             new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
-        //         colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
-        //         {
-        //             ColorPicker_SelectedColorChanged(s, e, colorEntry, theme);
-        //         };
-        //         colorEntryPanel.Children.Add(colorEntry);
-        //     }
-        // }
-
-        Console.WriteLine($"Theme: {settings.CurrentTheme.ThemeName}");
-        foreach (var color in settings.CurrentTheme.Colors)
+    private void CreateColorEntries()
+    {
+        colorEntryPanel = new StackPanel();
+        Console.WriteLine($"Theme: {appSettings.CurrentTheme.ThemeName}");
+        foreach (var color in appSettings.CurrentTheme.Colors)
         {
             ColorEntry colorEntry =
                 new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
             colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
             {
-                ColorPicker_SelectedColorChanged(s, e, colorEntry, settings.CurrentTheme);
-                // DataHandler.WriteSettingsToFile(settings);
+                ColorPicker_SelectedColorChanged(s, e, colorEntry, appSettings.CurrentTheme);
+                DataHandler.WriteSettingsToFile(appSettings);
             };
             colorEntryPanel.Children.Add(colorEntry);
         }
 
         colorEntryScrollViewer.Content = colorEntryPanel;
-        Panel.Children.Add(colorEntryScrollViewer);
+        // Panel.Children.Add(colorEntryScrollViewer);
     }
 
     private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e,
@@ -77,6 +73,42 @@ public class ThemeMenu : UserControl
             // Handle no selection
             colorEntry.colorPicker.Background = new SolidColorBrush(Colors.Transparent);
             Console.WriteLine($"No color selected for {colorEntry.Name}.");
+        }
+    }
+
+    private void CreateComboBox()
+    {
+        ThemeComboBox = new ComboBox
+        {
+            Width = 150,
+            Height = 30,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(10)
+        };
+        foreach (var theme in appSettings.ThemesList)
+        {
+            ThemeComboBox.Items.Add(theme.ThemeName);
+        }
+
+        ThemeComboBox.SelectionChanged += (s, e) =>
+        {
+            foreach (var theme in appSettings.ThemesList)
+            {
+                if (theme.ThemeName == ThemeComboBox.SelectedItem.ToString())
+                {
+                    appSettings.CurrentTheme = theme;
+                    CreateColorEntries();
+                    DataHandler.WriteSettingsToFile(appSettings);
+                    return;
+                }
+            }
+        };
+        Panel.Children.Add(ThemeComboBox);
+
+        if (ThemeComboBox.Items.Contains(appSettings.CurrentTheme.ThemeName))
+        {
+            ThemeComboBox.SelectedItem = appSettings.CurrentTheme.ThemeName;
         }
     }
 }

@@ -9,7 +9,6 @@ public class AppTheme : INotifyPropertyChanged
 {
     private string _themeName = "Default";
 
-    // private Dictionary<string, string> _colors = AppColors.GetColorsDict();
     private ObservableDictionary<string, string> _colors = AppColors.GetColorsDict();
 
     [JsonPropertyName("Theme Name")]
@@ -47,6 +46,8 @@ public class AppTheme : INotifyPropertyChanged
             OnPropertyChanged($"Color[{key}]"); // Notify changes for specific color key
         }
     }
+    
+    
 
     public event PropertyChangedEventHandler PropertyChanged;
 

@@ -27,28 +27,10 @@ public partial class MainWindow : Window
         InitializeComponent();
         Settings = DataHandler.GetSettingsFromFile();
         DataHandler.ManageStartupShortcut(Settings.StartWithSystem);
-
-        // TestTheme = new AppTheme();
-        // TestTheme.ThemeName = "Test";
-        // TestTheme.Colors = AppColors.GetColorsDict();
-        // Settings.ThemesList.Add(TestTheme);
-
-        Settings.CurrentTheme = Settings.ThemesList[0];
-        // DataHandler.WriteSettingsToFile(Settings);
-
-        Console.WriteLine(Settings.CurrentTheme.ThemeName);
-        Console.WriteLine(Settings.CurrentTheme.Colors.Count);
         foreach (var color in Settings.CurrentTheme.Colors)
         {
             Console.WriteLine($"Color: {color.Key}, {color.Value}");
         }
-
-        foreach (var color in Settings.CurrentTheme.Colors)
-        {
-            Console.WriteLine(color);
-        }
-
-        Console.WriteLine(Settings);
 
         MainGrid.SizeChanged += MainGrid_SizeChanged;
         Loaded += OnLoaded;
