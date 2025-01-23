@@ -7,7 +7,7 @@ namespace GameplayTimeTracker.Settings;
 
 public class AppSettings : INotifyPropertyChanged
 {
-    private bool _startWithSystem = false;
+    private bool _startWithSystem = true;
     private string _sgdbApiKey = "";
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
@@ -54,7 +54,6 @@ public class AppSettings : INotifyPropertyChanged
     public string CurrentTheme
     {
         get => _currentTheme;
-        // set => SetField(ref _currentTheme, value);
         set
         {
             if (_currentTheme != value)
