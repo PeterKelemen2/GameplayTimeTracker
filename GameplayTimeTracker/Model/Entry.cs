@@ -307,12 +307,7 @@ namespace GameplayTimeTracker
 
         public virtual void OnPropertyChanged(string propertyName)
         {
-            Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
-            // if (propertyName.Equals("TotalPlay"))
-            // {
-            //     
-            // }
-
+            // Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

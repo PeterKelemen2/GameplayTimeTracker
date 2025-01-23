@@ -24,19 +24,32 @@ public class ThemeMenu : UserControl
             Padding = new Thickness(5),
         };
 
-        foreach (var theme in settings.ThemesList)
+        // foreach (var theme in settings.ThemesList)
+        // {
+        //     Console.WriteLine($"Theme: {theme.ThemeName}");
+        //     foreach (var color in theme.Colors)
+        //     {
+        //         ColorEntry colorEntry =
+        //             new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
+        //         colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
+        //         {
+        //             ColorPicker_SelectedColorChanged(s, e, colorEntry, theme);
+        //         };
+        //         colorEntryPanel.Children.Add(colorEntry);
+        //     }
+        // }
+
+        Console.WriteLine($"Theme: {settings.CurrentTheme.ThemeName}");
+        foreach (var color in settings.CurrentTheme.Colors)
         {
-            Console.WriteLine($"Theme: {theme.ThemeName}");
-            foreach (var color in theme.Colors)
+            ColorEntry colorEntry =
+                new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
+            colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
             {
-                ColorEntry colorEntry =
-                    new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
-                colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
-                {
-                    ColorPicker_SelectedColorChanged(s, e, colorEntry, theme);
-                };
-                colorEntryPanel.Children.Add(colorEntry);
-            }
+                ColorPicker_SelectedColorChanged(s, e, colorEntry, settings.CurrentTheme);
+                // DataHandler.WriteSettingsToFile(settings);
+            };
+            colorEntryPanel.Children.Add(colorEntry);
         }
 
         colorEntryScrollViewer.Content = colorEntryPanel;

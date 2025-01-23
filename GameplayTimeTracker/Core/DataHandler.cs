@@ -50,7 +50,7 @@ public static class DataHandler
         {
             WriteSettingsToFile(settings);
         }
-
+        
         return settings;
     }
 

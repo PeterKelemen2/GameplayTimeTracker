@@ -12,8 +12,11 @@ public class AppSettings : INotifyPropertyChanged
     private string _sgdbApiKey = "";
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
-    private string _currentTheme = "Default";
-    private List<AppTheme> _themesList = new List<AppTheme>();
+
+    private AppTheme _currentTheme;
+
+    // private string _currentTheme = "Default";
+    private List<AppTheme> _themesList = new();
     public event PropertyChangedEventHandler PropertyChanged;
 
     [JsonPropertyName("Start with System")]
@@ -53,7 +56,7 @@ public class AppSettings : INotifyPropertyChanged
     }
 
     [JsonPropertyName("Current Theme")]
-    public string CurrentTheme
+    public AppTheme CurrentTheme
     {
         get => _currentTheme;
         set

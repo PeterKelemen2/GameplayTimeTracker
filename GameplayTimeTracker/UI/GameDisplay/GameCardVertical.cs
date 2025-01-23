@@ -93,7 +93,6 @@ public class GameCardVertical : GameCard
                 new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
             }
         };
-        Console.WriteLine(HeroImage.ActualWidth);
         HeroImage.Clip = new RectangleGeometry(
             new Rect(97, 0, CardRectangle.Width, HeroImage.Height),
             CardRectangle.RadiusX, CardRectangle.RadiusY);

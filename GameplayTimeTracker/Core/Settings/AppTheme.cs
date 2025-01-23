@@ -10,7 +10,7 @@ public class AppTheme : INotifyPropertyChanged
     private string _themeName = "Default";
 
     // private Dictionary<string, string> _colors = AppColors.GetColorsDict();
-    private ObservableDictionary<string, string> _colors = new ObservableDictionary<string, string>();
+    private ObservableDictionary<string, string> _colors = AppColors.GetColorsDict();
 
     [JsonPropertyName("Theme Name")]
     public string ThemeName
@@ -27,6 +27,7 @@ public class AppTheme : INotifyPropertyChanged
     }
 
     [JsonPropertyName("Colors")]
+    [JsonConverter(typeof(ObservableDictionaryConverter<string, string>))]
     public ObservableDictionary<string, string> Colors
     {
         get => _colors;
@@ -58,6 +59,7 @@ public class AppTheme : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
         return true;
     }
+
 
     public virtual void OnPropertyChanged(string propertyName)
     {
