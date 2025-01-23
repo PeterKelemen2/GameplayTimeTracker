@@ -23,7 +23,7 @@ public static class AppColors
         ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
         {
             { "Footer", "#6A6F99" },
-            { "Background ", "#1E2030" },
+            { "Background", "#1E2030" },
             { "Card 1", "#414769" },
             { "Card 2", "#2E324A" },
             { "Progress Bar 1", "#89ACF2" },

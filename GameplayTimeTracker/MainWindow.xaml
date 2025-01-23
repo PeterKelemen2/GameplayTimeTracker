@@ -16,17 +16,20 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="70" />
             </Grid.RowDefinitions>
-            
+
             <Grid.RenderTransform>
                 <ScaleTransform x:Name="ScaleTransform" />
             </Grid.RenderTransform>
-            
+
+            <Grid Grid.Row="0" x:Name="Grid0"></Grid>
+
             <ScrollViewer x:Name="MainScrollViewer"
                           Grid.Row="0"
                           VerticalScrollBarVisibility="Hidden"
                           HorizontalScrollBarVisibility="Disabled">
                 <Border Padding="5">
-                    <WrapPanel x:Name="MainPanel" Orientation="Horizontal" Background="#1E2030"
+                    <WrapPanel x:Name="MainPanel"
+                               Orientation="Horizontal"
                                HorizontalAlignment="Center" />
                 </Border>
 
