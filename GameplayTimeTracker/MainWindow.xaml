@@ -37,7 +37,6 @@
 
             <Grid Grid.Row="1" x:Name="Footer">
                 <TextBlock x:Name="GamesLoadedBlock"
-                           Foreground="Black"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            TextAlignment="Center"
@@ -49,7 +48,6 @@
                 </TextBlock>
 
                 <TextBlock x:Name="TotalPlaytimeTextBlock"
-                           Foreground="Black"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Center"
                            TextAlignment="Right"

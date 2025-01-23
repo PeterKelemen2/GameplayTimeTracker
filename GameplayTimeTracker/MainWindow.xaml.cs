@@ -38,7 +38,7 @@ public partial class MainWindow : Window
 
     public void OnLoaded(object sender, RoutedEventArgs e)
     {
-        CreateFooterButtons();
+        SetUpFooter();
         SetBaseColorBindings();
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
@@ -56,9 +56,11 @@ public partial class MainWindow : Window
     {
         BindingHelper.SetColorBinding(Footer, BackgroundProperty, Settings, "Footer");
         BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, Settings, "Background");
+        BindingHelper.SetColorBinding(GamesLoadedBlock, ForegroundProperty, Settings, "Footer Font");
+        BindingHelper.SetColorBinding(TotalPlaytimeTextBlock, ForegroundProperty, Settings, "Footer Font");
     }
 
-    private void CreateFooterButtons()
+    private void SetUpFooter()
     {
         CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
             bImgPath: AppFiles.AddIcon, effect: AppEffects.dropShadowIcon);
@@ -77,6 +79,9 @@ public partial class MainWindow : Window
         };
         Grid.SetRow(SettingsButton, 1);
         MainGrid.Children.Add(SettingsButton);
+        
+        GamesLoadedBlock.Effect = AppEffects.dropShadowIcon;
+        TotalPlaytimeTextBlock.Effect = AppEffects.dropShadowIcon;
     }
 
     public void AddEntry()
