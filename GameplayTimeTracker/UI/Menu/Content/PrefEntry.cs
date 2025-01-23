@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker;
 
@@ -9,8 +10,11 @@ public class PrefEntry : UserControl
 {
     private StackPanel ParentPanel;
     private Grid containerGrid;
+
     public TextBlock textBlock;
+
     public CheckBox checkBox { get; set; }
+    // public CustomCheckBox checkBox { get; set; }
     public String PrefName { get; set; }
     public bool PrefValue { get; set; }
     private double padding = 15;
@@ -49,7 +53,9 @@ public class PrefEntry : UserControl
             Margin = new Thickness(0, 0, padding, 0),
         };
         checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
-
+        checkBox.Background = new SolidColorBrush(AppColors.Font);
+        
+        // checkBox = new CustomCheckBox();
         containerGrid.Children.Add(checkBox);
 
         Content = containerGrid;

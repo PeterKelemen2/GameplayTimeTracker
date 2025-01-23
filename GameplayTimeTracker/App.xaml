@@ -6,7 +6,8 @@
     <Application.Resources>
         <ControlTemplate x:Key="CustomCheckBoxTemplate" TargetType="CheckBox">
             <StackPanel Orientation="Horizontal">
-                <Border Width="20" Height="20" BorderBrush="White" BorderThickness="2" CornerRadius="4"
+                <Border x:Name="BoxBorder" Width="20" Height="20" BorderBrush="White" BorderThickness="2"
+                        CornerRadius="4"
                         VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Rectangle x:Name="TickMark" Width="10" Height="10" Fill="Transparent" />
                 </Border>

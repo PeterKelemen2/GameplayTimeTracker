@@ -18,6 +18,9 @@ public class PrefMenu : UserControl
         Binding swsBinding = new Binding("StartWithSystem") { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(pref1.checkBox, CheckBox.IsCheckedProperty, swsBinding);
         BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty, settings, "Font");
+        // BindingHelper.SetColorBinding(pref1.checkBox.boxBorder, Border.BorderBrushProperty, settings, "Font");
+        // BindingHelper.SetColorBinding(pref1.checkBox.tickMark, Shape.FillProperty, settings, "Font");
+
         Panel.Children.Add(pref1);
 
         PrefEntry pref2 = new PrefEntry("Prefer SteamGridDB Images", settings.PreferSteamGridDBImage);
