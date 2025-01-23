@@ -27,8 +27,8 @@ public class ThemeMenu : UserControl
             VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
             Padding = new Thickness(5),
         };
-        // CreateColorEntries();
         CreateComboBox();
+        CreateColorEntries();
         Panel.Children.Add(colorEntryScrollViewer);
     }
 

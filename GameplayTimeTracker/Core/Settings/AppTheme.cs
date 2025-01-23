@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace GameplayTimeTracker.Settings;
 
@@ -37,17 +40,46 @@ public class AppTheme : INotifyPropertyChanged
         }
     }
 
+    // public void UpdateColor(string key, string newValue)
+    // {
+    //     if (_colors.ContainsKey(key))
+    //     {
+    //         _colors[key] = newValue;
+    //         OnPropertyChanged(nameof(Colors));
+    //         OnPropertyChanged($"Color[{key}]"); // Notify changes for specific color key
+    //     }
+    // }
     public void UpdateColor(string key, string newValue)
     {
         if (_colors.ContainsKey(key))
         {
             _colors[key] = newValue;
-            OnPropertyChanged(nameof(Colors));
-            OnPropertyChanged($"Color[{key}]"); // Notify changes for specific color key
+            OnPropertyChanged($"Colors[{key}]"); // Notify changes for specific color key
+        }
+        else
+        {
+            _colors.Add(key, newValue);
+            OnPropertyChanged($"Colors[{key}]"); // Notify changes for specific color key
         }
     }
-    
-    
+
+    public void RebindProperties(DependencyObject target, object source, List<string> propertyPaths,
+        IValueConverter converter = null)
+    {
+        foreach (var path in propertyPaths)
+        {
+            Binding binding = new Binding
+            {
+                Source = source,
+                Path = new PropertyPath(path),
+                Converter = converter,
+                Mode = BindingMode.OneWay,
+            };
+            BindingOperations.SetBinding(target, Control.BackgroundProperty,
+                binding); // Replace with the relevant dependency property
+        }
+    }
+
 
     public event PropertyChangedEventHandler PropertyChanged;
 

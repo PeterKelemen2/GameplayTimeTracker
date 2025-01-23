@@ -63,6 +63,26 @@ public partial class MainWindow : Window
         };
         BindingOperations.SetBinding(Footer, BackgroundProperty, footerBinding);
 
+        Settings.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(Settings.CurrentTheme))
+            {
+                Binding newBinding = new Binding
+                {
+                    Source = Settings.CurrentTheme.Colors,
+                    Path = new PropertyPath("[Footer]"),
+                    Converter = new ColorDictionaryToBrushConverter(),
+                    Mode = BindingMode.OneWay,
+                };
+                BindingOperations.SetBinding(Footer, BackgroundProperty, newBinding);
+            }
+        };
+
+
+        Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
+        Settings.CurrentTheme = Settings.ThemesList[1];
+        Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
+
         // Settings.CurrentTheme.UpdateColor("Footer", "#3BC9E3");
 
         MainScrollViewer.Background = new SolidColorBrush(AppColors.Background);
