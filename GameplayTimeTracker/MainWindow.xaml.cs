@@ -45,8 +45,8 @@ public partial class MainWindow : Window
 
         foreach (var entry in entryRepository.EntriesList)
         {
-            // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel);
-            GameCard gc = new GameCardVertical(entry, entryRepository, gameCardRepository, MainPanel);
+            // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel, Settings);
+            GameCard gc = new GameCardVertical(entry, entryRepository, gameCardRepository, MainPanel, Settings);
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
@@ -63,20 +63,20 @@ public partial class MainWindow : Window
         };
         BindingOperations.SetBinding(Footer, BackgroundProperty, footerBinding);
 
-        Settings.PropertyChanged += (sender, args) =>
-        {
-            if (args.PropertyName == nameof(Settings.CurrentTheme))
-            {
-                Binding newBinding = new Binding
-                {
-                    Source = Settings.CurrentTheme.Colors,
-                    Path = new PropertyPath("[Footer]"),
-                    Converter = new ColorDictionaryToBrushConverter(),
-                    Mode = BindingMode.OneWay,
-                };
-                BindingOperations.SetBinding(Footer, BackgroundProperty, newBinding);
-            }
-        };
+        // Settings.PropertyChanged += (sender, args) =>
+        // {
+        //     if (args.PropertyName == nameof(Settings.CurrentTheme))
+        //     {
+        //         Binding newBinding = new Binding
+        //         {
+        //             Source = Settings.CurrentTheme.Colors,
+        //             Path = new PropertyPath("[Footer]"),
+        //             Converter = new ColorDictionaryToBrushConverter(),
+        //             Mode = BindingMode.OneWay,
+        //         };
+        //         BindingOperations.SetBinding(Footer, BackgroundProperty, newBinding);
+        //     }
+        // };
 
 
         Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
@@ -139,7 +139,7 @@ public partial class MainWindow : Window
                 newEntry.Name = name;
 
                 CustomMenu addEntryConfigMenu =
-                    new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel);
+                    new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel, Settings);
                 addEntryConfigMenu.Open();
             }
             else

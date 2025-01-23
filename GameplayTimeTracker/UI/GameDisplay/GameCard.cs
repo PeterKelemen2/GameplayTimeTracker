@@ -11,6 +11,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using GameplayTimeTracker.Menu;
+using GameplayTimeTracker.Settings;
 using Gtk;
 using Grid = System.Windows.Controls.Grid;
 using Image = System.Windows.Controls.Image;
@@ -22,6 +23,7 @@ public class GameCard : UserControl
     public Panel ParentPanel { get; set; }
     private GameCardRepository GameCardRepository;
     private EntryRepository DataEntryRepository;
+    private AppSettings _appSettings;
     public Entry DataEntry { get; set; }
     public EditMenu EditMenu { get; set; }
 
@@ -51,12 +53,13 @@ public class GameCard : UserControl
     public CustomButton RemoveButton { get; set; }
 
     public GameCard(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
-        Panel parentPanel)
+        Panel parentPanel, AppSettings appSettings)
     {
         DataEntry = dataEntry;
         DataEntryRepository = dataEntryRepository;
         GameCardRepository = gameCardRepository;
         ParentPanel = parentPanel;
+        _appSettings = appSettings;
 
         ContainerGrid = new Grid();
         ContainerGrid.Margin = new Thickness(5);
