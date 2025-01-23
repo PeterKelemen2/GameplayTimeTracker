@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Settings;
 
@@ -14,7 +15,7 @@ public class BindingHelper
         {
             Source = settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{colorName}]"),
-            Converter = new ColorDictionaryToBrushConverter(),
+            Converter = new ColorToBrushConverter(),
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(element, property, newBinding);
@@ -47,5 +48,17 @@ public class BindingHelper
 
         // Apply the multi-binding to the rectangle's Fill property
         BindingOperations.SetBinding(element, property, fillMultiBinding);
+    }
+
+    public static void SetCustomButtonColorBinding(CustomButton button, AppSettings settings, string colorName)
+    {
+        Binding buttonFillBinding = new Binding
+        {
+            Source = settings.CurrentTheme.Colors,
+            Path = new PropertyPath($"[{colorName}]"),
+            Converter = new ColorToBrushConverter(),
+            Mode = BindingMode.OneWay
+        };
+        BindingOperations.SetBinding(button.ButtonBase, Shape.FillProperty, buttonFillBinding);
     }
 }

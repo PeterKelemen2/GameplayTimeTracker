@@ -75,7 +75,7 @@ public class ProgressBar : UserControl, INotifyPropertyChanged
             Height = BgHeight - 2 * BarPadding,
             RadiusX = CornerRadius - BarPadding / 2,
             RadiusY = CornerRadius - BarPadding / 2,
-            Fill = ColorHelper.CreateLinGradBrushHor(AppColors.ProgressBar1, AppColors.ProgressBar2),
+            // Fill = ColorHelper.CreateLinGradBrushHor(AppColors.ProgressBar1, AppColors.ProgressBar2),
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(BarPadding, 0, 0, 0)
         };
