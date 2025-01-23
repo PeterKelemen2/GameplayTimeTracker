@@ -18,7 +18,6 @@ public class AddMenu : EntryConfigMenu
         double width = 350, bool performanceMode = true)
         : base(appSettings, entry, width, performanceMode)
     {
-        _appSettings = appSettings;
         TitleTextBlock.Text = "Configure new entry";
         ConfirmButton.Margin = new Thickness(0, 20, 0, 20);
         ConfirmButton.Click += (_, _) =>

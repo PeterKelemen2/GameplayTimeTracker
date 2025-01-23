@@ -21,6 +21,7 @@ public class CustomMenu : UserControl
     private Border MenuContentBorder;
     public BlurEffect BlurEffect;
     public bool PerformanceMode = true;
+    public AppSettings Settings;
 
     public CustomMenu(AppSettings appSettings, double width = 300, bool performanceMode = true)
     {
@@ -28,6 +29,7 @@ public class CustomMenu : UserControl
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
         PerformanceMode = performanceMode;
+        Settings = appSettings;
 
         BlurEffect = new BlurEffect { Radius = 0 };
         ContentPanel.Effect = BlurEffect;
