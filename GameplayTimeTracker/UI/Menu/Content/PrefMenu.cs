@@ -17,12 +17,14 @@ public class PrefMenu : UserControl
         PrefEntry pref1 = new PrefEntry("Start With System", settings.StartWithSystem);
         Binding swsBinding = new Binding("StartWithSystem") { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(pref1.checkBox, CheckBox.IsCheckedProperty, swsBinding);
+        BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty, settings, "Font");
         Panel.Children.Add(pref1);
 
         PrefEntry pref2 = new PrefEntry("Prefer SteamGridDB Images", settings.PreferSteamGridDBImage);
         Binding preferSGDBBinding = new Binding("PreferSteamGridDBImage")
             { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(pref2.checkBox, CheckBox.IsCheckedProperty, preferSGDBBinding);
+        BindingHelper.SetColorBinding(pref2.textBlock, ForegroundProperty, settings, "Font");
         Panel.Children.Add(pref2);
 
         TextBlock sgdbApiKeyBlock =
@@ -30,6 +32,7 @@ public class PrefMenu : UserControl
         TextBox sgdbApiKeyBox = UIHelper.CreateTextBox();
         Binding sgdbApiKeyBinding = new Binding("SGDBApiKey") { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(sgdbApiKeyBox, TextBox.TextProperty, sgdbApiKeyBinding);
+        BindingHelper.SetColorBinding(sgdbApiKeyBlock, ForegroundProperty, settings, "Font");
         sgdbApiKeyBox.Margin = new Thickness(40, 0, 0, 0);
         Panel.Children.Add(sgdbApiKeyBlock);
         Panel.Children.Add(sgdbApiKeyBox);
@@ -37,6 +40,7 @@ public class PrefMenu : UserControl
         PrefEntry pref3 = new PrefEntry("Quick Add", settings.QuickAdd);
         Binding quickAddBinding = new Binding("QuickAdd") { Source = settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(pref3.checkBox, CheckBox.IsCheckedProperty, quickAddBinding);
+        BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, settings, "Font");
         Panel.Children.Add(pref3);
     }
 }

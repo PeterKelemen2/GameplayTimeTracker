@@ -46,6 +46,10 @@ public class ThemeMenu : UserControl
                 ColorPicker_SelectedColorChanged(s, e, colorEntry, appSettings.CurrentTheme);
                 DataHandler.WriteSettingsToFile(appSettings);
             };
+            BindingHelper.SetColorBinding(colorEntry.valueBlock, ForegroundProperty, appSettings, "Font");
+            BindingHelper.SetColorBinding(colorEntry.nameBlock, ForegroundProperty, appSettings, "Font");
+            BindingHelper.SetGradientColorBinding(colorEntry.bg, Shape.FillProperty, appSettings,
+                "Card 1", "Card 2", true);
             colorEntryPanel.Children.Add(colorEntry);
         }
 

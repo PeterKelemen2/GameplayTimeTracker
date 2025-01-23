@@ -12,11 +12,11 @@ public class ColorEntry : UserControl
 {
     public String ColorName { get; set; }
     public String ColorValue { get; set; }
-    private TextBlock nameBlock;
+    public TextBlock nameBlock;
     public TextBlock valueBlock;
     private Rectangle picker;
     private Rectangle pickerBg;
-    private Rectangle bg;
+    public Rectangle bg;
     private Grid containerGrid;
     public ColorPicker colorPicker;
     private int fontSize = 16;

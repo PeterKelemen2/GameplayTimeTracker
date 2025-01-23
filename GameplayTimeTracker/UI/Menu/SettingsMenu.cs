@@ -13,7 +13,8 @@ public class SettingsMenu : CustomMenu
     StackPanel HeaderPanel = new();
     private AppSettings _settings;
 
-    public SettingsMenu(AppSettings appSettings, double width = 400, bool performanceMode = true) : base(appSettings, width,
+    public SettingsMenu(AppSettings appSettings, double width = 400, bool performanceMode = true) : base(appSettings,
+        width,
         performanceMode)
     {
         _settings = appSettings;
@@ -26,9 +27,12 @@ public class SettingsMenu : CustomMenu
         var blockMargin = new Thickness(10);
         var PrefBlock = UIHelper.CreateTextBlock("Preferences", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
+        BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, appSettings, "Font");
         PrefBlock.MouseDown += (_, _) => { SetPrefMenu(PrefBlock); };
+
         var Themes = UIHelper.CreateTextBlock("Themes", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
+        BindingHelper.SetColorBinding(Themes, ForegroundProperty, appSettings, "Font");
         Themes.MouseDown += (_, _) => { SetThemeMenu(Themes); };
 
         HeaderPanel.Children.Add(PrefBlock);

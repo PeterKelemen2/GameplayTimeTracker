@@ -9,7 +9,7 @@ public class PrefEntry : UserControl
 {
     private StackPanel ParentPanel;
     private Grid containerGrid;
-    private TextBlock textBlock;
+    public TextBlock textBlock;
     public CheckBox checkBox { get; set; }
     public String PrefName { get; set; }
     public bool PrefValue { get; set; }

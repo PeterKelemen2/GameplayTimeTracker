@@ -26,19 +26,21 @@ public class EntryConfigMenu : CustomMenu
 
         TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);
+        BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty, appSettings, "Font");
         stackPanel.Children.Add(TitleTextBlock);
 
         TextBlock generalTextBlock = UIHelper.CreateTextBlock("General", hA: HorizontalAlignment.Center, fontSize: 17);
+        BindingHelper.SetColorBinding(generalTextBlock, ForegroundProperty, appSettings, "Font");
         stackPanel.Children.Add(generalTextBlock);
 
-        Grid nameGrid = UIHelper.CreateAddEntryGrid("Name", new Thickness(5, 0, 0, 30));
+        Grid nameGrid = UIHelper.CreateAddEntryGrid(appSettings, "Name", new Thickness(5, 0, 0, 30));
         var nameBox = Common.FindTextBox(nameGrid);
         Binding nameBinding = new Binding("Name")
             { Source = entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
         BindingOperations.SetBinding(nameBox, TextBox.TextProperty, nameBinding);
         stackPanel.Children.Add(nameGrid);
 
-        Grid timeGrid = UIHelper.CreateAddEntryGrid("Playtime", new Thickness(5, 10, 0, 30));
+        Grid timeGrid = UIHelper.CreateAddEntryGrid(appSettings, "Playtime", new Thickness(5, 10, 0, 30));
         var timeBox = Common.FindTextBox(timeGrid);
         Binding timeBinding = new Binding("TotalPlay")
         {
@@ -49,7 +51,7 @@ public class EntryConfigMenu : CustomMenu
         BindingOperations.SetBinding(timeBox, TextBox.TextProperty, timeBinding);
         stackPanel.Children.Add(timeGrid);
 
-        Grid exeGrid = UIHelper.CreateAddEntryGrid("Path", new Thickness(5, 10, 0, 30));
+        Grid exeGrid = UIHelper.CreateAddEntryGrid(appSettings, "Path", new Thickness(5, 10, 0, 30));
         ExeBox = Common.FindTextBox(exeGrid);
         ExeBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
         Binding exeBinding = new Binding("ExePath") { Source = entry, Mode = BindingMode.TwoWay, };
@@ -67,7 +69,7 @@ public class EntryConfigMenu : CustomMenu
         exeGrid.Children.Add(exeBrowseButton);
         stackPanel.Children.Add(exeGrid);
 
-        Grid argsGrid = UIHelper.CreateAddEntryGrid("Arguments", new Thickness(5, 10, 0, 30));
+        Grid argsGrid = UIHelper.CreateAddEntryGrid(appSettings, "Arguments", new Thickness(5, 10, 0, 30));
         stackPanel.Children.Add(argsGrid);
         var argsBox = Common.FindTextBox(argsGrid);
         Binding argsBinding = new Binding("Arguments") { Source = entry, Mode = BindingMode.TwoWay, };
@@ -76,9 +78,10 @@ public class EntryConfigMenu : CustomMenu
 
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
         imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
+        BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, appSettings, "Font");
         stackPanel.Children.Add(imagesTextBlock);
 
-        Grid iconGrid = UIHelper.CreateAddEntryGrid("Icon Path", new Thickness(5, 0, 0, 30));
+        Grid iconGrid = UIHelper.CreateAddEntryGrid(appSettings, "Icon Path", new Thickness(5, 0, 0, 30));
         var iconBox = Common.FindTextBox(iconGrid);
         Binding iconPathBinding = new Binding("IconPath") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(iconBox, TextBox.TextProperty, iconPathBinding);
@@ -96,7 +99,7 @@ public class EntryConfigMenu : CustomMenu
         iconGrid.Children.Add(iconBrowseButton);
         stackPanel.Children.Add(iconGrid);
 
-        Grid heroGrid = UIHelper.CreateAddEntryGrid("Hero Path", new Thickness(5, 10, 0, 30));
+        Grid heroGrid = UIHelper.CreateAddEntryGrid(appSettings, "Hero Path", new Thickness(5, 10, 0, 30));
         var heroBox = Common.FindTextBox(heroGrid);
         Binding heroPathBinding = new Binding("HeroPath") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(heroBox, TextBox.TextProperty, heroPathBinding);

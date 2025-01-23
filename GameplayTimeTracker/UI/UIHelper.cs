@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker;
 
@@ -63,11 +64,14 @@ public static class UIHelper
         return button;
     }
 
-    public static Grid CreateAddEntryGrid(string text, Thickness textMargin, string boxText = "", double boxWidth = 220,
+    public static Grid CreateAddEntryGrid(AppSettings settings, string text, Thickness textMargin, string boxText = "",
+        double boxWidth = 220,
         string binding = "", Entry entry = null)
     {
         Grid grid = new Grid { HorizontalAlignment = HorizontalAlignment.Center };
         TextBlock textBlock = CreateTextBlock(text, margin: textMargin);
+        BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, settings, "Font");
+
         TextBox textBox = CreateTextBox(boxText, width: boxWidth);
         if (binding != "" && entry != null)
         {
