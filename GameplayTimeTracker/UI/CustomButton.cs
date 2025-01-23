@@ -163,18 +163,18 @@ public class CustomButton : UserControl
         {
             case BType.Positive:
                 ButtonColor = AppColors.PositiveButton;
-                ButtonHoverColor = AppColors.PositiveButtonHover;
-                ButtonPressedColor = AppColors.PositiveButtonPress;
+                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
             case BType.Negative:
                 ButtonColor = AppColors.NegativeButton;
-                ButtonHoverColor = AppColors.NegativeButtonHover;
-                ButtonPressedColor = AppColors.NegativeButtonPress;
+                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
             default:
                 ButtonColor = AppColors.DefButton;
-                ButtonHoverColor = AppColors.DefButtonHover;
-                ButtonPressedColor = AppColors.DefButtonPress;
+                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
         }
 

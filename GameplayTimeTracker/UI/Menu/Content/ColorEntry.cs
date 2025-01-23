@@ -86,9 +86,4 @@ public class ColorEntry : UserControl
 
         Content = containerGrid;
     }
-
-    private void UpdateEntryColor()
-    {
-        bg.Fill = ColorHelper.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
-    }
 }

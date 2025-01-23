@@ -10,14 +10,14 @@ public static class AppColors
     public static Color Font = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color Running = (Color)ColorConverter.ConvertFromString("#C3E88D");
     public static Color DefButton = (Color)ColorConverter.ConvertFromString("#3BC9E3");
-    public static Color DefButtonHover => ColorHelper.AdjustBrightness(DefButton, 1.2);
-    public static Color DefButtonPress => ColorHelper.AdjustBrightness(DefButton, 0.8);
+    // public static Color DefButtonHover => ColorHelper.AdjustBrightness(DefButton, 1.2);
+    // public static Color DefButtonPress => ColorHelper.AdjustBrightness(DefButton, 0.8);
     public static Color PositiveButton = (Color)ColorConverter.ConvertFromString("#90EE90");
-    public static Color PositiveButtonHover => ColorHelper.AdjustBrightness(PositiveButton, 1.2);
-    public static Color PositiveButtonPress => ColorHelper.AdjustBrightness(PositiveButton, 0.8);
+    // public static Color PositiveButtonHover => ColorHelper.AdjustBrightness(PositiveButton, 1.2);
+    // public static Color PositiveButtonPress => ColorHelper.AdjustBrightness(PositiveButton, 0.8);
     public static Color NegativeButton = (Color)ColorConverter.ConvertFromString("#ED0C0C");
-    public static Color NegativeButtonHover => ColorHelper.AdjustBrightness(NegativeButton, 1.2);
-    public static Color NegativeButtonPress => ColorHelper.AdjustBrightness(NegativeButton, 0.8);
+    // public static Color NegativeButtonHover => ColorHelper.AdjustBrightness(NegativeButton, 1.2);
+    // public static Color NegativeButtonPress => ColorHelper.AdjustBrightness(NegativeButton, 0.8);
 
     public static Color ProgressBar1 = (Color)ColorConverter.ConvertFromString("#89ACF2");
     public static Color ProgressBar2 = (Color)ColorConverter.ConvertFromString("#B7BDF8");
