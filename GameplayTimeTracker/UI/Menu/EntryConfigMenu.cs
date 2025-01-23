@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -13,9 +14,9 @@ public class EntryConfigMenu : CustomMenu
     public TextBox IconBox { get; set; }
     public TextBox HeroBox { get; set; }
 
-    public EntryConfigMenu(Entry entry,
+    public EntryConfigMenu(AppSettings appSettings, Entry entry,
         double width = 350, bool performanceMode = true)
-        : base(width, performanceMode)
+        : base(appSettings, width, performanceMode)
     {
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;

@@ -52,8 +52,8 @@ public class GameCard : UserControl
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
 
-    public GameCard(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
-        Panel parentPanel, AppSettings appSettings)
+    public GameCard(AppSettings appSettings, Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+        Panel parentPanel)
     {
         DataEntry = dataEntry;
         DataEntryRepository = dataEntryRepository;
@@ -250,6 +250,7 @@ public class GameCard : UserControl
         RemoveButton.Click += (s, e) =>
         {
             PromptMenu deletePrompt = new PromptMenu(
+                _appSettings,
                 textArray: new[] { "Are you sure to delete:", $"{DataEntry.Name}" },
                 sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
                 boldArray: new[] { false, true },
@@ -308,7 +309,7 @@ public class GameCard : UserControl
     {
         // EditMenu = new EditMenu(DataEntry);
         // EditMenu.Open();
-        EntryConfigMenu configMenu = new EditMenu(DataEntry);
+        EntryConfigMenu configMenu = new EditMenu(_appSettings, DataEntry);
         configMenu.Open();
     }
 

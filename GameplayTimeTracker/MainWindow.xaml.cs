@@ -46,7 +46,7 @@ public partial class MainWindow : Window
         foreach (var entry in entryRepository.EntriesList)
         {
             // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel, Settings);
-            GameCard gc = new GameCardVertical(entry, entryRepository, gameCardRepository, MainPanel, Settings);
+            GameCard gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
@@ -109,13 +109,14 @@ public partial class MainWindow : Window
                 newEntry.Name = name;
 
                 CustomMenu addEntryConfigMenu =
-                    new AddMenu(entry: newEntry, entryRepository, gameCardRepository, MainPanel, Settings);
+                    new AddMenu(Settings, newEntry, entryRepository, gameCardRepository, MainPanel);
                 addEntryConfigMenu.Open();
             }
             else
             {
                 PromptMenu duplicatePrompt =
                     new PromptMenu(
+                        Settings,
                         // height: 200,
                         width: 400,
                         textArray: new[]

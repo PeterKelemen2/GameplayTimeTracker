@@ -13,10 +13,10 @@ public class SettingsMenu : CustomMenu
     StackPanel HeaderPanel = new();
     private AppSettings _settings;
 
-    public SettingsMenu(AppSettings settings, double width = 400, bool performanceMode = true) : base(width,
+    public SettingsMenu(AppSettings appSettings, double width = 400, bool performanceMode = true) : base(appSettings, width,
         performanceMode)
     {
-        _settings = settings;
+        _settings = appSettings;
         SettingsContentPanel = new StackPanel();
         HeaderPanel = new StackPanel
         {

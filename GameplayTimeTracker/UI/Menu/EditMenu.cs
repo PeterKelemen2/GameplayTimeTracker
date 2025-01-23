@@ -14,9 +14,9 @@ namespace GameplayTimeTracker.Menu;
 
 public class EditMenu : EntryConfigMenu
 {
-    public EditMenu(Entry entry,
+    public EditMenu(AppSettings appSettings, Entry entry,
         double width = 350, bool performanceMode = true)
-        : base(entry, width, performanceMode)
+        : base(appSettings, entry, width, performanceMode)
     {
         TitleTextBlock.FontWeight = FontWeights.Regular;
         TitleTextBlock.Text = "Editing ";

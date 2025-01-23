@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -17,12 +18,12 @@ public class PromptMenu : CustomMenu
 
     public Grid ButtonsGrid;
 
-    public PromptMenu(
+    public PromptMenu(AppSettings appSettings,
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
         double width = 300, PromptType type = PromptType.Ok,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
         bool performanceMode = true)
-        : base(width, performanceMode)
+        : base(appSettings, width, performanceMode)
     {
         sizeArray = (sizeArray ?? new double[0])
             .Concat(Enumerable.Repeat(Common.EditTitleFontSize,

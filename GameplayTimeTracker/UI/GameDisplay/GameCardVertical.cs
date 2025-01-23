@@ -11,9 +11,9 @@ namespace GameplayTimeTracker;
 
 public class GameCardVertical : GameCard
 {
-    public GameCardVertical(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
-        Panel parentPanel, AppSettings appSettings) :
-        base(dataEntry, dataEntryRepository, gameCardRepository, parentPanel, appSettings)
+    public GameCardVertical(AppSettings appSettings, Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+        Panel parentPanel) :
+        base(appSettings, dataEntry, dataEntryRepository, gameCardRepository, parentPanel)
     {
         Loaded += GameCardVertical_Loaded;
     }

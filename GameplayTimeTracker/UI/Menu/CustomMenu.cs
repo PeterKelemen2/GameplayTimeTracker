@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -21,7 +22,7 @@ public class CustomMenu : UserControl
     public BlurEffect BlurEffect;
     public bool PerformanceMode = true;
 
-    public CustomMenu(double width = 300, bool performanceMode = true)
+    public CustomMenu(AppSettings appSettings, double width = 300, bool performanceMode = true)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
@@ -41,9 +42,9 @@ public class CustomMenu : UserControl
         {
             Width = ContainerGrid.Width,
             Height = ContainerGrid.Height,
-            Fill = new SolidColorBrush(Colors.Black),
             Opacity = 0,
         };
+        BindingHelper.SetColorBinding(BgRectangle, Shape.FillProperty, appSettings, "Shadow");
         BgRectangle.MouseDown += (_, _) => { Close(); };
         ContainerGrid.Children.Add(BgRectangle);
 
@@ -55,7 +56,7 @@ public class CustomMenu : UserControl
         };
         MenuContentBorder = new Border
         {
-            Background = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
+            // Background = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             CornerRadius = new CornerRadius(15),
@@ -63,6 +64,8 @@ public class CustomMenu : UserControl
             Effect = AppEffects.DropShadowRectangle
         };
         ContainerGrid.Children.Add(MenuContentBorder);
+        BindingHelper.SetGradientColorBinding(MenuContentBorder, BackgroundProperty, appSettings, "Card 1",
+            "Card 2", horizontal: false);
 
         var translateTransform = new TranslateTransform(0, 0);
         MenuContentBorder.RenderTransform = translateTransform;
