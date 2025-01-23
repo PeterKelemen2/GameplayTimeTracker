@@ -24,6 +24,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Settings = DataHandler.GetSettingsFromFile();
+        DataHandler.ManageStartupShortcut(Settings.StartWithSystem);
         Console.WriteLine(Settings);
 
         MainGrid.SizeChanged += MainGrid_SizeChanged;
