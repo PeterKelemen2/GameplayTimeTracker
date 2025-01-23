@@ -18,9 +18,9 @@ public static class AppColors
     public static Color CardColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color Shadow = (Color)ColorConverter.ConvertFromString("#151515");
 
-    public static Dictionary<string, string> GetColorsDict()
+    public static ObservableDictionary<string, string> GetColorsDict()
     {
-        Dictionary<string, string> colors = new Dictionary<string, string>
+        ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
         {
             { "Footer", "#6A6F99" },
             { "Background ", "#1E2030" },

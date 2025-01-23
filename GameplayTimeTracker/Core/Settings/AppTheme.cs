@@ -8,7 +8,9 @@ namespace GameplayTimeTracker.Settings;
 public class AppTheme : INotifyPropertyChanged
 {
     private string _themeName = "Default";
-    private Dictionary<string, string> _colors = AppColors.GetColorsDict();
+
+    // private Dictionary<string, string> _colors = AppColors.GetColorsDict();
+    private ObservableDictionary<string, string> _colors = new ObservableDictionary<string, string>();
 
     [JsonPropertyName("Theme Name")]
     public string ThemeName
@@ -25,30 +27,23 @@ public class AppTheme : INotifyPropertyChanged
     }
 
     [JsonPropertyName("Colors")]
-    public Dictionary<string, string> Colors
+    public ObservableDictionary<string, string> Colors
     {
         get => _colors;
         set
         {
             _colors = value;
             OnPropertyChanged(nameof(Colors));
-            Console.WriteLine($"Colors changed: {_colors}");
-            // if (SetField(ref _colors, value))
-            // {
-            //     _colors = value;
-            //     OnPropertyChanged(nameof(Colors));
-            //     Console.WriteLine($"Colors changed: {_colors}");
-            // }
         }
     }
-    
+
     public void UpdateColor(string key, string newValue)
     {
         if (_colors.ContainsKey(key))
         {
             _colors[key] = newValue;
             OnPropertyChanged(nameof(Colors));
-            OnPropertyChanged($"Color[{key}]");  // Notify changes for specific color key
+            OnPropertyChanged($"Color[{key}]"); // Notify changes for specific color key
         }
     }
 

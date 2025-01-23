@@ -66,7 +66,7 @@ public partial class MainWindow : Window
         };
         BindingOperations.SetBinding(Footer, BackgroundProperty, footerBinding);
 
-        TestTheme.UpdateColor("Footer", "#3BC9E3");
+        // TestTheme.UpdateColor("Footer", "#3BC9E3");
 
         MainScrollViewer.Background = new SolidColorBrush(AppColors.Background);
     }
