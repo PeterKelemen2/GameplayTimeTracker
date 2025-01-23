@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -65,8 +66,12 @@ public class ThemeMenu : UserControl
             colorEntry.valueBlock.Text = color.ToString();
             colorEntry.ColorValue = color.ToString();
 
-            // Update the theme's color dictionary
+            // Update the theme's and source's color dictionary
             theme.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
+            foreach (var t in appSettings.ThemesList)
+            {
+                if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
+            }
         }
         else
         {
@@ -97,7 +102,7 @@ public class ThemeMenu : UserControl
             {
                 if (theme.ThemeName == ThemeComboBox.SelectedItem.ToString())
                 {
-                    appSettings.CurrentTheme = theme;
+                    ForceCurrentThemeDictUpdate(appSettings.CurrentTheme, theme);
                     CreateColorEntries();
                     DataHandler.WriteSettingsToFile(appSettings);
                     return;
@@ -110,5 +115,20 @@ public class ThemeMenu : UserControl
         {
             ThemeComboBox.SelectedItem = appSettings.CurrentTheme.ThemeName;
         }
+    }
+
+    private void ForceCurrentThemeDictUpdate(AppTheme currentTheme, AppTheme newTheme)
+    {
+        var keys = new List<string>(currentTheme.Colors.Keys); // Create a copy of the keys
+
+        foreach (var key in keys)
+        {
+            if (newTheme.Colors.ContainsKey(key))
+            {
+                currentTheme.UpdateColor(key, newTheme.Colors[key]);
+            }
+        }
+
+        currentTheme.ThemeName = newTheme.ThemeName;
     }
 }

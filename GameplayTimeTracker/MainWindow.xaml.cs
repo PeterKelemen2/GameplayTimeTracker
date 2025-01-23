@@ -79,9 +79,9 @@ public partial class MainWindow : Window
         // };
 
 
-        Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
-        Settings.CurrentTheme = Settings.ThemesList[1];
-        Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
+        // Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
+        // Settings.CurrentTheme = Settings.ThemesList[1];
+        // Console.WriteLine($"Current theme: {Settings.CurrentTheme.ThemeName}");
 
         // Settings.CurrentTheme.UpdateColor("Footer", "#3BC9E3");
 
