@@ -25,6 +25,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         Settings = DataHandler.GetSettingsFromFile();
         DataHandler.ManageStartupShortcut(Settings.StartWithSystem);
+        
+        AppTheme TestTheme = new AppTheme();
+        TestTheme.ThemeName = "Test";
+        TestTheme.Colors = AppColors.GetColorsDict();
+        Settings.ThemesList.Add(TestTheme);
+        
         Console.WriteLine(Settings);
 
         MainGrid.SizeChanged += MainGrid_SizeChanged;
