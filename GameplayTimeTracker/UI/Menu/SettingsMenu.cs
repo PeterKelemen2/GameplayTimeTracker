@@ -76,7 +76,7 @@ public class SettingsMenu : CustomMenu
 
     private void SetThemeMenu(TextBlock selectedTextBlock)
     {
-        var themeMenu = new ThemeMenu();
+        var themeMenu = new ThemeMenu(_settings);
         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
         {
             MenuContentPanel.Children.Remove(SettingsContentPanel);

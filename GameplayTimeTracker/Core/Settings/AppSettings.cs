@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using Xceed.Wpf.AvalonDock.Themes;
 
 namespace GameplayTimeTracker.Settings;
 
@@ -12,6 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private string _currentTheme = "Default";
+    private List<AppTheme> _themesList = new List<AppTheme>();
     public event PropertyChangedEventHandler PropertyChanged;
 
     [JsonPropertyName("Start with System")]
@@ -60,6 +62,20 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _currentTheme = value;
                 OnPropertyChanged(nameof(CurrentTheme));
+            }
+        }
+    }
+
+    [JsonPropertyName("Theme List")]
+    public List<AppTheme> ThemesList
+    {
+        get => _themesList;
+        set
+        {
+            if (_themesList != value)
+            {
+                _themesList = value;
+                OnPropertyChanged(nameof(ThemesList));
             }
         }
     }
