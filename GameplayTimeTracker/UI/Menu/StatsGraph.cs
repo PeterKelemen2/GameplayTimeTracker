@@ -30,7 +30,7 @@ public class StatsGraph : CustomMenu
         var spacing = new Run { Text = "\n.\n", Foreground = Brushes.Transparent, FontSize = 10 };
         var gameTotalTimeRun1 = new Run { Text = "Total Playtime: " };
         var gameTotalTimeRun2 = new Run
-            { Text = GetPrettyTime(GetTotalTime(entry)), FontWeight = FontWeights.Bold };
+            { Text = Common.GetPrettyTimeFromArray(GetTotalTime(entry)), FontWeight = FontWeights.Bold };
         titleTextBlock.Inlines.Add(gameNameRun);
         titleTextBlock.Inlines.Add(spacing);
         titleTextBlock.Inlines.Add(gameTotalTimeRun1);
@@ -115,10 +115,5 @@ public class StatsGraph : CustomMenu
         totalTime[1] %= 60;
 
         return totalTime;
-    }
-
-    private string GetPrettyTime(int[] arr)
-    {
-        return $"{arr[0]}h {arr[1]}m {arr[2]}s";
     }
 }

@@ -54,6 +54,10 @@ public static class Common
         return $"{t[0]}h {t[1]}m {t[2]}s";
     }
 
+    public static string GetPrettyTimeFromArray(int[] arr)
+    {
+        return $"{arr[0]}h {arr[1]}m {arr[2]}s";
+    }
 
     public static string GetDialogPath(string filter)
     {
