@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 
@@ -42,11 +43,17 @@ public static class Common
         return new[] { hours, minutes, seconds };
     }
 
+    public static double GetDoubleTimeFromArray(int[] arr)
+    {
+        return Math.Round(arr[0] + arr[1] / 60.0 + arr[2] / 3600.0, 2);
+    }
+
     public static string GetPrettyTimeFromDouble(double totalHours)
     {
         int[] t = GetArrayFromDoubleTime(totalHours);
         return $"{t[0]}h {t[1]}m {t[2]}s";
     }
+
 
     public static string GetDialogPath(string filter)
     {
