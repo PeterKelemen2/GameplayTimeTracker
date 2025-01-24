@@ -14,6 +14,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _quickAdd = false;
 
     private AppTheme _currentTheme;
+    private GameDisplay _gameDisplay = GameDisplay.Vertical;
 
     // private string _currentTheme = "Default";
     private List<AppTheme> _themesList = new();
@@ -53,6 +54,20 @@ public class AppSettings : INotifyPropertyChanged
     {
         get => _quickAdd;
         set => SetField(ref _quickAdd, value);
+    }
+
+    [JsonPropertyName("Display Type")]
+    public GameDisplay Display
+    {
+        get => _gameDisplay;
+        set
+        {
+            if (_gameDisplay != value)
+            {
+                _gameDisplay = value;
+                OnPropertyChanged(nameof(Display));
+            }
+        }
     }
 
     [JsonPropertyName("Current Theme")]

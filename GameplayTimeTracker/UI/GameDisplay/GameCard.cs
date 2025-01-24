@@ -52,6 +52,10 @@ public class GameCard : UserControl
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
 
+    public GameCard()
+    {
+    }
+
     public GameCard(AppSettings appSettings, Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
         Panel parentPanel)
     {

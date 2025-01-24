@@ -52,8 +52,21 @@ public partial class MainWindow : Window
 
         foreach (var entry in entryRepository.EntriesList)
         {
+            GameCard gc = new GameCard();
+            switch (Settings.Display)
+            {
+                case GameDisplay.Vertical:
+                    gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
+                    break;
+                case GameDisplay.Horizontal:
+                    gc = new GameCardHorizontal(Settings, entry, entryRepository, gameCardRepository, MainPanel);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel, Settings);
-            GameCard gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
+            // GameCard gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
