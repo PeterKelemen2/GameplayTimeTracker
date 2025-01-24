@@ -28,5 +28,15 @@ public class EditMenu : EntryConfigMenu
         RefreshImagesButton.Margin = new Thickness(0, 0, 0, 20);
         RefreshImagesButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
         stackPanel.Children.Add(RefreshImagesButton);
+
+        var ShowStatsButton =
+            new CustomButton(w: 120, h: 40, text: "Show Stats", effect: AppEffects.dropShadowIcon);
+        ShowStatsButton.Margin = new Thickness(0, 0, 0, 20);
+        ShowStatsButton.Click += (_, __) =>
+        {
+            StatsGraph statsGraph = new StatsGraph(entry, appSettings);
+            statsGraph.Open();
+        };
+        stackPanel.Children.Add(ShowStatsButton);
     }
 }
