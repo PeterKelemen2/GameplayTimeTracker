@@ -229,7 +229,7 @@ public class GameCard : UserControl
 
         Content = ContainerGrid;
 
-        StartRunningOscillation();
+        // StartRunningOscillation();
         // StartTimeIncrement();
     }
 

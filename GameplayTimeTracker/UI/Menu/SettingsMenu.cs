@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Menu.Content;
 using GameplayTimeTracker.Settings;
+using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -34,9 +35,15 @@ public class SettingsMenu : CustomMenu
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Themes, ForegroundProperty, appSettings, "Font");
         Themes.MouseDown += (_, _) => { SetThemeMenu(Themes); };
+        
+        var Backup = UIHelper.CreateTextBlock("Backup", margin: blockMargin, isBold: false,
+            fontSize: Common.TextFontSize + 2);
+        BindingHelper.SetColorBinding(Backup, ForegroundProperty, appSettings, "Font");
+        Backup.MouseDown += (_, _) => { SetBackupMenu(Backup); };
 
         HeaderPanel.Children.Add(PrefBlock);
         HeaderPanel.Children.Add(Themes);
+        HeaderPanel.Children.Add(Backup);
         Border headerBorder = new Border
         {
             BorderThickness = new Thickness(0, 0, 0, 1),
@@ -91,4 +98,19 @@ public class SettingsMenu : CustomMenu
 
         HighlightCurrentTextBlock(selectedTextBlock);
     }
+    
+    private void SetBackupMenu(TextBlock selectedTextBlock)
+    {
+        var backupMenu = new BackupMenu(_settings);
+        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
+        {
+            MenuContentPanel.Children.Remove(SettingsContentPanel);
+        }
+
+        SettingsContentPanel = backupMenu.Panel;
+        MenuContentPanel.Children.Add(SettingsContentPanel);
+
+        HighlightCurrentTextBlock(selectedTextBlock);
+    }
+    
 }
