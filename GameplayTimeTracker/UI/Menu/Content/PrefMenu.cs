@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -45,5 +46,36 @@ public class PrefMenu : UserControl
         BindingOperations.SetBinding(pref3.checkBox, CheckBox.IsCheckedProperty, quickAddBinding);
         BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, settings, "Font");
         Panel.Children.Add(pref3);
+
+        TextBlock DisplayTypeBlock =
+            UIHelper.CreateTextBlock(text: "Display", margin: new Thickness(25, 0, 0, 0), isBold: false, fontSize: 17);
+        DisplayTypeBlock.Effect = AppEffects.dropShadowText;
+        Panel.Children.Add(DisplayTypeBlock);
+        ComboBox DisplayTypeComboBox = new ComboBox
+        {
+            Width = 150,
+            Height = 30,
+            Margin = new Thickness(40, 10, 0, 10),
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            ItemsSource = Enum.GetValues(typeof(GameDisplay)),
+            SelectedItem = settings.Display
+        };
+        // DisplayTypeComboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding("Display")
+        // {
+        //     Source = settings,
+        //     Mode = BindingMode.TwoWay
+        // });
+        DisplayTypeComboBox.SelectionChanged += (s, e) =>
+        {
+            if (DisplayTypeComboBox.SelectedItem is GameDisplay selectedValue)
+            {
+                settings.Display = selectedValue;
+                ((MainWindow)Application.Current.MainWindow).ShowCards();
+            }
+        };
+
+        Panel.Children.Add(DisplayTypeComboBox);
     }
 }
