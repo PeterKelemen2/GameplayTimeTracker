@@ -129,4 +129,12 @@ public class AppAnimations
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
+    
+    public static DoubleAnimation BackupPanelGrowAnimation = new DoubleAnimation
+    {
+        From = 0,
+        // To = ContentPanel.ActualHeight,
+        Duration = new Duration(TimeSpan.FromSeconds(0.4)),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
 }

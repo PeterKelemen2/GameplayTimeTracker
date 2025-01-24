@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Windows.Documents;
+using System.Windows.Media.Animation;
 
 namespace GameplayTimeTracker.UI.Menu.Content;
 
@@ -22,8 +23,13 @@ public class BackupMenu : UserControl
     private AppSettings appSettings;
     private ScrollViewer backupEntryScrollViewer;
     private ScrollViewer backupContentScrollViewer;
+    private TextBlock backupContentBlock;
     private StackPanel backupEntriesPanel;
     private StackPanel backupContentPanel;
+    private Border backupContentBorder;
+    private StackPanel ContentPanel;
+    private CustomButton createBackupButton;
+    private CustomButton restoreBackupButton;
     private List<string> backupFilesList = new();
     private string currentSelectedPath = "";
     private double scrollWidth = 350;
@@ -62,7 +68,53 @@ public class BackupMenu : UserControl
         }
 
         backupEntriesPanel = new StackPanel();
+        ShowBackupEntries();
+        backupEntryScrollViewer.Content = backupEntriesPanel;
+        Panel.Children.Add(backupEntryBorder);
 
+        ContentPanel = new StackPanel();
+        ContentPanel.Visibility = Visibility.Collapsed;
+        backupContentBlock =
+            UIHelper.CreateTextBlock("Backup Content", hA: HorizontalAlignment.Center, fontSize: 20);
+        backupContentBlock.Margin = new Thickness(0, 10, 0, 0);
+        ContentPanel.Children.Add(backupContentBlock);
+
+        backupContentScrollViewer = new ScrollViewer
+        {
+            Height = scrollHeight, Width = scrollWidth,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+        };
+        backupContentBorder = new Border
+        {
+            Height = scrollHeight, Width = scrollWidth,
+            CornerRadius = new CornerRadius(Common.BorderRadius),
+            Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
+            Margin = new Thickness(10),
+            Child = backupContentScrollViewer,
+        };
+
+        backupContentPanel = new StackPanel();
+        backupContentScrollViewer.Content = backupContentPanel;
+
+        ContentPanel.Children.Add(backupContentBorder);
+        Panel.Children.Add(ContentPanel);
+
+        restoreBackupButton = new CustomButton(text: "Restore Backup", w: 170, h: 40, isBold: true,
+            effect: AppEffects.DropShadowMedium);
+        restoreBackupButton.Margin = new Thickness(10, 5, 10, 5);
+        Panel.Children.Add(restoreBackupButton);
+
+        createBackupButton = new CustomButton(text: "Create Backup", w: 170, h: 40, isBold: true,
+            effect: AppEffects.DropShadowMedium, type: BType.Positive);
+        createBackupButton.Margin = new Thickness(10, 5, 10, 20);
+        Panel.Children.Add(createBackupButton);
+    }
+
+    private void ShowBackupEntries()
+    {
+        backupEntriesPanel.Children.Clear();
         backupFilesList = GetAllFiles(AppFiles.BackupDataFolder);
         foreach (var file in backupFilesList)
         {
@@ -72,7 +124,8 @@ public class BackupMenu : UserControl
                 Text = file,
                 FontSize = Common.TitleFontSize,
                 Foreground =
-                    new SolidColorBrush((Color)ColorConverter.ConvertFromString(settings.CurrentTheme.Colors["Font"])),
+                    new SolidColorBrush(
+                        (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 Padding = new Thickness(5),
                 Margin = new Thickness(5),
@@ -87,34 +140,6 @@ public class BackupMenu : UserControl
 
             backupEntriesPanel.Children.Add(bEntryBlock);
         }
-
-        backupEntryScrollViewer.Content = backupEntriesPanel;
-        Panel.Children.Add(backupEntryBorder);
-
-        TextBlock backupContentBlock =
-            UIHelper.CreateTextBlock("Backup Content", hA: HorizontalAlignment.Center, fontSize: 20);
-        backupContentBlock.Margin = new Thickness(0, 10, 0, 0);
-        Panel.Children.Add(backupContentBlock);
-
-        backupContentScrollViewer = new ScrollViewer
-        {
-            Height = scrollHeight, Width = scrollWidth,
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
-        };
-        Border backupContentBorder = new Border
-        {
-            Height = scrollHeight, Width = scrollWidth,
-            CornerRadius = new CornerRadius(Common.BorderRadius),
-            Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
-            Margin = new Thickness(10),
-            Child = backupContentScrollViewer,
-        };
-
-        backupContentPanel = new StackPanel();
-        backupContentScrollViewer.Content = backupContentPanel;
-        Panel.Children.Add(backupContentBorder);
     }
 
     private void ShowBackupContents(string backupPath)
@@ -150,6 +175,15 @@ public class BackupMenu : UserControl
 
     private void HighlightSelected(TextBlock textBlock)
     {
+        if (ContentPanel.Visibility == Visibility.Collapsed)
+        {
+            ContentPanel.Visibility = Visibility.Visible;
+            ContentPanel.Measure(new Size(scrollWidth, double.PositiveInfinity));
+            ContentPanel.Arrange(new Rect(ContentPanel.DesiredSize));
+            AppAnimations.BackupPanelGrowAnimation.To = ContentPanel.ActualHeight;
+            ContentPanel.BeginAnimation(HeightProperty, AppAnimations.BackupPanelGrowAnimation);
+        }
+
         foreach (UIElement element in backupEntriesPanel.Children)
         {
             if (element is TextBlock tb)
