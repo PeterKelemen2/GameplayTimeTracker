@@ -13,6 +13,7 @@ public class SettingsMenu : CustomMenu
     StackPanel SettingsContentPanel = new();
     StackPanel HeaderPanel = new();
     private AppSettings _settings;
+    // public MainWindow _mainWindow;
 
     public SettingsMenu(AppSettings appSettings, double width = 400, bool performanceMode = true) : base(appSettings,
         width,
@@ -35,7 +36,7 @@ public class SettingsMenu : CustomMenu
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Themes, ForegroundProperty, appSettings, "Font");
         Themes.MouseDown += (_, _) => { SetThemeMenu(Themes); };
-        
+
         var Backup = UIHelper.CreateTextBlock("Backup", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Backup, ForegroundProperty, appSettings, "Font");
@@ -98,7 +99,7 @@ public class SettingsMenu : CustomMenu
 
         HighlightCurrentTextBlock(selectedTextBlock);
     }
-    
+
     private void SetBackupMenu(TextBlock selectedTextBlock)
     {
         var backupMenu = new BackupMenu(_settings);
@@ -112,5 +113,4 @@ public class SettingsMenu : CustomMenu
 
         HighlightCurrentTextBlock(selectedTextBlock);
     }
-    
 }

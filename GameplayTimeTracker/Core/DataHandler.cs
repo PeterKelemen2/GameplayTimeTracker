@@ -119,4 +119,10 @@ public static class DataHandler
         string backupFileName = $"backup-{d.Year}-{d.Month}-{d.Day}-{d.Hour}-{d.Minute}-{d.Second}.json";
         File.WriteAllText(Path.Combine(AppFiles.BackupDataFolder, backupFileName), currentData);
     }
+
+    public static void RestoreBackup(string backupFilePath)
+    {
+        string toLoad = File.ReadAllText(backupFilePath);
+        File.WriteAllText(AppFiles.DataFilePath, toLoad);
+    }
 }

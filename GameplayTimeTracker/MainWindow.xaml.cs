@@ -46,6 +46,7 @@ public partial class MainWindow : Window
 
     public void LoadAndShowData()
     {
+        MainPanel.Children.Clear();
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
 

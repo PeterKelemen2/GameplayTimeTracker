@@ -104,6 +104,11 @@ public class BackupMenu : UserControl
         restoreBackupButton = new CustomButton(text: "Restore Backup", w: 170, h: 40, isBold: true,
             effect: AppEffects.DropShadowMedium);
         restoreBackupButton.Margin = new Thickness(10, 5, 10, 5);
+        restoreBackupButton.Click += (s, e) =>
+        {
+            DataHandler.RestoreBackup(currentSelectedPath);
+            ((MainWindow)Application.Current.MainWindow).LoadAndShowData();
+        };
         Panel.Children.Add(restoreBackupButton);
 
         createBackupButton = new CustomButton(text: "Create Backup", w: 170, h: 40, isBold: true,
