@@ -15,6 +15,8 @@ public class EntryRepository
         foreach (Entry entry in EntriesList)
         {
             entry.Repository = this;
+            entry.EnsureLastWeekData();
+            entry.PrintHistory();
         }
 
         CheckForOldTime();

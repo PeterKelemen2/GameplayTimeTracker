@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using GameplayTimeTracker.Settings;
@@ -25,10 +26,14 @@ namespace GameplayTimeTracker
         private bool _isRunning;
         private string _runningString;
         private string _lastPlayStateString = "Started: ";
+
         private DateTime _lastDate;
+
+        // private Dictionary<DateTime, int[]> playTimeHistory = new();
         private string _lastDateString = "Never";
         private bool _wasRunning;
         private EntryRepository _repository;
+
 
         [JsonIgnore]
         public EntryRepository Repository
@@ -232,6 +237,51 @@ namespace GameplayTimeTracker
         {
             get => _wasRunning;
             set => SetField(ref _wasRunning, value);
+        }
+
+        [JsonPropertyName("Playtime History")] private Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
+
+        public void EnsureLastWeekData()
+        {
+            PlaytimeHistory = new Dictionary<DateTime, int[]>();
+            DateTime today = DateTime.Today;
+            DateTime weekAgo = today.AddDays(-6);
+
+            // Remove entries older than a week
+            var filteredHistory = PlaytimeHistory
+                .Where(entry => entry.Key >= weekAgo)
+                .ToDictionary(entry => entry.Key, entry => entry.Value);
+
+            // Ensure last 7 days are present
+            Random random = new Random();
+
+            for (int i = 0; i < 7; i++)
+            {
+                DateTime date = today.AddDays(-i);
+                if (!filteredHistory.ContainsKey(date))
+                {
+                    filteredHistory[date] = new int[]
+                    {
+                        random.Next(0, 23), // Index 0 initialized to 0
+                        random.Next(0, 60), // Index 1 with a random value between 0-59
+                        random.Next(0, 60) // Index 2 with a random value between 0-59
+                    };
+                }
+            }
+
+            PlaytimeHistory = filteredHistory.OrderBy(entry => entry.Key).ToDictionary(k => k.Key, v => v.Value);
+        }
+
+        public void PrintHistory()
+        {
+            Console.WriteLine($"\nHistory data for {Name}");
+            foreach (var entry in PlaytimeHistory)
+            {
+                string date = entry.Key.ToString("yyyy-MM-dd");
+                string playtimeData = entry.Value.Length > 0 ? string.Join(", ", entry.Value) : "No data";
+
+                Console.WriteLine($"Date: {date}, Playtime: [{playtimeData}]");
+            }
         }
 
         public void ResetLastPlaytime()
