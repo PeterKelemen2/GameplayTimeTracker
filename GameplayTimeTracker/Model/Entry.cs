@@ -239,11 +239,16 @@ namespace GameplayTimeTracker
             set => SetField(ref _wasRunning, value);
         }
 
-        [JsonPropertyName("Playtime History")] private Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
+        [JsonPropertyName("playtimeHistory")] public Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
 
         public void EnsureLastWeekData()
         {
-            PlaytimeHistory = new Dictionary<DateTime, int[]>();
+            // PlaytimeHistory = new Dictionary<DateTime, int[]>();
+            if (PlaytimeHistory == null)
+            {
+                PlaytimeHistory = new Dictionary<DateTime, int[]>();
+            }
+
             DateTime today = DateTime.Today;
             DateTime weekAgo = today.AddDays(-6);
 
@@ -262,9 +267,10 @@ namespace GameplayTimeTracker
                 {
                     filteredHistory[date] = new int[]
                     {
-                        random.Next(0, 23), // Index 0 initialized to 0
-                        random.Next(0, 60), // Index 1 with a random value between 0-59
-                        random.Next(0, 60) // Index 2 with a random value between 0-59
+                        // random.Next(0, 23), // Index 0 initialized to 0
+                        // random.Next(0, 60), // Index 1 with a random value between 0-59
+                        // random.Next(0, 60) // Index 2 with a random value between 0-59
+                        0, 0, 0
                     };
                 }
             }

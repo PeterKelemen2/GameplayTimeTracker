@@ -23,6 +23,7 @@ public class EntryRepository
         UpdateTotalPercentages();
         // SetTimeArrays();
         PrintEntryList();
+        // DataHandler.WriteEntriesToFile(EntriesList, AppFiles.DataFilePath);
     }
 
     private void CheckForOldTime()
