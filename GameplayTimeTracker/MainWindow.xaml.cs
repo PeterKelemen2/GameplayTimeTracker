@@ -49,6 +49,8 @@ public partial class MainWindow : Window
         MainPanel.Children.Clear();
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
+        GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
+        TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
 
         foreach (var entry in entryRepository.EntriesList)
         {

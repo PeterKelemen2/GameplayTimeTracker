@@ -8,7 +8,7 @@ public static class AppColors
     public static Color Background = (Color)ColorConverter.ConvertFromString("#1E2030");
     public static Color Footer = (Color)ColorConverter.ConvertFromString("#6A6F99");
     public static Color Font = (Color)ColorConverter.ConvertFromString("#DAE4FF");
-    public static Color FooterFont = (Color)ColorConverter.ConvertFromString("#000000");
+    public static Color FooterFont = (Color)ColorConverter.ConvertFromString("#DAE4FF");
     public static Color Running = (Color)ColorConverter.ConvertFromString("#C3E88D");
     public static Color DefButton = (Color)ColorConverter.ConvertFromString("#3BC9E3");
     public static Color PositiveButton = (Color)ColorConverter.ConvertFromString("#90EE90");
@@ -24,7 +24,7 @@ public static class AppColors
         ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
         {
             { "Footer", "#6A6F99" },
-            { "Footer Font", "#000000" },
+            { "Footer Font", "#DAE4FF" },
             { "Background", "#1E2030" },
             { "Card 1", "#414769" },
             { "Card 2", "#2E324A" },

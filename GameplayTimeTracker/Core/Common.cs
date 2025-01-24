@@ -42,6 +42,12 @@ public static class Common
         return new[] { hours, minutes, seconds };
     }
 
+    public static string GetPrettyTimeFromDouble(double totalHours)
+    {
+        int[] t = GetArrayFromDoubleTime(totalHours);
+        return $"{t[0]}h {t[1]}m {t[2]}s";
+    }
+
     public static string GetDialogPath(string filter)
     {
         string filePath = "";

@@ -55,7 +55,7 @@
                            FontSize="16">
                     <Run Text="Total Playtime" FontWeight="Bold" />
                     <LineBreak />
-                    <Run x:Name="TotalTimeText" Text="0" FontWeight="Normal" />
+                    <Run x:Name="TotalTimeRun" Text="0" FontWeight="Normal" />
                 </TextBlock>
             </Grid>
         </Grid>

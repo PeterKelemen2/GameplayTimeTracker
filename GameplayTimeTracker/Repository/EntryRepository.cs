@@ -112,6 +112,11 @@ public class EntryRepository
         }
     }
 
+    public double GetTotalTime()
+    {
+        return EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
+    }
+
     public void UpdateTotalPercentages()
     {
         double globalTotalTime = EntriesList.Sum(entry => entry.GetTotalPlaytimeAsDouble());
