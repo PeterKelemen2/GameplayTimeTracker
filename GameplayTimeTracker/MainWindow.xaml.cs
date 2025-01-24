@@ -46,12 +46,21 @@ public partial class MainWindow : Window
 
     public void LoadAndShowData()
     {
-        MainPanel.Children.Clear();
+        LoadData();
+        ShowCards();
+    }
+
+    public void LoadData()
+    {
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
         GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
         TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
+    }
 
+    public void ShowCards()
+    {
+        MainPanel.Children.Clear();
         foreach (var entry in entryRepository.EntriesList)
         {
             GameCard gc = new GameCard();
