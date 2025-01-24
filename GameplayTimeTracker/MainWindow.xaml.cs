@@ -40,6 +40,12 @@ public partial class MainWindow : Window
     {
         SetUpFooter();
         SetBaseColorBindings();
+
+        LoadAndShowData();
+    }
+
+    public void LoadAndShowData()
+    {
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
 
@@ -79,7 +85,7 @@ public partial class MainWindow : Window
         };
         Grid.SetRow(SettingsButton, 1);
         MainGrid.Children.Add(SettingsButton);
-        
+
         GamesLoadedBlock.Effect = AppEffects.dropShadowIcon;
         TotalPlaytimeTextBlock.Effect = AppEffects.dropShadowIcon;
     }

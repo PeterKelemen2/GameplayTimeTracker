@@ -111,4 +111,12 @@ public static class DataHandler
             else Console.WriteLine("Shortcut does not exist.");
         }
     }
+
+    public static void CreateBackup()
+    {
+        string currentData = File.ReadAllText(AppFiles.DataFilePath);
+        DateTime d = DateTime.Now;
+        string backupFileName = $"backup-{d.Year}-{d.Month}-{d.Day}-{d.Hour}-{d.Minute}-{d.Second}.json";
+        File.WriteAllText(Path.Combine(AppFiles.BackupDataFolder, backupFileName), currentData);
+    }
 }

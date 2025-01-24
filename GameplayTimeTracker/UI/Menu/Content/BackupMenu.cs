@@ -109,6 +109,11 @@ public class BackupMenu : UserControl
         createBackupButton = new CustomButton(text: "Create Backup", w: 170, h: 40, isBold: true,
             effect: AppEffects.DropShadowMedium, type: BType.Positive);
         createBackupButton.Margin = new Thickness(10, 5, 10, 20);
+        createBackupButton.Click += (s, e) =>
+        {
+            DataHandler.CreateBackup();
+            ShowBackupEntries();
+        };
         Panel.Children.Add(createBackupButton);
     }
 
