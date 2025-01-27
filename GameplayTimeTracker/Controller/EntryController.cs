@@ -70,6 +70,12 @@ public static class EntryController
                 parentPanel.Children.Add(gc);
 
                 DataHandler.WriteEntriesToFile(repository.EntriesList, AppFiles.DataFilePath);
+
+                if (!Common.Settings.QuickAdd)
+                {
+                    EntryConfigMenu configMenu = new EditMenu(newEntry);
+                    configMenu.Open();
+                }
             }
             else
             {
