@@ -9,7 +9,7 @@ namespace GameplayTimeTracker;
 public static class Common
 {
     public static AppSettings Settings { get; set; }
-    
+
     public const string RunningText = "Running!";
     public const double CardPadding = 10;
     public const double TitleFontSize = 17;
@@ -34,6 +34,27 @@ public static class Common
         }
 
         return value.Substring(0, length); // Otherwise, truncate the string
+    }
+
+    public static int[] NormalizeTimeArray(int[] array)
+    {
+        array[1] += array[2] / 60;
+        array[2] %= 60;
+        array[0] += array[1] / 60;
+        array[1] %= 60;
+
+        return array;
+    }
+
+    public static int[] AddTimeArrays(int[] array1, int[] array2)
+    {
+        int[] result = new int[3];
+        for (int i = 0; i < 3; i++)
+        {
+            result[i] = array1[i] + array2[i];
+        }
+
+        return result;
     }
 
     public static int[] GetArrayFromDoubleTime(double totalHours)

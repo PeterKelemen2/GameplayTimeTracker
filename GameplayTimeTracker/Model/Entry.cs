@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
+using Gtk;
 
 namespace GameplayTimeTracker
 {
@@ -31,7 +32,7 @@ namespace GameplayTimeTracker
 
         // private Dictionary<DateTime, int[]> playTimeHistory = new();
         private string _lastDateString = "Never";
-        private bool _wasRunning;
+        private bool _wasRunning = false;
         private EntryRepository _repository;
 
 
@@ -237,15 +238,41 @@ namespace GameplayTimeTracker
             get => _runningString == "Running!";
             set
             {
-                _runningString = value ? "Running!" : "";
-                _lastPlayStateString = value ? "Started: " : "Ended: ";
-                LastDate = value ? DateTime.Now : LastDate;
+                if (value != IsRunning)
+                {
+                    _runningString = value ? "Running!" : "";
+                    _lastPlayStateString = value ? "Started: " : "Ended: ";
+                    _wasRunning = value;
+                    LastDate = value ? DateTime.Now : LastDate;
 
-                OnPropertyChanged(nameof(IsRunning));
-                OnPropertyChanged(nameof(RunningFormatted));
-                OnPropertyChanged(nameof(LastDateFormatted));
-                OnPropertyChanged(nameof(LastRunningStateFormatted));
+                    OnPropertyChanged(nameof(IsRunning));
+                    OnPropertyChanged(nameof(RunningFormatted));
+                    OnPropertyChanged(nameof(LastDateFormatted));
+                    OnPropertyChanged(nameof(LastRunningStateFormatted));
+
+                    if (value)
+                    {
+                        ResetLastPlaytime();
+                    }
+                    else
+                    {
+                        IncrementTodaysHistory();
+                    }
+                }
             }
+        }
+
+        public void IncrementTodaysHistory()
+        {
+            if (PlaytimeHistory.ContainsKey(DateTime.Today))
+            {
+                PlaytimeHistory[DateTime.Today] =
+                    Common.NormalizeTimeArray(Common.AddTimeArrays(PlaytimeHistory[DateTime.Today],
+                        LastPlay));
+                Console.WriteLine($"Todays play time: {PlaytimeHistory[DateTime.Today]}");
+            }
+
+            DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
         }
 
         [JsonIgnore]
@@ -317,7 +344,7 @@ namespace GameplayTimeTracker
         public void ResetLastPlaytime()
         {
             LastPlay = new int[3];
-            LastDate = DateTime.Now;
+            // LastDate = DateTime.Now;
         }
 
         public void IncrementTime()

@@ -34,6 +34,7 @@ public class EditMenu : EntryConfigMenu
         ShowStatsButton.Margin = new Thickness(0, 0, 0, 20);
         ShowStatsButton.Click += (_, __) =>
         {
+            
             StatsGraph statsGraph = new StatsGraph(entry);
             statsGraph.Open();
         };

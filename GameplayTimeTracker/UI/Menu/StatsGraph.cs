@@ -60,7 +60,7 @@ public class StatsGraph : CustomMenu
 
         int count = entry.PlaytimeHistory.Count;
         double totalSpace = graphWidth - (count * barsWidth);
-        double maxTime = entry.PlaytimeHistory.Max(stat => stat.Value[0]) + 2;
+        double maxTime = entry.PlaytimeHistory.Max(stat => stat.Value[0]) + 0.1;
         double rectMargin = (totalSpace / count) * 0.5;
         double baseTimeMarg = (width - graphWidth) * 0.5 + 35;
 
@@ -109,10 +109,11 @@ public class StatsGraph : CustomMenu
                 return sum;
             });
 
-        totalTime[1] += totalTime[2] / 60;
-        totalTime[2] %= 60;
-        totalTime[0] += totalTime[1] / 60;
-        totalTime[1] %= 60;
+        // totalTime[1] += totalTime[2] / 60;
+        // totalTime[2] %= 60;
+        // totalTime[0] += totalTime[1] / 60;
+        // totalTime[1] %= 60;
+        totalTime = Common.NormalizeTimeArray(totalTime);
 
         return totalTime;
     }
