@@ -5,13 +5,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
+using Gdk;
 
 
 namespace GameplayTimeTracker.Menu;
 
 public class AddMenu : EntryConfigMenu
 {
-    private AppSettings _appSettings;
+    // private AppSettings _appSettings;
 
     public AddMenu(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo,
         Panel panel,
@@ -26,12 +27,13 @@ public class AddMenu : EntryConfigMenu
             Close();
         };
 
-        AppSettings settings = DataHandler.GetSettingsFromFile();
+        // AppSettings settings = DataHandler.GetSettingsFromFile();
         Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
 
-        if (!settings.SGDBApiKey.Equals(string.Empty))
+        if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
         {
-            Task.Run(async () => await SGDBFetch.FetchSGDBAsync(settings.SGDBApiKey, entry.Name, iconFiles)).Wait();
+            Task.Run(async () => await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles))
+                .Wait();
         }
 
         entry.IconPath = iconFiles["icon"];
@@ -41,7 +43,18 @@ public class AddMenu : EntryConfigMenu
     private void AddConfiguredEntry(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo, Panel panel)
     {
         entryRepo.AddEntry(entry);
-        GameCard gc = new GameCardVertical(entry, entryRepo, cardRepo, panel);
+        GameCard gc = new GameCard();
+
+        switch (Common.Settings.Display)
+        {
+            case GameDisplay.Horizontal:
+                gc = new GameCardHorizontal(entry, entryRepo, cardRepo, panel);
+                break;
+            case GameDisplay.Vertical:
+                gc = new GameCardVertical(entry, entryRepo, cardRepo, panel);
+                break;
+        }
+
         cardRepo.GameCards.Add(gc);
         panel.Children.Add(gc);
     }

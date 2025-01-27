@@ -138,9 +138,9 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(TotalProgressBar, ProgressBar.PercentageProperty, totalPlayPercentBinding);
-        BindingHelper.SetColorBinding(TotalProgressBar.BackgroundRect, Shape.FillProperty, 
+        BindingHelper.SetColorBinding(TotalProgressBar.BackgroundRect, Shape.FillProperty,
             "Background");
-        BindingHelper.SetGradientColorBinding(TotalProgressBar.BarRect, Shape.FillProperty, 
+        BindingHelper.SetGradientColorBinding(TotalProgressBar.BarRect, Shape.FillProperty,
             "Progress Bar 1", "Progress Bar 2", true);
 
         LastProgressBar = new ProgressBar(150, 30, 5, 10);
