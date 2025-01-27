@@ -22,7 +22,7 @@ public class EntryRepository
             entry.PrintHistory();
         }
 
-        CheckForOldTime();
+        Common.CheckForOldTime(EntriesList);
         UpdateTotalPercentages();
         // SetTimeArrays();
         PrintEntryList();
@@ -92,28 +92,28 @@ public class EntryRepository
         }
     }
 
-    private void CheckForOldTime()
-    {
-        int[] empty = { 0, 0, 0 };
-
-        foreach (var entry in EntriesList)
-        {
-            if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalTime > 0.0)
-            {
-                entry.TotalPlay = Common.GetArrayFromDoubleTime(entry.TotalTime);
-            }
-
-            if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
-            {
-                entry.LastPlay = Common.GetArrayFromDoubleTime(entry.LastTime);
-            }
-        }
-    }
-
-    private bool IsArrayEqual(int[] array1, int[] array2)
-    {
-        return array1 != null && array2 != null && array1.SequenceEqual(array2);
-    }
+    // private void CheckForOldTime()
+    // {
+    //     int[] empty = { 0, 0, 0 };
+    //
+    //     foreach (var entry in EntriesList)
+    //     {
+    //         if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalTime > 0.0)
+    //         {
+    //             entry.TotalPlay = Common.GetArrayFromDoubleTime(entry.TotalTime);
+    //         }
+    //
+    //         if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
+    //         {
+    //             entry.LastPlay = Common.GetArrayFromDoubleTime(entry.LastTime);
+    //         }
+    //     }
+    // }
+    //
+    // private bool IsArrayEqual(int[] array1, int[] array2)
+    // {
+    //     return array1 != null && array2 != null && array1.SequenceEqual(array2);
+    // }
 
     public void AddEntry(Entry entry)
     {

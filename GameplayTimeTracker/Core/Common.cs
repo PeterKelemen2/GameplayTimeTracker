@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GameplayTimeTracker.Settings;
@@ -25,7 +27,7 @@ public static class Common
 
     public static string exeFilter = "Executable files (*.exe, *.lnk)|*.exe;*.lnk|All files (*.*)|*.*";
 
-    public static string Truncate(string value, int length)
+    public static string Truncate(string value, int length, bool toDot = false)
     {
         if (value.Length < length)
         {
@@ -33,9 +35,45 @@ public static class Common
             return value.PadRight(length);
         }
 
-        return value.Substring(0, length); // Otherwise, truncate the string
+        string dots = toDot ? "..." : "";
+        return value.Substring(0, length) + dots; // Otherwise, truncate the string
     }
 
+    public static string Trim(string value, int length, bool toDot = false)
+    {
+        string dots = toDot ? "..." : "";
+        if (value.Length < length)
+        {
+            return value;
+        }
+        else
+        {
+            return value.Substring(0, length) + dots;
+        }
+    }
+
+    public static void CheckForOldTime(ObservableCollection<Entry> entries)
+    {
+        int[] empty = { 0, 0, 0 };
+
+        foreach (var entry in entries)
+        {
+            if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalTime > 0.0)
+            {
+                entry.TotalPlay = Common.GetArrayFromDoubleTime(entry.TotalTime);
+            }
+
+            if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
+            {
+                entry.LastPlay = Common.GetArrayFromDoubleTime(entry.LastTime);
+            }
+        }
+    }
+    
+    private static bool IsArrayEqual(int[] array1, int[] array2)
+    {
+        return array1 != null && array2 != null && array1.SequenceEqual(array2);
+    }
     public static int[] NormalizeTimeArray(int[] array)
     {
         array[1] += array[2] / 60;

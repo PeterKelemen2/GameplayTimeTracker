@@ -159,29 +159,29 @@ public class BackupMenu : UserControl
         string path = Path.Combine(AppFiles.BackupDataFolder, backupPath);
         ObservableCollection<Entry> entryList = new();
         entryList = DataHandler.GetEntriesFromFile(path);
+        Common.CheckForOldTime(entryList);
         Console.WriteLine($"Found {entryList.Count} entries from {path}");
         backupContentPanel.Children.Clear();
         foreach (var entry in entryList)
         {
             TextBlock entryBlock = new TextBlock
             {
-                Text = entry.Name,
-                HorizontalAlignment = HorizontalAlignment.Center,
+                // Text = entry.Name,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 FontSize = Common.TitleFontSize,
                 Foreground =
                     new SolidColorBrush(
                         (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
-                Margin = new Thickness(0, 5, 0, 5),
+                Margin = new Thickness(10, 5, 0, 5),
                 FontWeight = FontWeights.Bold,
                 TextWrapping = TextWrapping.Wrap,
-                TextAlignment = TextAlignment.Center,
+                TextAlignment = TextAlignment.Left,
             };
-            var entryRun = new Run
-            {
-                Text = $" - {entry.TotalPlayFormatted}",
-                FontWeight = FontWeights.Regular,
-            };
-            entryBlock.Inlines.Add(entryRun);
+
+            var entryNameRun = new Run { Text = Common.Trim(entry.Name, 25, true), FontWeight = FontWeights.Bold, };
+            var entryTimeRun = new Run { Text = $" - {entry.TotalPlayFormatted}", FontWeight = FontWeights.Regular, };
+            entryBlock.Inlines.Add(entryNameRun);
+            entryBlock.Inlines.Add(entryTimeRun);
             backupContentPanel.Children.Add(entryBlock);
             Console.WriteLine($"{entry.Name} - {entry.TotalPlayFormatted}");
         }
