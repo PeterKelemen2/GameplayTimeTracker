@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing.Imaging;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -32,7 +33,6 @@ public class GameCard : UserControl
     public double CardHeight { get; set; }
     public double CornerRadius { get; set; }
     public bool IsVertical { get; set; }
-
     public Grid ContainerGrid { get; set; }
     public StackPanel TotalStack { get; set; }
     public StackPanel LastStack { get; set; }
@@ -271,6 +271,12 @@ public class GameCard : UserControl
         LaunchButton = new CustomButton(text: "Launch", w: 90, h: 40, type: BType.Positive,
             hA: HorizontalAlignment.Right, vA: VerticalAlignment.Bottom);
         LaunchButton.Effect = bEffect;
+        Binding activeBinding = new Binding("IsLaunchable")
+        {
+            Source = DataEntry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(LaunchButton, CustomButton.ActiveProperty, activeBinding);
         LaunchButton.Click += (s, e) => Launcher.Launch(DataEntry);
         // SetLaunchButtonState();
         Panel.SetZIndex(LaunchButton, 3);

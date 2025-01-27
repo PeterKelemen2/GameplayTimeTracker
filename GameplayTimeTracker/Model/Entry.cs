@@ -15,7 +15,7 @@ namespace GameplayTimeTracker
     {
         private string _name;
         private string _exePath;
-        private bool _isLaunchable = false;
+        private bool _isLaunchable = true;
         private string _iconPath = AppFiles.DefaultIconPath;
         private string _heroPath = AppFiles.DefaultHeroPath;
         private string _arguments;

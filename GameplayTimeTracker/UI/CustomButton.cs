@@ -14,7 +14,6 @@ namespace GameplayTimeTracker;
 public class CustomButton : UserControl
 {
     public BType ButtonType { get; set; }
-    public bool IsActive { get; set; }
     public Rectangle ButtonBase;
     private string ButtonImagePath;
     public Image ButtonImage { get; set; }
@@ -41,6 +40,10 @@ public class CustomButton : UserControl
         DependencyProperty.Register("Effect", typeof(Effect), typeof(CustomButton),
             new PropertyMetadata(null, OnEffectChanged));
 
+    public static readonly DependencyProperty ActiveProperty =
+        DependencyProperty.Register(nameof(Active), typeof(bool), typeof(CustomButton),
+            new PropertyMetadata(true, OnActiveChanged));
+
     public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(
         "Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CustomButton));
 
@@ -52,31 +55,31 @@ public class CustomButton : UserControl
     }
 
     public CustomButton(double w = 100, double h = 30,
-        BType type = BType.Default,
-        double bRad = 7,
+        BType type = BType.Default, double bRad = 7,
         string text = "", double fontSize = 16, bool isBold = true,
-        string bImgPath = "", bool isActive = true,
-        Effect effect = null,
+        string bImgPath = "", Effect effect = null,
         HorizontalAlignment hA = HorizontalAlignment.Center,
         VerticalAlignment vA = VerticalAlignment.Center)
     {
+        bool isActive = (bool)GetValue(ActiveProperty);
+
         ButtonImagePath = bImgPath;
-        IsActive = isActive;
         ButtonType = type;
         ButtonEffect ??= effect;
 
         Grid = new Grid
         {
             Width = w, Height = h,
-            HorizontalAlignment = hA,  VerticalAlignment = vA,
+            HorizontalAlignment = hA, VerticalAlignment = vA,
             Effect = ButtonEffect,
         };
+
 
         ButtonBase = new Rectangle
         {
             Width = w, Height = h,
-            RadiusX = bRad,  RadiusY = bRad,
-            Fill = IsActive ? new SolidColorBrush(ButtonColor) : new SolidColorBrush(Colors.Gray),
+            RadiusX = bRad, RadiusY = bRad,
+            Fill = isActive ? new SolidColorBrush(ButtonColor) : new SolidColorBrush(Colors.Gray),
         };
         Grid.Children.Add(ButtonBase);
         SetButtonColors();
@@ -103,7 +106,8 @@ public class CustomButton : UserControl
                 // Console.WriteLine(bImgPath);
                 ButtonImage = new Image();
                 ButtonImage.Source = new BitmapImage(new Uri(bImgPath, UriKind.RelativeOrAbsolute));
-                ButtonImage.Width = h / 2; ButtonImage.Height = h / 2;
+                ButtonImage.Width = h / 2;
+                ButtonImage.Height = h / 2;
                 ButtonImage.HorizontalAlignment = HorizontalAlignment.Center;
                 RenderOptions.SetBitmapScalingMode(ButtonImage, BitmapScalingMode.HighQuality);
 
@@ -135,8 +139,7 @@ public class CustomButton : UserControl
             }
         }
 
-        // Console.WriteLine("Button state:" + IsActive);
-        if (IsActive)
+        if (isActive)
         {
             Grid.MouseEnter += OnMouseEnter;
             Grid.MouseLeave += OnMouseLeave;
@@ -144,15 +147,6 @@ public class CustomButton : UserControl
             Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
             ButtonBase.Fill = new SolidColorBrush(ButtonColor);
         }
-        // else
-        // {
-        //     Grid.MouseEnter -= OnMouseEnter;
-        //     Grid.MouseLeave -= OnMouseLeave;
-        //     Grid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
-        //     Grid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
-        //     ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
-        //     IsActive = false;
-        // }
 
         Content = Grid;
     }
@@ -183,34 +177,21 @@ public class CustomButton : UserControl
 
     public void Enable()
     {
-        if (!IsActive)
-        {
-            Grid.MouseEnter += OnMouseEnter;
-            Grid.MouseLeave += OnMouseLeave;
-            Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
-            Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
-            ButtonBase.Fill = new SolidColorBrush(ButtonColor);
-            IsActive = true;
-        }
-        // IsDisabled = false;
+        Grid.MouseEnter += OnMouseEnter;
+        Grid.MouseLeave += OnMouseLeave;
+        Grid.MouseLeftButtonDown += OnMouseLeftButtonDown;
+        Grid.MouseLeftButtonUp += OnMouseLeftButtonUp;
+        ButtonBase.Fill = new SolidColorBrush(ButtonColor);
     }
 
     public void Disable()
     {
-        if (IsActive)
-        {
-            Grid.MouseEnter -= OnMouseEnter;
-            Grid.MouseLeave -= OnMouseLeave;
-            Grid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
-            Grid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
-            ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
-            IsActive = false;
-        }
-        // IsDisabled = true;
-
-        // ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
+        Grid.MouseEnter -= OnMouseEnter;
+        Grid.MouseLeave -= OnMouseLeave;
+        Grid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
+        Grid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
+        ButtonBase.Fill = new SolidColorBrush(Colors.Gray);
     }
-
 
     private double animTime = 0.1;
 
@@ -306,6 +287,27 @@ public class CustomButton : UserControl
             var newEffect = (Effect)e.NewValue;
             customButton.Grid.Effect = newEffect;
         }
+    }
+
+    private static void OnActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CustomButton button)
+        {
+            bool newValue = (bool)e.NewValue;
+            button.OnActiveChanged(newValue);
+        }
+    }
+
+    protected virtual void OnActiveChanged(bool newValue)
+    {
+        if (newValue) Enable();
+        else Disable();
+    }
+
+    public bool Active
+    {
+        get => (bool)GetValue(ActiveProperty);
+        set => SetValue(ActiveProperty, value);
     }
 
     // Properties to access the dependency properties
