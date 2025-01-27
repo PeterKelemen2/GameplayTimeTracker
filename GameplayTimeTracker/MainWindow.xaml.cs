@@ -100,7 +100,7 @@ public partial class MainWindow : Window
                     cycleCount++;
                 });
 
-                if (cycleCount >= saveFrequency)
+                if (cycleCount >= Common.Settings.SavingFrequencyInMinutes * 60)
                 {
                     DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
                     cycleCount = 0;

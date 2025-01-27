@@ -16,6 +16,7 @@ public class AppSettings : INotifyPropertyChanged
 
     private AppTheme _currentTheme;
     private GameDisplay _gameDisplay = GameDisplay.Vertical;
+    private int _savingFreqInMin = 1;
 
     // private string _currentTheme = "Default";
     private List<AppTheme> _themesList = new();
@@ -90,6 +91,21 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _gameDisplay = value;
                 OnPropertyChanged(nameof(Display));
+                DataHandler.WriteSettingsToFile(this);
+            }
+        }
+    }
+
+    [JsonPropertyName("Saving Frequency")]
+    public int SavingFrequencyInMinutes
+    {
+        get => _savingFreqInMin;
+        set
+        {
+            if (_savingFreqInMin != value)
+            {
+                _savingFreqInMin = value;
+                OnPropertyChanged(nameof(SavingFrequencyInMinutes));
                 DataHandler.WriteSettingsToFile(this);
             }
         }

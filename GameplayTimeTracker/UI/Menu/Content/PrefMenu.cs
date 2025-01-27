@@ -62,24 +62,44 @@ public class PrefMenu : UserControl
             ItemsSource = Enum.GetValues(typeof(GameDisplay)),
             SelectedItem = Common.Settings.Display
         };
-        // DisplayTypeComboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding("Display")
-        // {
-        //     Source = settings,
-        //     Mode = BindingMode.TwoWay
-        // });
+        
         DisplayTypeComboBox.SelectionChanged += (s, e) =>
         {
             if (DisplayTypeComboBox.SelectedItem is GameDisplay selectedValue)
             {
                 var mainWindow = (MainWindow)Application.Current.MainWindow;
                 Common.Settings.Display = selectedValue;
-
+        
                 AppAnimations.FadeOutMainPanel.Completed += OnFadeOutCompleted;
                 mainWindow.MainPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOutMainPanel);
             }
         };
-
+        
         Panel.Children.Add(DisplayTypeComboBox);
+
+        TextBlock SaveFrequencyBlock =
+            UIHelper.CreateTextBlock(text: "Save Frequency", margin: new Thickness(25, 0, 0, 0), isBold: false,
+                fontSize: 17);
+        SaveFrequencyBlock.Effect = AppEffects.dropShadowText;
+        Panel.Children.Add(SaveFrequencyBlock);
+        ComboBox SaveFrequencyComboBox = new ComboBox
+        {
+            Width = 150,
+            Height = 30,
+            Margin = new Thickness(40, 10, 0, 10),
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            ItemsSource = Common.saveFreqArray,
+            SelectedItem = Common.Settings.SavingFrequencyInMinutes
+        };
+
+        SaveFrequencyComboBox.SelectionChanged += (s, e) =>
+        {
+            Common.Settings.SavingFrequencyInMinutes = (int)SaveFrequencyComboBox.SelectedItem;
+        };
+
+        Panel.Children.Add(SaveFrequencyComboBox);
     }
 
     private void OnFadeOutCompleted(object sender, EventArgs e)

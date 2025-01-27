@@ -22,6 +22,7 @@ public static class Common
     public const double TextBoxHeight = 28;
 
     public static int[] p = { 33, 11, 11, 10, 10, 11, 45, 45, 17 };
+    public static int[] saveFreqArray = { 1, 5, 10, 15, 30 };
 
     public static string imageFilter =
         "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
@@ -70,11 +71,12 @@ public static class Common
             }
         }
     }
-    
+
     private static bool IsArrayEqual(int[] array1, int[] array2)
     {
         return array1 != null && array2 != null && array1.SequenceEqual(array2);
     }
+
     public static int[] NormalizeTimeArray(int[] array)
     {
         array[1] += array[2] / 60;
