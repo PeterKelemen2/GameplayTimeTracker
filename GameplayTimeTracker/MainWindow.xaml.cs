@@ -113,8 +113,6 @@ public partial class MainWindow : Window
                     throw new ArgumentOutOfRangeException();
             }
 
-            // GameCard gc = new GameCardHorizontal(entry, entryRepository, gameCardRepository, MainPanel, Settings);
-            // GameCard gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
             gameCardRepository.GameCards.Add(gc);
             MainPanel.Children.Add(gc);
         }
@@ -133,7 +131,7 @@ public partial class MainWindow : Window
         CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
             bImgPath: AppFiles.AddIcon, effect: AppEffects.dropShadowIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
-        AddButton.Click += (_, _) => { AddEntry(); };
+        AddButton.Click += (_, _) => { EntryController.AddEntry(entryRepository, gameCardRepository, MainPanel); };
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
 
@@ -152,61 +150,61 @@ public partial class MainWindow : Window
         TotalPlaytimeTextBlock.Effect = AppEffects.dropShadowIcon;
     }
 
-    public void AddEntry()
-    {
-        string arguments = "";
-        string exePath = "";
-        string path = Common.GetDialogPath(Common.exeFilter);
-
-        if (Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
-        {
-            var shortcut = ShellLinkFile.Load(path);
-            exePath += shortcut.LinkInfo.LocalBasePath;
-            arguments += shortcut.Arguments;
-        }
-        else if (Path.GetExtension(path).Equals(".exe", StringComparison.OrdinalIgnoreCase))
-        {
-            exePath += path;
-        }
-
-        if (!exePath.Equals(""))
-        {
-            if (!entryRepository.IsExePresent(exePath))
-            {
-                Entry newEntry = new Entry();
-                newEntry.Repository = entryRepository;
-                newEntry.ExePath = exePath;
-                newEntry.Arguments = arguments;
-                string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
-                name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
-                newEntry.Name = name;
-
-                CustomMenu addEntryConfigMenu =
-                    new AddMenu(newEntry, entryRepository, gameCardRepository, MainPanel);
-                addEntryConfigMenu.Open();
-            }
-            else
-            {
-                PromptMenu duplicatePrompt =
-                    new PromptMenu(
-                        // height: 200,
-                        width: 400,
-                        textArray: new[]
-                        {
-                            "Sorry, this executable is already in use by",
-                            entryRepository.GetNameByExePath(exePath),
-                            "Would you like to select another file?"
-                        },
-                        sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
-                        boldArray: new[] { false, true },
-                        lineSpacing: 5,
-                        type: PromptMenu.PromptType.YesNo,
-                        yesHandler: (s, e) => { AddEntry(); }
-                    );
-                duplicatePrompt.Open();
-            }
-        }
-    }
+    // public void AddEntry()
+    // {
+    //     string arguments = "";
+    //     string exePath = "";
+    //     string path = Common.GetDialogPath(Common.exeFilter);
+    //
+    //     if (Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
+    //     {
+    //         var shortcut = ShellLinkFile.Load(path);
+    //         exePath += shortcut.LinkInfo.LocalBasePath;
+    //         arguments += shortcut.Arguments;
+    //     }
+    //     else if (Path.GetExtension(path).Equals(".exe", StringComparison.OrdinalIgnoreCase))
+    //     {
+    //         exePath += path;
+    //     }
+    //
+    //     if (!exePath.Equals(""))
+    //     {
+    //         if (!entryRepository.IsExePresent(exePath))
+    //         {
+    //             // Entry newEntry = new Entry();
+    //             // newEntry.Repository = entryRepository;
+    //             // newEntry.ExePath = exePath;
+    //             // newEntry.Arguments = arguments;
+    //             // string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
+    //             // name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
+    //             // newEntry.Name = name;
+    //
+    //             // CustomMenu addEntryConfigMenu =
+    //             // new AddMenu(newEntry, entryRepository, gameCardRepository, MainPanel);
+    //             // addEntryConfigMenu.Open();
+    //         }
+    //         else
+    //         {
+    //             PromptMenu duplicatePrompt =
+    //                 new PromptMenu(
+    //                     // height: 200,
+    //                     width: 400,
+    //                     textArray: new[]
+    //                     {
+    //                         "Sorry, this executable is already in use by",
+    //                         entryRepository.GetNameByExePath(exePath),
+    //                         "Would you like to select another file?"
+    //                     },
+    //                     sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
+    //                     boldArray: new[] { false, true },
+    //                     lineSpacing: 5,
+    //                     type: PromptMenu.PromptType.YesNo,
+    //                     yesHandler: (s, e) => { AddEntry(); }
+    //                 );
+    //             duplicatePrompt.Open();
+    //         }
+    //     }
+    // }
 
     private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
     {

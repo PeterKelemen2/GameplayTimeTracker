@@ -12,8 +12,6 @@ namespace GameplayTimeTracker.Menu;
 
 public class AddMenu : EntryConfigMenu
 {
-    // private AppSettings _appSettings;
-
     public AddMenu(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo,
         Panel panel,
         double width = 350, bool performanceMode = true)
@@ -27,7 +25,6 @@ public class AddMenu : EntryConfigMenu
             Close();
         };
 
-        // AppSettings settings = DataHandler.GetSettingsFromFile();
         Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
 
         if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
