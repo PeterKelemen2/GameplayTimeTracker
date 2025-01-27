@@ -69,7 +69,7 @@ namespace GameplayTimeTracker
                         Repository.PrintEntryList();
                     }
 
-                    InitSave();
+                    // InitSave();
                 }
             }
         }
@@ -258,6 +258,7 @@ namespace GameplayTimeTracker
                     {
                         // EnsureLastWeekData();
                         IncrementTodaysHistory();
+                        InitSave();
                     }
 
                     if (_repository != null)

@@ -19,11 +19,9 @@ namespace GameplayTimeTracker;
 public partial class MainWindow : Window
 {
     private EntryRepository entryRepository;
-
     private GameCardRepository gameCardRepository;
-
-    // public AppSettings Settings;
     private AppTheme TestTheme;
+    public int saveFrequency = 60;
 
     public MainWindow()
     {
@@ -90,6 +88,7 @@ public partial class MainWindow : Window
         {
             stopwatch.Start();
 
+            int cycleCount = 0;
             while (true)
             {
                 stopwatch.Restart();
@@ -98,7 +97,14 @@ public partial class MainWindow : Window
                     entryRepository.ManageEntriesState();
                     // tracker.HandleProcesses();
                     // RearrangeTiles();
+                    cycleCount++;
                 });
+
+                if (cycleCount >= saveFrequency)
+                {
+                    DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
+                    cycleCount = 0;
+                }
 
                 stopwatch.Stop();
                 Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
