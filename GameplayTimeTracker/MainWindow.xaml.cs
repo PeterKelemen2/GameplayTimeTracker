@@ -61,6 +61,7 @@ public partial class MainWindow : Window
                 boldArray: new[] { true, true, false },
                 lineSpacing: 5,
                 type: PromptMenu.PromptType.YesNo,
+                dontShowAgainQuestion: true,
                 yesHandler: (s, e) =>
                 {
                     SettingsMenu settingsMenu = new SettingsMenu();
@@ -83,6 +84,8 @@ public partial class MainWindow : Window
                     MessageBox.Show($"Failed to open link: {ex.Message}");
                 }
             };
+
+            // sgdbApiKeyPrompt.MenuContentPanel.Children.Add(dontShotAgain);
             sgdbApiKeyPrompt.Open();
         }
     }

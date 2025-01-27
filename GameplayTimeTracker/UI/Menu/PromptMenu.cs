@@ -18,10 +18,11 @@ public class PromptMenu : CustomMenu
 
     public Grid ButtonsGrid;
     public TextBlock promptTextBlock;
+    public PrefEntry dontShowAgainPref;
 
     public PromptMenu(
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
-        double width = 300, PromptType type = PromptType.Ok,
+        double width = 300, PromptType type = PromptType.Ok, bool dontShowAgainQuestion = false,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
         bool performanceMode = true)
         : base(width, performanceMode)
@@ -56,6 +57,12 @@ public class PromptMenu : CustomMenu
         }
 
         MenuContentPanel.Children.Add(promptTextBlock);
+
+        if (dontShowAgainQuestion)
+        {
+            dontShowAgainPref = new PrefEntry("Don't show again", false, 200);
+            MenuContentPanel.Children.Add(dontShowAgainPref);
+        }
 
         ButtonsGrid = new Grid { Height = 60 };
         if (type == PromptType.YesNo)
