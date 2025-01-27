@@ -14,8 +14,10 @@ namespace GameplayTimeTracker;
 public class CustomButton : UserControl
 {
     public BType ButtonType { get; set; }
+
     public Rectangle ButtonBase;
-    private string ButtonImagePath;
+
+    // private string ButtonImagePath;
     public Image ButtonImage { get; set; }
     public Color ButtonColor { get; set; }
     public Color ButtonHoverColor { get; set; }
@@ -63,7 +65,7 @@ public class CustomButton : UserControl
     {
         bool isActive = (bool)GetValue(ActiveProperty);
 
-        ButtonImagePath = bImgPath;
+        // ButtonImagePath = bImgPath;
         ButtonType = type;
         ButtonEffect ??= effect;
 
@@ -73,7 +75,6 @@ public class CustomButton : UserControl
             HorizontalAlignment = hA, VerticalAlignment = vA,
             Effect = ButtonEffect,
         };
-
 
         ButtonBase = new Rectangle
         {
@@ -103,7 +104,6 @@ public class CustomButton : UserControl
         {
             if (File.Exists(bImgPath))
             {
-                // Console.WriteLine(bImgPath);
                 ButtonImage = new Image();
                 ButtonImage.Source = new BitmapImage(new Uri(bImgPath, UriKind.RelativeOrAbsolute));
                 ButtonImage.Width = h / 2;
@@ -151,27 +151,32 @@ public class CustomButton : UserControl
         Content = Grid;
     }
 
+    // TODO: Implement color change
     public void SetButtonColors()
     {
         switch (ButtonType)
         {
+            case BType.Default:
+                ButtonColor = AppColors.DefButton;
+                break;
             case BType.Positive:
                 ButtonColor = AppColors.PositiveButton;
-                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
-                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
+                // ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                // ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
             case BType.Negative:
                 ButtonColor = AppColors.NegativeButton;
-                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
-                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
+                // ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                // ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
             default:
                 ButtonColor = AppColors.DefButton;
-                ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
-                ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
+                // ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+                // ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
         }
-
+        ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
+        ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
         ButtonBase.Fill = new SolidColorBrush(ButtonColor);
     }
 
