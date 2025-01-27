@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using GameplayTimeTracker.Settings;
@@ -26,7 +28,7 @@ public class EntryConfigMenu : CustomMenu
 
         TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);
-        BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty,"Font");
+        BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty, "Font");
         stackPanel.Children.Add(TitleTextBlock);
 
         TextBlock generalTextBlock = UIHelper.CreateTextBlock("General", hA: HorizontalAlignment.Center, fontSize: 17);
@@ -42,13 +44,30 @@ public class EntryConfigMenu : CustomMenu
 
         Grid timeGrid = UIHelper.CreateAddEntryGrid(Settings, "Playtime", new Thickness(5, 10, 0, 30));
         var timeBox = Common.FindTextBox(timeGrid);
+        timeBox.Text =
+            new TimeArrayConverter().Convert(entry.TotalPlay, typeof(string), null, CultureInfo.InvariantCulture) as
+                string;
         Binding timeBinding = new Binding("TotalPlay")
         {
             Source = entry,
             Mode = BindingMode.TwoWay,
-            Converter = new TimeArrayConverter()
+            Converter = new TimeArrayConverter(),
         };
         BindingOperations.SetBinding(timeBox, TextBox.TextProperty, timeBinding);
+
+        timeBox.GotFocus += (s, e) =>
+        {
+            BindingOperations.ClearBinding(timeBox, TextBox.TextProperty);
+            timeBox.Text = entry.TotalPlayFormatted;
+        };
+
+        timeBox.LostFocus += (s, e) =>
+        {
+            entry.TotalPlay =
+                new TimeArrayConverter().ConvertBack(timeBox.Text, typeof(int[]), null, CultureInfo.InvariantCulture) as
+                    int[];
+            BindingOperations.SetBinding(timeBox, TextBox.TextProperty, timeBinding);
+        };
         stackPanel.Children.Add(timeGrid);
 
         Grid exeGrid = UIHelper.CreateAddEntryGrid(Settings, "Path", new Thickness(5, 10, 0, 30));
