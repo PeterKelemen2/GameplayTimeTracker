@@ -259,11 +259,11 @@ namespace GameplayTimeTracker
                         // EnsureLastWeekData();
                         IncrementTodaysHistory();
                     }
-                }
 
-                if (_repository != null)
-                {
-                    _repository.SortEntries();
+                    if (_repository != null)
+                    {
+                        _repository.SortEntries();
+                    }
                 }
             }
         }

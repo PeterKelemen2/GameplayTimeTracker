@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -52,7 +53,7 @@ public static class Common
         }
     }
 
-    public static void CheckForOldTime(ObservableCollection<Entry> entries)
+    public static void CheckForOldTime(List<Entry> entries)
     {
         int[] empty = { 0, 0, 0 };
 

@@ -11,7 +11,7 @@ namespace GameplayTimeTracker;
 public class EntryRepository
 {
     // public List<Entry> EntriesList { get; set; }
-    public ObservableCollection<Entry> EntriesList { get; set; } = new ObservableCollection<Entry>();
+    public List<Entry> EntriesList { get; set; } = new List<Entry>();
 
     public EntryRepository()
     {
@@ -53,12 +53,12 @@ public class EntryRepository
 
     public void SortEntries()
     {
-        List<Entry> sortedList = new List<Entry>();
-        sortedList = EntriesList
+        // List<Entry> sortedList = new List<Entry>();
+        EntriesList = EntriesList
             .OrderByDescending(item => item.IsRunning) // Sort by IsRunning first
             .ThenByDescending(item => item.LastDate) // Then by LastPlayDate (descending)
             .ToList();
-        EntriesList = new ObservableCollection<Entry>(sortedList);
+        // EntriesList = new ObservableCollection<Entry>(sortedList);
         ((MainWindow)Application.Current.MainWindow).ShowCards();
     }
 

@@ -157,7 +157,7 @@ public class BackupMenu : UserControl
     private void ShowBackupContents(string backupPath)
     {
         string path = Path.Combine(AppFiles.BackupDataFolder, backupPath);
-        ObservableCollection<Entry> entryList = new();
+        List<Entry> entryList = new();
         entryList = DataHandler.GetEntriesFromFile(path);
         Common.CheckForOldTime(entryList);
         Console.WriteLine($"Found {entryList.Count} entries from {path}");
