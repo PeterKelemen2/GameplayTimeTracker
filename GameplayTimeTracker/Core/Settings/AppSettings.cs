@@ -39,21 +39,33 @@ public class AppSettings : INotifyPropertyChanged
     public string SGDBApiKey
     {
         get => _sgdbApiKey;
-        set => SetField(ref _sgdbApiKey, value);
+        set
+        {
+            SetField(ref _sgdbApiKey, value);
+            DataHandler.WriteSettingsToFile(this);
+        }
     }
 
     [JsonPropertyName("Prefer SteamGridDB Image")]
     public bool PreferSteamGridDBImage
     {
         get => _preferSGDBImages;
-        set => SetField(ref _preferSGDBImages, value);
+        set
+        {
+            SetField(ref _preferSGDBImages, value);
+            DataHandler.WriteSettingsToFile(this);
+        }
     }
 
     [JsonPropertyName("Quick Add")]
     public bool QuickAdd
     {
         get => _quickAdd;
-        set => SetField(ref _quickAdd, value);
+        set
+        {
+            SetField(ref _quickAdd, value);
+            DataHandler.WriteSettingsToFile(this);
+        }
     }
 
     [JsonPropertyName("Display Type")]
@@ -66,6 +78,7 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _gameDisplay = value;
                 OnPropertyChanged(nameof(Display));
+                DataHandler.WriteSettingsToFile(this);
             }
         }
     }
@@ -80,6 +93,7 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _currentTheme = value;
                 OnPropertyChanged(nameof(CurrentTheme));
+                DataHandler.WriteSettingsToFile(this);
             }
         }
     }
@@ -94,6 +108,7 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _themesList = value;
                 OnPropertyChanged(nameof(ThemesList));
+                DataHandler.WriteSettingsToFile(this);
             }
         }
     }

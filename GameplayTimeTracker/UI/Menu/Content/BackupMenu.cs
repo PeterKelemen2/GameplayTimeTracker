@@ -110,6 +110,7 @@ public class BackupMenu : UserControl
             ((MainWindow)Application.Current.MainWindow).LoadAndShowData();
         };
         Panel.Children.Add(restoreBackupButton);
+        restoreBackupButton.Disable();
 
         createBackupButton = new CustomButton(text: "Create Backup", w: 170, h: 40, isBold: true,
             effect: AppEffects.DropShadowMedium, type: BType.Positive);
@@ -171,6 +172,8 @@ public class BackupMenu : UserControl
                         (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
                 Margin = new Thickness(0, 5, 0, 5),
                 FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
             };
             var entryRun = new Run
             {
@@ -192,6 +195,7 @@ public class BackupMenu : UserControl
             ContentPanel.Arrange(new Rect(ContentPanel.DesiredSize));
             AppAnimations.BackupPanelGrowAnimation.To = ContentPanel.ActualHeight;
             ContentPanel.BeginAnimation(HeightProperty, AppAnimations.BackupPanelGrowAnimation);
+            restoreBackupButton.Enable();
         }
 
         foreach (UIElement element in backupEntriesPanel.Children)

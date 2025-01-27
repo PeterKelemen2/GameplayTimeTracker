@@ -56,6 +56,7 @@ public static class DataHandler
             AppTheme theme = new AppTheme();
             settings.ThemesList.Add(theme);
             settings.CurrentTheme = theme;
+            WriteSettingsToFile(settings);
         }
 
         return settings;

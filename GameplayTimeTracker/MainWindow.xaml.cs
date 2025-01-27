@@ -19,15 +19,16 @@ public partial class MainWindow : Window
 {
     private EntryRepository entryRepository;
     private GameCardRepository gameCardRepository;
-    private AppSettings Settings;
+    // public AppSettings Settings;
     private AppTheme TestTheme;
 
     public MainWindow()
     {
         InitializeComponent();
-        Settings = DataHandler.GetSettingsFromFile();
-        DataHandler.ManageStartupShortcut(Settings.StartWithSystem);
-        foreach (var color in Settings.CurrentTheme.Colors)
+        Common.Settings = DataHandler.GetSettingsFromFile();
+        // Settings = Common.Settings;
+        DataHandler.ManageStartupShortcut(Common.Settings.StartWithSystem);
+        foreach (var color in Common.Settings.CurrentTheme.Colors)
         {
             Console.WriteLine($"Color: {color.Key}, {color.Value}");
         }
@@ -64,13 +65,13 @@ public partial class MainWindow : Window
         foreach (var entry in entryRepository.EntriesList)
         {
             GameCard gc = new GameCard();
-            switch (Settings.Display)
+            switch (Common.Settings.Display)
             {
                 case GameDisplay.Vertical:
-                    gc = new GameCardVertical(Settings, entry, entryRepository, gameCardRepository, MainPanel);
+                    gc = new GameCardVertical(Common.Settings, entry, entryRepository, gameCardRepository, MainPanel);
                     break;
                 case GameDisplay.Horizontal:
-                    gc = new GameCardHorizontal(Settings, entry, entryRepository, gameCardRepository, MainPanel);
+                    gc = new GameCardHorizontal(Common.Settings, entry, entryRepository, gameCardRepository, MainPanel);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -85,10 +86,10 @@ public partial class MainWindow : Window
 
     private void SetBaseColorBindings()
     {
-        BindingHelper.SetColorBinding(Footer, BackgroundProperty, Settings, "Footer");
-        BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, Settings, "Background");
-        BindingHelper.SetColorBinding(GamesLoadedBlock, ForegroundProperty, Settings, "Footer Font");
-        BindingHelper.SetColorBinding(TotalPlaytimeTextBlock, ForegroundProperty, Settings, "Footer Font");
+        BindingHelper.SetColorBinding(Footer, BackgroundProperty, Common.Settings, "Footer");
+        BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, Common.Settings, "Background");
+        BindingHelper.SetColorBinding(GamesLoadedBlock, ForegroundProperty, Common.Settings, "Footer Font");
+        BindingHelper.SetColorBinding(TotalPlaytimeTextBlock, ForegroundProperty, Common.Settings, "Footer Font");
     }
 
     private void SetUpFooter()
@@ -105,7 +106,7 @@ public partial class MainWindow : Window
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
         SettingsButton.Click += (_, _) =>
         {
-            SettingsMenu settingsMenu = new SettingsMenu(Settings);
+            SettingsMenu settingsMenu = new SettingsMenu(Common.Settings);
             settingsMenu.Open();
         };
         Grid.SetRow(SettingsButton, 1);
@@ -145,14 +146,14 @@ public partial class MainWindow : Window
                 newEntry.Name = name;
 
                 CustomMenu addEntryConfigMenu =
-                    new AddMenu(Settings, newEntry, entryRepository, gameCardRepository, MainPanel);
+                    new AddMenu(Common.Settings, newEntry, entryRepository, gameCardRepository, MainPanel);
                 addEntryConfigMenu.Open();
             }
             else
             {
                 PromptMenu duplicatePrompt =
                     new PromptMenu(
-                        Settings,
+                        Common.Settings,
                         // height: 200,
                         width: 400,
                         textArray: new[]

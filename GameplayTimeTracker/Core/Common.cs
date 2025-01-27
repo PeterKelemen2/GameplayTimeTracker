@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using GameplayTimeTracker.Settings;
 using Microsoft.Win32;
 
 namespace GameplayTimeTracker;
 
 public static class Common
 {
+    public static AppSettings Settings { get; set; }
+    
     public const string RunningText = "Running!";
     public const double CardPadding = 10;
     public const double TitleFontSize = 17;

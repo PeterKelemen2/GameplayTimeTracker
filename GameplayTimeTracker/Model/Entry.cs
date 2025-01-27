@@ -46,7 +46,11 @@ namespace GameplayTimeTracker
         public string Name
         {
             get => _name;
-            set => SetField(ref _name, value);
+            set
+            {
+                SetField(ref _name, value);
+                InitSave();
+            }
         }
 
         public int[] TotalPlay
@@ -63,6 +67,8 @@ namespace GameplayTimeTracker
                         LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
                         Repository.PrintEntryList();
                     }
+
+                    InitSave();
                 }
             }
         }
@@ -125,14 +131,22 @@ namespace GameplayTimeTracker
         public string ExePath
         {
             get => _exePath;
-            set => SetField(ref _exePath, value);
+            set
+            {
+                SetField(ref _exePath, value);
+                InitSave();
+            }
         }
 
         [JsonPropertyName("arguments")]
         public string Arguments
         {
             get => _arguments;
-            set => SetField(ref _arguments, value);
+            set
+            {
+                SetField(ref _arguments, value);
+                InitSave();
+            }
         }
 
         [JsonPropertyName("iconPath")]
@@ -143,6 +157,7 @@ namespace GameplayTimeTracker
             {
                 string imagePath = File.Exists(value) ? value : AppFiles.DefaultIconPath;
                 SetField(ref _iconPath, imagePath);
+                InitSave();
             }
         }
 
@@ -154,6 +169,7 @@ namespace GameplayTimeTracker
             {
                 string imagePath = File.Exists(value) ? value : AppFiles.DefaultHeroPath;
                 SetField(ref _heroPath, imagePath);
+                InitSave();
             }
         }
 
@@ -240,6 +256,14 @@ namespace GameplayTimeTracker
         }
 
         [JsonPropertyName("playtimeHistory")] public Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
+
+        public void InitSave()
+        {
+            if (_repository != null)
+            {
+                DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
+            }
+        }
 
         public void EnsureLastWeekData()
         {
@@ -374,12 +398,12 @@ namespace GameplayTimeTracker
 
         public async Task RefreshImagesFromSGDB()
         {
-            AppSettings settings = DataHandler.GetSettingsFromFile();
+            // AppSettings settings = DataHandler.GetSettingsFromFile();
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
 
-            if (!settings.SGDBApiKey.Equals(string.Empty))
+            if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
             {
-                await SGDBFetch.FetchSGDBAsync(settings.SGDBApiKey, Name, iconFiles);
+                await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, Name, iconFiles);
             }
 
             IconPath = iconFiles["icon"];
