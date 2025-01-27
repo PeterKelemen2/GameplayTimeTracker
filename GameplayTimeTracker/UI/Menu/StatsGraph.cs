@@ -60,7 +60,7 @@ public class StatsGraph : CustomMenu
 
         int count = entry.PlaytimeHistory.Count;
         double totalSpace = graphWidth - (count * barsWidth);
-        double maxTime = entry.PlaytimeHistory.Max(stat => stat.Value[0]) + 0.1;
+        double maxTime = entry.PlaytimeHistory.Max(stat => Common.GetDoubleTimeFromArray(stat.Value)) * 1.1;
         double rectMargin = (totalSpace / count) * 0.5;
         double baseTimeMarg = (width - graphWidth) * 0.5 + 35;
 
