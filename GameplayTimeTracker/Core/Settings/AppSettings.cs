@@ -10,6 +10,7 @@ public class AppSettings : INotifyPropertyChanged
 {
     private bool _startWithSystem = true;
     private string _sgdbApiKey = "";
+    private bool _dontShowApiKeyPrompt = false;
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
 
@@ -42,6 +43,17 @@ public class AppSettings : INotifyPropertyChanged
         set
         {
             SetField(ref _sgdbApiKey, value);
+            DataHandler.WriteSettingsToFile(this);
+        }
+    }
+
+    [JsonPropertyName("Dont Show API Key prompt")]
+    public bool DontShowApiKeyPrompt
+    {
+        get => _dontShowApiKeyPrompt;
+        set
+        {
+            SetField(ref _dontShowApiKeyPrompt, value);
             DataHandler.WriteSettingsToFile(this);
         }
     }

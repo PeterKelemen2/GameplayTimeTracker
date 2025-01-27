@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using GameplayTimeTracker.Settings;
@@ -61,6 +62,10 @@ public class PromptMenu : CustomMenu
         if (dontShowAgainQuestion)
         {
             dontShowAgainPref = new PrefEntry("Don't show again", false, 200);
+            Binding dontShowBinding = new Binding("DontShowApiKeyPrompt")
+                { Source = Common.Settings, Mode = BindingMode.TwoWay, };
+            BindingOperations.SetBinding(dontShowAgainPref.checkBox, CheckBox.IsCheckedProperty, dontShowBinding);
+            BindingHelper.SetColorBinding(dontShowAgainPref.textBlock, ForegroundProperty, "Font");
             MenuContentPanel.Children.Add(dontShowAgainPref);
         }
 

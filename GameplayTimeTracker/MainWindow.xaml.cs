@@ -46,10 +46,9 @@ public partial class MainWindow : Window
 
         LoadAndShowData();
 
-        if (Common.Settings.SGDBApiKey.Length == 0)
+        if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
             var sgdbApiKeyPrompt = new PromptMenu(
-                // height: 200,
                 width: 400,
                 textArray: new[]
                 {
@@ -57,11 +56,8 @@ public partial class MainWindow : Window
                     "Would you like to set one?",
                     "Clicking this text will open the website to get one.",
                 },
-                // sizeArray: new[] { },
                 boldArray: new[] { true, true, false },
-                lineSpacing: 5,
-                type: PromptMenu.PromptType.YesNo,
-                dontShowAgainQuestion: true,
+                lineSpacing: 5, type: PromptMenu.PromptType.YesNo, dontShowAgainQuestion: true,
                 yesHandler: (s, e) =>
                 {
                     SettingsMenu settingsMenu = new SettingsMenu();
@@ -73,11 +69,7 @@ public partial class MainWindow : Window
                 string url = "https://www.steamgriddb.com/profile/preferences/api";
                 try
                 {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = url,
-                        UseShellExecute = true // Required for launching URLs in default browser
-                    });
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {
@@ -85,7 +77,6 @@ public partial class MainWindow : Window
                 }
             };
 
-            // sgdbApiKeyPrompt.MenuContentPanel.Children.Add(dontShotAgain);
             sgdbApiKeyPrompt.Open();
         }
     }
