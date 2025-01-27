@@ -280,6 +280,7 @@ public class GameCard : UserControl
     private void DeleteInstance()
     {
         DataEntryRepository.RemoveEntry(DataEntry);
+        DataHandler.WriteEntriesToFile(DataEntryRepository.EntriesList, AppFiles.DataFilePath);
 
         // Handle animation completion locally to avoid potential memory leaks
         EventHandler animationCompletedHandler = null;
