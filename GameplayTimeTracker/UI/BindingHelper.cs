@@ -8,12 +8,11 @@ namespace GameplayTimeTracker;
 
 public class BindingHelper
 {
-    public static void SetColorBinding(UIElement element, DependencyProperty property,
-        AppSettings settings, string colorName)
+    public static void SetColorBinding(UIElement element, DependencyProperty property, string colorName)
     {
         Binding newBinding = new Binding
         {
-            Source = settings.CurrentTheme.Colors,
+            Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{colorName}]"),
             Converter = new ColorToBrushConverter(),
             Mode = BindingMode.OneWay,
@@ -21,8 +20,8 @@ public class BindingHelper
         BindingOperations.SetBinding(element, property, newBinding);
     }
 
-    public static void SetGradientColorBinding(UIElement element, DependencyProperty property,
-        AppSettings settings, string c1, string c2, bool horizontal = false)
+    public static void SetGradientColorBinding(UIElement element, DependencyProperty property, string c1, string c2,
+        bool horizontal = false)
     {
         MultiBinding fillMultiBinding = new MultiBinding
         {
@@ -35,14 +34,14 @@ public class BindingHelper
         // Bind first color
         fillMultiBinding.Bindings.Add(new Binding
         {
-            Source = settings.CurrentTheme.Colors,
+            Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{c1}]")
         });
 
         // Bind second color
         fillMultiBinding.Bindings.Add(new Binding
         {
-            Source = settings.CurrentTheme.Colors,
+            Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{c2}]")
         });
 
@@ -54,7 +53,7 @@ public class BindingHelper
     {
         Binding buttonFillBinding = new Binding
         {
-            Source = settings.CurrentTheme.Colors,
+            Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{colorName}]"),
             Converter = new ColorToBrushConverter(),
             Mode = BindingMode.OneWay

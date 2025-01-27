@@ -11,9 +11,9 @@ namespace GameplayTimeTracker;
 
 public class GameCardVertical : GameCard
 {
-    public GameCardVertical(AppSettings appSettings, Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+    public GameCardVertical(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
         Panel parentPanel) :
-        base(appSettings, dataEntry, dataEntryRepository, gameCardRepository, parentPanel)
+        base(dataEntry, dataEntryRepository, gameCardRepository, parentPanel)
     {
         Loaded += GameCardVertical_Loaded;
     }
@@ -28,8 +28,7 @@ public class GameCardVertical : GameCard
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
         // CardRectangle.Fill = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2);
-        BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, _appSettings,
-            "Card 1", "Card 2", false);
+        BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, "Card 1", "Card 2", false);
         EditButton.VerticalAlignment = VerticalAlignment.Bottom;
         EditButton.HorizontalAlignment = HorizontalAlignment.Right;
         RemoveButton.VerticalAlignment = VerticalAlignment.Bottom;

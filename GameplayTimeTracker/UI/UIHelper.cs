@@ -70,7 +70,7 @@ public static class UIHelper
     {
         Grid grid = new Grid { HorizontalAlignment = HorizontalAlignment.Center };
         TextBlock textBlock = CreateTextBlock(text, margin: textMargin);
-        BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, settings, "Font");
+        BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, "Font");
 
         TextBox textBox = CreateTextBox(boxText, width: boxWidth);
         if (binding != "" && entry != null)

@@ -18,12 +18,12 @@ public class PromptMenu : CustomMenu
 
     public Grid ButtonsGrid;
 
-    public PromptMenu(AppSettings appSettings,
+    public PromptMenu(
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
         double width = 300, PromptType type = PromptType.Ok,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
         bool performanceMode = true)
-        : base(appSettings, width, performanceMode)
+        : base(width, performanceMode)
     {
         sizeArray = (sizeArray ?? new double[0])
             .Concat(Enumerable.Repeat(Common.EditTitleFontSize,

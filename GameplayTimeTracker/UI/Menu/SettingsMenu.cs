@@ -12,14 +12,13 @@ public class SettingsMenu : CustomMenu
 {
     StackPanel SettingsContentPanel = new();
     StackPanel HeaderPanel = new();
-    private AppSettings _settings;
+    // private AppSettings _settings;
     // public MainWindow _mainWindow;
 
-    public SettingsMenu(AppSettings appSettings, double width = 400, bool performanceMode = true) : base(appSettings,
-        width,
-        performanceMode)
+    public SettingsMenu(double width = 400, bool performanceMode = true) 
+        : base( width, performanceMode)
     {
-        _settings = appSettings;
+        // _settings = appSettings;
         SettingsContentPanel = new StackPanel();
         HeaderPanel = new StackPanel
         {
@@ -29,17 +28,17 @@ public class SettingsMenu : CustomMenu
         var blockMargin = new Thickness(10);
         var PrefBlock = UIHelper.CreateTextBlock("Preferences", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
-        BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, "Font");
         PrefBlock.MouseDown += (_, _) => { SetPrefMenu(PrefBlock); };
 
         var Themes = UIHelper.CreateTextBlock("Themes", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
-        BindingHelper.SetColorBinding(Themes, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(Themes, ForegroundProperty, "Font");
         Themes.MouseDown += (_, _) => { SetThemeMenu(Themes); };
 
         var Backup = UIHelper.CreateTextBlock("Backup", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
-        BindingHelper.SetColorBinding(Backup, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(Backup, ForegroundProperty, "Font");
         Backup.MouseDown += (_, _) => { SetBackupMenu(Backup); };
 
         HeaderPanel.Children.Add(PrefBlock);
@@ -74,7 +73,7 @@ public class SettingsMenu : CustomMenu
 
     private void SetPrefMenu(TextBlock selectedTextBlock)
     {
-        var prefMenu = new PrefMenu(_settings);
+        var prefMenu = new PrefMenu();
         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
         {
             MenuContentPanel.Children.Remove(SettingsContentPanel);
@@ -88,7 +87,7 @@ public class SettingsMenu : CustomMenu
 
     private void SetThemeMenu(TextBlock selectedTextBlock)
     {
-        var themeMenu = new ThemeMenu(_settings);
+        var themeMenu = new ThemeMenu();
         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
         {
             MenuContentPanel.Children.Remove(SettingsContentPanel);
@@ -102,7 +101,7 @@ public class SettingsMenu : CustomMenu
 
     private void SetBackupMenu(TextBlock selectedTextBlock)
     {
-        var backupMenu = new BackupMenu(_settings);
+        var backupMenu = new BackupMenu(Common.Settings);
         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
         {
             MenuContentPanel.Children.Remove(SettingsContentPanel);

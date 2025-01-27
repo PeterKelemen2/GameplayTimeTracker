@@ -23,13 +23,13 @@ public class CustomMenu : UserControl
     public bool PerformanceMode = true;
     public AppSettings Settings;
 
-    public CustomMenu(AppSettings appSettings, double width = 300, bool performanceMode = true)
+    public CustomMenu(double width = 300, bool performanceMode = true)
     {
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
         PerformanceMode = performanceMode;
-        Settings = appSettings;
+        // Settings = appSettings;
 
         BlurEffect = new BlurEffect { Radius = 0 };
         ContentPanel.Effect = BlurEffect;
@@ -46,7 +46,7 @@ public class CustomMenu : UserControl
             Height = ContainerGrid.Height,
             Opacity = 0,
         };
-        BindingHelper.SetColorBinding(BgRectangle, Shape.FillProperty, appSettings, "Shadow");
+        BindingHelper.SetColorBinding(BgRectangle, Shape.FillProperty, "Shadow");
         BgRectangle.MouseDown += (_, _) => { Close(); };
         ContainerGrid.Children.Add(BgRectangle);
 
@@ -66,8 +66,8 @@ public class CustomMenu : UserControl
             Effect = AppEffects.DropShadowRectangle
         };
         ContainerGrid.Children.Add(MenuContentBorder);
-        BindingHelper.SetGradientColorBinding(MenuContentBorder, BackgroundProperty, appSettings, "Card 1",
-            "Card 2", horizontal: false);
+        BindingHelper.SetGradientColorBinding(MenuContentBorder, BackgroundProperty, "Card 1", "Card 2",
+            horizontal: false);
 
         var translateTransform = new TranslateTransform(0, 0);
         MenuContentBorder.RenderTransform = translateTransform;

@@ -14,9 +14,9 @@ public class EntryConfigMenu : CustomMenu
     public TextBox IconBox { get; set; }
     public TextBox HeroBox { get; set; }
 
-    public EntryConfigMenu(AppSettings appSettings, Entry entry,
+    public EntryConfigMenu(Entry entry,
         double width = 350, bool performanceMode = true)
-        : base(appSettings, width, performanceMode)
+        : base(width, performanceMode)
     {
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
@@ -26,11 +26,11 @@ public class EntryConfigMenu : CustomMenu
 
         TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);
-        BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty, Settings, "Font");
+        BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty,"Font");
         stackPanel.Children.Add(TitleTextBlock);
 
         TextBlock generalTextBlock = UIHelper.CreateTextBlock("General", hA: HorizontalAlignment.Center, fontSize: 17);
-        BindingHelper.SetColorBinding(generalTextBlock, ForegroundProperty, Settings, "Font");
+        BindingHelper.SetColorBinding(generalTextBlock, ForegroundProperty, "Font");
         stackPanel.Children.Add(generalTextBlock);
 
         Grid nameGrid = UIHelper.CreateAddEntryGrid(Settings, "Name", new Thickness(5, 0, 0, 30));
@@ -78,7 +78,7 @@ public class EntryConfigMenu : CustomMenu
 
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
         imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
-        BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, Settings, "Font");
+        BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, "Font");
         stackPanel.Children.Add(imagesTextBlock);
 
         Grid iconGrid = UIHelper.CreateAddEntryGrid(Settings, "Icon Path", new Thickness(5, 0, 0, 30));

@@ -12,13 +12,13 @@ public class ThemeMenu : UserControl
 {
     public StackPanel Panel = new();
     public ComboBox ThemeComboBox = new();
-    private AppSettings appSettings;
+    // private AppSettings appSettings;
     private ScrollViewer colorEntryScrollViewer;
     private StackPanel colorEntryPanel;
 
-    public ThemeMenu(AppSettings settings)
+    public ThemeMenu()
     {
-        appSettings = settings;
+        // appSettings = settings;
         Panel = new StackPanel();
 
         colorEntryScrollViewer = new ScrollViewer
@@ -36,19 +36,19 @@ public class ThemeMenu : UserControl
     private void CreateColorEntries()
     {
         colorEntryPanel = new StackPanel();
-        Console.WriteLine($"Theme: {appSettings.CurrentTheme.ThemeName}");
-        foreach (var color in appSettings.CurrentTheme.Colors)
+        Console.WriteLine($"Theme: {Common.Settings.CurrentTheme.ThemeName}");
+        foreach (var color in Common.Settings.CurrentTheme.Colors)
         {
             ColorEntry colorEntry =
                 new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
             colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
             {
-                ColorPicker_SelectedColorChanged(s, e, colorEntry, appSettings.CurrentTheme);
-                DataHandler.WriteSettingsToFile(appSettings);
+                ColorPicker_SelectedColorChanged(s, e, colorEntry, Common.Settings.CurrentTheme);
+                DataHandler.WriteSettingsToFile(Common.Settings);
             };
-            BindingHelper.SetColorBinding(colorEntry.valueBlock, ForegroundProperty, appSettings, "Font");
-            BindingHelper.SetColorBinding(colorEntry.nameBlock, ForegroundProperty, appSettings, "Font");
-            BindingHelper.SetGradientColorBinding(colorEntry.bg, Shape.FillProperty, appSettings,
+            BindingHelper.SetColorBinding(colorEntry.valueBlock, ForegroundProperty, "Font");
+            BindingHelper.SetColorBinding(colorEntry.nameBlock, ForegroundProperty, "Font");
+            BindingHelper.SetGradientColorBinding(colorEntry.bg, Shape.FillProperty,
                 "Card 1", "Card 2", true);
             colorEntryPanel.Children.Add(colorEntry);
         }
@@ -72,7 +72,7 @@ public class ThemeMenu : UserControl
 
             // Update the theme's and source's color dictionary
             theme.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
-            foreach (var t in appSettings.ThemesList)
+            foreach (var t in Common.Settings.ThemesList)
             {
                 if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
             }
@@ -95,29 +95,29 @@ public class ThemeMenu : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Margin = new Thickness(10)
         };
-        foreach (var theme in appSettings.ThemesList)
+        foreach (var theme in Common.Settings.ThemesList)
         {
             ThemeComboBox.Items.Add(theme.ThemeName);
         }
 
         ThemeComboBox.SelectionChanged += (s, e) =>
         {
-            foreach (var theme in appSettings.ThemesList)
+            foreach (var theme in Common.Settings.ThemesList)
             {
                 if (theme.ThemeName == ThemeComboBox.SelectedItem.ToString())
                 {
-                    ForceCurrentThemeDictUpdate(appSettings.CurrentTheme, theme);
+                    ForceCurrentThemeDictUpdate(Common.Settings.CurrentTheme, theme);
                     CreateColorEntries();
-                    DataHandler.WriteSettingsToFile(appSettings);
+                    DataHandler.WriteSettingsToFile(Common.Settings);
                     return;
                 }
             }
         };
         Panel.Children.Add(ThemeComboBox);
 
-        if (ThemeComboBox.Items.Contains(appSettings.CurrentTheme.ThemeName))
+        if (ThemeComboBox.Items.Contains(Common.Settings.CurrentTheme.ThemeName))
         {
-            ThemeComboBox.SelectedItem = appSettings.CurrentTheme.ThemeName;
+            ThemeComboBox.SelectedItem = Common.Settings.CurrentTheme.ThemeName;
         }
     }
 

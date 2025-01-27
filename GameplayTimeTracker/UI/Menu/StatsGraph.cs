@@ -17,8 +17,8 @@ public class StatsGraph : CustomMenu
     private double barsWidth = 30;
     private double[] marginArray;
 
-    public StatsGraph(Entry entry, AppSettings appSettings, double width = 500, bool performanceMode = true)
-        : base(appSettings, width, performanceMode)
+    public StatsGraph(Entry entry, double width = 500, bool performanceMode = true)
+        : base(width, performanceMode)
     {
         TextBlock titleTextBlock = UIHelper.CreateTextBlock(
             text: $"Last {entry.PlaytimeHistory.Count()} day's playtime for ",
@@ -43,14 +43,14 @@ public class StatsGraph : CustomMenu
         {
             Width = graphWidth, Height = graphHeight,
             Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
+                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.2)),
             Orientation = Orientation.Horizontal,
         };
         Border statsPanelBorder = new Border
         {
             HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top,
             BorderBrush = new SolidColorBrush(
-                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
+                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
             BorderThickness = new Thickness(2, 0, 0, 2),
             Margin = new Thickness(0, 10, 0, 0),
             Effect = AppEffects.DropShadowRectangle,
@@ -74,7 +74,7 @@ public class StatsGraph : CustomMenu
                 HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Bottom,
                 Margin = new Thickness(rectMargin, 0, rectMargin, 0),
             };
-            BindingHelper.SetGradientColorBinding(bar, Shape.FillProperty, appSettings, "Progress Bar 1",
+            BindingHelper.SetGradientColorBinding(bar, Shape.FillProperty, "Progress Bar 1",
                 "Progress Bar 2", true);
             statStackPanel.Children.Add(bar);
 
@@ -85,7 +85,7 @@ public class StatsGraph : CustomMenu
                 FontSize = Common.TitleFontSize,
                 HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
                 Foreground = new SolidColorBrush(
-                    (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
                 Margin = new Thickness(baseTimeMarg + i * (rectMargin * 2 + barsWidth),
                     graphHeight + Common.TitleFontSize, 0, 80),
                 Effect = titleTextBlock.Effect

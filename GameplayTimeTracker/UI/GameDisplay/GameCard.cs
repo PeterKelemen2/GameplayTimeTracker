@@ -22,8 +22,10 @@ public class GameCard : UserControl
 {
     public Panel ParentPanel { get; set; }
     private GameCardRepository GameCardRepository;
+
     private EntryRepository DataEntryRepository;
-    public AppSettings _appSettings;
+
+    // public AppSettings _appSettings;
     public Entry DataEntry { get; set; }
     public EditMenu EditMenu { get; set; }
 
@@ -56,14 +58,14 @@ public class GameCard : UserControl
     {
     }
 
-    public GameCard(AppSettings appSettings, Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
+    public GameCard(Entry dataEntry, EntryRepository dataEntryRepository, GameCardRepository gameCardRepository,
         Panel parentPanel)
     {
         DataEntry = dataEntry;
         DataEntryRepository = dataEntryRepository;
         GameCardRepository = gameCardRepository;
         ParentPanel = parentPanel;
-        _appSettings = appSettings;
+        // _appSettings = appSettings;
 
         ContainerGrid = new Grid();
         ContainerGrid.Margin = new Thickness(5);
@@ -111,7 +113,7 @@ public class GameCard : UserControl
             Mode = BindingMode.TwoWay
         };
         TitleBlock.SetBinding(TextBlock.TextProperty, titleBinding);
-        BindingHelper.SetColorBinding(TitleBlock, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(TitleBlock, ForegroundProperty, "Font");
         ContainerGrid.Children.Add(TitleBlock);
 
         RunningTextBlock = new TextBlock
@@ -127,7 +129,7 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
-        BindingHelper.SetColorBinding(RunningTextBlock, ForegroundProperty, appSettings, "Running");
+        BindingHelper.SetColorBinding(RunningTextBlock, ForegroundProperty, "Running");
         ContainerGrid.Children.Add(RunningTextBlock);
 
         TotalProgressBar = new ProgressBar(150, 30, 5, 10);
@@ -137,8 +139,9 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(TotalProgressBar, ProgressBar.PercentageProperty, totalPlayPercentBinding);
-        BindingHelper.SetColorBinding(TotalProgressBar.BackgroundRect, Shape.FillProperty, appSettings, "Background");
-        BindingHelper.SetGradientColorBinding(TotalProgressBar.BarRect, Shape.FillProperty, appSettings,
+        BindingHelper.SetColorBinding(TotalProgressBar.BackgroundRect, Shape.FillProperty, 
+            "Background");
+        BindingHelper.SetGradientColorBinding(TotalProgressBar.BarRect, Shape.FillProperty, 
             "Progress Bar 1", "Progress Bar 2", true);
 
         LastProgressBar = new ProgressBar(150, 30, 5, 10);
@@ -148,8 +151,8 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(LastProgressBar, ProgressBar.PercentageProperty, lastPlayPercentBinding);
-        BindingHelper.SetColorBinding(LastProgressBar.BackgroundRect, Shape.FillProperty, appSettings, "Background");
-        BindingHelper.SetGradientColorBinding(LastProgressBar.BarRect, Shape.FillProperty, appSettings,
+        BindingHelper.SetColorBinding(LastProgressBar.BackgroundRect, Shape.FillProperty, "Background");
+        BindingHelper.SetGradientColorBinding(LastProgressBar.BarRect, Shape.FillProperty,
             "Progress Bar 1", "Progress Bar 2", true);
 
         TotalPlaytimeBlock = new TextBlock
@@ -169,7 +172,7 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(totalTimeRun, Run.TextProperty, totalPlayBinding);
-        BindingHelper.SetColorBinding(TotalPlaytimeBlock, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(TotalPlaytimeBlock, ForegroundProperty, "Font");
 
         LastPlaytimeBlock = new TextBlock
         {
@@ -188,7 +191,7 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(lastTimeRun, Run.TextProperty, lastPlayBinding);
-        BindingHelper.SetColorBinding(LastPlaytimeBlock, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(LastPlaytimeBlock, ForegroundProperty, "Font");
 
         LastPlayedOnBlock = new TextBlock
         {
@@ -216,7 +219,7 @@ public class GameCard : UserControl
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(lastPlayDateRun, Run.TextProperty, lastPlayDateBinding);
-        BindingHelper.SetColorBinding(LastPlayedOnBlock, ForegroundProperty, appSettings, "Font");
+        BindingHelper.SetColorBinding(LastPlayedOnBlock, ForegroundProperty, "Font");
 
         TotalStack = new StackPanel();
         TotalStack.Children.Add(TotalPlaytimeBlock);
@@ -254,7 +257,6 @@ public class GameCard : UserControl
         RemoveButton.Click += (s, e) =>
         {
             PromptMenu deletePrompt = new PromptMenu(
-                _appSettings,
                 textArray: new[] { "Are you sure to delete:", $"{DataEntry.Name}" },
                 sizeArray: new[] { Common.EditTitleFontSize, Common.EditTitleFontSize + 2 },
                 boldArray: new[] { false, true },
@@ -313,7 +315,7 @@ public class GameCard : UserControl
     {
         // EditMenu = new EditMenu(DataEntry);
         // EditMenu.Open();
-        EntryConfigMenu configMenu = new EditMenu(_appSettings, DataEntry);
+        EntryConfigMenu configMenu = new EditMenu(DataEntry);
         configMenu.Open();
     }
 

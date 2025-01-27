@@ -13,10 +13,10 @@ public class AddMenu : EntryConfigMenu
 {
     private AppSettings _appSettings;
 
-    public AddMenu(AppSettings appSettings, Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo,
+    public AddMenu(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo,
         Panel panel,
         double width = 350, bool performanceMode = true)
-        : base(appSettings, entry, width, performanceMode)
+        : base(entry, width, performanceMode)
     {
         TitleTextBlock.Text = "Configure new entry";
         ConfirmButton.Margin = new Thickness(0, 20, 0, 20);
@@ -41,7 +41,7 @@ public class AddMenu : EntryConfigMenu
     private void AddConfiguredEntry(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo, Panel panel)
     {
         entryRepo.AddEntry(entry);
-        GameCard gc = new GameCardVertical(_appSettings, entry, entryRepo, cardRepo, panel);
+        GameCard gc = new GameCardVertical(entry, entryRepo, cardRepo, panel);
         cardRepo.GameCards.Add(gc);
         panel.Children.Add(gc);
     }
