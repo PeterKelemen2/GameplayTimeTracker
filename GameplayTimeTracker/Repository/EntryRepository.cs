@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -7,7 +8,8 @@ namespace GameplayTimeTracker;
 
 public class EntryRepository
 {
-    public List<Entry> EntriesList { get; set; }
+    // public List<Entry> EntriesList { get; set; }
+    public ObservableCollection<Entry> EntriesList { get; set; } = new ObservableCollection<Entry>();
 
     public EntryRepository()
     {
@@ -58,7 +60,8 @@ public class EntryRepository
         }
 
         entry.Repository = this;
-        EntriesList.Add(entry);
+        entry.EnsureLastWeekData();
+        EntriesList.Insert(0, entry);
 
         UpdateTotalPercentages();
     }

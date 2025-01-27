@@ -25,7 +25,6 @@ public class GameCard : UserControl
 
     private EntryRepository DataEntryRepository;
 
-    // public AppSettings _appSettings;
     public Entry DataEntry { get; set; }
     public EditMenu EditMenu { get; set; }
 
