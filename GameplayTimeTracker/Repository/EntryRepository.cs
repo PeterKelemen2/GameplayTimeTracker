@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -26,6 +27,69 @@ public class EntryRepository
         // SetTimeArrays();
         PrintEntryList();
         // DataHandler.WriteEntriesToFile(EntriesList, AppFiles.DataFilePath);
+    }
+
+    public void ManageEntriesState()
+    {
+        var runningProcesses = Process.GetProcesses();
+        Console.WriteLine($" ==== {DateTime.Now} ==== ");
+        foreach (var entry in EntriesList)
+        {
+            var isRunning =
+                runningProcesses.Any(p => p.ProcessName.Equals(Path.GetFileNameWithoutExtension(entry.ExePath),
+                    StringComparison.OrdinalIgnoreCase));
+            if (isRunning)
+            {
+                entry.IsRunning = true;
+                entry.IncrementTime();
+            }
+            else
+            {
+                entry.IsRunning = false;
+            }
+
+            // if (isRunning)
+            // {
+            //     // Setting things up if first start
+            //     if (entry.WasRunning == false)
+            //     {
+            //         entry.WasRunning = true;
+            //         entry.IsRunning = true;
+            //         entry.ResetLastPlaytime();
+            //         entry.ToggleBgImageColor(isRunning);
+            //         Console.WriteLine($"Setting new playtime for {entry.ExePathName}");
+            //     }
+            //
+            //     // Only change text if it's not already the correct string
+            //     if (!entry.lastPlaytimeTitle.Text.Equals(currSessionText))
+            //         entry.lastPlaytimeTitle.Text = currSessionText;
+            //     if (!entry.runningTextBlock.Text.Equals(runningText)) entry.runningTextBlock.Text = runningText;
+            //
+            //     entry.IncrementPlaytime();
+            //     entry.UpdatePlaytimeText();
+            //
+            //     // Only update if a minute is passed
+            //     if (entry.LastS % 60 == 0 || entry.TotalS % 60 == 0)
+            //     {
+            //         _tileContainer.UpdatePlaytimeBars();
+            //         _tileContainer.InitSave();
+            //         _tileContainer.TotalTimeRun.Text = $"{Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
+            //     }
+            // }
+            // else
+            // {
+            //     // If it was running, set it back to initial state
+            //     if (entry.IsRunning)
+            //     {
+            //         entry.WasRunning = false;
+            //         entry.IsRunning = false;
+            //         entry.lastPlaytimeTitle.Text = lastSessionText;
+            //         entry.runningTextBlock.Text = notRunningText;
+            //         entry.UpdateDateInfo();
+            //         entry.ToggleBgImageColor(isRunning);
+            //     }
+            // }
+        }
     }
 
     private void CheckForOldTime()

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -45,6 +46,8 @@ public partial class MainWindow : Window
         SetBaseColorBindings();
 
         LoadAndShowData();
+        StartCheckingEntries();
+
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
@@ -79,6 +82,35 @@ public partial class MainWindow : Window
 
             sgdbApiKeyPrompt.Open();
         }
+    }
+
+    private async void StartCheckingEntries()
+    {
+        Stopwatch stopwatch = new Stopwatch();
+        await Task.Run(() =>
+        {
+            stopwatch.Start();
+
+            while (true)
+            {
+                stopwatch.Restart();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    entryRepository.ManageEntriesState();
+                    // tracker.HandleProcesses();
+                    // RearrangeTiles();
+                });
+
+                stopwatch.Stop();
+                Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
+
+                if ((int)stopwatch.ElapsedMilliseconds < 1000)
+                {
+                    Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds).Wait();
+                }
+                // Task.Delay(10).Wait();
+            }
+        });
     }
 
     public void LoadAndShowData()
