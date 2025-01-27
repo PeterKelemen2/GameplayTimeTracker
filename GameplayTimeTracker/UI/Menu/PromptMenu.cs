@@ -17,6 +17,7 @@ public class PromptMenu : CustomMenu
     }
 
     public Grid ButtonsGrid;
+    public TextBlock promptTextBlock;
 
     public PromptMenu(
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
@@ -33,7 +34,7 @@ public class PromptMenu : CustomMenu
             .Select(i => boldArray != null && i < boldArray.Length && boldArray[i])
             .ToArray();
 
-        var promptTextBlock = new TextBlock
+        promptTextBlock = new TextBlock
         {
             TextAlignment = TextAlignment.Center,
             Margin = new Thickness(0, 20, 0, 0),

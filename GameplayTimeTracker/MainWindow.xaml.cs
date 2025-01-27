@@ -18,7 +18,9 @@ namespace GameplayTimeTracker;
 public partial class MainWindow : Window
 {
     private EntryRepository entryRepository;
+
     private GameCardRepository gameCardRepository;
+
     // public AppSettings Settings;
     private AppTheme TestTheme;
 
@@ -43,6 +45,46 @@ public partial class MainWindow : Window
         SetBaseColorBindings();
 
         LoadAndShowData();
+
+        if (Common.Settings.SGDBApiKey.Length == 0)
+        {
+            var sgdbApiKeyPrompt = new PromptMenu(
+                // height: 200,
+                width: 400,
+                textArray: new[]
+                {
+                    "You don't have a SteamGridDB API Key set.",
+                    "Would you like to set one?",
+                    "Clicking this text will open the website to get one.",
+                },
+                // sizeArray: new[] { },
+                boldArray: new[] { true, true, false },
+                lineSpacing: 5,
+                type: PromptMenu.PromptType.YesNo,
+                yesHandler: (s, e) =>
+                {
+                    SettingsMenu settingsMenu = new SettingsMenu();
+                    settingsMenu.Open();
+                }
+            );
+            sgdbApiKeyPrompt.promptTextBlock.MouseDown += (s, e) =>
+            {
+                string url = "https://www.steamgriddb.com/profile/preferences/api";
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true // Required for launching URLs in default browser
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to open link: {ex.Message}");
+                }
+            };
+            sgdbApiKeyPrompt.Open();
+        }
     }
 
     public void LoadAndShowData()
