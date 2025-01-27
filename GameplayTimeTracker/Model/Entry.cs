@@ -15,6 +15,7 @@ namespace GameplayTimeTracker
     {
         private string _name;
         private string _exePath;
+        private bool _isLaunchable = false;
         private string _iconPath = AppFiles.DefaultIconPath;
         private string _heroPath = AppFiles.DefaultHeroPath;
         private string _arguments;
@@ -135,8 +136,17 @@ namespace GameplayTimeTracker
             set
             {
                 SetField(ref _exePath, value);
+                IsLaunchable = File.Exists(_exePath) && Path.GetExtension(_exePath).ToLower() == ".exe" ? true : false;
+                Console.WriteLine($"Launchable: {IsLaunchable}");
                 InitSave();
             }
+        }
+
+        [JsonIgnore]
+        public bool IsLaunchable
+        {
+            get => _isLaunchable;
+            set { SetField(ref _isLaunchable, value); }
         }
 
         [JsonPropertyName("arguments")]
@@ -243,7 +253,7 @@ namespace GameplayTimeTracker
                     _runningString = value ? "Running!" : "";
                     _lastPlayStateString = value ? "Started: " : "Ended: ";
                     _wasRunning = value;
-                    LastDate = value ? DateTime.Now : LastDate;
+                    LastDate = DateTime.Now;
 
                     OnPropertyChanged(nameof(IsRunning));
                     OnPropertyChanged(nameof(RunningFormatted));
