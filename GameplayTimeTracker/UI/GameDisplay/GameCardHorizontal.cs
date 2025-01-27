@@ -50,6 +50,7 @@ public class GameCardHorizontal : GameCard
         double stackMargin = 200;
         TotalPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         TotalProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
+        TotalProgressBar.UpdateBgWidth(180);
         TotalStack.HorizontalAlignment = HorizontalAlignment.Left;
         foreach (UIElement child in TotalStack.Children)
         {
@@ -61,13 +62,14 @@ public class GameCardHorizontal : GameCard
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         LastPlayedOnBlock.FontSize = Common.TitleFontSize - 2;
         LastProgressBar.HorizontalAlignment = HorizontalAlignment.Left;
+        LastProgressBar.UpdateBgWidth(180);
         LastStack.HorizontalAlignment = HorizontalAlignment.Right;
         foreach (UIElement child in LastStack.Children)
         {
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
 
-        LastStack.Width = 160;
+        LastStack.Width = 180;
         LastStack.Margin = new Thickness(0, 20, stackMargin, 0);
 
         IconImage.Height = ContainerGrid.Height * 0.6;
