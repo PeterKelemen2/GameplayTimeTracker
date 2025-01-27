@@ -48,7 +48,6 @@ public partial class MainWindow : Window
         LoadAndShowData();
         StartCheckingEntries();
 
-
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
             var sgdbApiKeyPrompt = new PromptMenu(

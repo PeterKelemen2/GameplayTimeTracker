@@ -260,6 +260,11 @@ namespace GameplayTimeTracker
                         IncrementTodaysHistory();
                     }
                 }
+
+                if (_repository != null)
+                {
+                    _repository.SortEntries();
+                }
             }
         }
 

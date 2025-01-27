@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace GameplayTimeTracker;
 
@@ -47,73 +48,19 @@ public class EntryRepository
             {
                 entry.IsRunning = false;
             }
-
-            // if (isRunning)
-            // {
-            //     // Setting things up if first start
-            //     if (entry.WasRunning == false)
-            //     {
-            //         entry.WasRunning = true;
-            //         entry.IsRunning = true;
-            //         entry.ResetLastPlaytime();
-            //         entry.ToggleBgImageColor(isRunning);
-            //         Console.WriteLine($"Setting new playtime for {entry.ExePathName}");
-            //     }
-            //
-            //     // Only change text if it's not already the correct string
-            //     if (!entry.lastPlaytimeTitle.Text.Equals(currSessionText))
-            //         entry.lastPlaytimeTitle.Text = currSessionText;
-            //     if (!entry.runningTextBlock.Text.Equals(runningText)) entry.runningTextBlock.Text = runningText;
-            //
-            //     entry.IncrementPlaytime();
-            //     entry.UpdatePlaytimeText();
-            //
-            //     // Only update if a minute is passed
-            //     if (entry.LastS % 60 == 0 || entry.TotalS % 60 == 0)
-            //     {
-            //         _tileContainer.UpdatePlaytimeBars();
-            //         _tileContainer.InitSave();
-            //         _tileContainer.TotalTimeRun.Text = $"{Utils.GetPrettyTime(_tileContainer.GetTLTotalTimeDouble())}";
-            //     }
-            // }
-            // else
-            // {
-            //     // If it was running, set it back to initial state
-            //     if (entry.IsRunning)
-            //     {
-            //         entry.WasRunning = false;
-            //         entry.IsRunning = false;
-            //         entry.lastPlaytimeTitle.Text = lastSessionText;
-            //         entry.runningTextBlock.Text = notRunningText;
-            //         entry.UpdateDateInfo();
-            //         entry.ToggleBgImageColor(isRunning);
-            //     }
-            // }
         }
     }
 
-    // private void CheckForOldTime()
-    // {
-    //     int[] empty = { 0, 0, 0 };
-    //
-    //     foreach (var entry in EntriesList)
-    //     {
-    //         if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalTime > 0.0)
-    //         {
-    //             entry.TotalPlay = Common.GetArrayFromDoubleTime(entry.TotalTime);
-    //         }
-    //
-    //         if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
-    //         {
-    //             entry.LastPlay = Common.GetArrayFromDoubleTime(entry.LastTime);
-    //         }
-    //     }
-    // }
-    //
-    // private bool IsArrayEqual(int[] array1, int[] array2)
-    // {
-    //     return array1 != null && array2 != null && array1.SequenceEqual(array2);
-    // }
+    public void SortEntries()
+    {
+        List<Entry> sortedList = new List<Entry>();
+        sortedList = EntriesList
+            .OrderByDescending(item => item.IsRunning) // Sort by IsRunning first
+            .ThenByDescending(item => item.LastDate) // Then by LastPlayDate (descending)
+            .ToList();
+        EntriesList = new ObservableCollection<Entry>(sortedList);
+        ((MainWindow)Application.Current.MainWindow).ShowCards();
+    }
 
     public void AddEntry(Entry entry)
     {
