@@ -18,7 +18,7 @@ public class PrefMenu : UserControl
         PrefEntry pref1 = new PrefEntry("Start With System", Common.Settings.StartWithSystem);
         Binding swsBinding = new Binding("StartWithSystem") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(pref1.checkBox, CheckBox.IsCheckedProperty, swsBinding);
-        BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty,  "Font");
+        BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty, "Font");
         // BindingHelper.SetColorBinding(pref1.checkBox.boxBorder, Border.BorderBrushProperty, settings, "Font");
         // BindingHelper.SetColorBinding(pref1.checkBox.tickMark, Shape.FillProperty, settings, "Font");
 
@@ -36,7 +36,7 @@ public class PrefMenu : UserControl
         TextBox sgdbApiKeyBox = UIHelper.CreateTextBox();
         Binding sgdbApiKeyBinding = new Binding("SGDBApiKey") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(sgdbApiKeyBox, TextBox.TextProperty, sgdbApiKeyBinding);
-        BindingHelper.SetColorBinding(sgdbApiKeyBlock, ForegroundProperty,"Font");
+        BindingHelper.SetColorBinding(sgdbApiKeyBlock, ForegroundProperty, "Font");
         sgdbApiKeyBox.Margin = new Thickness(40, 0, 0, 0);
         Panel.Children.Add(sgdbApiKeyBlock);
         Panel.Children.Add(sgdbApiKeyBox);
@@ -71,11 +71,22 @@ public class PrefMenu : UserControl
         {
             if (DisplayTypeComboBox.SelectedItem is GameDisplay selectedValue)
             {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
                 Common.Settings.Display = selectedValue;
-                ((MainWindow)Application.Current.MainWindow).ShowCards();
+
+                AppAnimations.FadeOutMainPanel.Completed += OnFadeOutCompleted;
+                mainWindow.MainPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOutMainPanel);
             }
         };
 
         Panel.Children.Add(DisplayTypeComboBox);
+    }
+
+    private void OnFadeOutCompleted(object sender, EventArgs e)
+    {
+        var mainWindow = (MainWindow)Application.Current.MainWindow;
+        mainWindow.ShowCards();
+        mainWindow.MainPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeInMainPanel);
+        AppAnimations.FadeOut.Completed -= OnFadeOutCompleted;
     }
 }
