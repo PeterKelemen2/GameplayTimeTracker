@@ -120,6 +120,7 @@ public class GameCard : UserControl
             FontWeight = FontWeights.Bold,
             Foreground = new SolidColorBrush(AppColors.Running),
             Effect = AppEffects.dropShadowText,
+            Padding = new Thickness(10, 0, 10, 0)
         };
         RunningTextBlock.DataContext = DataEntry;
         Binding runningBinding = new Binding("RunningFormatted")

@@ -39,13 +39,13 @@ public class GameCardHorizontal : GameCard
         TitleBlock.FontWeight = FontWeights.Bold;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
         TitleBlock.VerticalAlignment = VerticalAlignment.Top;
-        TitleBlock.Margin = new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX / 2, 0, 0);
+        TitleBlock.Margin = new Thickness(CardRectangle.RadiusX / 2, CardRectangle.RadiusX / 2, 0, 0);
 
         RunningTextBlock.FontSize = Common.TitleFontSize - 4;
         RunningTextBlock.HorizontalAlignment = HorizontalAlignment.Left;
         RunningTextBlock.VerticalAlignment = VerticalAlignment.Top;
         RunningTextBlock.Margin =
-            new Thickness(CardRectangle.RadiusX, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
+            new Thickness(CardRectangle.RadiusX / 2, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
 
         double stackMargin = 200;
         TotalPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
