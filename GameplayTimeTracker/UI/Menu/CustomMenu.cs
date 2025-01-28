@@ -20,7 +20,6 @@ public class CustomMenu : UserControl
     public Panel MenuContentPanel;
     private Border MenuContentBorder;
     public BlurEffect BlurEffect;
-    public bool PerformanceMode = true;
     public AppSettings Settings;
 
     public CustomMenu(double width = 300, bool performanceMode = true)
@@ -28,7 +27,6 @@ public class CustomMenu : UserControl
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
-        PerformanceMode = performanceMode;
         // Settings = appSettings;
 
         BlurEffect = new BlurEffect { Radius = 0 };
@@ -58,7 +56,6 @@ public class CustomMenu : UserControl
         };
         MenuContentBorder = new Border
         {
-            // Background = ColorHelper.CreateLinGradBrushVer(AppColors.CardColor1, AppColors.CardColor2),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             CornerRadius = new CornerRadius(15),
@@ -88,11 +85,17 @@ public class CustomMenu : UserControl
             MenuContentBorder.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
             MenuContentPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
-            if (!PerformanceMode)
+            if (!Common.Settings.PerformanceMode)
             {
                 BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
                 ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
                 ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+            }
+            else
+            {
+                ContentPanel.Effect = null;
+                ContentPanel.RenderTransform = new ScaleTransform(1, 1);
+                ContentPanel.RenderTransformOrigin = new Point(0.5, 0.5);
             }
 
             IsOpen = true;
@@ -115,11 +118,17 @@ public class CustomMenu : UserControl
             MenuContentBorder.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
             MenuContentPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOut);
 
-            if (!PerformanceMode)
+            if (!Common.Settings.PerformanceMode)
             {
                 BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
                 ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
                 ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+            }
+            else
+            {
+                ContentPanel.Effect = null;
+                ContentPanel.RenderTransform = new ScaleTransform(1, 1);
+                ContentPanel.RenderTransformOrigin = new Point(0.5, 0.5);
             }
         }
     }
