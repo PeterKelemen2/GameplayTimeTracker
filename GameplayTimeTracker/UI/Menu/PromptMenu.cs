@@ -61,10 +61,12 @@ public class PromptMenu : CustomMenu
 
         if (dontShowAgainQuestion)
         {
-            dontShowAgainPref = new PrefEntry("Don't show again", false, 200);
+            dontShowAgainPref = new PrefEntry("Don't show again", false, 220);
+            dontShowAgainPref.Margin = new Thickness(10,-10,0,10);
             Binding dontShowBinding = new Binding("DontShowApiKeyPrompt")
                 { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-            BindingOperations.SetBinding(dontShowAgainPref.checkBox, CheckBox.IsCheckedProperty, dontShowBinding);
+            BindingOperations.SetBinding(dontShowAgainPref.toggleButton, CustomToggleButton.IsToggledProperty,
+                dontShowBinding);
             BindingHelper.SetColorBinding(dontShowAgainPref.textBlock, ForegroundProperty, "Font");
             MenuContentPanel.Children.Add(dontShowAgainPref);
         }
