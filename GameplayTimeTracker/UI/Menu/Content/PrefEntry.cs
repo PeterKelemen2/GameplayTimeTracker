@@ -11,13 +11,8 @@ public class PrefEntry : UserControl
 {
     private StackPanel ParentPanel;
     private Grid containerGrid;
-
     public TextBlock textBlock;
-
-    public CheckBox checkBox { get; set; }
     public CustomToggleButton toggleButton { get; set; }
-
-    // public CustomCheckBox checkBox { get; set; }
     public String PrefName { get; set; }
     public bool PrefValue { get; set; }
     private double padding = 15;
@@ -57,22 +52,7 @@ public class PrefEntry : UserControl
             };
             textBlock.Inlines.Add(descRun);
         }
-
         containerGrid.Children.Add(textBlock);
-
-        checkBox = new CheckBox
-        {
-            IsChecked = PrefValue,
-            FontSize = 17,
-            VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            Margin = new Thickness(0, 0, padding, 0),
-        };
-        checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
-        checkBox.Background = new SolidColorBrush(AppColors.Font);
-
-        // checkBox = new CustomCheckBox();
-        // containerGrid.Children.Add(checkBox);
 
         toggleButton = new CustomToggleButton();
         toggleButton.HorizontalAlignment = HorizontalAlignment.Right;
