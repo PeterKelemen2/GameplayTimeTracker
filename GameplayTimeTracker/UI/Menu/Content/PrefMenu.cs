@@ -49,7 +49,8 @@ public class PrefMenu : UserControl
         BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, "Font");
         Panel.Children.Add(pref3);
 
-        PrefEntry performancePref = new PrefEntry("Performance Mode", Common.Settings.StartWithSystem);
+        PrefEntry performancePref = new PrefEntry("Performance Mode", Common.Settings.StartWithSystem,
+            description: "More modest animations");
         Binding performanceBinding = new Binding("PerformanceMode")
             { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(performancePref.toggleButton, CustomToggleButton.IsToggledProperty,
