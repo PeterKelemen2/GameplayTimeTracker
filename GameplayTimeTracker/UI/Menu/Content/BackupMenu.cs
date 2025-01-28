@@ -61,6 +61,7 @@ public class BackupMenu : UserControl
                 (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
             Margin = new Thickness(10),
             Child = backupEntryScrollViewer,
+            Effect = AppEffects.DropShadowIcon
         };
 
         if (!Path.Exists(AppFiles.BackupDataFolder))
@@ -94,6 +95,7 @@ public class BackupMenu : UserControl
                 (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
             Margin = new Thickness(10),
             Child = backupContentScrollViewer,
+            Effect = AppEffects.DropShadowIcon
         };
 
         backupContentPanel = new StackPanel();

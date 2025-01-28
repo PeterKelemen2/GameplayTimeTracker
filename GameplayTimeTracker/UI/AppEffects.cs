@@ -21,7 +21,7 @@ public static class AppEffects
         Radius = 30,
         RenderingBias = RenderingBias.Performance
     };
-
+    
     public static DropShadowEffect dropShadowText = new DropShadowEffect
     {
         BlurRadius = 8,
@@ -56,7 +56,7 @@ public static class AppEffects
         Color = Colors.Black,
     };
 
-    public static DropShadowEffect dropShadowIcon = new DropShadowEffect
+    public static DropShadowEffect DropShadowIcon = new DropShadowEffect
     {
         BlurRadius = 10,
         ShadowDepth = 0

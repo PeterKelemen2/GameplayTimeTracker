@@ -22,7 +22,7 @@ public static class UIHelper
             TextAlignment = TextAlignment.Left,
             HorizontalContentAlignment = HorizontalAlignment.Left,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Effect = AppEffects.dropShadowIcon,
+            Effect = AppEffects.DropShadowIcon,
             Margin = margin,
             // Margin = new Thickness(leftMargin, 0, 0, 5)
         };

@@ -148,14 +148,14 @@ public partial class MainWindow : Window
     private void SetUpFooter()
     {
         CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
-            bImgPath: AppFiles.AddIcon, effect: AppEffects.dropShadowIcon);
+            bImgPath: AppFiles.AddIcon, effect: AppEffects.DropShadowIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
         AddButton.Click += (_, _) => { EntryController.AddEntry(entryRepository, gameCardRepository, MainPanel); };
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
 
         CustomButton SettingsButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
-            bImgPath: AppFiles.CogIcon, effect: AppEffects.dropShadowIcon);
+            bImgPath: AppFiles.CogIcon, effect: AppEffects.DropShadowIcon);
         SettingsButton.Margin = new Thickness(70, 0, 0, 0);
         SettingsButton.Click += (_, _) =>
         {
@@ -165,8 +165,8 @@ public partial class MainWindow : Window
         Grid.SetRow(SettingsButton, 1);
         MainGrid.Children.Add(SettingsButton);
 
-        GamesLoadedBlock.Effect = AppEffects.dropShadowIcon;
-        TotalPlaytimeTextBlock.Effect = AppEffects.dropShadowIcon;
+        GamesLoadedBlock.Effect = AppEffects.DropShadowIcon;
+        TotalPlaytimeTextBlock.Effect = AppEffects.DropShadowIcon;
     }
 
     private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)

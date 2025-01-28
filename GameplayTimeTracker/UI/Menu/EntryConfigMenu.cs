@@ -140,7 +140,7 @@ public class EntryConfigMenu : CustomMenu
         stackPanel.Children.Add(heroGrid);
 
         ConfirmButton =
-            new CustomButton(w: 120, h: 40, text: "Finish", effect: AppEffects.dropShadowIcon,
+            new CustomButton(w: 120, h: 40, text: "Finish", effect: AppEffects.DropShadowIcon,
                 type: BType.Positive);
         ConfirmButton.Margin = new Thickness(0, 20, 0, 10);
         // ConfirmButton.Click += (_, _) => { AddConfiguredEntry(entry, entryRepo, cardRepo, panel); };

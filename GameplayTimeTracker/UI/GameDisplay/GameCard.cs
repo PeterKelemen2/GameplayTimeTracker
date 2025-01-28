@@ -73,7 +73,7 @@ public class GameCard : UserControl
         {
             RadiusX = Common.BorderRadius,
             RadiusY = Common.BorderRadius,
-            Effect = AppEffects.dropShadowIcon,
+            Effect = AppEffects.DropShadowIcon,
         };
         ContainerGrid.Children.Add(CardRectangle);
 
@@ -242,7 +242,7 @@ public class GameCard : UserControl
 
     private void CreateButtons()
     {
-        var bEffect = AppEffects.dropShadowIcon;
+        var bEffect = AppEffects.DropShadowIcon;
 
         EditButton = new CustomButton(w: 40, h: 40, bImgPath: AppFiles.EditIcon,
             type: BType.Default, hA: HorizontalAlignment.Right, vA: VerticalAlignment.Top);
