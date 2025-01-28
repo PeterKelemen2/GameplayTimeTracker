@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using GameplayTimeTracker.UI.Menu.Content;
 
@@ -21,7 +22,7 @@ public class PrefEntry : UserControl
     public bool PrefValue { get; set; }
     private double padding = 15;
 
-    public PrefEntry(string prefName, bool prefValue, double width = 380)
+    public PrefEntry(string prefName, bool prefValue, double width = 380, string description = "")
     {
         PrefName = prefName;
         PrefValue = prefValue;
@@ -37,13 +38,26 @@ public class PrefEntry : UserControl
         textBlock = new TextBlock
         {
             Text = PrefName,
-            Foreground = new SolidColorBrush(AppColors.Font),
+            Foreground =
+                new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
             FontSize = 17,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(padding, 0, 0, 0),
             Effect = AppEffects.dropShadowText,
         };
+        if (description != "")
+        {
+            var descRun = new Run
+            {
+                Text = "\n" + description, FontSize = textBlock.FontSize - 3,
+                Foreground = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"]), 0.9)),
+            };
+            textBlock.Inlines.Add(descRun);
+        }
+
         containerGrid.Children.Add(textBlock);
 
         checkBox = new CheckBox

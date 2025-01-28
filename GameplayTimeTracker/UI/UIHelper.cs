@@ -1,13 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Media;
 using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker;
@@ -36,22 +31,35 @@ public static class UIHelper
         return sample;
     }
 
-    public static TextBlock CreateTextBlock(string text = "", HorizontalAlignment hA = HorizontalAlignment.Left,
-        VerticalAlignment vA = VerticalAlignment.Top, double fontSize = Common.TextFontSize, Thickness margin = new(),
-        bool isBold = true)
+    public static TextBlock CreateTextBlock(string text = "", string description = "",
+        HorizontalAlignment hA = HorizontalAlignment.Left, VerticalAlignment vA = VerticalAlignment.Top,
+        double fontSize = Common.TextFontSize, Thickness margin = new(), bool isBold = true)
     {
         var sampleTextBlock = new TextBlock
         {
             Text = text,
             FontWeight = isBold ? FontWeights.Bold : FontWeights.Regular,
             FontSize = fontSize,
-            Foreground = new SolidColorBrush(AppColors.Font),
+            Foreground =
+                new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
             HorizontalAlignment = hA,
             VerticalAlignment = vA,
             Margin = margin,
             // Margin = new Thickness(leftMargin + 5, 5, 0, 5),
             Effect = AppEffects.dropShadowText,
         };
+
+        if (description != "")
+        {
+            var descRun = new Run
+            {
+                Text = "\n" + description, FontSize = fontSize - 3,
+                Foreground = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"]), 0.9)),
+            };
+            sampleTextBlock.Inlines.Add(descRun);
+        }
 
         return sampleTextBlock;
     }

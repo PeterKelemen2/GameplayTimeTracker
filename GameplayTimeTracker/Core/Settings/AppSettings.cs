@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
-using Xceed.Wpf.AvalonDock.Themes;
 
 namespace GameplayTimeTracker.Settings;
 
@@ -13,6 +12,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _dontShowApiKeyPrompt = false;
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
+    private bool _performanceMode = true;
 
     private AppTheme _currentTheme;
     private GameDisplay _gameDisplay = GameDisplay.Vertical;
@@ -77,6 +77,17 @@ public class AppSettings : INotifyPropertyChanged
         set
         {
             SetField(ref _quickAdd, value);
+            DataHandler.WriteSettingsToFile(this);
+        }
+    }
+    
+    [JsonPropertyName("Performance Mode")]
+    public bool PerformanceMode
+    {
+        get => _performanceMode;
+        set
+        {
+            SetField(ref _performanceMode, value);
             DataHandler.WriteSettingsToFile(this);
         }
     }
