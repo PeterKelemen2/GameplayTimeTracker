@@ -25,8 +25,8 @@ public class PromptMenu : CustomMenu
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
         double width = 300, PromptType type = PromptType.Ok, bool dontShowAgainQuestion = false,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
-        bool performanceMode = true)
-        : base(width, performanceMode)
+        bool toScale = true)
+        : base(width, toScale)
     {
         sizeArray = (sizeArray ?? new double[0])
             .Concat(Enumerable.Repeat(Common.EditTitleFontSize,

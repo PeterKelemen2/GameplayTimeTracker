@@ -15,9 +15,10 @@ namespace GameplayTimeTracker.Menu;
 public class EditMenu : EntryConfigMenu
 {
     public EditMenu(Entry entry,
-        double width = 350, bool performanceMode = true)
-        : base(entry, width, performanceMode)
+        double width = 350, bool toScale = true)
+        : base(entry, width, toScale)
     {
+        ToScale = toScale;
         TitleTextBlock.FontWeight = FontWeights.Regular;
         TitleTextBlock.Text = "Editing ";
         TitleTextBlock.Inlines.Add(new Run { Text = entry.Name, FontWeight = FontWeights.Bold });
@@ -34,7 +35,6 @@ public class EditMenu : EntryConfigMenu
         ShowStatsButton.Margin = new Thickness(0, 0, 0, 20);
         ShowStatsButton.Click += (_, __) =>
         {
-            
             StatsGraph statsGraph = new StatsGraph(entry);
             statsGraph.Open();
         };

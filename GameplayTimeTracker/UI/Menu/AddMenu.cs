@@ -14,8 +14,8 @@ public class AddMenu : EntryConfigMenu
 {
     public AddMenu(Entry entry, EntryRepository entryRepo, GameCardRepository cardRepo,
         Panel panel,
-        double width = 350, bool performanceMode = true)
-        : base(entry, width, performanceMode)
+        double width = 350, bool toScale = true)
+        : base(entry, width, toScale)
     {
         TitleTextBlock.Text = "Configure new entry";
         ConfirmButton.Margin = new Thickness(0, 20, 0, 20);

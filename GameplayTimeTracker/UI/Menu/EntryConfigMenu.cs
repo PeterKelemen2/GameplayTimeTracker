@@ -3,12 +3,15 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker.Menu;
 
 public class EntryConfigMenu : CustomMenu
 {
+    private bool ToScale;
     public StackPanel stackPanel { get; set; }
     public TextBlock TitleTextBlock { get; set; }
     public CustomButton ConfirmButton { get; set; }
@@ -17,9 +20,10 @@ public class EntryConfigMenu : CustomMenu
     public TextBox HeroBox { get; set; }
 
     public EntryConfigMenu(Entry entry,
-        double width = 350, bool performanceMode = true)
-        : base(width, performanceMode)
+        double width = 350, bool toScale = true)
+        : base(width, toScale)
     {
+        ToScale = toScale;
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
@@ -93,8 +97,7 @@ public class EntryConfigMenu : CustomMenu
         var argsBox = Common.FindTextBox(argsGrid);
         Binding argsBinding = new Binding("Arguments") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(argsBox, TextBox.TextProperty, argsBinding);
-
-
+        
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
         imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
         BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, "Font");

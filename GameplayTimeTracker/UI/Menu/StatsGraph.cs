@@ -17,9 +17,10 @@ public class StatsGraph : CustomMenu
     private double barsWidth = 30;
     private double[] marginArray;
 
-    public StatsGraph(Entry entry, double width = 500, bool performanceMode = true)
-        : base(width, performanceMode)
+    public StatsGraph(Entry entry, double width = 500, bool toScale = false)
+        : base(width, toScale)
     {
+        ToScale = false;
         TextBlock titleTextBlock = UIHelper.CreateTextBlock(
             text: $"Last {entry.PlaytimeHistory.Count()} day's playtime for ",
             isBold: false, fontSize: Common.EditTitleFontSize, hA: HorizontalAlignment.Center);

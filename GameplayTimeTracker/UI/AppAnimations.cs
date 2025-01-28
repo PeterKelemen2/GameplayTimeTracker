@@ -13,8 +13,8 @@ public class AppAnimations
 
 
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
-    private static double scaleAnimValue = 1.07;
-    private static double blurAnimValue = 15;
+    public static double scaleAnimValue = 1.07;
+    public static double blurAnimValue = 15.0;
     private static double menuBgOpacity = 0.6;
 
     // private static double[] blurAnimValues = { 0, 30 };
@@ -37,7 +37,7 @@ public class AppAnimations
 
     public static DoubleAnimation ScaleUpAnim = new DoubleAnimation
     {
-        From = 1.0,
+        // From = 1.0,
         To = scaleAnimValue,
         Duration = new Duration(TimeSpan.FromSeconds(scaleAnimDuration)),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
@@ -45,7 +45,7 @@ public class AppAnimations
 
     public static DoubleAnimation ScaleDownAnim = new DoubleAnimation
     {
-        From = scaleAnimValue,
+        // From = scaleAnimValue,
         To = 1.0,
         Duration = new Duration(TimeSpan.FromSeconds(scaleAnimDuration)),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
@@ -53,7 +53,7 @@ public class AppAnimations
 
     public static DoubleAnimation BgBlurInEffectAnim = new DoubleAnimation
     {
-        From = 0,
+        // From = 0,
         To = blurAnimValue,
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         // AutoReverse = false,
@@ -62,7 +62,7 @@ public class AppAnimations
 
     public static DoubleAnimation BgBlurOutEffectAnim = new DoubleAnimation
     {
-        From = blurAnimValue,
+        // From = blurAnimValue,
         To = 0,
         Duration = TimeSpan.FromSeconds(scaleAnimDuration),
         // AutoReverse = false,

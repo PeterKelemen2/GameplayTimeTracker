@@ -6,15 +6,18 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Settings;
+using MonoMac.CoreMedia;
 
 namespace GameplayTimeTracker.Menu;
 
 public class CustomMenu : UserControl
 {
-    private bool IsOpen = false;
+    public bool IsOpen = false;
+    public bool ToScale;
+
     private Window mainWindow = Application.Current.MainWindow;
     private Panel RootPanel;
-    private Panel ContentPanel;
+    public Panel ContentPanel;
     public Grid ContainerGrid;
     private Rectangle BgRectangle;
     public Panel MenuContentPanel;
@@ -22,8 +25,9 @@ public class CustomMenu : UserControl
     public BlurEffect BlurEffect;
     public AppSettings Settings;
 
-    public CustomMenu(double width = 300, bool performanceMode = true)
+    public CustomMenu(double width = 300, bool toScale = true)
     {
+        ToScale = toScale;
         RootPanel = (Panel)mainWindow.FindName("Root");
         ContentPanel = (Panel)mainWindow.FindName("MainGrid");
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
@@ -87,13 +91,23 @@ public class CustomMenu : UserControl
 
             if (!Common.Settings.PerformanceMode)
             {
-                BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
-                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleUpAnim);
-                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleUpAnim);
+                if (ToScale)
+                {
+                    BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurInEffectAnim);
+                    ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty,
+                        AppAnimations.ScaleUpAnim);
+                    ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty,
+                        AppAnimations.ScaleUpAnim);
+                }
+                else
+                {
+                    BlurEffect.Radius = AppAnimations.blurAnimValue;
+                }
             }
             else
             {
-                ContentPanel.Effect = null;
+                BlurEffect = new BlurEffect { Radius = 0 };
+                ContentPanel.Effect = BlurEffect;
                 ContentPanel.RenderTransform = new ScaleTransform(1, 1);
                 ContentPanel.RenderTransformOrigin = new Point(0.5, 0.5);
             }
@@ -120,13 +134,27 @@ public class CustomMenu : UserControl
 
             if (!Common.Settings.PerformanceMode)
             {
-                BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
-                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, AppAnimations.ScaleDownAnim);
-                ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, AppAnimations.ScaleDownAnim);
+                Console.WriteLine($"{GetType().Name} to scale: {ToScale}");
+                if (ToScale)
+                {
+                    AppAnimations.BgBlurOutEffectAnim.To = 0.0;
+                    ContentPanel.Effect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
+
+                    ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty,
+                        AppAnimations.ScaleDownAnim);
+                    ContentPanel.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty,
+                        AppAnimations.ScaleDownAnim);
+                }
+                else
+                {
+                    AppAnimations.BgBlurOutEffectAnim.To = AppAnimations.blurAnimValue;
+                    BlurEffect.BeginAnimation(BlurEffect.RadiusProperty, AppAnimations.BgBlurOutEffectAnim);
+                }
             }
             else
             {
-                ContentPanel.Effect = null;
+                BlurEffect = new BlurEffect { Radius = 0 };
+                ContentPanel.Effect = BlurEffect;
                 ContentPanel.RenderTransform = new ScaleTransform(1, 1);
                 ContentPanel.RenderTransformOrigin = new Point(0.5, 0.5);
             }

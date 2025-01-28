@@ -11,14 +11,12 @@ namespace GameplayTimeTracker.Menu;
 public class SettingsMenu : CustomMenu
 {
     StackPanel SettingsContentPanel = new();
-    StackPanel HeaderPanel = new();
-    // private AppSettings _settings;
-    // public MainWindow _mainWindow;
 
-    public SettingsMenu(double width = 400, bool performanceMode = true) 
-        : base( width, performanceMode)
+    StackPanel HeaderPanel = new();
+
+    public SettingsMenu(double width = 400, bool toScale = true)
+        : base(width, toScale)
     {
-        // _settings = appSettings;
         SettingsContentPanel = new StackPanel();
         HeaderPanel = new StackPanel
         {
@@ -54,9 +52,6 @@ public class SettingsMenu : CustomMenu
         MenuContentPanel.Children.Add(SettingsContentPanel);
 
         SetPrefMenu(PrefBlock);
-
-        // PrefEntry pref1 = new PrefEntry("Pref 1", false);
-        // SettingsContentPanel.Children.Add(pref1);
     }
 
     private void HighlightCurrentTextBlock(TextBlock selectedTextBlock)
