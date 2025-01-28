@@ -17,7 +17,7 @@ public class PrefMenu : UserControl
         Panel = new StackPanel();
         PrefEntry pref1 = new PrefEntry("Start With System", Common.Settings.StartWithSystem);
         Binding swsBinding = new Binding("StartWithSystem") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref1.checkBox, CheckBox.IsCheckedProperty, swsBinding);
+        BindingOperations.SetBinding(pref1.toggleButton, CustomToggleButton.IsToggledProperty, swsBinding);
         BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty, "Font");
         // BindingHelper.SetColorBinding(pref1.checkBox.boxBorder, Border.BorderBrushProperty, settings, "Font");
         // BindingHelper.SetColorBinding(pref1.checkBox.tickMark, Shape.FillProperty, settings, "Font");
@@ -27,7 +27,7 @@ public class PrefMenu : UserControl
         PrefEntry pref2 = new PrefEntry("Prefer SteamGridDB Images", Common.Settings.PreferSteamGridDBImage);
         Binding preferSGDBBinding = new Binding("PreferSteamGridDBImage")
             { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref2.checkBox, CheckBox.IsCheckedProperty, preferSGDBBinding);
+        BindingOperations.SetBinding(pref2.toggleButton, CustomToggleButton.IsToggledProperty, preferSGDBBinding);
         BindingHelper.SetColorBinding(pref2.textBlock, ForegroundProperty, "Font");
         Panel.Children.Add(pref2);
 
@@ -43,7 +43,7 @@ public class PrefMenu : UserControl
 
         PrefEntry pref3 = new PrefEntry("Quick Add", Common.Settings.QuickAdd);
         Binding quickAddBinding = new Binding("QuickAdd") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref3.checkBox, CheckBox.IsCheckedProperty, quickAddBinding);
+        BindingOperations.SetBinding(pref3.toggleButton, CustomToggleButton.IsToggledProperty, quickAddBinding);
         BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, "Font");
         Panel.Children.Add(pref3);
 
@@ -62,19 +62,19 @@ public class PrefMenu : UserControl
             ItemsSource = Enum.GetValues(typeof(GameDisplay)),
             SelectedItem = Common.Settings.Display
         };
-        
+
         DisplayTypeComboBox.SelectionChanged += (s, e) =>
         {
             if (DisplayTypeComboBox.SelectedItem is GameDisplay selectedValue)
             {
                 var mainWindow = (MainWindow)Application.Current.MainWindow;
                 Common.Settings.Display = selectedValue;
-        
+
                 AppAnimations.FadeOutMainPanel.Completed += OnFadeOutCompleted;
                 mainWindow.MainPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOutMainPanel);
             }
         };
-        
+
         Panel.Children.Add(DisplayTypeComboBox);
 
         TextBlock SaveFrequencyBlock =

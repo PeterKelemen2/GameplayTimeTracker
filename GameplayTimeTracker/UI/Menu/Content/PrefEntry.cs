@@ -14,6 +14,8 @@ public class PrefEntry : UserControl
     public TextBlock textBlock;
 
     public CheckBox checkBox { get; set; }
+    public CustomToggleButton toggleButton { get; set; }
+
     // public CustomCheckBox checkBox { get; set; }
     public String PrefName { get; set; }
     public bool PrefValue { get; set; }
@@ -54,9 +56,14 @@ public class PrefEntry : UserControl
         };
         checkBox.Template = (ControlTemplate)Application.Current.Resources["CustomCheckBoxTemplate"];
         checkBox.Background = new SolidColorBrush(AppColors.Font);
-        
+
         // checkBox = new CustomCheckBox();
-        containerGrid.Children.Add(checkBox);
+        // containerGrid.Children.Add(checkBox);
+
+        toggleButton = new CustomToggleButton();
+        toggleButton.HorizontalAlignment = HorizontalAlignment.Right;
+        toggleButton.ButtonGrid.Margin = new Thickness(0, 0, padding, 0);
+        containerGrid.Children.Add(toggleButton);
 
         Content = containerGrid;
     }
