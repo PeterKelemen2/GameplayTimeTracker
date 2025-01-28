@@ -11,13 +11,17 @@ namespace GameplayTimeTracker;
 public class CustomComboBox : UserControl
 {
     public double cornerRadius = 5;
+    public double borderSize = 2;
     public double W { get; set; }
     public double H { get; set; }
+    public bool IsOpen { get; set; }
 
     private StackPanel mainStackPanel;
     private Grid selectedGrid;
     private StackPanel optionsStackPanel;
     private Border selectedBorder;
+    private Border optionsBorder;
+    private TextBlock selectedTextBlock;
     List<string> themeNames = new();
 
     public CustomComboBox(double w = 120, double h = 30)
@@ -31,31 +35,88 @@ public class CustomComboBox : UserControl
         }
 
         mainStackPanel = new StackPanel { Width = W };
+
         optionsStackPanel = new StackPanel { Width = W };
+        optionsBorder = new Border
+        {
+            Child = optionsStackPanel,
+            Background =
+                new SolidColorBrush(ColorHelper.AdjustBrightness(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.5)),
+            CornerRadius = new CornerRadius(cornerRadius),
+            Margin = Margin = new Thickness(0, 5, 0, 5),
+            BorderBrush = Brushes.Gray,
+        };
 
         CreateSelectedGrid();
+        mainStackPanel.Children.Add(selectedGrid);
+        mainStackPanel.Children.Add(optionsBorder);
+
+        IsOpen = false;
         selectedGrid.MouseEnter += OnMouseEnter;
         selectedGrid.MouseLeave += OnMouseLeave;
-        selectedGrid.MouseLeftButtonDown -= OnMouseLeftButtonDown;
-        selectedGrid.MouseLeftButtonUp -= OnMouseLeftButtonUp;
-        mainStackPanel.Children.Add(selectedGrid);
+        selectedGrid.MouseLeftButtonDown += OnMouseLeftButtonDown;
+        selectedGrid.MouseLeftButtonUp += OnMouseLeftButtonUp;
 
-        ShowOptions(themeNames);
+        // ShowOptions();
 
         Content = mainStackPanel;
     }
 
-    public void ShowOptions(List<string> themes)
+    public void ToggleOptions()
     {
         optionsStackPanel.Children.Clear();
 
-        foreach (var text in themes)
+        if (IsOpen)
         {
-            TextBlock textBlock = new TextBlock { Text = text, Padding = new Thickness(5) };
-            optionsStackPanel.Children.Add(textBlock);
+            optionsBorder.BorderThickness = new Thickness(0);
+            optionsBorder.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            Console.WriteLine("Showing...");
+            foreach (var text in themeNames)
+            {
+                Console.WriteLine(text);
+                TextBlock textBlock = CreateTextBlock(text);
+                Border textBorder = new Border
+                {
+                    Child = textBlock,
+                    CornerRadius = new CornerRadius(cornerRadius),
+                    Padding = new Thickness(5),
+                    Margin = new Thickness(5),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                };
+
+                textBorder.MouseLeftButtonDown += (_, _) => { HighlightSelected(textBlock); };
+                optionsStackPanel.Children.Add(textBorder);
+            }
+
+            optionsBorder.BorderThickness = new Thickness(borderSize);
+            optionsBorder.Visibility = Visibility.Visible;
         }
 
-        mainStackPanel.Children.Add(optionsStackPanel);
+        IsOpen = !IsOpen;
+    }
+
+    private void HighlightSelected(TextBlock selected)
+    {
+        foreach (UIElement child in optionsStackPanel.Children)
+        {
+            if (child is Border border && border.Child is TextBlock textBlock)
+            {
+                if (textBlock.Text.Equals(selected.Text))
+                {
+                    border.Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]),
+                        0.9));
+                }
+                else
+                {
+                    border.Background = new SolidColorBrush(Colors.Transparent);
+                }
+            }
+        }
     }
 
     public void CreateSelectedGrid()
@@ -73,28 +134,20 @@ public class CustomComboBox : UserControl
             };
         }
 
-        TextBlock selectedTextBlock = new TextBlock
-        {
-            Text = Common.Settings.CurrentTheme.ThemeName,
-            FontSize = Common.TextFontSize,
-            Foreground =
-                new SolidColorBrush(
-                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
-            VerticalAlignment = VerticalAlignment.Center,
-            Padding = new Thickness(10),
-        };
+        selectedTextBlock = CreateTextBlock(Common.Settings.CurrentTheme.ThemeName);
+
         selectedBorder = new Border
         {
             Child = selectedTextBlock,
-            // Width = W,
-            // Height = H,
             Background =
                 new SolidColorBrush(ColorHelper.AdjustBrightness(
                     (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.5)),
             CornerRadius = new CornerRadius(cornerRadius),
-            BorderThickness = new Thickness(1),
-            BorderBrush = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 0.5))
+            BorderThickness = new Thickness(borderSize),
+            Padding = new Thickness(5),
+            // BorderBrush = new SolidColorBrush(ColorHelper.AdjustBrightness(
+            //     (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 0.5))
+            BorderBrush = Brushes.Gray,
         };
         selectedGrid.Children.Add(selectedBorder);
 
@@ -108,6 +161,22 @@ public class CustomComboBox : UserControl
             Margin = new Thickness(3),
         };
         selectedGrid.Children.Add(downArrow);
+    }
+
+    private TextBlock CreateTextBlock(string text)
+    {
+        var textBlock = new TextBlock
+        {
+            Text = text,
+            FontSize = Common.TextFontSize,
+            Foreground =
+                new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
+            VerticalAlignment = VerticalAlignment.Center,
+            // Padding = new Thickness(10),
+        };
+
+        return textBlock;
     }
 
     private void OnMouseEnter(object sender, MouseEventArgs e)
@@ -126,7 +195,7 @@ public class CustomComboBox : UserControl
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        ShowOptions(themeNames);
+        ToggleOptions();
         e.Handled = true;
     }
 
