@@ -47,49 +47,51 @@ public class PrefMenu : UserControl
         BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, "Font");
         Panel.Children.Add(pref3);
 
-        TextBlock DisplayTypeBlock =
-            UIHelper.CreateTextBlock(text: "Display", margin: new Thickness(25, 0, 0, 0), isBold: false, fontSize: 17);
+
+        Grid displayGrid = new Grid { Width = 380, Margin = new Thickness(25, 10, 25, 10) };
+        
+        TextBlock DisplayTypeBlock = UIHelper.CreateTextBlock(text: "Display", isBold: false, fontSize: 17);
         DisplayTypeBlock.Effect = AppEffects.dropShadowText;
-        Panel.Children.Add(DisplayTypeBlock);
+        DisplayTypeBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        displayGrid.Children.Add(DisplayTypeBlock);
+        
         ComboBox DisplayTypeComboBox = new ComboBox
         {
-            Width = 150,
+            Width = 120,
             Height = 30,
-            Margin = new Thickness(40, 10, 0, 10),
-            HorizontalContentAlignment = HorizontalAlignment.Center,
+            HorizontalContentAlignment = HorizontalAlignment.Left,
             VerticalContentAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Right,
             ItemsSource = Enum.GetValues(typeof(GameDisplay)),
             SelectedItem = Common.Settings.Display
         };
-
+        displayGrid.Children.Add(DisplayTypeComboBox);
+        Panel.Children.Add(displayGrid);
         DisplayTypeComboBox.SelectionChanged += (s, e) =>
         {
             if (DisplayTypeComboBox.SelectedItem is GameDisplay selectedValue)
             {
                 var mainWindow = (MainWindow)Application.Current.MainWindow;
                 Common.Settings.Display = selectedValue;
-
+        
                 AppAnimations.FadeOutMainPanel.Completed += OnFadeOutCompleted;
                 mainWindow.MainPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeOutMainPanel);
             }
         };
+        
+        Grid frequencyGrid = new Grid { Width = 380, Margin = new Thickness(25, 10, 25, 20) };
 
-        Panel.Children.Add(DisplayTypeComboBox);
-
-        TextBlock SaveFrequencyBlock =
-            UIHelper.CreateTextBlock(text: "Save Frequency", margin: new Thickness(25, 0, 0, 0), isBold: false,
-                fontSize: 17);
+        TextBlock SaveFrequencyBlock = UIHelper.CreateTextBlock(text: "Save Frequency", isBold: false, fontSize: 17);
         SaveFrequencyBlock.Effect = AppEffects.dropShadowText;
-        Panel.Children.Add(SaveFrequencyBlock);
+        SaveFrequencyBlock.HorizontalAlignment = HorizontalAlignment.Left;
+        frequencyGrid.Children.Add(SaveFrequencyBlock);
         ComboBox SaveFrequencyComboBox = new ComboBox
         {
-            Width = 150,
+            Width = 120,
             Height = 30,
-            Margin = new Thickness(40, 10, 0, 10),
-            HorizontalContentAlignment = HorizontalAlignment.Center,
+            HorizontalContentAlignment = HorizontalAlignment.Left,
             VerticalContentAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Right,
             ItemsSource = Common.saveFreqArray,
             SelectedItem = Common.Settings.SavingFrequencyInMinutes
         };
@@ -99,7 +101,8 @@ public class PrefMenu : UserControl
             Common.Settings.SavingFrequencyInMinutes = (int)SaveFrequencyComboBox.SelectedItem;
         };
 
-        Panel.Children.Add(SaveFrequencyComboBox);
+        frequencyGrid.Children.Add(SaveFrequencyComboBox);
+        Panel.Children.Add(frequencyGrid);
     }
 
     private void OnFadeOutCompleted(object sender, EventArgs e)
