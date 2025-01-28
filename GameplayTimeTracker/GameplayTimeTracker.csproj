@@ -72,6 +72,10 @@
       <Content Include="Assets\DefaultIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\arrow.png" />
+      <Content Include="Assets\arrow.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

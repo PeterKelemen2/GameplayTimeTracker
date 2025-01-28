@@ -114,6 +114,9 @@ public class PrefMenu : UserControl
 
         frequencyGrid.Children.Add(SaveFrequencyComboBox);
         Panel.Children.Add(frequencyGrid);
+
+        CustomComboBox experimentalComboBox = new CustomComboBox();
+        Panel.Children.Add(experimentalComboBox);
     }
 
     private void OnFadeOutCompleted(object sender, EventArgs e)
