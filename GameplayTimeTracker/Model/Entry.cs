@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
 using Gtk;
+using Application = System.Windows.Application;
 
 namespace GameplayTimeTracker
 {
@@ -263,6 +264,7 @@ namespace GameplayTimeTracker
                     if (value)
                     {
                         ResetLastPlaytime();
+                        ((MainWindow)Application.Current.MainWindow).MainScrollViewer.ScrollToTop();
                     }
                     else
                     {
