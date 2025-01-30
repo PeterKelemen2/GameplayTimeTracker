@@ -12,8 +12,8 @@ namespace GameplayTimeTracker;
 public class ImageHelper
 {
     static int numImages = 20;
-    static double scaleMax = 1.2;
-    static double scaleMin = 0.9;
+    static double scaleMax = 1.1;
+    static double scaleMin = 1.1;
     static double brightnessMax = 1.0;
     static double brightnessMin = 1.0;
     static float shadowOffset = 20;
@@ -22,7 +22,7 @@ public class ImageHelper
 
     private static float scatterY(int x, int scale, int hMod)
     {
-        float y = (float)Math.Sin(x);
+        float y = (float)Math.Cos(x);
         // float y = (float)(Math.Sin(x + 2) / (0.2 * (x + 2)));
         Console.WriteLine($"{x} | {y}");
         return y * scale + hMod;
@@ -64,21 +64,25 @@ public class ImageHelper
                 int newWidth = (int)(resizedImg.Width * scaleModifier(i));
                 int newHeight = (int)(resizedImg.Height * scaleModifier(i));
 
+                var hmod = -30;
+                float rotation = (float)random.NextDouble() * 360;
                 // Shadow
                 Bitmap shadowImage = AdjustBrightness(resizedImg, shadowOpacity);
                 GraphicsState state = g.Save();
                 g.TranslateTransform(step * i + shadowOffset, //+ newWidth / 2,
-                    scatterY(i, 200, -10) + newHeight / 2 + shadowOffset); // Move to image center
-                g.RotateTransform((float)random.NextDouble() * 360); // Apply rotation
+                    scatterY(i, 200, hmod) + newHeight / 2 + shadowOffset); // Move to image center
+                g.RotateTransform(rotation); // Apply rotation
 
                 g.DrawImage(shadowImage, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
                 g.Restore(state);
 
+                // Image
                 Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)brightnessModifier(i));
                 state = g.Save();
                 g.TranslateTransform(step * i, //+ newWidth / 2,
-                    scatterY(i, 200, -10) + newHeight / 2); // Move to image center
-                g.RotateTransform((float)random.NextDouble() * 360); // Apply rotation
+                    scatterY(i, 200, hmod) + newHeight / 2); // Move to image center
+                // Random rotation to fill up space with shadow version
+                g.RotateTransform((float)random.NextDouble() * 360);
 
                 g.DrawImage(adjustedImg, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
                 g.Restore(state);
