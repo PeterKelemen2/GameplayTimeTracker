@@ -25,7 +25,7 @@ public class AddMenu : EntryConfigMenu
             Close();
         };
 
-        Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
+        Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
 
         if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
         {

@@ -30,6 +30,6 @@ public static class AppFiles
     public static readonly string SettingsFilePath = Path.Combine(DocumentsPath, SettingsFileName);
     public static readonly string SavedImagesPath = Path.Combine(DocumentsPath, SavedImagesFolderName);
     public static readonly string BackupDataFolder = Path.Combine(DocumentsPath, BackupFolderName);
-    public static readonly string SGDBFolder = Path.Combine(DocumentsPath, SGDBFolderName);
+    // public static readonly string SGDBFolder = Path.Combine(DocumentsPath, SGDBFolderName);
     
 }

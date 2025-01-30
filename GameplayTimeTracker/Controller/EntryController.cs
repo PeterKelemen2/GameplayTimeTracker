@@ -41,7 +41,7 @@ public static class EntryController
                 name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
                 newEntry.Name = name;
 
-                Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles();
+                Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(name);
 
                 if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
                 {

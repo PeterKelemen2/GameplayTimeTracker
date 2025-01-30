@@ -11,9 +11,9 @@ public static class SGDBFetch
 {
     public static async Task FetchSGDBAsync(string apiKey, string gameName, Dictionary<string, string> files)
     {
-        if (!Path.Exists(AppFiles.SGDBFolder))
+        if (!Path.Exists(AppFiles.SavedImagesPath))
         {
-            Directory.CreateDirectory(AppFiles.SGDBFolder);
+            Directory.CreateDirectory(AppFiles.SavedImagesPath);
         }
 
         SteamGridDb sgdb = new SteamGridDb(apiKey);
@@ -28,7 +28,7 @@ public static class SGDBFetch
             {
                 Console.WriteLine(hero.FullImageUrl);
                 await SGDBDownloader.DownloadImageAsync(hero.FullImageUrl,
-                    Path.Combine(AppFiles.SGDBFolder, files["hero"]),
+                    Path.Combine(AppFiles.SavedImagesPath, files["hero"]),
                     sizeLimits: new[] { 960, 310 });
             }
 
@@ -41,12 +41,12 @@ public static class SGDBFetch
                     // await SGDBDownloader.DownloadImageAsync(icon.FullImageUrl,
                     //     Path.Combine(AppFiles.SGDBFolder, files["icon"]));
                     await SGDBDownloader.DownloadAndProcessIcoAsync(icon.FullImageUrl,
-                        Path.Combine(AppFiles.SGDBFolder, files["icon"]));
+                        Path.Combine(AppFiles.SavedImagesPath, files["icon"]));
                 }
                 else
                 {
                     await SGDBDownloader.DownloadImageAsync(icon.FullImageUrl,
-                        Path.Combine(AppFiles.SGDBFolder, files["icon"]),
+                        Path.Combine(AppFiles.SavedImagesPath, files["icon"]),
                         sizeLimits: new[] { 256, 256 });
                 }
             }
