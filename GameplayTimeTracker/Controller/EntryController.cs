@@ -129,7 +129,7 @@ public static class EntryController
         entry.HeroPath = iconFiles["hero"];
     }
 
-    private static void HandleLocalImages(Entry entry)
+    public static void HandleLocalImages(Entry entry)
     {
         Guid guid = Guid.NewGuid();
         string iconPath = Path.Combine(AppFiles.SavedImagesPath,

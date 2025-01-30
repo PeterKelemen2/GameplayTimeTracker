@@ -131,7 +131,7 @@ public class ImageHelper
         return adjustedImage;
     }
 
-    public static bool SaveIconFromExe(string source, string destination)
+    public static void SaveIconFromExe(string source, string destination)
     {
         if (!File.Exists(destination) && File.Exists(source))
         {
@@ -144,11 +144,8 @@ public class ImageHelper
             if (IsImageFile(source))
             {
                 File.Copy(source, destination);
-                return true;
             }
         }
-
-        return false;
     }
 
     private static bool IsImageFile(string filePath)

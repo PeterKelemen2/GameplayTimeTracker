@@ -68,10 +68,8 @@ namespace GameplayTimeTracker
                     {
                         Repository.UpdateTotalPercentages();
                         LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
-                        Repository.PrintEntryList();
+                        // Repository.PrintEntryList();
                     }
-
-                    // InitSave();
                 }
             }
         }
@@ -167,9 +165,26 @@ namespace GameplayTimeTracker
             get => _iconPath;
             set
             {
-                string imagePath = File.Exists(value) ? value : AppFiles.DefaultIconPath;
-                SetField(ref _iconPath, imagePath);
-                InitSave();
+                if (value != _iconPath)
+                {
+                    if (File.Exists(value))
+                    {
+                        string newIconPath = "";
+                        if (Path.GetExtension(value).ToLower() == ".exe")
+                        {
+                            newIconPath += Path.Combine(AppFiles.SavedImagesPath,
+                                $"{Name.Replace(" ", "_")}_{Guid.NewGuid().ToString()}_icon.png");
+                            ImageHelper.SaveIconFromExe(value, newIconPath);
+                        }
+                        else
+                        {
+                            newIconPath += File.Exists(value) ? value : AppFiles.DefaultIconPath;
+                        }
+
+                        SetField(ref _iconPath, newIconPath);
+                        InitSave();
+                    }
+                }
             }
         }
 
@@ -435,11 +450,6 @@ namespace GameplayTimeTracker
         {
             // Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void PrintRepo()
-        {
-            Repository.PrintEntryList();
         }
 
         public async Task RefreshImagesFromSGDB()

@@ -85,15 +85,9 @@ public class EditMenu : EntryConfigMenu
             Guid guid = Guid.NewGuid();
             string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
             string cloned = string.Copy(newImagePath);
-            bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-            if (success)
-            {
-                Dispatcher.Invoke(() => entry.IconPath = newImagePath);
-            }
-            else
-            {
-                Console.WriteLine("Failed to set icon");
-            }
+            // bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+            ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+            Dispatcher.Invoke(() => entry.IconPath = newImagePath);
         });
     }
 }

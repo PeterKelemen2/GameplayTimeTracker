@@ -276,15 +276,6 @@ public partial class MainWindow : Window
     private void Grid_Drop(object sender, DragEventArgs e)
     {
         // Handle the dropped data here (e.g., process the file)
-        if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files)
-            {
-                EntryController.AddEntry(file, entryRepository, gameCardRepository, MainPanel);
-            }
-        }
-
         if (!isAnimating)
         {
             AppAnimations.DragFadeOut.Completed += (s, o) =>
@@ -295,6 +286,15 @@ public partial class MainWindow : Window
 
             DragDropGrid.BeginAnimation(OpacityProperty, AppAnimations.DragFadeOut);
             isAnimating = true; // Prevent further animations while one is in progress
+        }
+
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                EntryController.AddEntry(file, entryRepository, gameCardRepository, MainPanel);
+            }
         }
 
         e.Handled = true; // Marks event as handled
