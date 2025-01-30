@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using Color = System.Drawing.Color;
+using System.Runtime.InteropServices;
 using Rectangle = System.Drawing.Rectangle;
 using Size = System.Drawing.Size;
 
@@ -14,13 +14,12 @@ public class ImageHelper
     static int numImages = 20;
     static double scaleMax = 1.1;
     static double scaleMin = 1.1;
-    static double brightnessMax = 1.0;
-    static double brightnessMin = 1.0;
+    static float brightness = 0.8f;
     static float shadowOffset = 20;
     static float shadowOpacity = 0.4f;
     private static int step;
 
-    private static float scatterY(int x, int scale, int hMod)
+    private static float scatterY(int x, int scale, int hMod = 0)
     {
         float y = (float)Math.Cos(x);
         // float y = (float)(Math.Sin(x + 2) / (0.2 * (x + 2)));
@@ -33,11 +32,6 @@ public class ImageHelper
         return scaleMax - (i / (double)(numImages - 1) * (scaleMax - scaleMin));
     }
 
-    private static double brightnessModifier(int i)
-    {
-        return brightnessMax - (i / (double)(numImages - 1) * (brightnessMax - brightnessMin));
-    }
-
     public static void ScatterImage(string inputPath, string outputPath)
     {
         Random random = new Random();
@@ -48,43 +42,38 @@ public class ImageHelper
         Size targetSize = new Size(256, 256);
         step = Common.HeroSize.Width / numImages;
 
-        using (System.Drawing.Image originalImg = System.Drawing.Image.FromFile(inputPath))
+        using (Image originalImg = Image.FromFile(inputPath))
         using (Bitmap resizedImg = new Bitmap(targetSize.Width, targetSize.Height))
         using (Graphics resizeGraphics = Graphics.FromImage(resizedImg))
         using (Bitmap canvas = new Bitmap(canvasSize.Width, canvasSize.Height))
         using (Graphics g = Graphics.FromImage(canvas))
         {
-            resizeGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            resizeGraphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
             resizeGraphics.DrawImage(originalImg, new Rectangle(0, 0, targetSize.Width, targetSize.Height));
-
-            g.Clear(Color.Transparent); // Transparent background
+            // g.Clear(Color.Transparent);
 
             for (int i = numImages; i > 0; i--)
             {
                 int newWidth = (int)(resizedImg.Width * scaleModifier(i));
                 int newHeight = (int)(resizedImg.Height * scaleModifier(i));
-
-                var hmod = -30;
+                var dy = scatterY(i, 200);
                 float rotation = (float)random.NextDouble() * 360;
+
                 // Shadow
                 Bitmap shadowImage = AdjustBrightness(resizedImg, shadowOpacity);
                 GraphicsState state = g.Save();
-                g.TranslateTransform(step * i + shadowOffset, //+ newWidth / 2,
-                    scatterY(i, 200, hmod) + newHeight / 2 + shadowOffset); // Move to image center
-                g.RotateTransform(rotation); // Apply rotation
-
-                g.DrawImage(shadowImage, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
+                g.TranslateTransform(step * i + shadowOffset, dy + newHeight / 2 + shadowOffset);
+                g.RotateTransform(rotation);
+                g.DrawImage(shadowImage, -newWidth / 2, -newHeight / 2, newWidth, newHeight);
                 g.Restore(state);
 
                 // Image
-                Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)brightnessModifier(i));
+                Bitmap adjustedImg = AdjustBrightness(resizedImg, brightness);
                 state = g.Save();
-                g.TranslateTransform(step * i, //+ newWidth / 2,
-                    scatterY(i, 200, hmod) + newHeight / 2); // Move to image center
-                // Random rotation to fill up space with shadow version
+                g.TranslateTransform(step * i, dy + newHeight / 2);
+                // Random rotation to fill up space with shadow version, use rotation var to have actual shadows
                 g.RotateTransform((float)random.NextDouble() * 360);
-
-                g.DrawImage(adjustedImg, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
+                g.DrawImage(adjustedImg, -newWidth / 2, -newHeight / 2, newWidth, newHeight);
                 g.Restore(state);
             }
 
@@ -93,30 +82,48 @@ public class ImageHelper
         }
 
         stopwatch.Stop();
-        Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds:F2}ms");
+        Console.WriteLine($"Generating image took {stopwatch.Elapsed.TotalMilliseconds:F2}ms");
     }
 
     private static Bitmap AdjustBrightness(Bitmap image, float brightnessFactor)
     {
         Bitmap adjustedImage = new Bitmap(image);
 
-        for (int y = 0; y < adjustedImage.Height; y++)
+        // Lock the bitmap's bits for fast access
+        Rectangle rect = new Rectangle(0, 0, adjustedImage.Width, adjustedImage.Height);
+        BitmapData data = adjustedImage.LockBits(rect, ImageLockMode.ReadWrite, adjustedImage.PixelFormat);
+
+        int bytesPerPixel = Bitmap.GetPixelFormatSize(adjustedImage.PixelFormat) / 8;
+        int byteCount = data.Stride * adjustedImage.Height;
+        byte[] pixels = new byte[byteCount];
+
+        // Copy the pixel data into the byte array
+        Marshal.Copy(data.Scan0, pixels, 0, byteCount);
+
+        // Adjust brightness in the pixel array
+        for (int i = 0; i < pixels.Length; i += bytesPerPixel)
         {
-            for (int x = 0; x < adjustedImage.Width; x++)
-            {
-                Color pixelColor = adjustedImage.GetPixel(x, y);
+            // The pixel data is arranged in BGRA format for most formats
+            byte blue = pixels[i];
+            byte green = pixels[i + 1];
+            byte red = pixels[i + 2];
 
-                int r = (int)(pixelColor.R * brightnessFactor);
-                int g = (int)(pixelColor.G * brightnessFactor);
-                int b = (int)(pixelColor.B * brightnessFactor);
+            // Adjust the brightness
+            red = (byte)Math.Min(255, Math.Max(0, red * brightnessFactor));
+            green = (byte)Math.Min(255, Math.Max(0, green * brightnessFactor));
+            blue = (byte)Math.Min(255, Math.Max(0, blue * brightnessFactor));
 
-                r = Math.Min(255, Math.Max(0, r));
-                g = Math.Min(255, Math.Max(0, g));
-                b = Math.Min(255, Math.Max(0, b));
-
-                adjustedImage.SetPixel(x, y, Color.FromArgb(pixelColor.A, r, g, b));
-            }
+            // Set the new pixel values
+            pixels[i] = blue;
+            pixels[i + 1] = green;
+            pixels[i + 2] = red;
         }
+
+        // Copy the modified byte array back into the bitmap
+        Marshal.Copy(pixels, 0, data.Scan0, byteCount);
+
+        // Unlock the bits to apply changes
+        adjustedImage.UnlockBits(data);
 
         return adjustedImage;
     }
