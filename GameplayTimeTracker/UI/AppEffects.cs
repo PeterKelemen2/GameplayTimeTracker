@@ -5,24 +5,24 @@ namespace GameplayTimeTracker;
 
 public static class AppEffects
 {
-    public static BlurEffect fakeShadow = new BlurEffect
+    public static readonly BlurEffect fakeShadow = new BlurEffect
     {
         Radius = 8,
     };
 
-    public static BlurEffect blurEffect = new BlurEffect
+    public static readonly BlurEffect blurEffect = new BlurEffect
     {
         Radius = 10,
         RenderingBias = RenderingBias.Performance
     };
 
-    public static BlurEffect bigBlurEffect = new BlurEffect
+    public static readonly BlurEffect bigBlurEffect = new BlurEffect
     {
         Radius = 30,
         RenderingBias = RenderingBias.Performance
     };
     
-    public static DropShadowEffect dropShadowText = new DropShadowEffect
+    public static readonly  DropShadowEffect dropShadowText = new DropShadowEffect
     {
         BlurRadius = 8,
         ShadowDepth = 0,
@@ -31,7 +31,7 @@ public static class AppEffects
         Direction = 200,
     };
 
-    public static DropShadowEffect DropShadowTitle = new DropShadowEffect
+    public static readonly DropShadowEffect DropShadowTitle = new DropShadowEffect
     {
         BlurRadius = 0,
         ShadowDepth = 3,
@@ -40,7 +40,7 @@ public static class AppEffects
         Direction = -45,
     };
 
-    public static DropShadowEffect DropShadowGameIcon = new DropShadowEffect
+    public static readonly DropShadowEffect DropShadowGameIcon = new DropShadowEffect
     {
         BlurRadius = 0,
         ShadowDepth = 10,
@@ -49,32 +49,32 @@ public static class AppEffects
         Direction = -45,
     };
 
-    public static DropShadowEffect DropOuterGlow = new DropShadowEffect
+    public static readonly DropShadowEffect DropOuterGlow = new DropShadowEffect
     {
         BlurRadius = 5,
         ShadowDepth = 0,
         Color = Colors.Black,
     };
 
-    public static DropShadowEffect DropShadowIcon = new DropShadowEffect
+    public static readonly DropShadowEffect DropShadowIcon = new DropShadowEffect
     {
         BlurRadius = 10,
         ShadowDepth = 0
     };
 
-    public static DropShadowEffect dropShadowLightArea = new DropShadowEffect
+    public static readonly DropShadowEffect dropShadowLightArea = new DropShadowEffect
     {
         BlurRadius = 7,
         ShadowDepth = 0
     };
 
-    public static DropShadowEffect DropShadowRectangle = new DropShadowEffect
+    public static readonly DropShadowEffect DropShadowRectangle = new DropShadowEffect
     {
         BlurRadius = 20,
         ShadowDepth = 0
     };
     
-    public static DropShadowEffect DropShadowMedium = new DropShadowEffect
+    public static readonly DropShadowEffect DropShadowMedium = new DropShadowEffect
     {
         BlurRadius = 15,
         ShadowDepth = 0

@@ -18,6 +18,8 @@ public class SettingsMenu : CustomMenu
         : base(width, toScale)
     {
         SettingsContentPanel = new StackPanel();
+        SettingsContentPanel.CacheMode = new BitmapCache();
+        
         HeaderPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,

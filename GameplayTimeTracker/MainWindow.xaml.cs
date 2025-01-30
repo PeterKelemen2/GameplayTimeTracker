@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using GameplayTimeTracker.Helper;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
@@ -22,11 +25,16 @@ public partial class MainWindow : Window
     private EntryRepository entryRepository;
     private GameCardRepository gameCardRepository;
     private AppTheme TestTheme;
-    public int saveFrequency = 60;
+    private double _scrollTarget = 0;
+    private double _scrollOffset = 0;
+    private const double ScrollSpeed = 80;
+
 
     public MainWindow()
     {
         InitializeComponent();
+        MainScrollViewer.PreviewMouseWheel += MainScrollViewer_PreviewMouseWheel;
+
         Common.Settings = DataHandler.GetSettingsFromFile();
         // Settings = Common.Settings;
         DataHandler.ManageStartupShortcut(Common.Settings.StartWithSystem);
@@ -192,5 +200,32 @@ public partial class MainWindow : Window
 
         OverlayTop.Visibility = verticalOffset < 10 ? Visibility.Collapsed : Visibility.Visible;
         OverlayBottom.Visibility = verticalOffset < scrollableHeight - 10 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void MainScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        e.Handled = true;
+        _scrollTarget -= e.Delta > 0 ? ScrollSpeed : -ScrollSpeed;
+        _scrollTarget = Math.Max(0, Math.Min(MainScrollViewer.ScrollableHeight, _scrollTarget));
+
+        SmoothScrollTo(_scrollTarget);
+    }
+
+    private void SmoothScrollTo(double toValue)
+    {
+        // Stop any existing animation
+        MainScrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, null);
+
+        DoubleAnimation animation = new DoubleAnimation
+        {
+            From = MainScrollViewer.VerticalOffset,
+            To = toValue,
+            Duration = TimeSpan.FromMilliseconds(Common.ScrollDurationsMs),
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        animation.Completed += (s, e) => MainScrollViewer.ScrollToVerticalOffset(toValue);
+
+        MainScrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, animation);
     }
 }
