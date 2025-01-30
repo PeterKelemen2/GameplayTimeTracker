@@ -12,7 +12,7 @@ public static class AppEffects
 
     public static readonly BlurEffect blurEffect = new BlurEffect
     {
-        Radius = 10,
+        Radius = 2,
         RenderingBias = RenderingBias.Performance
     };
 

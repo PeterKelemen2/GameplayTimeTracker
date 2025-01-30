@@ -83,6 +83,7 @@ public class GameCard : UserControl
         {
             Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
             Stretch = Stretch.Uniform,
+            // Effect = AppEffects.blurEffect
         };
         Binding heroBinding = new Binding("HeroPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
         BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
