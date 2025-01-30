@@ -12,11 +12,11 @@ namespace GameplayTimeTracker;
 
 public static class EntryController
 {
-    public static void AddEntry(EntryRepository repository, GameCardRepository cardRepository, Panel parentPanel)
+    public static void AddEntry(string path, EntryRepository repository, GameCardRepository cardRepository,
+        Panel parentPanel)
     {
         string arguments = "";
         string exePath = "";
-        string path = Common.GetDialogPath(Common.exeFilter);
 
         if (Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
         {
@@ -103,7 +103,11 @@ public static class EntryController
                         boldArray: new[] { false, true },
                         lineSpacing: 5,
                         type: PromptMenu.PromptType.YesNo,
-                        yesHandler: (s, e) => { AddEntry(repository, cardRepository, parentPanel); }
+                        yesHandler: (s, e) =>
+                        {
+                            string newpath = Common.GetDialogPath(Common.exeFilter);
+                            AddEntry(newpath, repository, cardRepository, parentPanel);
+                        }
                     );
                 duplicatePrompt.Open();
             }

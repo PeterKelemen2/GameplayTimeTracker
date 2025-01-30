@@ -16,7 +16,11 @@ using GameplayTimeTracker.Helper;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
+using Gtk;
 using Shellify;
+using Application = System.Windows.Application;
+using Grid = System.Windows.Controls.Grid;
+using Window = System.Windows.Window;
 
 namespace GameplayTimeTracker;
 
@@ -28,15 +32,18 @@ public partial class MainWindow : Window
     private double _scrollTarget = 0;
     private double _scrollOffset = 0;
     private const double ScrollSpeed = 80;
+    private DragDropOverlay dragDropOverlay;
+    private bool isAnimating = false;
 
 
     public MainWindow()
     {
         InitializeComponent();
         MainScrollViewer.PreviewMouseWheel += MainScrollViewer_PreviewMouseWheel;
-
         Common.Settings = DataHandler.GetSettingsFromFile();
-        // Settings = Common.Settings;
+        dragDropOverlay = new DragDropOverlay();
+        DragDropGrid.Children.Add(dragDropOverlay);
+
         DataHandler.ManageStartupShortcut(Common.Settings.StartWithSystem);
         foreach (var color in Common.Settings.CurrentTheme.Colors)
         {
@@ -161,7 +168,11 @@ public partial class MainWindow : Window
         CustomButton AddButton = new CustomButton(w: 40, h: 40, hA: HorizontalAlignment.Left,
             bImgPath: AppFiles.AddIcon, effect: AppEffects.DropShadowIcon);
         AddButton.Margin = new Thickness(15, 0, 0, 0);
-        AddButton.Click += (_, _) => { EntryController.AddEntry(entryRepository, gameCardRepository, MainPanel); };
+        AddButton.Click += (_, _) =>
+        {
+            string path = Common.GetDialogPath(Common.exeFilter);
+            EntryController.AddEntry(path, entryRepository, gameCardRepository, MainPanel);
+        };
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
 
@@ -229,5 +240,63 @@ public partial class MainWindow : Window
         animation.Completed += (s, e) => MainScrollViewer.ScrollToVerticalOffset(toValue);
 
         MainScrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, animation);
+    }
+
+    private void Grid_DragEnter(object sender, DragEventArgs e)
+    {
+        if (!isAnimating)
+        {
+            DragDropGrid.Visibility = Visibility.Visible;
+            isAnimating = true; // Prevent further animations while one is in progress
+
+            AppAnimations.DragFadeIn.Completed += (s, o) => { isAnimating = false; };
+            DragDropGrid.BeginAnimation(OpacityProperty, AppAnimations.DragFadeIn);
+        }
+
+        e.Handled = true; // Marks event as handled
+    }
+
+    private void Grid_DragLeave(object sender, DragEventArgs e)
+    {
+        if (!isAnimating)
+        {
+            AppAnimations.DragFadeOut.Completed += (s, o) =>
+            {
+                DragDropGrid.Visibility = Visibility.Collapsed;
+                isAnimating = false; // Allow new animations after this one completes
+            };
+
+            DragDropGrid.BeginAnimation(OpacityProperty, AppAnimations.DragFadeOut);
+            isAnimating = true; // Prevent further animations while one is in progress
+        }
+
+        e.Handled = true; // Marks event as handled
+    }
+
+    private void Grid_Drop(object sender, DragEventArgs e)
+    {
+        // Handle the dropped data here (e.g., process the file)
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                EntryController.AddEntry(file, entryRepository, gameCardRepository, MainPanel);
+            }
+        }
+
+        if (!isAnimating)
+        {
+            AppAnimations.DragFadeOut.Completed += (s, o) =>
+            {
+                DragDropGrid.Visibility = Visibility.Collapsed;
+                isAnimating = false; // Allow new animations after this one completes
+            };
+
+            DragDropGrid.BeginAnimation(OpacityProperty, AppAnimations.DragFadeOut);
+            isAnimating = true; // Prevent further animations while one is in progress
+        }
+
+        e.Handled = true; // Marks event as handled
     }
 }

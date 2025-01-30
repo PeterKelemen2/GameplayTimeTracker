@@ -10,8 +10,15 @@
         Width="870"
         MinWidth="870"
         Icon="pack://application:,,,/Assets/GameplayTimeTracker.ico">
-    <Grid x:Name="Root">
+    <Grid x:Name="Root"
+          AllowDrop="True"
+          DragEnter="Grid_DragEnter"
+          DragLeave="Grid_DragLeave"
+          Drop="Grid_Drop">
+        <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
+        </Grid>
         <Grid x:Name="MainGrid">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="70" />
@@ -21,8 +28,9 @@
                 <ScaleTransform x:Name="ScaleTransform" />
             </Grid.RenderTransform>
 
-            <Grid Grid.Row="0" x:Name="Grid0"></Grid>
-            
+
+            <!-- <Grid Grid.Row="0" x:Name="Grid0"></Grid> -->
+
             <ScrollViewer x:Name="MainScrollViewer"
                           Grid.Row="0"
                           VerticalScrollBarVisibility="Hidden"
@@ -35,9 +43,9 @@
                 </Border>
             </ScrollViewer>
 
-            <Rectangle x:Name="OverlayTop" Width="870" Height="60" VerticalAlignment="Top" Fill="Aqua"/>
-            <Rectangle x:Name="OverlayBottom" Width="870" Height="60" VerticalAlignment="Bottom" Fill="Aqua"/>
-            
+            <Rectangle x:Name="OverlayTop" Width="870" Height="60" VerticalAlignment="Top" Fill="Aqua" />
+            <Rectangle x:Name="OverlayBottom" Width="870" Height="60" VerticalAlignment="Bottom" Fill="Aqua" />
+
             <Grid Grid.Row="1" x:Name="Footer">
                 <TextBlock x:Name="GamesLoadedBlock"
                            HorizontalAlignment="Center"

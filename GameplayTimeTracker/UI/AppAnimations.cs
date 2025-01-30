@@ -10,6 +10,7 @@ public class AppAnimations
     public static double deleteAnimDuration = 0.6;
     public static double fadeAnimDuration = 0.3;
     public static double fadeMainPanelDuration = 0.1;
+    public static double dragAnimDuration = 0.1;
 
 
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
@@ -116,6 +117,22 @@ public class AppAnimations
         From = 1,
         To = 0,
         Duration = TimeSpan.FromSeconds(fadeAnimDuration),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
+    
+    public static DoubleAnimation DragFadeIn = new DoubleAnimation
+    {
+        From = 0,
+        To = 1,
+        Duration = TimeSpan.FromSeconds(dragAnimDuration),
+        EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+    };
+
+    public static DoubleAnimation DragFadeOut = new DoubleAnimation
+    {
+        From = 1,
+        To = 0,
+        Duration = TimeSpan.FromSeconds(dragAnimDuration),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
     
