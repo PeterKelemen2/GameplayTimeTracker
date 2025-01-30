@@ -80,7 +80,7 @@ public class AppSettings : INotifyPropertyChanged
             DataHandler.WriteSettingsToFile(this);
         }
     }
-    
+
     [JsonPropertyName("Performance Mode")]
     public bool PerformanceMode
     {
@@ -155,6 +155,17 @@ public class AppSettings : INotifyPropertyChanged
     public override string ToString()
     {
         return $"SETTINGS: Start: {StartWithSystem}, API Key: {SGDBApiKey}, Prefer Local: {PreferSteamGridDBImage}";
+    }
+
+    public void SetNewCurrentTheme(string newThemeName)
+    {
+        foreach (var theme in ThemesList)
+        {
+            if (theme.ThemeName.Equals(newThemeName))
+            {
+                
+            }
+        }
     }
 
     protected bool SetField<T>(ref T field, T value,

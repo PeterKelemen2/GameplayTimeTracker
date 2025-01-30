@@ -20,7 +20,8 @@ public class BindingHelper
         BindingOperations.SetBinding(element, property, newBinding);
     }
 
-    public static void SetGradientColorBinding(UIElement element, DependencyProperty property, string c1, string c2,
+    public static void SetGradientColorBinding(UIElement element, DependencyProperty property, string c1 = "",
+        string c2 = "",
         bool horizontal = false)
     {
         MultiBinding fillMultiBinding = new MultiBinding

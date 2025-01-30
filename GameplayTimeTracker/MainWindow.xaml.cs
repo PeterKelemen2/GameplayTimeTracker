@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
@@ -143,6 +144,9 @@ public partial class MainWindow : Window
         BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, "Background");
         BindingHelper.SetColorBinding(GamesLoadedBlock, ForegroundProperty, "Footer Font");
         BindingHelper.SetColorBinding(TotalPlaytimeTextBlock, ForegroundProperty, "Footer Font");
+        // BindingHelper.SetColorBinding(OverlayTop, ForegroundProperty, "Footer Font");
+        BindingHelper.SetGradientColorBinding(OverlayTop, Shape.FillProperty, "Background", "Transparent");
+        BindingHelper.SetGradientColorBinding(OverlayBottom, Shape.FillProperty, "Transparent", "Background");
     }
 
     private void SetUpFooter()
@@ -179,5 +183,14 @@ public partial class MainWindow : Window
             scaleTransform.CenterX = grid.ActualWidth / 2;
             scaleTransform.CenterY = grid.ActualHeight / 2;
         }
+    }
+
+    private void MainScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        double verticalOffset = e.VerticalOffset; // Current scroll position
+        double scrollableHeight = e.ExtentHeight - e.ViewportHeight;
+
+        OverlayTop.Visibility = verticalOffset < 10 ? Visibility.Collapsed : Visibility.Visible;
+        OverlayBottom.Visibility = verticalOffset < scrollableHeight - 10 ? Visibility.Visible : Visibility.Collapsed;
     }
 }

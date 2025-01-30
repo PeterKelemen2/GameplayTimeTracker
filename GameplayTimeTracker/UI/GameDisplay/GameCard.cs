@@ -75,6 +75,7 @@ public class GameCard : UserControl
             RadiusY = Common.BorderRadius,
             Effect = AppEffects.DropShadowIcon,
         };
+        // BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, "Card 1", "Card 2", true);
         ContainerGrid.Children.Add(CardRectangle);
 
         HeroImage = new Image

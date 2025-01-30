@@ -22,19 +22,22 @@
             </Grid.RenderTransform>
 
             <Grid Grid.Row="0" x:Name="Grid0"></Grid>
-
+            
             <ScrollViewer x:Name="MainScrollViewer"
                           Grid.Row="0"
                           VerticalScrollBarVisibility="Hidden"
-                          HorizontalScrollBarVisibility="Disabled">
+                          HorizontalScrollBarVisibility="Disabled"
+                          ScrollChanged="MainScrollViewer_ScrollChanged">
                 <Border Padding="5">
                     <WrapPanel x:Name="MainPanel"
                                Orientation="Horizontal"
                                HorizontalAlignment="Center" />
                 </Border>
-
             </ScrollViewer>
 
+            <Rectangle x:Name="OverlayTop" Width="870" Height="60" VerticalAlignment="Top" Fill="Aqua"/>
+            <Rectangle x:Name="OverlayBottom" Width="870" Height="60" VerticalAlignment="Bottom" Fill="Aqua"/>
+            
             <Grid Grid.Row="1" x:Name="Footer">
                 <TextBlock x:Name="GamesLoadedBlock"
                            HorizontalAlignment="Center"

@@ -18,6 +18,7 @@ public static class AppColors
     public static Color CardColor1 = (Color)ColorConverter.ConvertFromString("#414769");
     public static Color CardColor2 = (Color)ColorConverter.ConvertFromString("#2E324A");
     public static Color Shadow = (Color)ColorConverter.ConvertFromString("#151515");
+    public static Color Transparent = (Color)ColorConverter.ConvertFromString("#00000000");
 
     public static ObservableDictionary<string, string> GetColorsDict()
     {
@@ -36,6 +37,7 @@ public static class AppColors
             { "Positive Button", "#90EE90" },
             { "Negative Button", "#ED0C0C" },
             { "Shadow", "#151515" },
+            { "Transparent", "#00000000" },
         };
         return colors;
     }
