@@ -152,7 +152,6 @@ public partial class MainWindow : Window
         BindingHelper.SetColorBinding(MainScrollViewer, BackgroundProperty, "Background");
         BindingHelper.SetColorBinding(GamesLoadedBlock, ForegroundProperty, "Footer Font");
         BindingHelper.SetColorBinding(TotalPlaytimeTextBlock, ForegroundProperty, "Footer Font");
-        // BindingHelper.SetColorBinding(OverlayTop, ForegroundProperty, "Footer Font");
         BindingHelper.SetGradientColorBinding(OverlayTop, Shape.FillProperty, "Background", "Transparent");
         BindingHelper.SetGradientColorBinding(OverlayBottom, Shape.FillProperty, "Transparent", "Background");
     }
@@ -191,6 +190,9 @@ public partial class MainWindow : Window
             scaleTransform.CenterX = grid.ActualWidth / 2;
             scaleTransform.CenterY = grid.ActualHeight / 2;
         }
+
+        OverlayBottom.Width = grid.ActualWidth;
+        OverlayTop.Width = grid.ActualWidth;
     }
 
     private void MainScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
