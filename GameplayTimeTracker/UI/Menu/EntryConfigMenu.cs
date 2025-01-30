@@ -144,6 +144,6 @@ public class EntryConfigMenu : CustomMenu
                 type: BType.Positive);
         ConfirmButton.Margin = new Thickness(0, 20, 0, 10);
         // ConfirmButton.Click += (_, _) => { AddConfiguredEntry(entry, entryRepo, cardRepo, panel); };
-        stackPanel.Children.Add(ConfirmButton);
+        // stackPanel.Children.Add(ConfirmButton);
     }
 }
