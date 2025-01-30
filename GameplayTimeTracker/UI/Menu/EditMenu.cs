@@ -27,6 +27,11 @@ public class EditMenu : EntryConfigMenu
             new CustomButton(w: 120, h: 40, text: "SGDB Refresh", effect: AppEffects.DropShadowIcon);
         RefreshSGDBButton.Margin = new Thickness(5);
         RefreshSGDBButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
+        if (Common.Settings.SGDBApiKey.Length == 0)
+        {
+            RefreshSGDBButton.Active = false;
+        }
+
         buttonContainer.Children.Add(RefreshSGDBButton);
 
         var RefreshLocalHeroButton =
