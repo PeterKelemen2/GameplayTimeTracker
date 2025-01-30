@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using WrapPanel = Xceed.Wpf.Toolkit.Panels.WrapPanel;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -19,39 +20,61 @@ public class EditMenu : EntryConfigMenu
         TitleTextBlock.Inlines.Add(new Run { Text = entry.Name, FontWeight = FontWeights.Bold });
         ConfirmButton.Click += (_, _) => { Close(); };
 
-        Grid refreshGrid = new Grid();
+        Panel buttonContainer = new WrapPanel
+            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(15) };
         var RefreshSGDBButton =
             new CustomButton(w: 120, h: 40, text: "SGDB Refresh", effect: AppEffects.DropShadowIcon);
-        RefreshSGDBButton.Margin = new Thickness(0, 20, 130, 30);
+        RefreshSGDBButton.Margin = new Thickness(5);
         RefreshSGDBButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
-        refreshGrid.Children.Add(RefreshSGDBButton);
+        buttonContainer.Children.Add(RefreshSGDBButton);
 
         var RefreshLocalHeroButton =
             new CustomButton(w: 120, h: 40, text: "Local Refresh", effect: AppEffects.DropShadowIcon);
-        RefreshLocalHeroButton.Margin = new Thickness(130, 20, 0, 30);
-        RefreshLocalHeroButton.Click += async (_, __) =>
-        {
-            await Task.Run(() =>
-            {
-                Guid guid = Guid.NewGuid();
-                string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}.png");
-                ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+        RefreshLocalHeroButton.Margin = new Thickness(5);
+        RefreshLocalHeroButton.Click += async (_, __) => { RefreshLocalHero(entry); };
+        buttonContainer.Children.Add(RefreshLocalHeroButton);
 
-                Dispatcher.Invoke(() => entry.HeroPath = newImagePath);
-            });
-        };
-        refreshGrid.Children.Add(RefreshLocalHeroButton);
-
-        stackPanel.Children.Add(refreshGrid);
+        var RefreshLocalIconFromExeButton =
+            new CustomButton(w: 120, h: 40, text: "Exe Refresh", effect: AppEffects.DropShadowIcon);
+        RefreshLocalIconFromExeButton.Margin = new Thickness(5);
+        RefreshLocalIconFromExeButton.Click += async (_, __) => { RefreshLocalIcon(entry); };
+        buttonContainer.Children.Add(RefreshLocalIconFromExeButton);
 
         var ShowStatsButton =
-            new CustomButton(w: 120, h: 40, text: "Show Stats", effect: AppEffects.DropShadowIcon);
-        ShowStatsButton.Margin = new Thickness(0, 0, 0, 20);
+            new CustomButton(w: 120, h: 40, text: "Show Stats", effect: AppEffects.DropShadowIcon,
+                type: BType.Positive);
+        ShowStatsButton.Margin = new Thickness(5);
         ShowStatsButton.Click += (_, __) =>
         {
             StatsGraph statsGraph = new StatsGraph(entry);
             statsGraph.Open();
         };
-        stackPanel.Children.Add(ShowStatsButton);
+        buttonContainer.Children.Add(ShowStatsButton);
+
+        stackPanel.Children.Add(buttonContainer);
+    }
+
+    private async void RefreshLocalHero(Entry entry)
+    {
+        await Task.Run(() =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_hero.png");
+            ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+
+            Dispatcher.Invoke(() => entry.HeroPath = newImagePath);
+        });
+    }
+
+    private async void RefreshLocalIcon(Entry entry)
+    {
+        await Task.Run(() =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
+            // ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+            ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+            Dispatcher.Invoke(() => entry.IconPath = newImagePath);
+        });
     }
 }
