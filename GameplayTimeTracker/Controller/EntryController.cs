@@ -41,17 +41,28 @@ public static class EntryController
                 name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
                 newEntry.Name = name;
 
-                Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(name);
-
-                if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
+                if (Common.Settings.PreferSteamGridDBImage)
                 {
-                    Task.Run(async () =>
-                            await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, newEntry.Name, iconFiles))
-                        .Wait();
+                    if (Common.Settings.SGDBApiKey.Length > 0)
+                    {
+                        HandleSGDBImages(newEntry);
+                    }
+                    else
+                    {
+                        var sgdbApiKeyPrompt = new PromptMenu(
+                            width: 400,
+                            textArray: new[]
+                                { "You don't have a SteamGridDB API Key set.", "Local icon image was used.", },
+                            boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
+                        );
+                        sgdbApiKeyPrompt.Open();
+                        HandleLocalImages(newEntry);
+                    }
                 }
-
-                newEntry.IconPath = iconFiles["icon"];
-                newEntry.HeroPath = iconFiles["hero"];
+                else
+                {
+                    HandleLocalImages(newEntry);
+                }
 
                 repository.AddEntry(newEntry);
                 GameCard gc = new GameCard();
@@ -97,5 +108,34 @@ public static class EntryController
                 duplicatePrompt.Open();
             }
         }
+    }
+
+    private static void HandleSGDBImages(Entry entry)
+    {
+        Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
+
+        if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
+        {
+            Task.Run(async () =>
+                    await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles))
+                .Wait();
+        }
+
+        entry.IconPath = iconFiles["icon"];
+        entry.HeroPath = iconFiles["hero"];
+    }
+
+    private static void HandleLocalImages(Entry entry)
+    {
+        Guid guid = Guid.NewGuid();
+        string iconPath = Path.Combine(AppFiles.SavedImagesPath,
+            $"{entry.Name.Replace(" ", "_")}_{guid.ToString()}_icon.png");
+        string heroPath = Path.Combine(AppFiles.SavedImagesPath,
+            $"{entry.Name.Replace(" ", "_")}_{guid.ToString()}_hero.png");
+
+        ImageHelper.SaveIconFromExe(entry.ExePath, iconPath);
+        entry.IconPath = iconPath;
+        ImageHelper.ScatterImage(iconPath, heroPath);
+        entry.HeroPath = heroPath;
     }
 }

@@ -3,7 +3,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows;
+using Toolbelt.Drawing;
 using Rectangle = System.Drawing.Rectangle;
 using Size = System.Drawing.Size;
 
@@ -126,5 +129,37 @@ public class ImageHelper
         adjustedImage.UnlockBits(data);
 
         return adjustedImage;
+    }
+
+    public static void SaveIconFromExe(string source, string destination)
+    {
+        try
+        {
+            if (!File.Exists(destination))
+            {
+                if (Path.GetExtension(source).ToLower().Equals(".exe"))
+                {
+                    using var s = File.Create(destination);
+                    IconExtractor.Extract1stIconTo(source, s);
+                }
+
+                if (IsImageFile(source))
+                {
+                    File.Copy(source, destination);
+                }
+            }
+        }
+        catch (IOException ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
+    }
+
+    private static bool IsImageFile(string filePath)
+    {
+        // Check if the file is an image by its extension
+        string extension = Path.GetExtension(filePath)?.ToLower();
+        return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".bmp" ||
+               extension == ".gif";
     }
 }

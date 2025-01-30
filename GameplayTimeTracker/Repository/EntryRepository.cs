@@ -72,7 +72,7 @@ public class EntryRepository
 
         entry.Repository = this;
         entry.EnsureLastWeekData();
-        EntriesList.Insert(0, entry);
+        // EntriesList.Insert(0, entry);
 
         UpdateTotalPercentages();
     }
