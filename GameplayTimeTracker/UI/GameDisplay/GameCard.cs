@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing.Imaging;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,7 +14,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
-using Gtk;
 using Grid = System.Windows.Controls.Grid;
 using Image = System.Windows.Controls.Image;
 
@@ -76,14 +76,12 @@ public class GameCard : UserControl
             RadiusY = Common.BorderRadius,
             Effect = AppEffects.DropShadowIcon,
         };
-        // BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, "Card 1", "Card 2", true);
         ContainerGrid.Children.Add(CardRectangle);
 
         HeroImage = new Image
         {
             Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
             Stretch = Stretch.Uniform,
-            // Effect = AppEffects.blurEffect
         };
         Binding heroBinding = new Binding("HeroPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
         BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
@@ -100,6 +98,11 @@ public class GameCard : UserControl
         BindingOperations.SetBinding(IconImage, Image.SourceProperty, iconBinding);
         RenderOptions.SetBitmapScalingMode(IconImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(IconImage);
+
+        if (DataEntry.HeroPath.Equals(AppFiles.DefaultHeroPath))
+        {
+            GenerateLocalHeroImage();
+        }
 
         TitleBlock = new TextBlock
         {
@@ -353,5 +356,18 @@ public class GameCard : UserControl
         };
         timeTimer.Tick += (sender, e) => { DataEntry.IncrementTime(); };
         timeTimer.Start();
+    }
+
+    private async void GenerateLocalHeroImage()
+    {
+        await Task.Run(() =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = System.IO.Path.Combine(AppFiles.SavedImagesPath,
+                $"{DataEntry.Name.Replace(" ", "_")}_{guid}.png");
+            ImageHelper.ScatterImage(DataEntry.IconPath, newImagePath);
+        
+            Dispatcher.Invoke(() => DataEntry.HeroPath = newImagePath);
+        });
     }
 }
