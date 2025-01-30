@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
+using Size = System.Drawing.Size;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -34,7 +36,13 @@ public class EditMenu : EntryConfigMenu
         var RefreshLocalHeroButton =
             new CustomButton(w: 120, h: 40, text: "Local Refresh", effect: AppEffects.DropShadowIcon);
         RefreshLocalHeroButton.Margin = new Thickness(130, 20, 0, 30);
-        RefreshLocalHeroButton.Click += (_, __) => { };
+        RefreshLocalHeroButton.Click += (_, __) =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}.png");
+            ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+            entry.HeroPath = newImagePath;
+        };
         refreshGrid.Children.Add(RefreshLocalHeroButton);
 
         stackPanel.Children.Add(refreshGrid);

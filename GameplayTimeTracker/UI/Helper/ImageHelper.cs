@@ -9,32 +9,36 @@ using Size = System.Drawing.Size;
 
 namespace GameplayTimeTracker;
 
-public class IconHelper
+public class ImageHelper
 {
-    private int[] pX =
+    private static int[] pX =
         { 476, 570, 648, -76, 54, 753, 24, 444, -233, 352, 207, 365, -212, 75, -37, 338, 752, -8, 426, 266 };
 
-    private int[] pY = { 4, 101, 8, 67, 40, 31, 6, 17, 119, 0, 0, 3, 92, 0, 32, 33, 19, 0, 3, 0 };
+    private static int[] pY = { 4, 101, 8, 67, 40, 31, 6, 17, 119, 0, 0, 3, 92, 0, 32, 33, 19, 0, 3, 0 };
 
-    private double[] s =
+    private static double[] s =
     {
         1.14, 0.79, 0.85, 0.94, 0.97, 0.65, 1.18, 1.05, 0.62, 1.22, 1.39, 0.83, 0.74, 1.22, 1.04, 0.87, 0.71, 1.23,
         1.18, 1.24
     };
 
-    private float[] a =
+    private static float[] a =
         { 139, 89, 45, 135, 250, 36, 319, 108, 321, 79, 346, 24, 227, 113, 275, 107, 233, 226, 166, 356 };
 
-    private double[] b =
+    private static double[] b =
     {
         0.3000, 0.3263, 0.3526, 0.3789, 0.4053, 0.4316, 0.4579, 0.4842, 0.5105, 0.5368, 0.5632, 0.5895, 0.6158,
         0.6421, 0.6684, 0.6947, 0.7211, 0.7474, 0.7737, 0.8000
     };
 
-    private void ScatterImage(string inputPath, string outputPath, Size canvasSize, int numImages, Size targetSize)
+    public static void ScatterImage(string inputPath, string outputPath)
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
+
+        Size canvasSize = Common.HeroSize;
+        Size targetSize = new Size(256, 256);
+        int numImages = pX.Length;
 
         using (System.Drawing.Image originalImg = System.Drawing.Image.FromFile(inputPath))
         using (Bitmap resizedImg = new Bitmap(targetSize.Width, targetSize.Height))
@@ -61,7 +65,7 @@ public class IconHelper
                 g.Restore(state);
             }
 
-            canvas.Save(outputPath, ImageFormat.Png); 
+            canvas.Save(outputPath, ImageFormat.Png);
             Console.WriteLine($"Scattered and blurred image saved to {outputPath}");
         }
 
@@ -69,7 +73,7 @@ public class IconHelper
         Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds:F2}ms");
     }
 
-    private Bitmap AdjustBrightness(Bitmap image, float brightnessFactor)
+    private static Bitmap AdjustBrightness(Bitmap image, float brightnessFactor)
     {
         Bitmap adjustedImage = new Bitmap(image);
 

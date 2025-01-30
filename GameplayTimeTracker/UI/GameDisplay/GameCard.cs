@@ -79,23 +79,13 @@ public class GameCard : UserControl
         // BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, "Card 1", "Card 2", true);
         ContainerGrid.Children.Add(CardRectangle);
 
-        var heroBitmap = new BitmapImage();
-        heroBitmap.BeginInit();
-        heroBitmap.UriSource = new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute);
-        heroBitmap.CacheOption = BitmapCacheOption.OnLoad;
-        // heroBitmap.DecodePixelWidth = 300;
-        heroBitmap.EndInit();
-        // heroBitmap.Freeze();
-
         HeroImage = new Image
         {
-            Source = heroBitmap,
-            // Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
+            Source = new BitmapImage(new Uri(DataEntry.HeroPath, UriKind.RelativeOrAbsolute)),
             Stretch = Stretch.Uniform,
         };
         Binding heroBinding = new Binding("HeroPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
-        BindingOperations.SetBinding(heroBitmap, Image.SourceProperty, heroBinding);
-        // BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
+        BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
         RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
 
