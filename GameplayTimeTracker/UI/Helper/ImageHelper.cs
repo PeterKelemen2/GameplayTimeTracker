@@ -15,12 +15,15 @@ public class ImageHelper
     static double scaleMax = 1.2;
     static double scaleMin = 0.9;
     static double brightnessMax = 1.0;
-    static double brightnessMin = 0.3;
+    static double brightnessMin = 1.0;
+    static float shadowOffset = 20;
+    static float shadowOpacity = 0.4f;
     private static int step;
 
     private static float scatterY(int x, int scale, int hMod)
     {
-        float y = (float)(Math.Sin(x + 2) / (0.2 * (x + 2)));
+        float y = (float)Math.Sin(x);
+        // float y = (float)(Math.Sin(x + 2) / (0.2 * (x + 2)));
         Console.WriteLine($"{x} | {y}");
         return y * scale + hMod;
     }
@@ -61,11 +64,20 @@ public class ImageHelper
                 int newWidth = (int)(resizedImg.Width * scaleModifier(i));
                 int newHeight = (int)(resizedImg.Height * scaleModifier(i));
 
-                Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)brightnessModifier(i));
-
+                // Shadow
+                Bitmap shadowImage = AdjustBrightness(resizedImg, shadowOpacity);
                 GraphicsState state = g.Save();
+                g.TranslateTransform(step * i + shadowOffset, //+ newWidth / 2,
+                    scatterY(i, 200, -10) + newHeight / 2 + shadowOffset); // Move to image center
+                g.RotateTransform((float)random.NextDouble() * 360); // Apply rotation
+
+                g.DrawImage(shadowImage, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
+                g.Restore(state);
+
+                Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)brightnessModifier(i));
+                state = g.Save();
                 g.TranslateTransform(step * i, //+ newWidth / 2,
-                    scatterY(i, 200, 50) + newHeight / 2); // Move to image center
+                    scatterY(i, 200, -10) + newHeight / 2); // Move to image center
                 g.RotateTransform((float)random.NextDouble() * 360); // Apply rotation
 
                 g.DrawImage(adjustedImg, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
