@@ -11,34 +11,45 @@ namespace GameplayTimeTracker;
 
 public class ImageHelper
 {
-    private static int[] pX =
-        { 476, 570, 648, -76, 54, 753, 24, 444, -233, 352, 207, 365, -212, 75, -37, 338, 752, -8, 426, 266 };
+    static int numImages = 20;
+    static double scaleMax = 1.2;
+    static double scaleMin = 0.9;
+    static double brightnessMax = 1.0;
+    static double brightnessMin = 0.3;
 
-    private static int[] pY = { 4, 101, 8, 67, 40, 31, 6, 17, 119, 0, 0, 3, 92, 0, 32, 33, 19, 0, 3, 0 };
+    private static int step;
 
-    private static double[] s =
+    private static float scatterY(int x, int scale, int hMod)
     {
-        1.14, 0.79, 0.85, 0.94, 0.97, 0.65, 1.18, 1.05, 0.62, 1.22, 1.39, 0.83, 0.74, 1.22, 1.04, 0.87, 0.71, 1.23,
-        1.18, 1.24
-    };
+        float y = (float)(Math.Sin(x + 2) / (0.2 * (x + 2)));
+        Console.WriteLine($"{x} | {y}");
+        return y * scale + hMod;
+    }
 
-    private static float[] a =
-        { 139, 89, 45, 135, 250, 36, 319, 108, 321, 79, 346, 24, 227, 113, 275, 107, 233, 226, 166, 356 };
-
-    private static double[] b =
+    private static float posX(int x)
     {
-        0.3000, 0.3263, 0.3526, 0.3789, 0.4053, 0.4316, 0.4579, 0.4842, 0.5105, 0.5368, 0.5632, 0.5895, 0.6158,
-        0.6421, 0.6684, 0.6947, 0.7211, 0.7474, 0.7737, 0.8000
-    };
+        return (float)(x / Common.HeroSize.Width);
+    }
+
+    private static double scaleModifier(int i)
+    {
+        return scaleMax - (i / (double)(numImages - 1) * (scaleMax - scaleMin));
+    }
+
+    private static double brightnessModifier(int i)
+    {
+        return brightnessMax - (i / (double)(numImages - 1) * (brightnessMax - brightnessMin));
+    }
 
     public static void ScatterImage(string inputPath, string outputPath)
     {
+        Random random = new Random();
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         Size canvasSize = Common.HeroSize;
         Size targetSize = new Size(256, 256);
-        int numImages = pX.Length;
+        step = Common.HeroSize.Width / numImages;
 
         using (System.Drawing.Image originalImg = System.Drawing.Image.FromFile(inputPath))
         using (Bitmap resizedImg = new Bitmap(targetSize.Width, targetSize.Height))
@@ -51,16 +62,17 @@ public class ImageHelper
 
             g.Clear(Color.Transparent); // Transparent background
 
-            for (int i = 0; i < numImages; i++)
+            for (int i = numImages; i > 0; i--)
             {
-                int newWidth = (int)(resizedImg.Width * s[i]);
-                int newHeight = (int)(resizedImg.Height * s[i]);
+                int newWidth = (int)(resizedImg.Width * scaleModifier(i));
+                int newHeight = (int)(resizedImg.Height * scaleModifier(i));
 
-                Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)b[i]);
+                Bitmap adjustedImg = AdjustBrightness(resizedImg, (float)brightnessModifier(i));
 
                 GraphicsState state = g.Save();
-                g.TranslateTransform(pX[i] + newWidth / 2, pY[i] + newHeight / 2); // Move to image center
-                g.RotateTransform(a[i]); // Apply rotation
+                g.TranslateTransform(step * i, //+ newWidth / 2,
+                    scatterY(i, 200, 50) + newHeight / 2); // Move to image center
+                g.RotateTransform((float)random.NextDouble() * 360); // Apply rotation
                 g.DrawImage(adjustedImg, -newWidth / 2, -newHeight / 2, newWidth, newHeight); // Draw rotated image
                 g.Restore(state);
             }
