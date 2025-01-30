@@ -131,28 +131,24 @@ public class ImageHelper
         return adjustedImage;
     }
 
-    public static void SaveIconFromExe(string source, string destination)
+    public static bool SaveIconFromExe(string source, string destination)
     {
-        try
+        if (!File.Exists(destination) && File.Exists(source))
         {
-            if (!File.Exists(destination))
+            if (Path.GetExtension(source).ToLower().Equals(".exe"))
             {
-                if (Path.GetExtension(source).ToLower().Equals(".exe"))
-                {
-                    using var s = File.Create(destination);
-                    IconExtractor.Extract1stIconTo(source, s);
-                }
+                using var s = File.Create(destination);
+                IconExtractor.Extract1stIconTo(source, s);
+            }
 
-                if (IsImageFile(source))
-                {
-                    File.Copy(source, destination);
-                }
+            if (IsImageFile(source))
+            {
+                File.Copy(source, destination);
+                return true;
             }
         }
-        catch (IOException ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
+
+        return false;
     }
 
     private static bool IsImageFile(string filePath)

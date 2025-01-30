@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using WrapPanel = Xceed.Wpf.Toolkit.Panels.WrapPanel;
 
@@ -38,6 +39,12 @@ public class EditMenu : EntryConfigMenu
             new CustomButton(w: 120, h: 40, text: "Exe Refresh", effect: AppEffects.DropShadowIcon);
         RefreshLocalIconFromExeButton.Margin = new Thickness(5);
         RefreshLocalIconFromExeButton.Click += async (_, __) => { RefreshLocalIcon(entry); };
+        Binding activeBinding = new Binding("IsLaunchable")
+        {
+            Source = entry,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(RefreshLocalIconFromExeButton, CustomButton.ActiveProperty, activeBinding);
         buttonContainer.Children.Add(RefreshLocalIconFromExeButton);
 
         var ShowStatsButton =
@@ -72,9 +79,16 @@ public class EditMenu : EntryConfigMenu
         {
             Guid guid = Guid.NewGuid();
             string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
-            // ImageHelper.ScatterImage(entry.IconPath, newImagePath);
-            ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-            Dispatcher.Invoke(() => entry.IconPath = newImagePath);
+            string cloned = string.Copy(newImagePath);
+            bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+            if (success)
+            {
+                Dispatcher.Invoke(() => entry.IconPath = newImagePath);
+            }
+            else
+            {
+                Console.WriteLine("Failed to set icon");
+            }
         });
     }
 }
