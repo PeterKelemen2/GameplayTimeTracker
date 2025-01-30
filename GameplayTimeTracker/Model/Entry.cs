@@ -169,16 +169,24 @@ namespace GameplayTimeTracker
                 {
                     if (File.Exists(value))
                     {
-                        string newIconPath = "";
-                        if (Path.GetExtension(value).ToLower() == ".exe")
+                        string newIconPath;
+                        try
                         {
-                            newIconPath += Path.Combine(AppFiles.SavedImagesPath,
-                                $"{Name.Replace(" ", "_")}_{Guid.NewGuid().ToString()}_icon.png");
-                            ImageHelper.SaveIconFromExe(value, newIconPath);
+                            if (Path.GetExtension(value).ToLower() == ".exe")
+                            {
+                                newIconPath = Path.Combine(AppFiles.SavedImagesPath,
+                                    $"{Name.Replace(" ", "_")}_{Guid.NewGuid().ToString()}_icon.png");
+                                ImageHelper.SaveIconFromExe(value, newIconPath);
+                            }
+                            else
+                            {
+                                newIconPath = File.Exists(value) ? value : AppFiles.DefaultIconPath;
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            newIconPath += File.Exists(value) ? value : AppFiles.DefaultIconPath;
+                            Console.WriteLine(ex.Message);
+                            newIconPath = AppFiles.DefaultIconPath;
                         }
 
                         SetField(ref _iconPath, newIconPath);
@@ -194,9 +202,41 @@ namespace GameplayTimeTracker
             get => _heroPath;
             set
             {
-                string imagePath = File.Exists(value) ? value : AppFiles.DefaultHeroPath;
-                SetField(ref _heroPath, imagePath);
-                InitSave();
+                if (value != _heroPath)
+                {
+                    if (File.Exists(value))
+                    {
+                        string newHeroPath;
+                        try
+                        {
+                            if (Path.GetExtension(value).ToLower() == ".exe")
+                            {
+                                newHeroPath = Path.Combine(AppFiles.SavedImagesPath,
+                                    $"{Name.Replace(" ", "_")}_{Guid.NewGuid().ToString()}_hero.png");
+                                string auxImagePath = Path.Combine(AppFiles.SavedImagesPath,
+                                    $"{Name.Replace(" ", "_")}_{Guid.NewGuid().ToString()}_auxicon.png");
+
+                                ImageHelper.SaveIconFromExe(value, auxImagePath);
+                                ImageHelper.ScatterImage(auxImagePath, newHeroPath);
+
+                                File.Delete(auxImagePath);
+                            }
+                            else
+                            {
+                                newHeroPath = File.Exists(value) ? value : AppFiles.DefaultHeroPath;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            newHeroPath = AppFiles.DefaultHeroPath;
+                        }
+
+                        SetField(ref _heroPath, newHeroPath);
+                        InitSave();
+                    }
+                }
+                // string imagePath = File.Exists(value) ? value : AppFiles.DefaultHeroPath;
             }
         }
 
