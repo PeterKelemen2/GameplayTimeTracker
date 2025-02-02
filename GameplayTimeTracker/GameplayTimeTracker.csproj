@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <PackageReference Include="craftersmine.SteamGridDB.Net" Version="1.1.7" />
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
         <PackageReference Include="IconExtractor" Version="1.0.1"/>
 <!--        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">-->
 <!--            <PrivateAssets>all</PrivateAssets>-->

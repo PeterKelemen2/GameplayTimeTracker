@@ -17,6 +17,7 @@ using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
 using Gtk;
+using Hardcodet.Wpf.TaskbarNotification;
 using Shellify;
 using Application = System.Windows.Application;
 using Grid = System.Windows.Controls.Grid;
@@ -62,6 +63,9 @@ public partial class MainWindow : Window
         LoadAndShowData();
         SetUpFooter();
         StartCheckingEntries();
+
+        var notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
+        notifyIcon.Visibility = Visibility.Visible;
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
@@ -340,5 +344,17 @@ public partial class MainWindow : Window
         }
 
         e.Handled = true; // Marks event as handled
+    }
+
+    private void TrayMenu_Open_Click(object sender, RoutedEventArgs e)
+    {
+        // throw new NotImplementedException();
+        Console.WriteLine("Tray menu open click");
+    }
+
+    private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
+    {
+        // throw new NotImplementedException();
+        Console.WriteLine("Tray menu exit click");
     }
 }
