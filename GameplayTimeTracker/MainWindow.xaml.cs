@@ -67,7 +67,6 @@ public partial class MainWindow : Window
 
         taskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
         taskbarIcon.Visibility = Visibility.Visible;
-        // UpdateTrayToolTip();
         TaskbarManager.UpdateTrayToolTip(taskbarIcon, entryRepository);
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)

@@ -24,12 +24,27 @@
                        HorizontalAlignment="Center" />
         </StackPanel>
 
-        <StackPanel x:Key="TrayToolTip" Background="LightGray" Width="150" Height="50">
-            <TextBlock Text="Gameplay Time Tracker"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontWeight="Bold" />
-        </StackPanel>
+        <Border x:Key="TrayToolTipBorder" CornerRadius="5" BorderThickness="2">
+            <Grid x:Name="TrayToolTipGrid" Width="250" Height="100">
+                <Image x:Name="IconImage"
+                       Source="pack://application:,,,/Assets/GameplayTimeTracker.ico"
+                       Width="60" Height="60" HorizontalAlignment="Left"
+                       Margin="10,10,0,0">
+                    <Image.Effect>
+                        <DropShadowEffect Color="Black"
+                                          ShadowDepth="5"
+                                          BlurRadius="10" />
+                    </Image.Effect>
+                    <RenderOptions.BitmapScalingMode>HighQuality</RenderOptions.BitmapScalingMode>
+                </Image>
+
+                <TextBlock x:Name="AppTitleBlock"
+                           HorizontalAlignment="Center" Margin="0,5,0,0">
+                    <Run x:Name="TitleRun" Text="Gameplay Time Tracker" FontWeight="Bold" FontSize="13" />
+                    <Run x:Name="VersionRun" Text="v2.0.0" FontWeight="Regular" FontSize="11" />
+                </TextBlock>
+            </Grid>
+        </Border>
 
         <tb:TaskbarIcon x:Key="AppTaskbarIcon"
                         ToolTipText="Fallback ToolTip for Windows XP"
@@ -38,7 +53,7 @@
                         MenuActivation="LeftOrRightClick"
                         TrayPopup="{StaticResource TrayStatusPopup}"
                         PopupActivation="DoubleClick"
-                        TrayToolTip="{StaticResource TrayToolTip}" />
+                        TrayToolTip="{StaticResource TrayToolTipBorder}" />
     </Window.Resources>
 
     <Grid x:Name="Root"
