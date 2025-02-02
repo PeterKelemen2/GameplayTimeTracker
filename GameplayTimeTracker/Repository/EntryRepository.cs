@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
+using Gtk;
+using Application = System.Windows.Application;
 
 namespace GameplayTimeTracker;
 
@@ -16,13 +17,79 @@ public class EntryRepository : INotifyPropertyChanged
         get => EntriesList.Count(entry => entry.IsRunning);
     }
 
-    // public int[] TotalRuntime
-    // {
-    //     get => EntriesList.
-    // }
+    private int _totalEntryCount;
 
-    public ObservableCollection<Entry> EntriesList { get; set; }
+    public int TotalEntryCount
+    {
+        get => _totalEntryCount;
+        set
+        {
+            if (SetField(ref _totalEntryCount, value))
+            {
+                OnPropertyChanged(nameof(TotalEntryCount));
+            }
+        }
+    }
 
+    private int[] _totalRuntime;
+
+    public int[] TotalRuntime
+    {
+        get => _totalRuntime;
+        set
+        {
+            if (SetField(ref _totalRuntime, value))
+            {
+                OnPropertyChanged(nameof(TotalRuntimeFormatted));
+                _totalRuntime = GetTotalTimeArrays();
+            }
+        }
+    }
+
+    public string TotalRuntimeFormatted =>
+        TotalRuntime != null && TotalRuntime.Length == 3
+            ? $"{TotalRuntime[0]}h {TotalRuntime[1]}m {TotalRuntime[2]}s"
+            : "0h 0m 0s";
+
+    // public ObservableCollection<Entry> EntriesList { get; set; }
+    
+    private ObservableCollection<Entry> _entriesList;
+
+    public ObservableCollection<Entry> EntriesList
+    {
+        get => _entriesList;
+        set
+        {
+            if (_entriesList != value)
+            {
+                // Unsubscribe from previous collection's change events (if necessary)
+                if (_entriesList != null)
+                {
+                    _entriesList.CollectionChanged -= EntriesList_CollectionChanged;
+                }
+
+                _entriesList = value;
+
+                // Subscribe to collection change events
+                if (_entriesList != null)
+                {
+                    _entriesList.CollectionChanged += EntriesList_CollectionChanged;
+                }
+
+                // Update TotalEntryCount whenever the collection changes
+                TotalEntryCount = _entriesList?.Count ?? 0;
+                OnPropertyChanged(nameof(EntriesList));
+            }
+        }
+    }
+
+    private void EntriesList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        // Whenever the collection changes (item added, removed, etc.), update the TotalEntryCount
+        TotalEntryCount = _entriesList.Count;
+    }
+
+    
     public EntryRepository()
     {
         EntriesList = new ObservableCollection<Entry>();
@@ -32,6 +99,7 @@ public class EntryRepository : INotifyPropertyChanged
             entry.Repository = this;
             entry.EnsureLastWeekData();
             entry.PrintHistory();
+            entry.PropertyChanged += OnEntryPropertyChanged;
         }
 
         Common.CheckForOldTime(EntriesList);
@@ -39,6 +107,28 @@ public class EntryRepository : INotifyPropertyChanged
         // SetTimeArrays();
         PrintEntryList();
         // DataHandler.WriteEntriesToFile(EntriesList, AppFiles.DataFilePath);
+    }
+
+    private void OnEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Entry.TotalPlay))
+        {
+            TotalRuntime = GetTotalTimeArrays();
+            Console.WriteLine(Common.GetPrettyTimeFromArray(TotalRuntime));
+        }
+    }
+
+    public int[] GetTotalTimeArrays()
+    {
+        int[] totalTimeArray = new int[3];
+        foreach (var entry in EntriesList)
+        {
+            totalTimeArray = Common.AddTimeArrays(totalTimeArray, entry.TotalPlay);
+        }
+
+        totalTimeArray = Common.NormalizeTimeArray(totalTimeArray);
+
+        return totalTimeArray;
     }
 
     public void ManageEntriesState()
@@ -84,6 +174,7 @@ public class EntryRepository : INotifyPropertyChanged
         entry.Repository = this;
         entry.EnsureLastWeekData();
         EntriesList.Add(entry);
+        entry.PropertyChanged += OnEntryPropertyChanged;
         SortEntries();
 
         UpdateTotalPercentages();
@@ -188,7 +279,10 @@ public class EntryRepository : INotifyPropertyChanged
 
     public virtual void OnPropertyChanged(string propertyName)
     {
-        Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - {RunningEntryCount}");
+        var propertyInfo = this.GetType().GetProperty(propertyName);
+        var propertyValue = propertyInfo?.GetValue(this);
+
+        Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - Value: {propertyValue}");
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

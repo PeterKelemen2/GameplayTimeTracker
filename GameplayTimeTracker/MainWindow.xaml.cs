@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -149,8 +150,8 @@ public partial class MainWindow : Window
     {
         entryRepository = new EntryRepository();
         gameCardRepository = new GameCardRepository();
-        GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
-        TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
+        // GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
+        // TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
     }
 
     public void ShowCards()
@@ -193,7 +194,20 @@ public partial class MainWindow : Window
         MainGrid.Children.Add(SettingsButton);
 
         GamesLoadedBlock.Effect = AppEffects.DropShadowIcon;
+        Binding managedCountBinding = new Binding("TotalEntryCount")
+        {
+            Source = entryRepository,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(GameCountRun, Run.TextProperty, managedCountBinding);
+        
         TotalPlaytimeTextBlock.Effect = AppEffects.DropShadowIcon;
+        Binding totalPlaytimeBinding = new Binding("TotalRuntimeFormatted")
+        {
+            Source = entryRepository,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(TotalTimeRun, Run.TextProperty, totalPlaytimeBinding);
     }
 
     private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
