@@ -35,7 +35,7 @@ public partial class MainWindow : Window
     private const double ScrollSpeed = 80;
     private DragDropOverlay dragDropOverlay;
     private bool isAnimating = false;
-
+    public TaskbarIcon taskbarIcon;
 
     public MainWindow()
     {
@@ -65,8 +65,10 @@ public partial class MainWindow : Window
         SetUpFooter();
         StartCheckingEntries();
 
-        var notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
-        notifyIcon.Visibility = Visibility.Visible;
+        taskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
+        taskbarIcon.Visibility = Visibility.Visible;
+        // UpdateTrayToolTip();
+        TaskbarManager.UpdateTrayToolTip(taskbarIcon, entryRepository);
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
@@ -341,6 +343,7 @@ public partial class MainWindow : Window
         e.Handled = true; // Marks event as handled
     }
 
+
     private void TrayMenu_Open_Click(object sender, RoutedEventArgs e)
     {
         Show();
@@ -359,14 +362,12 @@ public partial class MainWindow : Window
     {
         if (WindowState == WindowState.Minimized)
         {
-            // Hide(); // Hides the window completely
+            Hide();
             Root.Visibility = Visibility.Collapsed;
-            MainPanel.Children.Clear();
         }
         else if (WindowState == WindowState.Normal)
         {
             Root.Visibility = Visibility.Visible;
-            ShowCards();
         }
     }
 }
