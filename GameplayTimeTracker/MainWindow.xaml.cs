@@ -52,6 +52,7 @@ public partial class MainWindow : Window
         }
 
         Closing += MainWindow_Closing;
+        StateChanged += Window_StateChanged;
         MainGrid.SizeChanged += MainGrid_SizeChanged;
         Loaded += OnLoaded;
     }
@@ -212,12 +213,6 @@ public partial class MainWindow : Window
                 // noHandler: (s, e) => { Console.WriteLine("Closing canceled."); }
             );
             exitPrompt.Open();
-
-            // Reinitialize NotifyIcon if it's null
-            // if (notificationHandler.m_notifyIcon == null)
-            // {
-            //     notificationHandler.InitializeNotifyIcon();
-            // }
         }
         catch (Exception ex)
         {
@@ -348,13 +343,30 @@ public partial class MainWindow : Window
 
     private void TrayMenu_Open_Click(object sender, RoutedEventArgs e)
     {
-        // throw new NotImplementedException();
-        Console.WriteLine("Tray menu open click");
+        Show();
+        WindowState = WindowState.Normal;
+        // ShowCards();
+        Activate();
     }
 
     private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
     {
-        // throw new NotImplementedException();
         Console.WriteLine("Tray menu exit click");
+        ExitButton_YesClick(sender, e);
+    }
+
+    private void Window_StateChanged(object sender, EventArgs e)
+    {
+        if (WindowState == WindowState.Minimized)
+        {
+            // Hide(); // Hides the window completely
+            Root.Visibility = Visibility.Collapsed;
+            MainPanel.Children.Clear();
+        }
+        else if (WindowState == WindowState.Normal)
+        {
+            Root.Visibility = Visibility.Visible;
+            ShowCards();
+        }
     }
 }
