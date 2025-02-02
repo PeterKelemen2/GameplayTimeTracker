@@ -43,6 +43,12 @@
                     <Run x:Name="TitleRun" Text="Gameplay Time Tracker" FontWeight="Bold" FontSize="13" />
                     <Run x:Name="VersionRun" Text="v2.0.0" FontWeight="Regular" FontSize="11" />
                 </TextBlock>
+
+                <TextBlock x:Name="RunningBlock"
+                           HorizontalAlignment="Left" Margin="80,30,0,0">
+                    <Run x:Name="RunningTitleRun" Text="Running apps: " FontWeight="Bold" FontSize="13" />
+                    <Run x:Name="RunningCountRun" FontWeight="Regular" FontSize="11" />
+                </TextBlock>
             </Grid>
         </Border>
 

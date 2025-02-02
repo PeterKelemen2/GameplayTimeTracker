@@ -299,6 +299,8 @@ namespace GameplayTimeTracker
                     OnPropertyChanged(nameof(LastDateFormatted));
                     OnPropertyChanged(nameof(LastRunningStateFormatted));
 
+                    _repository?.UpdateRunningEntryCount();
+
                     if (value)
                     {
                         ResetLastPlaytime();

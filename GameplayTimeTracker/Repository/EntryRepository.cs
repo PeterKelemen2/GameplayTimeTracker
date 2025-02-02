@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,9 +9,13 @@ using System.Windows;
 
 namespace GameplayTimeTracker;
 
-public class EntryRepository
+public class EntryRepository : INotifyPropertyChanged
 {
-    // public List<Entry> EntriesList { get; set; }
+    public int RunningEntryCount
+    {
+        get => EntriesList.Count(entry => entry.IsRunning);
+    }
+
     public List<Entry> EntriesList { get; set; } // = new();
 
     public EntryRepository()
@@ -156,5 +161,29 @@ public class EntryRepository
     public string GetNameByExePath(string exePath)
     {
         return EntriesList.FirstOrDefault(x => x.ExePath.Equals(exePath, StringComparison.OrdinalIgnoreCase))?.Name;
+    }
+
+    public void UpdateRunningEntryCount()
+    {
+        OnPropertyChanged(nameof(RunningEntryCount));
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected bool SetField<T>(ref T field, T value,
+        [System.Runtime.CompilerServices.CallerMemberName]
+        string propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        // Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - {value}");
+        OnPropertyChanged(propertyName);
+        return true;
+    }
+
+    public virtual void OnPropertyChanged(string propertyName)
+    {
+        Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - {RunningEntryCount}");
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

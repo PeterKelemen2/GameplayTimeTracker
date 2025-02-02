@@ -71,6 +71,26 @@ public static class TaskbarManager
             versionRun.Text = versionString;
         }
 
+        TextBlock runningBlock = FindChild<TextBlock>(trayToolTipGrid, "RunningBlock");
+        BindingExpression runningBinding =
+            BindingOperations.GetBindingExpression(runningBlock, TextBlock.ForegroundProperty);
+        if (runningBinding == null)
+        {
+            BindingHelper.SetColorBinding(runningBlock, TextBlock.ForegroundProperty, "Font");
+        }
+
+        Run countRun = runningBlock?.Inlines.FirstOrDefault(i => i is Run && ((Run)i).Name == "RunningCountRun") as Run;
+        BindingExpression runningCountBinding =
+            BindingOperations.GetBindingExpression(countRun, TextBlock.TextProperty);
+        if (runningCountBinding == null)
+        {
+            Binding countBinding = new Binding("RunningEntryCount")
+            {
+                Source = entryRepository, Mode = BindingMode.OneWay,
+            };
+            countRun.SetBinding(Run.TextProperty, countBinding);
+        }
+
         taskbarIcon.TrayToolTip = toolTipBorder;
     }
 
