@@ -175,6 +175,7 @@ namespace GameplayTimeTracker
                         newIconPath = Path.Combine(AppFiles.SavedImagesPath, $"{baseName}_icon.png");
                         ImageHelper.SaveIconFromExe(value, newIconPath);
                     }
+
                     SetField(ref _iconPath, newIconPath);
                     InitSave();
                 }
@@ -318,7 +319,7 @@ namespace GameplayTimeTracker
             }
         }
 
-        public void IncrementTodaysHistory()
+        public void IncrementTodaysHistory(bool toSave = true)
         {
             if (PlaytimeHistory.ContainsKey(DateTime.Today))
             {
@@ -328,7 +329,10 @@ namespace GameplayTimeTracker
                 Console.WriteLine($"Todays play time: {PlaytimeHistory[DateTime.Today]}");
             }
 
-            DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
+            if (toSave)
+            {
+                DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
+            }
         }
 
         [JsonIgnore]

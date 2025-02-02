@@ -50,6 +50,7 @@ public partial class MainWindow : Window
             Console.WriteLine($"Color: {color.Key}, {color.Value}");
         }
 
+        Closing += MainWindow_Closing;
         MainGrid.SizeChanged += MainGrid_SizeChanged;
         Loaded += OnLoaded;
     }
@@ -148,7 +149,6 @@ public partial class MainWindow : Window
 
     public void ShowCards()
     {
-        
         gameCardRepository.LoadCards(entryRepository, MainPanel);
     }
 
@@ -188,6 +188,49 @@ public partial class MainWindow : Window
 
         GamesLoadedBlock.Effect = AppEffects.DropShadowIcon;
         TotalPlaytimeTextBlock.Effect = AppEffects.DropShadowIcon;
+    }
+
+    private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        try
+        {
+            e.Cancel = true;
+
+            var exitPrompt = new PromptMenu(
+                width: 400,
+                textArray: new[]
+                {
+                    "Would you really like to exit?",
+                },
+                boldArray: new[] { true, },
+                type: PromptMenu.PromptType.YesNo,
+                yesHandler: ExitButton_YesClick
+                // noHandler: (s, e) => { Console.WriteLine("Closing canceled."); }
+            );
+            exitPrompt.Open();
+
+            // Reinitialize NotifyIcon if it's null
+            // if (notificationHandler.m_notifyIcon == null)
+            // {
+            //     notificationHandler.InitializeNotifyIcon();
+            // }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("An error occurred: " + ex.Message);
+            e.Cancel = true;
+        }
+    }
+
+    private void ExitButton_YesClick(object sender, RoutedEventArgs e)
+    {
+        foreach (var entry in entryRepository.EntriesList)
+        {
+            entry.IncrementTodaysHistory(toSave: false);
+        }
+
+        DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
+        Application.Current.Shutdown();
     }
 
     private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)

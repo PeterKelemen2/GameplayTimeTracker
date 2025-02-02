@@ -22,7 +22,7 @@ public class PromptMenu : CustomMenu
     public PrefEntry dontShowAgainPref;
 
     public PromptMenu(
-        string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 0,
+        string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 5,
         double width = 300, PromptType type = PromptType.Ok, bool dontShowAgainQuestion = false,
         RoutedEventHandler yesHandler = null, RoutedEventHandler noHandler = null,
         bool toScale = true)
