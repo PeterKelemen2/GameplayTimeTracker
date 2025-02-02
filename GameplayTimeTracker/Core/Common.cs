@@ -56,7 +56,7 @@ public static class Common
         }
     }
 
-    public static void CheckForOldTime(List<Entry> entries)
+    public static void CheckForOldTime(ObservableCollection<Entry> entries)
     {
         int[] empty = { 0, 0, 0 };
 

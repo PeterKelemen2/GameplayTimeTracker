@@ -12,9 +12,9 @@ namespace GameplayTimeTracker;
 
 public static class DataHandler
 {
-    public static List<Entry> GetEntriesFromFile(string filePath)
+    public static ObservableCollection<Entry> GetEntriesFromFile(string filePath)
     {
-        List<Entry> entries = new();
+        ObservableCollection<Entry> entries = new();
         if (File.Exists(filePath))
         {
             string jsonString = File.ReadAllText(filePath);
@@ -23,7 +23,7 @@ public static class DataHandler
                 return entries;
             }
 
-            entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+            entries = JsonSerializer.Deserialize<ObservableCollection<Entry>>(jsonString);
         }
         else
         {
@@ -33,7 +33,7 @@ public static class DataHandler
         return entries;
     }
 
-    public static void WriteEntriesToFile(List<Entry> entries, string filePath)
+    public static void WriteEntriesToFile(ObservableCollection<Entry> entries, string filePath)
     {
         if (!Path.Exists(AppFiles.DocumentsPath))
         {

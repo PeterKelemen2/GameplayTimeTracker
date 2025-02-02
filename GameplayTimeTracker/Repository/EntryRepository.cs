@@ -21,11 +21,11 @@ public class EntryRepository : INotifyPropertyChanged
     //     get => EntriesList.
     // }
 
-    public List<Entry> EntriesList { get; set; }
+    public ObservableCollection<Entry> EntriesList { get; set; }
 
     public EntryRepository()
     {
-        EntriesList = new List<Entry>();
+        EntriesList = new ObservableCollection<Entry>();
         EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
         foreach (Entry entry in EntriesList)
         {
@@ -64,12 +64,12 @@ public class EntryRepository : INotifyPropertyChanged
 
     public void SortEntries()
     {
-        // List<Entry> sortedList = new List<Entry>();
-        EntriesList = EntriesList
+        List<Entry> sortedList = new List<Entry>();
+        sortedList = EntriesList
             .OrderByDescending(item => item.IsRunning) // Sort by IsRunning first
             .ThenByDescending(item => item.LastDate) // Then by LastPlayDate (descending)
             .ToList();
-        // EntriesList = new ObservableCollection<Entry>(sortedList);
+        EntriesList = new ObservableCollection<Entry>(sortedList);
         ((MainWindow)Application.Current.MainWindow).ShowCards();
     }
 
