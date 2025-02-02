@@ -73,15 +73,8 @@ public class EntryRepository
 
         entry.Repository = this;
         entry.EnsureLastWeekData();
-        EntriesList.Insert(0, entry);
-        // for (int i = 0; i < EntriesList.Count; i++)
-        // {
-        //     if (!EntriesList[i].IsRunning)
-        //     {
-        //         EntriesList.Insert(i, entry);
-        //         break;
-        //     }
-        // }
+        EntriesList.Add(entry);
+        SortEntries();
 
         UpdateTotalPercentages();
         PrintEntryList();

@@ -148,6 +148,7 @@ public partial class MainWindow : Window
 
     public void ShowCards()
     {
+        
         gameCardRepository.LoadCards(entryRepository, MainPanel);
     }
 

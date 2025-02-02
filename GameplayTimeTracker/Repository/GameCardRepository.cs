@@ -17,7 +17,6 @@ public class GameCardRepository
     {
         ParentPanel.Children.Clear();
         GameCards = new List<GameCard>();
-        // gameCardRepository = new GameCardRepository();
         foreach (var entry in entryRepository.EntriesList)
         {
             GameCard gc = new GameCard();
@@ -33,7 +32,7 @@ public class GameCardRepository
                     throw new ArgumentOutOfRangeException();
             }
 
-            this.GameCards.Add(gc);
+            GameCards.Add(gc);
             ParentPanel.Children.Add(gc);
         }
     }

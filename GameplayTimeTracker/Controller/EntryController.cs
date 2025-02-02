@@ -67,22 +67,22 @@ public static class EntryController
 
                 repository.AddEntry(newEntry);
                 // DataHandler.WriteEntriesToFile(repository.EntriesList, AppFiles.DataFilePath);
-                GameCard gc = new GameCard();
-
-                switch (Common.Settings.Display)
-                {
-                    case GameDisplay.Horizontal:
-                        gc = new GameCardHorizontal(newEntry, repository, cardRepository, parentPanel);
-                        break;
-                    case GameDisplay.Vertical:
-                        gc = new GameCardVertical(newEntry, repository, cardRepository, parentPanel);
-                        break;
-                }
-
-                cardRepository.GameCards.Add(gc);
-                parentPanel.Children.Add(gc);
-
-                DataHandler.WriteEntriesToFile(repository.EntriesList, AppFiles.DataFilePath);
+                // GameCard gc = new GameCard();
+                //
+                // switch (Common.Settings.Display)
+                // {
+                //     case GameDisplay.Horizontal:
+                //         gc = new GameCardHorizontal(newEntry, repository, cardRepository, parentPanel);
+                //         break;
+                //     case GameDisplay.Vertical:
+                //         gc = new GameCardVertical(newEntry, repository, cardRepository, parentPanel);
+                //         break;
+                // }
+                //
+                // cardRepository.GameCards.Add(gc);
+                // parentPanel.Children.Add(gc);
+                //
+                // DataHandler.WriteEntriesToFile(repository.EntriesList, AppFiles.DataFilePath);
 
                 if (!Common.Settings.QuickAdd)
                 {
