@@ -189,6 +189,7 @@ public class EntryRepository : INotifyPropertyChanged
             Console.WriteLine($"Removing entry {entry.Name}");
             EntriesList.Remove(entry);
             UpdateTotalPercentages();
+            TotalRuntime = GetTotalTimeArrays();
             PrintEntryList();
         }
     }
