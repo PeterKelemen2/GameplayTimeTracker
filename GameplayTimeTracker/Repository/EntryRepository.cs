@@ -272,7 +272,6 @@ public class EntryRepository : INotifyPropertyChanged
     {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
         field = value;
-        // Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - {value}");
         OnPropertyChanged(propertyName);
         return true;
     }
@@ -282,7 +281,7 @@ public class EntryRepository : INotifyPropertyChanged
         var propertyInfo = this.GetType().GetProperty(propertyName);
         var propertyValue = propertyInfo?.GetValue(this);
 
-        Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - Value: {propertyValue}");
+        // Console.WriteLine($"EntryRepository - PropertyChanged: {propertyName} - Value: {propertyValue}");
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

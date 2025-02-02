@@ -104,7 +104,7 @@ public static class TaskbarManager
             BindingOperations.GetBindingExpression(totalTimeRun, TextBlock.TextProperty);
         if (timeExistingBinding == null)
         {
-            Binding timeBinding = new Binding("RunningEntryCount")
+            Binding timeBinding = new Binding("TotalRuntimeFormatted")
             {
                 Source = entryRepository, Mode = BindingMode.OneWay,
             };
