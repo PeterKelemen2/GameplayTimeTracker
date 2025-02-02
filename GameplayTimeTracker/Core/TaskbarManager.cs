@@ -90,6 +90,26 @@ public static class TaskbarManager
             };
             countRun.SetBinding(Run.TextProperty, countBinding);
         }
+        
+        TextBlock timeBlock = FindChild<TextBlock>(trayToolTipGrid, "TotalTimeBlock");
+        BindingExpression timeColorBinding =
+            BindingOperations.GetBindingExpression(timeBlock, TextBlock.ForegroundProperty);
+        if (timeColorBinding == null)
+        {
+            BindingHelper.SetColorBinding(timeBlock, TextBlock.ForegroundProperty, "Font");
+        }
+        
+        Run totalTimeRun = timeBlock?.Inlines.FirstOrDefault(i => i is Run && ((Run)i).Name == "TotalTimeRun") as Run;
+        BindingExpression timeExistingBinding =
+            BindingOperations.GetBindingExpression(totalTimeRun, TextBlock.TextProperty);
+        if (timeExistingBinding == null)
+        {
+            Binding timeBinding = new Binding("RunningEntryCount")
+            {
+                Source = entryRepository, Mode = BindingMode.OneWay,
+            };
+            totalTimeRun.SetBinding(Run.TextProperty, timeBinding);
+        }
 
         taskbarIcon.TrayToolTip = toolTipBorder;
     }

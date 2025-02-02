@@ -16,7 +16,12 @@ public class EntryRepository : INotifyPropertyChanged
         get => EntriesList.Count(entry => entry.IsRunning);
     }
 
-    public List<Entry> EntriesList { get; set; } // = new();
+    // public int[] TotalRuntime
+    // {
+    //     get => EntriesList.
+    // }
+
+    public List<Entry> EntriesList { get; set; }
 
     public EntryRepository()
     {

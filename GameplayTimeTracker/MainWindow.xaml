@@ -49,6 +49,12 @@
                     <Run x:Name="RunningTitleRun" Text="Running apps: " FontWeight="Bold" FontSize="13" />
                     <Run x:Name="RunningCountRun" FontWeight="Regular" FontSize="11" />
                 </TextBlock>
+
+                <TextBlock x:Name="TotalTimeBlock"
+                           HorizontalAlignment="Left" Margin="80,50,0,0">
+                    <Run x:Name="TotalTitleRun" Text="Total Time: " FontWeight="Bold" FontSize="13" />
+                    <Run x:Name="TotalTimeRun" FontWeight="Regular" FontSize="11" />
+                </TextBlock>
             </Grid>
         </Border>
 
