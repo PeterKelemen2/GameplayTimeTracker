@@ -11,10 +11,11 @@ namespace GameplayTimeTracker;
 public class EntryRepository
 {
     // public List<Entry> EntriesList { get; set; }
-    public List<Entry> EntriesList { get; set; } = new List<Entry>();
+    public List<Entry> EntriesList { get; set; } // = new();
 
     public EntryRepository()
     {
+        EntriesList = new List<Entry>();
         EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
         foreach (Entry entry in EntriesList)
         {
@@ -72,9 +73,19 @@ public class EntryRepository
 
         entry.Repository = this;
         entry.EnsureLastWeekData();
-        // EntriesList.Insert(0, entry);
+        EntriesList.Insert(0, entry);
+        // for (int i = 0; i < EntriesList.Count; i++)
+        // {
+        //     if (!EntriesList[i].IsRunning)
+        //     {
+        //         EntriesList.Insert(i, entry);
+        //         break;
+        //     }
+        // }
 
         UpdateTotalPercentages();
+        PrintEntryList();
+        DataHandler.WriteEntriesToFile(EntriesList, AppFiles.DataFilePath);
     }
 
     public void RemoveEntry(Entry entry)

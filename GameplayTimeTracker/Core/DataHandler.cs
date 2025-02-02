@@ -18,6 +18,11 @@ public static class DataHandler
         if (File.Exists(filePath))
         {
             string jsonString = File.ReadAllText(filePath);
+            if (jsonString.Length == 0)
+            {
+                return entries;
+            }
+
             entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
         }
         else

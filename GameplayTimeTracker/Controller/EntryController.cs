@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.SGDB;
@@ -34,7 +35,7 @@ public static class EntryController
             if (!repository.IsExePresent(exePath))
             {
                 Entry newEntry = new Entry();
-                newEntry.Repository = repository;
+                // newEntry.Repository = repository;
                 newEntry.ExePath = exePath;
                 newEntry.Arguments = arguments;
                 string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
@@ -65,6 +66,7 @@ public static class EntryController
                 }
 
                 repository.AddEntry(newEntry);
+                // DataHandler.WriteEntriesToFile(repository.EntriesList, AppFiles.DataFilePath);
                 GameCard gc = new GameCard();
 
                 switch (Common.Settings.Display)

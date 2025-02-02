@@ -56,10 +56,10 @@ public partial class MainWindow : Window
 
     public void OnLoaded(object sender, RoutedEventArgs e)
     {
-        SetUpFooter();
         SetBaseColorBindings();
 
         LoadAndShowData();
+        SetUpFooter();
         StartCheckingEntries();
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
@@ -111,8 +111,6 @@ public partial class MainWindow : Window
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     entryRepository.ManageEntriesState();
-                    // tracker.HandleProcesses();
-                    // RearrangeTiles();
                     cycleCount++;
                 });
 
