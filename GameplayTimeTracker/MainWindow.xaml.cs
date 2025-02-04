@@ -149,6 +149,7 @@ public partial class MainWindow : Window
     public void LoadData()
     {
         entryRepository = new EntryRepository();
+        entryRepository.TotalRuntime = entryRepository.GetTotalTimeArrays();
         gameCardRepository = new GameCardRepository();
         // GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
         // TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
