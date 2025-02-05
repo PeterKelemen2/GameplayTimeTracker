@@ -40,6 +40,14 @@ public static class TaskbarManager
         }
 
         MenuItem openItem = new MenuItem { Header = "Open" };
+        Image openImage = new Image
+        {
+            Source = new BitmapImage(new Uri(AppFiles.ArrowIcon, UriKind.Relative)),
+            Width = 16,
+            Height = 16,
+        };
+        RenderOptions.SetBitmapScalingMode(openImage, BitmapScalingMode.HighQuality);
+        openItem.Icon = openImage;
         openItem.Click += mainWin.TrayMenu_Open_Click;
         trayMenu.Items.Insert(0, openItem);
         Separator sep1 = new Separator();
