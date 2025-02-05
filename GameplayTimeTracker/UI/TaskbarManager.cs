@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Application = System.Windows.Application;
 using Border = System.Windows.Controls.Border;
 using Grid = System.Windows.Controls.Grid;
@@ -26,6 +27,14 @@ public static class TaskbarManager
         foreach (var entry in sorted)
         {
             MenuItem entryMenuItem = new MenuItem { Header = $"Launch {entry.Name}" };
+            Image entryImage = new Image
+            {
+                Source = new BitmapImage(new Uri(entry.IconPath)),
+                Width = 16,
+                Height = 16,
+            };
+            RenderOptions.SetBitmapScalingMode(entryImage, BitmapScalingMode.HighQuality);
+            entryMenuItem.Icon = entryImage;
             entryMenuItem.Click += (s, e) => { Launcher.Launch(entry); };
             trayMenu.Items.Add(entryMenuItem);
         }
