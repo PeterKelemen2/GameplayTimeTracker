@@ -66,14 +66,14 @@ public class StatsGraph : CustomMenu
         for (int i = 0; i < count; i++)
         {
             double barRatio = Common.GetDoubleTimeFromArray(entry.PlaytimeHistory.ElementAt(i).Value) / maxTime;
-            Rectangle bar = new Rectangle
+            Border bar = new Border
             {
                 Width = barsWidth, Height = barRatio * graphHeight,
-                RadiusX = 5, RadiusY = 5,
+                CornerRadius = new CornerRadius(5, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Bottom,
                 Margin = new Thickness(rectMargin, 0, rectMargin, 0),
             };
-            BindingHelper.SetGradientColorBinding(bar, Shape.FillProperty, "Progress Bar 1",
+            BindingHelper.SetGradientColorBinding(bar, Border.BackgroundProperty, "Progress Bar 1",
                 "Progress Bar 2", true);
             statStackPanel.Children.Add(bar);
 
