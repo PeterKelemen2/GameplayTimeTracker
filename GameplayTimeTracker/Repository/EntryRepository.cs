@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Gtk;
 using Application = System.Windows.Application;
 
 namespace GameplayTimeTracker;

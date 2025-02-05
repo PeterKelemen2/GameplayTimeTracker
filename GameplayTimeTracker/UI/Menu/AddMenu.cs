@@ -2,10 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
-using Gdk;
 
 
 namespace GameplayTimeTracker.Menu;

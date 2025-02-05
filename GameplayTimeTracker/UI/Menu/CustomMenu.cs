@@ -2,11 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Settings;
-using MonoMac.CoreMedia;
 
 namespace GameplayTimeTracker.Menu;
 

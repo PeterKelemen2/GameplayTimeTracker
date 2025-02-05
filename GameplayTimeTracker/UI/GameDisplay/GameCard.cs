@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Drawing.Imaging;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using GameplayTimeTracker.Menu;
-using GameplayTimeTracker.Settings;
 using Grid = System.Windows.Controls.Grid;
 using Image = System.Windows.Controls.Image;
 

@@ -5,7 +5,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows;
 using Toolbelt.Drawing;
 using Rectangle = System.Drawing.Rectangle;
 using Size = System.Drawing.Size;

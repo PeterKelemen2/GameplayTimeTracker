@@ -5,9 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.SGDB;
-using Gtk;
 using Application = System.Windows.Application;
 
 namespace GameplayTimeTracker

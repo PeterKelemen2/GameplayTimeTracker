@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Menu.Content;
-using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu;

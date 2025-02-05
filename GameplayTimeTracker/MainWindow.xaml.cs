@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,10 +12,7 @@ using System.Windows.Shapes;
 using GameplayTimeTracker.Helper;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.Settings;
-using GameplayTimeTracker.SGDB;
-using Gtk;
 using Hardcodet.Wpf.TaskbarNotification;
-using Shellify;
 using Application = System.Windows.Application;
 using Grid = System.Windows.Controls.Grid;
 using Window = System.Windows.Window;
@@ -28,15 +21,12 @@ namespace GameplayTimeTracker;
 
 public partial class MainWindow : Window
 {
-    // private EntryRepository entryRepository;
-    // private GameCardRepository gameCardRepository;
     private AppTheme TestTheme;
     private double _scrollTarget = 0;
     private double _scrollOffset = 0;
     private const double ScrollSpeed = 80;
     private DragDropOverlay dragDropOverlay;
     private bool isAnimating = false;
-    public TaskbarIcon taskbarIcon;
 
     public MainWindow()
     {
@@ -61,7 +51,6 @@ public partial class MainWindow : Window
     public void OnLoaded(object sender, RoutedEventArgs e)
     {
         SetBaseColorBindings();
-
         LoadAndShowData();
         SetUpFooter();
         StartCheckingEntries();

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Menu;
-using GameplayTimeTracker.Settings;
 
 namespace GameplayTimeTracker;
 
