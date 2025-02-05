@@ -201,7 +201,7 @@ public partial class MainWindow : Window
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(GameCountRun, Run.TextProperty, managedCountBinding);
-        
+
         TotalPlaytimeTextBlock.Effect = AppEffects.DropShadowIcon;
         Binding totalPlaytimeBinding = new Binding("TotalRuntimeFormatted")
         {
@@ -372,16 +372,18 @@ public partial class MainWindow : Window
         ExitButton_YesClick(sender, e);
     }
 
-    private void Window_StateChanged(object sender, EventArgs e)
+    private async void Window_StateChanged(object sender, EventArgs e)
     {
         if (WindowState == WindowState.Minimized)
         {
+            await Task.Delay(200);
             Hide();
             Root.Visibility = Visibility.Collapsed;
         }
         else if (WindowState == WindowState.Normal)
         {
             Root.Visibility = Visibility.Visible;
+            Show();
         }
     }
 }
