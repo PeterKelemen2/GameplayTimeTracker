@@ -359,15 +359,14 @@ public partial class MainWindow : Window
     }
 
 
-    private void TrayMenu_Open_Click(object sender, RoutedEventArgs e)
+    public void TrayMenu_Open_Click(object sender, RoutedEventArgs e)
     {
         Show();
         WindowState = WindowState.Normal;
-        // ShowCards();
         Activate();
     }
 
-    private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
+    public void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
     {
         Console.WriteLine("Tray menu exit click");
         ExitButton_YesClick(sender, e);

@@ -1,29 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using GameplayTimeTracker.Helper;
-using GameplayTimeTracker.Menu;
-using GameplayTimeTracker.Settings;
-using GameplayTimeTracker.SGDB;
-using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
 using Border = System.Windows.Controls.Border;
 using Grid = System.Windows.Controls.Grid;
-using Window = System.Windows.Window;
 
 namespace GameplayTimeTracker;
 
@@ -32,15 +18,29 @@ public static class TaskbarManager
     public static void UpdateTrayEntries()
     {
         var mainWindow = Application.Current.MainWindow;
+        MainWindow mainWin = (MainWindow)Application.Current.MainWindow;
         ContextMenu trayMenu = (ContextMenu)mainWindow.FindResource("TrayMenu");
+        trayMenu.Items.Clear();
 
-        foreach (var entry in Common.Repository.GetEntriesSortedForTray())
+        List<Entry> sorted = Common.Repository.GetEntriesSortedForTray();
+        foreach (var entry in sorted)
         {
             MenuItem entryMenuItem = new MenuItem { Header = $"Launch {entry.Name}" };
             entryMenuItem.Click += (s, e) => { Launcher.Launch(entry); };
-
-            trayMenu.Items.Insert(1, entryMenuItem);
+            trayMenu.Items.Add(entryMenuItem);
         }
+
+        MenuItem openItem = new MenuItem { Header = "Open" };
+        openItem.Click += mainWin.TrayMenu_Open_Click;
+        trayMenu.Items.Insert(0, openItem);
+        Separator sep1 = new Separator();
+        trayMenu.Items.Insert(1, sep1);
+
+        Separator sep2 = new Separator();
+        trayMenu.Items.Add(sep2);
+        MenuItem exitItem = new MenuItem { Header = "Exit" };
+        exitItem.Click += mainWin.TrayMenu_Exit_Click;
+        trayMenu.Items.Add(exitItem);
     }
 
     public static void UpdateTrayToolTip()

@@ -156,9 +156,15 @@ public class EntryRepository : INotifyPropertyChanged
     public List<Entry> GetEntriesSortedForTray()
     {
         List<Entry> result = EntriesList
+            .Where(entry => !entry.IsRunning)
             .OrderByDescending(entry => Common.GetDoubleTimeFromArray(entry.TotalPlay))
-            .ThenBy(entry => entry.IsRunning)
+            .Take(Math.Min(5, EntriesList.Count()))
             .ToList();
+        foreach (Entry entry in result)
+        {
+            Console.WriteLine($"Sorted: {entry.Name} - {entry.IsRunning}");
+        }
+
         return result;
     }
 
