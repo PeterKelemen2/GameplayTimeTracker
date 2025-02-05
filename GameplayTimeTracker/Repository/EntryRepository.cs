@@ -52,7 +52,7 @@ public class EntryRepository : INotifyPropertyChanged
             : "0h 0m 0s";
 
     // public ObservableCollection<Entry> EntriesList { get; set; }
-    
+
     private ObservableCollection<Entry> _entriesList;
 
     public ObservableCollection<Entry> EntriesList
@@ -83,13 +83,14 @@ public class EntryRepository : INotifyPropertyChanged
         }
     }
 
-    private void EntriesList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void EntriesList_CollectionChanged(object sender,
+        System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         // Whenever the collection changes (item added, removed, etc.), update the TotalEntryCount
         TotalEntryCount = _entriesList.Count;
     }
 
-    
+
     public EntryRepository()
     {
         EntriesList = new ObservableCollection<Entry>();
@@ -150,6 +151,15 @@ public class EntryRepository : INotifyPropertyChanged
                 entry.IsRunning = false;
             }
         }
+    }
+
+    public List<Entry> GetEntriesSortedForTray()
+    {
+        List<Entry> result = EntriesList
+            .OrderByDescending(entry => Common.GetDoubleTimeFromArray(entry.TotalPlay))
+            .ThenBy(entry => entry.IsRunning)
+            .ToList();
+        return result;
     }
 
     public void SortEntries()

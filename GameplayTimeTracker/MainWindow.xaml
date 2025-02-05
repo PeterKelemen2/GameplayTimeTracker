@@ -15,14 +15,9 @@
     <Window.Resources>
         <ContextMenu x:Key="TrayMenu">
             <MenuItem Header="Open" Click="TrayMenu_Open_Click" />
+            <Separator />
             <MenuItem Header="Exit" Click="TrayMenu_Exit_Click" />
         </ContextMenu>
-
-        <StackPanel x:Key="TrayStatusPopup" Background="White" Width="200" Height="100">
-            <TextBlock Text="Gameplay Time Tracker is running..."
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center" />
-        </StackPanel>
 
         <Border x:Key="TrayToolTipBorder" CornerRadius="5" BorderThickness="2">
             <Grid x:Name="TrayToolTipGrid" Width="250" Height="100">
@@ -59,12 +54,9 @@
         </Border>
 
         <tb:TaskbarIcon x:Key="AppTaskbarIcon"
-                        ToolTipText="Fallback ToolTip for Windows XP"
                         IconSource="pack://application:,,,/Assets/GameplayTimeTracker.ico"
                         ContextMenu="{StaticResource TrayMenu}"
                         MenuActivation="LeftOrRightClick"
-                        TrayPopup="{StaticResource TrayStatusPopup}"
-                        PopupActivation="DoubleClick"
                         TrayToolTip="{StaticResource TrayToolTipBorder}" />
     </Window.Resources>
 

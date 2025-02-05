@@ -29,7 +29,21 @@ namespace GameplayTimeTracker;
 
 public static class TaskbarManager
 {
-    public static void UpdateTrayToolTip(TaskbarIcon taskbarIcon, EntryRepository entryRepository)
+    public static void UpdateTrayEntries()
+    {
+        var mainWindow = Application.Current.MainWindow;
+        ContextMenu trayMenu = (ContextMenu)mainWindow.FindResource("TrayMenu");
+
+        foreach (var entry in Common.Repository.GetEntriesSortedForTray())
+        {
+            MenuItem entryMenuItem = new MenuItem { Header = $"Launch {entry.Name}" };
+            entryMenuItem.Click += (s, e) => { Launcher.Launch(entry); };
+
+            trayMenu.Items.Insert(1, entryMenuItem);
+        }
+    }
+
+    public static void UpdateTrayToolTip()
     {
         var mainWindow = Application.Current.MainWindow;
         Border toolTipBorder = (Border)mainWindow.FindResource("TrayToolTipBorder");
@@ -86,11 +100,11 @@ public static class TaskbarManager
         {
             Binding countBinding = new Binding("RunningEntryCount")
             {
-                Source = entryRepository, Mode = BindingMode.OneWay,
+                Source = Common.Repository, Mode = BindingMode.OneWay,
             };
             countRun.SetBinding(Run.TextProperty, countBinding);
         }
-        
+
         TextBlock timeBlock = FindChild<TextBlock>(trayToolTipGrid, "TotalTimeBlock");
         BindingExpression timeColorBinding =
             BindingOperations.GetBindingExpression(timeBlock, TextBlock.ForegroundProperty);
@@ -98,7 +112,7 @@ public static class TaskbarManager
         {
             BindingHelper.SetColorBinding(timeBlock, TextBlock.ForegroundProperty, "Font");
         }
-        
+
         Run totalTimeRun = timeBlock?.Inlines.FirstOrDefault(i => i is Run && ((Run)i).Name == "TotalTimeRun") as Run;
         BindingExpression timeExistingBinding =
             BindingOperations.GetBindingExpression(totalTimeRun, TextBlock.TextProperty);
@@ -106,12 +120,12 @@ public static class TaskbarManager
         {
             Binding timeBinding = new Binding("TotalRuntimeFormatted")
             {
-                Source = entryRepository, Mode = BindingMode.OneWay,
+                Source = Common.Repository, Mode = BindingMode.OneWay,
             };
             totalTimeRun.SetBinding(Run.TextProperty, timeBinding);
         }
 
-        taskbarIcon.TrayToolTip = toolTipBorder;
+        Common.TaskbarIcon.TrayToolTip = toolTipBorder;
     }
 
     private static T FindChild<T>(DependencyObject parent, string childName) where T : DependencyObject

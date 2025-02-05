@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GameplayTimeTracker.Settings;
+using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
 
 namespace GameplayTimeTracker;
@@ -12,6 +13,9 @@ namespace GameplayTimeTracker;
 public static class Common
 {
     public static AppSettings Settings { get; set; }
+    public static EntryRepository Repository { get; set; }
+    public static GameCardRepository CardRepository { get; set; }
+    public static TaskbarIcon TaskbarIcon { get; set; }
 
     public const string RunningText = "Running!";
     public const double CardPadding = 10;

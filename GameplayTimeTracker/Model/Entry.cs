@@ -316,6 +316,7 @@ namespace GameplayTimeTracker
                     if (_repository != null)
                     {
                         _repository.SortEntries();
+                        TaskbarManager.UpdateTrayEntries();
                     }
                 }
             }

@@ -28,8 +28,8 @@ namespace GameplayTimeTracker;
 
 public partial class MainWindow : Window
 {
-    private EntryRepository entryRepository;
-    private GameCardRepository gameCardRepository;
+    // private EntryRepository entryRepository;
+    // private GameCardRepository gameCardRepository;
     private AppTheme TestTheme;
     private double _scrollTarget = 0;
     private double _scrollOffset = 0;
@@ -66,9 +66,10 @@ public partial class MainWindow : Window
         SetUpFooter();
         StartCheckingEntries();
 
-        taskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
-        taskbarIcon.Visibility = Visibility.Visible;
-        TaskbarManager.UpdateTrayToolTip(taskbarIcon, entryRepository);
+        Common.TaskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
+        Common.TaskbarIcon.Visibility = Visibility.Visible;
+        TaskbarManager.UpdateTrayToolTip();
+        TaskbarManager.UpdateTrayEntries();
 
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
@@ -118,13 +119,13 @@ public partial class MainWindow : Window
                 stopwatch.Restart();
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    entryRepository.ManageEntriesState();
+                    Common.Repository.ManageEntriesState();
                     cycleCount++;
                 });
 
                 if (cycleCount >= Common.Settings.SavingFrequencyInMinutes * 60)
                 {
-                    DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
+                    DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
                     cycleCount = 0;
                 }
 
@@ -148,16 +149,16 @@ public partial class MainWindow : Window
 
     public void LoadData()
     {
-        entryRepository = new EntryRepository();
-        entryRepository.TotalRuntime = entryRepository.GetTotalTimeArrays();
-        gameCardRepository = new GameCardRepository();
+        Common.Repository = new EntryRepository();
+        Common.Repository.TotalRuntime = Common.Repository.GetTotalTimeArrays();
+        Common.CardRepository = new GameCardRepository();
         // GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
         // TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
     }
 
     public void ShowCards()
     {
-        gameCardRepository.LoadCards(entryRepository, MainPanel);
+        Common.CardRepository.LoadCards(Common.Repository, MainPanel);
     }
 
     private void SetBaseColorBindings()
@@ -178,7 +179,7 @@ public partial class MainWindow : Window
         AddButton.Click += (_, _) =>
         {
             string path = Common.GetDialogPath(Common.exeFilter);
-            EntryController.AddEntry(path, entryRepository, gameCardRepository, MainPanel);
+            EntryController.AddEntry(path, Common.Repository, Common.CardRepository, MainPanel);
         };
         Grid.SetRow(AddButton, 1);
         MainGrid.Children.Add(AddButton);
@@ -197,7 +198,7 @@ public partial class MainWindow : Window
         GamesLoadedBlock.Effect = AppEffects.DropShadowIcon;
         Binding managedCountBinding = new Binding("TotalEntryCount")
         {
-            Source = entryRepository,
+            Source = Common.Repository,
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(GameCountRun, Run.TextProperty, managedCountBinding);
@@ -205,7 +206,7 @@ public partial class MainWindow : Window
         TotalPlaytimeTextBlock.Effect = AppEffects.DropShadowIcon;
         Binding totalPlaytimeBinding = new Binding("TotalRuntimeFormatted")
         {
-            Source = entryRepository,
+            Source = Common.Repository,
             Mode = BindingMode.OneWay,
         };
         BindingOperations.SetBinding(TotalTimeRun, Run.TextProperty, totalPlaytimeBinding);
@@ -239,12 +240,12 @@ public partial class MainWindow : Window
 
     private void ExitButton_YesClick(object sender, RoutedEventArgs e)
     {
-        foreach (var entry in entryRepository.EntriesList)
+        foreach (var entry in Common.Repository.EntriesList)
         {
             entry.IncrementTodaysHistory(toSave: false);
         }
 
-        DataHandler.WriteEntriesToFile(entryRepository.EntriesList, AppFiles.DataFilePath);
+        DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
         Application.Current.Shutdown();
     }
 
@@ -350,7 +351,7 @@ public partial class MainWindow : Window
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
             {
-                EntryController.AddEntry(file, entryRepository, gameCardRepository, MainPanel);
+                EntryController.AddEntry(file, Common.Repository, Common.CardRepository, MainPanel);
             }
         }
 
