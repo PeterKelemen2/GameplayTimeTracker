@@ -27,14 +27,13 @@ public static class TaskbarManager
         foreach (var entry in sorted)
         {
             MenuItem entryMenuItem = new MenuItem { Header = $"Launch {entry.Name}" };
-            Image entryImage = new Image
-            {
-                Source = new BitmapImage(new Uri(entry.IconPath)),
-                Width = 16,
-                Height = 16,
-            };
+
+            Image entryImage = new Image { Width = 16, Height = 16, };
+            Binding iconBinding = new Binding("IconPath") { Source = entry, Mode = BindingMode.OneWay, };
+            BindingOperations.SetBinding(entryImage, Image.SourceProperty, iconBinding);
             RenderOptions.SetBitmapScalingMode(entryImage, BitmapScalingMode.HighQuality);
             entryMenuItem.Icon = entryImage;
+
             entryMenuItem.Click += (s, e) => { Launcher.Launch(entry); };
             trayMenu.Items.Add(entryMenuItem);
         }
@@ -42,9 +41,7 @@ public static class TaskbarManager
         MenuItem openItem = new MenuItem { Header = "Open" };
         Image openImage = new Image
         {
-            Source = new BitmapImage(new Uri(AppFiles.ArrowIcon, UriKind.Relative)),
-            Width = 16,
-            Height = 16,
+            Source = new BitmapImage(new Uri(AppFiles.ArrowIcon, UriKind.Relative)), Width = 16, Height = 16,
         };
         RenderOptions.SetBitmapScalingMode(openImage, BitmapScalingMode.HighQuality);
         openItem.Icon = openImage;
