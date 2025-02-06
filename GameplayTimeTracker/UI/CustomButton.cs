@@ -25,6 +25,9 @@ public class CustomButton : UserControl
     public Grid Grid { get; set; }
     public Effect ButtonEffect { get; set; }
 
+    public double W { get; set; }
+    public double H { get; set; }
+
     // Dependency Properties
     public static readonly DependencyProperty MarginProperty =
         DependencyProperty.Register("Margin", typeof(Thickness), typeof(CustomButton),
@@ -66,6 +69,8 @@ public class CustomButton : UserControl
         bool isActive = (bool)GetValue(ActiveProperty);
 
         // ButtonImagePath = bImgPath;
+        W = w;
+        H = h;
         ButtonType = type;
         ButtonEffect ??= effect;
 
@@ -175,6 +180,7 @@ public class CustomButton : UserControl
                 // ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
                 break;
         }
+
         ButtonHoverColor = ColorHelper.AdjustBrightness(ButtonColor, 1.2);
         ButtonPressedColor = ColorHelper.AdjustBrightness(ButtonColor, 0.8);
         ButtonBase.Fill = new SolidColorBrush(ButtonColor);

@@ -19,7 +19,7 @@ public class GameCardCompact : GameCard
     {
         IsVertical = false;
         ContainerGrid.Width = 830;
-        ContainerGrid.Height = 150;
+        ContainerGrid.Height = 100;
         // ContainerGrid.Margin = new Thickness(0, 10, 0, 0);
 
         CardRectangle.Width = ContainerGrid.Width;
@@ -68,23 +68,29 @@ public class GameCardCompact : GameCard
         LastStack.Width = 180;
         LastStack.Margin = new Thickness(0, 25, stackMargin, 0);
 
-        IconImage.Height = ContainerGrid.Height * 0.6;
+        IconImage.Height = ContainerGrid.Height * 0.5;
         IconImage.HorizontalAlignment = HorizontalAlignment.Left;
-        IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 30, 0, 0);
+        IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 20, 0, 0);
 
-        HeroImage.Height = ContainerGrid.Height;
-        HeroImage.HorizontalAlignment = HorizontalAlignment.Left;
-        HeroImage.OpacityMask = new LinearGradientBrush
-        {
-            StartPoint = new Point(0.33, 0), // Start from the left
-            EndPoint = new Point(1, 0), // End on the right
-            GradientStops = new GradientStopCollection
-            {
-                new GradientStop(Colors.Black, 0.0), // Full opacity on the left
-                new GradientStop(Colors.Transparent, 1.0) // Fully transparent on the right
-            }
-        };
-        HeroImage.Clip = new RectangleGeometry(new Rect(0, 0, CardRectangle.Width, ContainerGrid.Height),
-            CardRectangle.RadiusX, CardRectangle.RadiusY);
+        HeroImage.Visibility = Visibility.Collapsed;
+        TotalProgressBar.Visibility = Visibility.Collapsed;
+        LastPlayedOnBlock.Visibility = Visibility.Collapsed;
+        LastProgressBar.Visibility = Visibility.Collapsed;
+
+        UpdateButtons();
+    }
+
+    private void UpdateButtons()
+    {
+        EditButton.HorizontalAlignment = HorizontalAlignment.Right;
+        EditButton.VerticalAlignment = VerticalAlignment.Center;
+        RemoveButton.HorizontalAlignment = HorizontalAlignment.Right;
+        RemoveButton.VerticalAlignment = VerticalAlignment.Center;
+        LaunchButton.HorizontalAlignment = HorizontalAlignment.Right;
+        LaunchButton.VerticalAlignment = VerticalAlignment.Center;
+
+        LaunchButton.Margin = new Thickness(0, 0, 20, 0);
+        RemoveButton.Margin = new Thickness(0, 0, 30 + LaunchButton.W, 0);
+        EditButton.Margin = new Thickness(0, 0, 40 + LaunchButton.W + RemoveButton.W, 0);
     }
 }
