@@ -355,7 +355,6 @@ namespace GameplayTimeTracker
 
         public void EnsureLastWeekData()
         {
-            // PlaytimeHistory = new Dictionary<DateTime, int[]>();
             if (PlaytimeHistory == null)
             {
                 PlaytimeHistory = new Dictionary<DateTime, int[]>();
@@ -370,20 +369,12 @@ namespace GameplayTimeTracker
                 .ToDictionary(entry => entry.Key, entry => entry.Value);
 
             // Ensure last 7 days are present
-            Random random = new Random();
-
             for (int i = 0; i < 7; i++)
             {
                 DateTime date = today.AddDays(-i);
                 if (!filteredHistory.ContainsKey(date))
                 {
-                    filteredHistory[date] = new int[]
-                    {
-                        // random.Next(0, 23), // Index 0 initialized to 0
-                        // random.Next(0, 60), // Index 1 with a random value between 0-59
-                        // random.Next(0, 60) // Index 2 with a random value between 0-59
-                        0, 0, 0
-                    };
+                    filteredHistory[date] = new[] { 0, 0, 0 };
                 }
             }
 
