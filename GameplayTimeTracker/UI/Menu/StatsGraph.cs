@@ -41,17 +41,18 @@ public class StatsGraph : CustomMenu
         StackPanel statStackPanel = new StackPanel
         {
             Width = graphWidth, Height = graphHeight,
-            Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.2)),
             Orientation = Orientation.Horizontal,
         };
         Border statsPanelBorder = new Border
         {
             HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top,
+            Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.2)),
             BorderBrush = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
             BorderThickness = new Thickness(2, 0, 0, 2),
             Margin = new Thickness(0, 10, 0, 0),
+            CornerRadius = new CornerRadius(0, 5, 0, 0),
             Effect = AppEffects.DropShadowRectangle,
             Child = statStackPanel,
         };
