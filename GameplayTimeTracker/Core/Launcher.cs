@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using GameplayTimeTracker.Menu;
+using Gdk;
 
 namespace GameplayTimeTracker;
 
@@ -16,6 +18,10 @@ public static class Launcher
             if (entry.IsRunning)
             {
                 Console.WriteLine("Already running");
+                var alreadyRunningPrompt = new PromptMenu(
+                    width: 300, textArray: new[] { entry.Name, "is already running." }, boldArray: new[] { true, false }
+                );
+                alreadyRunningPrompt.Open();
                 return;
             }
 

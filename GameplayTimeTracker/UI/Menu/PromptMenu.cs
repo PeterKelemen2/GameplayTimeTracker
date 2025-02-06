@@ -78,7 +78,7 @@ public class PromptMenu : CustomMenu
         }
         else
         {
-            AddButton("Ok", 0, null, BType.Default);
+            AddButton("Ok", 0, yesHandler, BType.Default);
         }
 
         MenuContentPanel.Children.Add(ButtonsGrid);
