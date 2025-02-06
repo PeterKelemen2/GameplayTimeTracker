@@ -19,6 +19,17 @@ public class BindingHelper
         BindingOperations.SetBinding(element, property, newBinding);
     }
 
+    public static void SetRunningColorBinding(UIElement element, DependencyProperty property, Entry entry)
+    {
+        Binding newBinding = new Binding
+        {
+            Source = entry.IsRunning,
+            Converter = new RunningToColorConverter(),
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(element, property, newBinding);
+    }
+
     public static void SetGradientColorBinding(UIElement element, DependencyProperty property, string c1 = "",
         string c2 = "",
         bool horizontal = false)

@@ -19,29 +19,22 @@ public class GameCardCompact : GameCard
     {
         IsVertical = false;
         ContainerGrid.Width = 830;
-        ContainerGrid.Height = 100;
-        // ContainerGrid.Margin = new Thickness(0, 10, 0, 0);
+        ContainerGrid.Height = 80;
 
         CardRectangle.Width = ContainerGrid.Width;
         CardRectangle.Height = ContainerGrid.Height;
-        // CardRectangle.Fill = ColorHelper.CreateLinGradBrushHor(AppColors.CardColor1, AppColors.CardColor2);
         BindingHelper.SetGradientColorBinding(CardRectangle, Shape.FillProperty, "Card 1", "Card 2", true);
 
-        EditButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - EditButton.Height - 5, 80, 0);
-        RemoveButton.Margin = new Thickness(0, ContainerGrid.Height / 2 - RemoveButton.Height - 5, 30, 0);
-        LaunchButton.Margin = new Thickness(0, 0, 30, ContainerGrid.Height / 2 - LaunchButton.Height - 5);
+        IconImage.Height = ContainerGrid.Height * 0.6;
+        IconImage.HorizontalAlignment = HorizontalAlignment.Left;
+        IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 0, 0, 0);
 
         TitleBlock.FontSize = Common.TitleFontSize;
         TitleBlock.FontWeight = FontWeights.Bold;
         TitleBlock.HorizontalAlignment = HorizontalAlignment.Left;
         TitleBlock.VerticalAlignment = VerticalAlignment.Top;
-        TitleBlock.Margin = new Thickness(CardRectangle.RadiusX / 2, CardRectangle.RadiusX / 2, 0, 0);
-
-        RunningTextBlock.FontSize = Common.TitleFontSize - 4;
-        RunningTextBlock.HorizontalAlignment = HorizontalAlignment.Left;
-        RunningTextBlock.VerticalAlignment = VerticalAlignment.Top;
-        RunningTextBlock.Margin =
-            new Thickness(CardRectangle.RadiusX / 2, CardRectangle.RadiusX + Common.TitleFontSize - 3, 0, 0);
+        TitleBlock.Margin = new Thickness(85, CardRectangle.RadiusX / 2, 0, 0);
+        BindingHelper.SetRunningColorBinding(TitleBlock, ForegroundProperty, DataEntry);
 
         double stackMargin = 200;
         TotalPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
@@ -68,10 +61,7 @@ public class GameCardCompact : GameCard
         LastStack.Width = 180;
         LastStack.Margin = new Thickness(0, 25, stackMargin, 0);
 
-        IconImage.Height = ContainerGrid.Height * 0.5;
-        IconImage.HorizontalAlignment = HorizontalAlignment.Left;
-        IconImage.Margin = new Thickness(ContainerGrid.Height * 0.3, 20, 0, 0);
-
+        RunningTextBlock.Visibility = Visibility.Collapsed;
         HeroImage.Visibility = Visibility.Collapsed;
         TotalProgressBar.Visibility = Visibility.Collapsed;
         LastPlayedOnBlock.Visibility = Visibility.Collapsed;
