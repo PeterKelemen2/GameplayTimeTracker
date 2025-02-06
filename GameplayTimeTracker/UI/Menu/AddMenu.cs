@@ -47,6 +47,9 @@ public class AddMenu : EntryConfigMenu
             case GameDisplay.Vertical:
                 gc = new GameCardVertical(entry, entryRepo, cardRepo, panel);
                 break;
+            case GameDisplay.Compact:
+                gc = new GameCardCompact(entry, entryRepo, cardRepo, panel);
+                break;
         }
 
         cardRepo.GameCards.Add(gc);

@@ -28,6 +28,9 @@ public class GameCardRepository
                 case GameDisplay.Horizontal:
                     gc = new GameCardHorizontal(entry, entryRepository, this, ParentPanel);
                     break;
+                case GameDisplay.Compact:
+                    gc = new GameCardCompact(entry, entryRepository, this, ParentPanel);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
