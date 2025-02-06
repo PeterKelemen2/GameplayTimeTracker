@@ -53,7 +53,7 @@ public class GameCardHorizontal : GameCard
             if (child is FrameworkElement fe) fe.Margin = new Thickness(0, 5, 0, 0);
         }
 
-        TotalStack.Margin = new Thickness(stackMargin, 20, 0, 0);
+        TotalStack.Margin = new Thickness(stackMargin, 25, 0, 0);
 
         LastPlaytimeBlock.FontSize = Common.TitleFontSize - 2;
         LastPlayedOnBlock.FontSize = Common.TitleFontSize - 2;
@@ -66,7 +66,7 @@ public class GameCardHorizontal : GameCard
         }
 
         LastStack.Width = 180;
-        LastStack.Margin = new Thickness(0, 20, stackMargin, 0);
+        LastStack.Margin = new Thickness(0, 25, stackMargin, 0);
 
         IconImage.Height = ContainerGrid.Height * 0.6;
         IconImage.HorizontalAlignment = HorizontalAlignment.Left;
