@@ -235,7 +235,10 @@ public partial class MainWindow : Window
     {
         foreach (var entry in Common.Repository.EntriesList)
         {
-            entry.IncrementTodaysHistory(toSave: false);
+            if (entry.IsRunning)
+            {
+                entry.IncrementTodaysHistory(toSave: false);
+            }
         }
 
         DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
