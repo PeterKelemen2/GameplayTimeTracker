@@ -27,8 +27,8 @@ namespace GameplayTimeTracker
         private bool _isRunning;
         private string _runningString;
         private string _lastPlayStateString = "Started: ";
-        private string _localSavePath;
-        private bool _isRemoteSaveEnabled;
+        private string _localSavePath = "";
+        private bool _isRemoteSaveEnabled = false;
 
         private DateTime _lastDate;
 
@@ -37,34 +37,6 @@ namespace GameplayTimeTracker
         private bool _wasRunning = false;
         private EntryRepository _repository;
 
-
-        [JsonPropertyName("isRemoteSaveEnabled")]
-        public bool IsRemoteSaveEnabled
-        {
-            get => _isRemoteSaveEnabled;
-            set
-            {
-                if (value != _isRemoteSaveEnabled)
-                {
-                    _isRemoteSaveEnabled = value;
-                    OnPropertyChanged(nameof(IsRemoteSaveEnabled));
-                }
-            }
-        }
-
-        [JsonPropertyName("localSavePath")]
-        public string LocalSavePath
-        {
-            get => _localSavePath;
-            set
-            {
-                if (value != _localSavePath)
-                {
-                    _localSavePath = value;
-                    OnPropertyChanged(nameof(LocalSavePath));
-                }
-            }
-        }
 
         [JsonIgnore]
         public EntryRepository Repository
@@ -184,6 +156,34 @@ namespace GameplayTimeTracker
             {
                 SetField(ref _arguments, value);
                 InitSave();
+            }
+        }
+
+        [JsonPropertyName("isRemoteSaveEnabled")]
+        public bool IsRemoteSaveEnabled
+        {
+            get => _isRemoteSaveEnabled;
+            set
+            {
+                if (value != _isRemoteSaveEnabled)
+                {
+                    _isRemoteSaveEnabled = value;
+                    OnPropertyChanged(nameof(IsRemoteSaveEnabled));
+                }
+            }
+        }
+
+        [JsonPropertyName("localSavePath")]
+        public string LocalSavePath
+        {
+            get => _localSavePath;
+            set
+            {
+                if (value != _localSavePath)
+                {
+                    _localSavePath = value;
+                    OnPropertyChanged(nameof(LocalSavePath));
+                }
             }
         }
 
@@ -338,6 +338,7 @@ namespace GameplayTimeTracker
                     {
                         IncrementTodaysHistory();
                         InitSave();
+                        InitRemoteSave();
                     }
 
                     if (_repository != null)
@@ -379,6 +380,16 @@ namespace GameplayTimeTracker
             if (_repository != null)
             {
                 DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
+            }
+        }
+
+        public void InitRemoteSave()
+        {
+            if (_isRemoteSaveEnabled && _localSavePath != null)
+            {
+                string uploadPath =
+                    $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+                RemoteController.UploadFolder(_localSavePath, uploadPath);
             }
         }
 
