@@ -23,10 +23,12 @@ public class EditMenu : EntryConfigMenu
         TitleTextBlock.Padding = new Thickness(10, 0, 10, 0);
         ConfirmButton.Click += (_, _) => { Close(); };
 
+        CreateTitleBlock("Refresh Images");
+
         Panel buttonContainer = new WrapPanel
-            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(15) };
+            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,15) };
         var RefreshSGDBButton =
-            new CustomButton(w: 120, h: 40, text: "SGDB Refresh", effect: AppEffects.DropShadowIcon);
+            new CustomButton(w: 120, h: 40, text: "Full SGDB", effect: AppEffects.DropShadowIcon);
         RefreshSGDBButton.Margin = new Thickness(5);
         RefreshSGDBButton.Click += (_, __) => { entry.RefreshImagesFromSGDB(); };
         if (Common.Settings.SGDBApiKey.Length == 0)
@@ -37,13 +39,13 @@ public class EditMenu : EntryConfigMenu
         buttonContainer.Children.Add(RefreshSGDBButton);
 
         var RefreshLocalHeroButton =
-            new CustomButton(w: 120, h: 40, text: "Local Refresh", effect: AppEffects.DropShadowIcon);
+            new CustomButton(w: 120, h: 40, text: "Hero Local", effect: AppEffects.DropShadowIcon);
         RefreshLocalHeroButton.Margin = new Thickness(5);
         RefreshLocalHeroButton.Click += async (_, __) => { RefreshLocalHero(entry); };
         buttonContainer.Children.Add(RefreshLocalHeroButton);
 
         var RefreshLocalIconFromExeButton =
-            new CustomButton(w: 120, h: 40, text: "Exe Refresh", effect: AppEffects.DropShadowIcon);
+            new CustomButton(w: 120, h: 40, text: "Icon Local", effect: AppEffects.DropShadowIcon);
         RefreshLocalIconFromExeButton.Margin = new Thickness(5);
         RefreshLocalIconFromExeButton.Click += async (_, __) => { RefreshLocalIcon(entry); };
         Binding activeBinding = new Binding("IsLaunchable")

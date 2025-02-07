@@ -14,11 +14,13 @@ public class EntryConfigMenu : CustomMenu
     public TextBox ExeBox { get; set; }
     public TextBox IconBox { get; set; }
     public TextBox HeroBox { get; set; }
+    public Entry _entry { get; set; }
 
     public EntryConfigMenu(Entry entry,
         double width = 350, bool toScale = true)
         : base(width, toScale)
     {
+        _entry = entry;
         ToScale = toScale;
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
@@ -31,16 +33,9 @@ public class EntryConfigMenu : CustomMenu
         BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty, "Font");
         stackPanel.Children.Add(TitleTextBlock);
 
-        TextBlock generalTextBlock = UIHelper.CreateTextBlock("General", hA: HorizontalAlignment.Center, fontSize: 17);
-        BindingHelper.SetColorBinding(generalTextBlock, ForegroundProperty, "Font");
-        stackPanel.Children.Add(generalTextBlock);
+        CreateTitleBlock("General");
 
-        Grid nameGrid = UIHelper.CreateAddEntryGrid(Settings, "Name", new Thickness(5, 0, 0, 30));
-        var nameBox = Common.FindTextBox(nameGrid);
-        Binding nameBinding = new Binding("Name")
-            { Source = entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-        BindingOperations.SetBinding(nameBox, TextBox.TextProperty, nameBinding);
-        stackPanel.Children.Add(nameGrid);
+        CreateEditEntry("Name", "Name");
 
         Grid timeGrid = UIHelper.CreateAddEntryGrid(Settings, "Playtime", new Thickness(5, 10, 0, 30));
         var timeBox = Common.FindTextBox(timeGrid);
@@ -76,24 +71,12 @@ public class EntryConfigMenu : CustomMenu
         Binding exeBinding = new Binding("ExePath") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(ExeBox, TextBox.TextProperty, exeBinding);
         CustomButton exeBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        exeBrowseButton.Click += (_, _) =>
-        {
-            string newPath = Common.GetDialogPath(Common.exeFilter);
-            if (!newPath.Equals(""))
-            {
-                ExeBox.Text = newPath;
-                entry.ExePath = newPath;
-            }
-        };
+        exeBrowseButton.Click += ExeBrowse_Click;
         exeGrid.Children.Add(exeBrowseButton);
         stackPanel.Children.Add(exeGrid);
 
-        Grid argsGrid = UIHelper.CreateAddEntryGrid(Settings, "Arguments", new Thickness(5, 10, 0, 30));
-        stackPanel.Children.Add(argsGrid);
-        var argsBox = Common.FindTextBox(argsGrid);
-        Binding argsBinding = new Binding("Arguments") { Source = entry, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(argsBox, TextBox.TextProperty, argsBinding);
-        
+        CreateEditEntry("Arguments", "Arguments");
+
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
         imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
         BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, "Font");
@@ -118,6 +101,7 @@ public class EntryConfigMenu : CustomMenu
         stackPanel.Children.Add(iconGrid);
 
         Grid heroGrid = UIHelper.CreateAddEntryGrid(Settings, "Hero Path", new Thickness(5, 10, 0, 30));
+        heroGrid.Margin = new Thickness(0, 0, 0, 15);
         var heroBox = Common.FindTextBox(heroGrid);
         Binding heroPathBinding = new Binding("HeroPath") { Source = entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(heroBox, TextBox.TextProperty, heroPathBinding);
@@ -139,7 +123,33 @@ public class EntryConfigMenu : CustomMenu
             new CustomButton(w: 120, h: 40, text: "Finish", effect: AppEffects.DropShadowIcon,
                 type: BType.Positive);
         ConfirmButton.Margin = new Thickness(0, 20, 0, 10);
-        // ConfirmButton.Click += (_, _) => { AddConfiguredEntry(entry, entryRepo, cardRepo, panel); };
-        // stackPanel.Children.Add(ConfirmButton);
+    }
+
+
+    private void ExeBrowse_Click(object sender, RoutedEventArgs e)
+    {
+        string newPath = Common.GetDialogPath(Common.exeFilter);
+        if (!newPath.Equals(""))
+        {
+            ExeBox.Text = newPath;
+            _entry.ExePath = newPath;
+        }
+    }
+
+    private void CreateEditEntry(string title, string bindingPath)
+    {
+        Grid grid = UIHelper.CreateAddEntryGrid(Settings, title, new Thickness(5, 0, 0, 30));
+        var textBox = Common.FindTextBox(grid);
+        Binding binding = new Binding(bindingPath)
+            { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+        BindingOperations.SetBinding(textBox, TextBox.TextProperty, binding);
+        stackPanel.Children.Add(grid);
+    }
+
+    public void CreateTitleBlock(string title)
+    {
+        TextBlock textBlock = UIHelper.CreateTextBlock(title, hA: HorizontalAlignment.Center, fontSize: 17);
+        BindingHelper.SetColorBinding(textBlock, ForegroundProperty, "Font");
+        stackPanel.Children.Add(textBlock);
     }
 }
