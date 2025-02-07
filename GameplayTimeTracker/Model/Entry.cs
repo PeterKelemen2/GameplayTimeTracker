@@ -449,23 +449,13 @@ namespace GameplayTimeTracker
         {
             int[] newArray = (int[])arr.Clone(); // Clone the array
             newArray[2]++; // Increment seconds
-            if (newArray[2] >= 60)
-            {
-                newArray[2] = 0;
-                newArray[1]++; // Increment minutes
-                if (newArray[1] >= 60)
-                {
-                    newArray[1] = 0;
-                    newArray[0]++; // Increment hours
-                }
-            }
+            newArray = Common.NormalizeTimeArray(newArray);
 
             if (arr == LastPlay)
                 LastPlay = newArray; // Reassign to trigger notification
             else if (arr == TotalPlay)
                 TotalPlay = newArray; // Reassign to trigger notification
         }
-
 
         public double GetTotalPlaytimeAsDouble()
         {
