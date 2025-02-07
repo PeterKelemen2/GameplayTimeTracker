@@ -30,12 +30,8 @@ public class AppSettings : INotifyPropertyChanged
         get => _startWithSystem;
         set
         {
-            if (_startWithSystem != value)
-            {
-                _startWithSystem = value;
-                OnPropertyChanged(nameof(StartWithSystem));
-                DataHandler.ManageStartupShortcut(_startWithSystem);
-            }
+            SetField(ref _startWithSystem, value);
+            DataHandler.ManageStartupShortcut(_startWithSystem);
         }
     }
 
@@ -43,145 +39,77 @@ public class AppSettings : INotifyPropertyChanged
     public string SGDBApiKey
     {
         get => _sgdbApiKey;
-        set
-        {
-            SetField(ref _sgdbApiKey, value);
-            DataHandler.WriteSettingsToFile(this);
-        }
+        set { SetField(ref _sgdbApiKey, value); }
     }
 
     [JsonPropertyName("Dont Show API Key prompt")]
     public bool DontShowApiKeyPrompt
     {
         get => _dontShowApiKeyPrompt;
-        set
-        {
-            SetField(ref _dontShowApiKeyPrompt, value);
-            DataHandler.WriteSettingsToFile(this);
-        }
+        set { SetField(ref _dontShowApiKeyPrompt, value); }
     }
 
     [JsonPropertyName("Prefer SteamGridDB Image")]
     public bool PreferSteamGridDBImage
     {
         get => _preferSGDBImages;
-        set
-        {
-            SetField(ref _preferSGDBImages, value);
-            DataHandler.WriteSettingsToFile(this);
-        }
+        set { SetField(ref _preferSGDBImages, value); }
     }
 
     [JsonPropertyName("Quick Add")]
     public bool QuickAdd
     {
         get => _quickAdd;
-        set
-        {
-            SetField(ref _quickAdd, value);
-            DataHandler.WriteSettingsToFile(this);
-        }
+        set { SetField(ref _quickAdd, value); }
     }
 
     [JsonPropertyName("Performance Mode")]
     public bool PerformanceMode
     {
         get => _performanceMode;
-        set
-        {
-            SetField(ref _performanceMode, value);
-            DataHandler.WriteSettingsToFile(this);
-        }
+        set { SetField(ref _performanceMode, value); }
     }
 
     [JsonPropertyName("Display Type")]
     public GameDisplay Display
     {
         get => _gameDisplay;
-        set
-        {
-            if (_gameDisplay != value)
-            {
-                _gameDisplay = value;
-                OnPropertyChanged(nameof(Display));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _gameDisplay, value); }
     }
 
     [JsonPropertyName("Saving Frequency")]
     public int SavingFrequencyInMinutes
     {
         get => _savingFreqInMin;
-        set
-        {
-            if (_savingFreqInMin != value)
-            {
-                _savingFreqInMin = value;
-                OnPropertyChanged(nameof(SavingFrequencyInMinutes));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _savingFreqInMin, value); }
     }
 
     [JsonPropertyName("Remote Saving Enabled")]
     public bool IsRemoteSavingEnabled
     {
         get => _isRemoteSavingEnabled;
-        set
-        {
-            if (_isRemoteSavingEnabled != value)
-            {
-                _isRemoteSavingEnabled = value;
-                OnPropertyChanged(nameof(IsRemoteSavingEnabled));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _isRemoteSavingEnabled, value); }
     }
 
     [JsonPropertyName("Remote Machine")]
     public RemoteMachine RemoteMachine
     {
         get => _remoteMachine;
-        set
-        {
-            if (_remoteMachine != value)
-            {
-                _remoteMachine = value;
-                OnPropertyChanged(nameof(RemoteMachine));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _remoteMachine, value); }
     }
 
     [JsonPropertyName("Current Theme")]
     public AppTheme CurrentTheme
     {
         get => _currentTheme;
-        set
-        {
-            if (_currentTheme != value)
-            {
-                _currentTheme = value;
-                OnPropertyChanged(nameof(CurrentTheme));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _currentTheme, value); }
     }
 
     [JsonPropertyName("Theme List")]
     public List<AppTheme> ThemesList
     {
         get => _themesList;
-        set
-        {
-            if (_themesList != value)
-            {
-                _themesList = value;
-                OnPropertyChanged(nameof(ThemesList));
-                DataHandler.WriteSettingsToFile(this);
-            }
-        }
+        set { SetField(ref _themesList, value); }
     }
 
     public override string ToString()
@@ -212,7 +140,7 @@ public class AppSettings : INotifyPropertyChanged
     public virtual void OnPropertyChanged(string propertyName)
     {
         Console.WriteLine($"Settings - PropertyChanged: {propertyName}");
-
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        DataHandler.WriteSettingsToFile(this);
     }
 }

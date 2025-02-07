@@ -17,70 +17,35 @@ public class RemoteMachine : INotifyPropertyChanged
     public string Address
     {
         get => _address;
-        set
-        {
-            if (value != _address)
-            {
-                _address = value;
-                OnPropertyChanged(nameof(Address));
-            }
-        }
+        set { SetField(ref _address, value); }
     }
 
     [JsonPropertyName("Port")]
     public int Port
     {
         get => _port;
-        set
-        {
-            if (value != _port)
-            {
-                _port = value;
-                OnPropertyChanged(nameof(Port));
-            }
-        }
+        set { SetField(ref _port, value); }
     }
 
     [JsonPropertyName("User")]
     public string User
     {
         get => _user;
-        set
-        {
-            if (value != _user)
-            {
-                _user = value;
-                OnPropertyChanged(nameof(User));
-            }
-        }
+        set { SetField(ref _user, value); }
     }
 
     [JsonPropertyName("Password")]
     public string Password
     {
         get => _password;
-        set
-        {
-            if (value != _password)
-            {
-                _password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
+        set { SetField(ref _password, value); }
     }
 
     [JsonPropertyName("Remote Folder")]
     public string RemoteFolder
     {
         get => _remoteFolder;
-        set
-        {
-            if (value != _remoteFolder)
-            {
-                _remoteFolder = value;
-                OnPropertyChanged(nameof(RemoteFolder));
-            }
-        }
+        set { SetField(ref _remoteFolder, value); }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

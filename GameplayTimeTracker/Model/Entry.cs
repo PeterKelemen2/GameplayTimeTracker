@@ -86,11 +86,8 @@ namespace GameplayTimeTracker
             get => _lastArray;
             set
             {
-                if (SetField(ref _lastArray, value))
-                {
-                    // Notify that the formatted playtime has changed
-                    OnPropertyChanged(nameof(LastPlayFormatted));
-                }
+                SetField(ref _lastArray, value);
+                OnPropertyChanged(nameof(LastPlayFormatted));
             }
         }
 
@@ -104,28 +101,14 @@ namespace GameplayTimeTracker
         public string RunningFormatted
         {
             get => _runningString;
-            set
-            {
-                if (_runningString != value)
-                {
-                    _runningString = value;
-                    OnPropertyChanged(nameof(RunningFormatted));
-                }
-            }
+            set { SetField(ref _runningString, value); }
         }
 
         [JsonIgnore]
         public string LastRunningStateFormatted
         {
             get => _lastPlayStateString;
-            set
-            {
-                if (_lastPlayStateString != value)
-                {
-                    _lastPlayStateString = value;
-                    OnPropertyChanged(nameof(LastRunningStateFormatted));
-                }
-            }
+            set { SetField(ref _lastPlayStateString, value); }
         }
 
         [JsonPropertyName("exePath")]
@@ -163,14 +146,7 @@ namespace GameplayTimeTracker
         public bool IsRemoteSaveEnabled
         {
             get => _isRemoteSaveEnabled;
-            set
-            {
-                if (value != _isRemoteSaveEnabled)
-                {
-                    _isRemoteSaveEnabled = value;
-                    OnPropertyChanged(nameof(IsRemoteSaveEnabled));
-                }
-            }
+            set { SetField(ref _isRemoteSaveEnabled, value); }
         }
 
         [JsonPropertyName("localSavePath")]
@@ -269,29 +245,14 @@ namespace GameplayTimeTracker
         public double TotalPerc
         {
             get => _totalPerc;
-            set
-            {
-                if (_totalPerc != value)
-                {
-                    _totalPerc = value;
-                    OnPropertyChanged(nameof(TotalPerc));
-                }
-            }
+            set { SetField(ref _totalPerc, value); }
         }
 
         [JsonIgnore]
         public double LastPerc
         {
             get => _lastPerc;
-            // set => SetField(ref _lastPerc, value);
-            set
-            {
-                if (_lastPerc != value)
-                {
-                    _lastPerc = value;
-                    OnPropertyChanged(nameof(LastPerc));
-                }
-            }
+            set => SetField(ref _lastPerc, value);
         }
 
         [JsonPropertyName("lastPlayDate")]
