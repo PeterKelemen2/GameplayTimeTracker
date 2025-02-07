@@ -39,6 +39,7 @@ public static class EntryController
                 newEntry.Arguments = arguments;
                 string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
                 name = string.IsNullOrEmpty(name) ? Path.GetFileNameWithoutExtension(newEntry.ExePath) : name;
+                name = name.Trim();
                 newEntry.Name = name;
 
                 if (Common.Settings.PreferSteamGridDBImage)

@@ -29,6 +29,7 @@ namespace GameplayTimeTracker
         private string _lastPlayStateString = "Started: ";
         private string _localSavePath = "";
         private bool _isRemoteSaveEnabled = false;
+        public bool _isEditing = false;
 
         private DateTime _lastDate;
 
@@ -43,6 +44,16 @@ namespace GameplayTimeTracker
         {
             get => _repository;
             set => SetField(ref _repository, value);
+        }
+
+        [JsonIgnore]
+        public bool IsEditing
+        {
+            set
+            {
+                SetField(ref _isEditing, value);
+                if (!_isEditing) Name = Name.Trim();
+            }
         }
 
         [JsonPropertyName("gameName")]

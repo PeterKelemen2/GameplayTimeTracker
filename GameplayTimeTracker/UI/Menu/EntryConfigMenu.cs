@@ -35,7 +35,14 @@ public class EntryConfigMenu : CustomMenu
 
         CreateTitleBlock("General");
 
-        CreateEditEntry("Name", "Name");
+        Grid nameGrid = UIHelper.CreateAddEntryGrid(Settings, "Name", new Thickness(5, 0, 0, 30));
+        var nameTextBox = Common.FindTextBox(nameGrid);
+        Binding nameBinding = new Binding("Name")
+            { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+        BindingOperations.SetBinding(nameTextBox, TextBox.TextProperty, nameBinding);
+        nameTextBox.GotFocus += (s, e) => { _entry.IsEditing = true; };
+        nameTextBox.LostFocus += (s, e) => { _entry.IsEditing = false; };
+        stackPanel.Children.Add(nameGrid);
 
         Grid timeGrid = UIHelper.CreateAddEntryGrid(Settings, "Playtime", new Thickness(5, 10, 0, 30));
         var timeBox = Common.FindTextBox(timeGrid);
