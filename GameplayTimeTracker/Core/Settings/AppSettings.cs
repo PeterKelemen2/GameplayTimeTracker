@@ -13,7 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private bool _performanceMode = true;
-    private RemoteMachine _remoteMachine;
+    private RemoteMachine _remoteMachine = new();
 
     private AppTheme _currentTheme;
     private GameDisplay _gameDisplay = GameDisplay.Vertical;

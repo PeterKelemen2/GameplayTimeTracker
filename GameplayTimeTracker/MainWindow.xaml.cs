@@ -37,10 +37,6 @@ public partial class MainWindow : Window
         DragDropGrid.Children.Add(dragDropOverlay);
 
         DataHandler.ManageStartupShortcut(Common.Settings.StartWithSystem);
-        foreach (var color in Common.Settings.CurrentTheme.Colors)
-        {
-            Console.WriteLine($"Color: {color.Key}, {color.Value}");
-        }
 
         Closing += MainWindow_Closing;
         StateChanged += Window_StateChanged;

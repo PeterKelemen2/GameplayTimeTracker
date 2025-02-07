@@ -17,8 +17,8 @@ public static class RemoteController
         }
 
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.RemoteAddress, remote.RemotePort, remote.RemoteUser,
-                   remote.RemotePassword))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
+                   remote.Password))
         {
             sftp.Connect();
             Console.WriteLine($"Trying to upload to {remoteFolderPath}");
@@ -86,8 +86,8 @@ public static class RemoteController
     public static void DownloadFolder(string remoteFolderPath, string localFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.RemoteAddress, remote.RemotePort, remote.RemoteUser,
-                   remote.RemotePassword))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
+                   remote.Password))
         {
             sftp.Connect();
 
@@ -142,8 +142,8 @@ public static class RemoteController
         string gameFolderPath = Path.Combine(remotePath, gameName).Replace("\\", "/");
 
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.RemoteAddress, remote.RemotePort, remote.RemoteUser,
-                   remote.RemotePassword))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
+                   remote.Password))
         {
             sftp.Connect();
 
@@ -177,8 +177,8 @@ public static class RemoteController
         // string gameFolderPath = remotePath;
 
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.RemoteAddress, remote.RemotePort, remote.RemoteUser,
-                   remote.RemotePassword))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
+                   remote.Password))
         {
             sftp.Connect();
 
