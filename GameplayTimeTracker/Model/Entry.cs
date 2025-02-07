@@ -306,7 +306,6 @@ namespace GameplayTimeTracker
                     }
                     else
                     {
-                        // EnsureLastWeekData();
                         IncrementTodaysHistory();
                         InitSave();
                     }

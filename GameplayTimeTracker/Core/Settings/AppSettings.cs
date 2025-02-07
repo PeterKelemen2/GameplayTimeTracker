@@ -13,6 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private bool _performanceMode = true;
+    private RemoteMachine _remoteMachine;
 
     private AppTheme _currentTheme;
     private GameDisplay _gameDisplay = GameDisplay.Vertical;
@@ -122,6 +123,21 @@ public class AppSettings : INotifyPropertyChanged
         }
     }
 
+    [JsonPropertyName("Remote Machine")]
+    public RemoteMachine RemoteMachine
+    {
+        get => _remoteMachine;
+        set
+        {
+            if (_remoteMachine != value)
+            {
+                _remoteMachine = value;
+                OnPropertyChanged(nameof(RemoteMachine));
+                DataHandler.WriteSettingsToFile(this);
+            }
+        }
+    }
+
     [JsonPropertyName("Current Theme")]
     public AppTheme CurrentTheme
     {
@@ -163,7 +179,6 @@ public class AppSettings : INotifyPropertyChanged
         {
             if (theme.ThemeName.Equals(newThemeName))
             {
-                
             }
         }
     }
