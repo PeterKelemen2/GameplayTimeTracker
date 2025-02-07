@@ -36,15 +36,15 @@ public partial class MainWindow : Window
         dragDropOverlay = new DragDropOverlay();
         DragDropGrid.Children.Add(dragDropOverlay);
 
-        string gameName = "Game";
-        string localSavePath = "C:\\Users\\Peti\\AppData\\Local\\TestGame";
-        string uploadPath =
-            $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{gameName}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-        RemoteController.UploadFolder(localSavePath, uploadPath);
-
-        string remoteGameFolder = System.IO.Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, gameName)
-            .Replace("\\", "/");
-        RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder), localSavePath);
+        // string gameName = "Game";
+        // string localSavePath = "C:\\Users\\Peti\\AppData\\Local\\TestGame";
+        // string uploadPath =
+        //     $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{gameName}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+        // RemoteController.UploadFolder(localSavePath, uploadPath);
+        //
+        // string remoteGameFolder = System.IO.Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, gameName)
+        //     .Replace("\\", "/");
+        // RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder), localSavePath);
 
         Closing += MainWindow_Closing;
         StateChanged += Window_StateChanged;

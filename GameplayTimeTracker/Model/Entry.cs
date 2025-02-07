@@ -385,7 +385,8 @@ namespace GameplayTimeTracker
 
         public void InitRemoteSave()
         {
-            if (_isRemoteSaveEnabled && _localSavePath != null)
+            if (_isRemoteSaveEnabled && Common.Settings.IsRemoteSavingEnabled &&
+                !string.IsNullOrWhiteSpace(_localSavePath))
             {
                 string uploadPath =
                     $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
