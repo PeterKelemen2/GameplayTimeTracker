@@ -37,6 +37,7 @@ public class ColorEntry : UserControl
             Margin = new Thickness(0, 5, 0, 5),
             HorizontalAlignment = HorizontalAlignment.Center,
         };
+        containerGrid.CacheMode = new BitmapCache();
 
         bg = new Rectangle
         {

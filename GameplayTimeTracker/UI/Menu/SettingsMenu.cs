@@ -22,23 +22,23 @@ public class SettingsMenu : CustomMenu
             HorizontalAlignment = HorizontalAlignment.Center,
         };
         var blockMargin = new Thickness(10);
-        var PrefBlock = UIHelper.CreateTextBlock("Preferences", margin: blockMargin, isBold: false,
-            fontSize: Common.TextFontSize + 2);
+        var PrefBlock = UIHelper.CreateTextBlock("Preferences", isBold: false, fontSize: Common.TextFontSize + 2);
+        PrefBlock.Padding = blockMargin;
         BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, "Font");
         PrefBlock.MouseDown += (_, _) => { SetMenu<PrefMenu>(PrefBlock); };
 
-        var Themes = UIHelper.CreateTextBlock("Themes", margin: blockMargin, isBold: false,
-            fontSize: Common.TextFontSize + 2);
+        var Themes = UIHelper.CreateTextBlock("Themes", isBold: false, fontSize: Common.TextFontSize + 2);
+        Themes.Padding = blockMargin;
         BindingHelper.SetColorBinding(Themes, ForegroundProperty, "Font");
         Themes.MouseDown += (_, _) => { SetMenu<ThemeMenu>(Themes); };
 
-        var Backup = UIHelper.CreateTextBlock("Backup", margin: blockMargin, isBold: false,
-            fontSize: Common.TextFontSize + 2);
+        var Backup = UIHelper.CreateTextBlock("Backup", isBold: false, fontSize: Common.TextFontSize + 2);
+        Backup.Padding = blockMargin;
         BindingHelper.SetColorBinding(Backup, ForegroundProperty, "Font");
         Backup.MouseDown += (_, _) => { SetMenu<BackupMenu>(Backup); };
 
-        var Remote = UIHelper.CreateTextBlock("Remote", margin: blockMargin, isBold: false,
-            fontSize: Common.TextFontSize + 2);
+        var Remote = UIHelper.CreateTextBlock("Remote", isBold: false, fontSize: Common.TextFontSize + 2);
+        Remote.Padding = blockMargin;
         BindingHelper.SetColorBinding(Remote, ForegroundProperty, "Font");
         Remote.MouseDown += (_, _) => { SetMenu<RemoteMenu>(Remote); };
 
