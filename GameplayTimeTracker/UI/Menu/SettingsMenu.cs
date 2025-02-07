@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using GameplayTimeTracker.Menu.Content;
 using GameplayTimeTracker.UI.Menu.Content;
 
@@ -72,18 +73,39 @@ public class SettingsMenu : CustomMenu
     private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
     {
         var menuInstance = Activator.CreateInstance(typeof(T));
+        double previousHeight = 0.0;
 
-        if (menuInstance is not null && menuInstance is MenuContent menu)
+        if (menuInstance is not null && menuInstance is MenuContent newMenu)
         {
             if (MenuContentPanel.Children.Contains(ContentScrollViewer))
             {
+                previousHeight = ContentScrollViewer.ActualHeight;
                 MenuContentPanel.Children.Remove(ContentScrollViewer);
             }
 
-            ContentScrollViewer = menu._scrollViewer;
+            ContentScrollViewer = newMenu._scrollViewer;
+
+            // Ensure the new menu is measured before animation
             MenuContentPanel.Children.Add(ContentScrollViewer);
+            ContentScrollViewer.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            double newHeight = ContentScrollViewer.DesiredSize.Height;
+
+            AnimateHeightTransition(ContentScrollViewer, previousHeight, newHeight);
 
             HighlightCurrentTextBlock(selectedTextBlock);
         }
+    }
+
+    private void AnimateHeightTransition(ScrollViewer target, double fromHeight, double toHeight)
+    {
+        var heightAnimation = new DoubleAnimation
+        {
+            From = fromHeight,
+            To = toHeight,
+            Duration = TimeSpan.FromMilliseconds(200),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        target.BeginAnimation(FrameworkElement.HeightProperty, heightAnimation);
     }
 }
