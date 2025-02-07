@@ -20,17 +20,24 @@ public static class RemoteController
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
                    remote.Password))
         {
-            sftp.Connect();
-            Console.WriteLine($"Trying to upload to {remoteFolderPath}");
-            EnsureRemoteFolderExists(sftp, remoteFolderPath);
+            try
+            {
+                sftp.Connect();
+                Console.WriteLine($"Trying to upload to {remoteFolderPath}");
+                EnsureRemoteFolderExists(sftp, remoteFolderPath);
 
-            UploadDirectoryRecursive(sftp, localFolderPath, remoteFolderPath);
+                UploadDirectoryRecursive(sftp, localFolderPath, remoteFolderPath);
 
-            Console.WriteLine("Folder upload complete.");
-            sftp.Disconnect();
+                Console.WriteLine("Folder upload complete.");
+                sftp.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
-    
+
     private static void UploadDirectoryRecursive(SftpClient sftp, string localFolderPath, string remoteFolderPath)
     {
         var files = Directory.GetFiles(localFolderPath);
@@ -89,18 +96,25 @@ public static class RemoteController
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
                    remote.Password))
         {
-            sftp.Connect();
-
-            // Ensure the local folder exists
-            if (!Directory.Exists(localFolderPath))
+            try
             {
-                Directory.CreateDirectory(localFolderPath);
+                sftp.Connect();
+
+                // Ensure the local folder exists
+                if (!Directory.Exists(localFolderPath))
+                {
+                    Directory.CreateDirectory(localFolderPath);
+                }
+
+                DownloadDirectoryRecursive(sftp, remoteFolderPath, localFolderPath);
+
+                Console.WriteLine("Folder download complete.");
+                sftp.Disconnect();
             }
-
-            DownloadDirectoryRecursive(sftp, remoteFolderPath, localFolderPath);
-
-            Console.WriteLine("Folder download complete.");
-            sftp.Disconnect();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 
@@ -170,7 +184,7 @@ public static class RemoteController
             sftp.Disconnect();
         }
     }
-    
+
     public static string GetPathWithLatestName(string remotePath)
     {
         // Combine the remote path with the game name
@@ -222,6 +236,7 @@ public static class RemoteController
 
             sftp.Disconnect();
         }
+
         return null;
     }
 }

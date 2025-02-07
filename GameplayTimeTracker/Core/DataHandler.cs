@@ -64,6 +64,8 @@ public static class DataHandler
             WriteSettingsToFile(settings);
         }
 
+        ManageStartupShortcut(settings.StartWithSystem);
+
         return settings;
     }
 

@@ -13,6 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private bool _performanceMode = true;
+    private bool _isRemoteSavingEnabled = false;
     private RemoteMachine _remoteMachine = new();
 
     private AppTheme _currentTheme;
@@ -119,6 +120,20 @@ public class AppSettings : INotifyPropertyChanged
                 _savingFreqInMin = value;
                 OnPropertyChanged(nameof(SavingFrequencyInMinutes));
                 DataHandler.WriteSettingsToFile(this);
+            }
+        }
+    }
+
+    [JsonPropertyName("Remote Saving Enabled")]
+    public bool IsRemoteSavingEnabled
+    {
+        get => _isRemoteSavingEnabled;
+        set
+        {
+            if (_isRemoteSavingEnabled != value)
+            {
+                _isRemoteSavingEnabled = value;
+                OnPropertyChanged(nameof(IsRemoteSavingEnabled));
             }
         }
     }
