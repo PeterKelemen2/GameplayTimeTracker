@@ -27,6 +27,8 @@ namespace GameplayTimeTracker
         private bool _isRunning;
         private string _runningString;
         private string _lastPlayStateString = "Started: ";
+        private string _localSavePath;
+        private bool _isRemoteSaveEnabled;
 
         private DateTime _lastDate;
 
@@ -35,6 +37,34 @@ namespace GameplayTimeTracker
         private bool _wasRunning = false;
         private EntryRepository _repository;
 
+
+        [JsonPropertyName("isRemoteSaveEnabled")]
+        public bool IsRemoteSaveEnabled
+        {
+            get => _isRemoteSaveEnabled;
+            set
+            {
+                if (value != _isRemoteSaveEnabled)
+                {
+                    _isRemoteSaveEnabled = value;
+                    OnPropertyChanged(nameof(IsRemoteSaveEnabled));
+                }
+            }
+        }
+
+        [JsonPropertyName("localSavePath")]
+        public string LocalSavePath
+        {
+            get => _localSavePath;
+            set
+            {
+                if (value != _localSavePath)
+                {
+                    _localSavePath = value;
+                    OnPropertyChanged(nameof(LocalSavePath));
+                }
+            }
+        }
 
         [JsonIgnore]
         public EntryRepository Repository
