@@ -4,9 +4,9 @@ namespace GameplayTimeTracker.Settings;
 
 public class RemoteMachine
 {
-    [JsonPropertyName("address")] public string Address { get; set; }
-    [JsonPropertyName("port")] public int Port { get; set; } = 22;
-    [JsonPropertyName("user")] public string User { get; set; }
-    [JsonPropertyName("password")] public string Password { get; set; }
-    [JsonPropertyName("remoteFolder")] public string RemoteFolder { get; set; }
+    [JsonPropertyName("Address")] public string Address { get; set; }
+    [JsonPropertyName("Port")] public int Port { get; set; } = 22;
+    [JsonPropertyName("User")] public string User { get; set; }
+    [JsonPropertyName("Password")] public string Password { get; set; }
+    [JsonPropertyName("Remote Folder")] public string RemoteFolder { get; set; }
 }
