@@ -157,7 +157,11 @@ namespace GameplayTimeTracker
         public bool IsRemoteSaveEnabled
         {
             get => _isRemoteSaveEnabled;
-            set { SetField(ref _isRemoteSaveEnabled, value); }
+            set
+            {
+                SetField(ref _isRemoteSaveEnabled, value);
+                InitSave();
+            }
         }
 
         [JsonPropertyName("localSavePath")]
@@ -360,10 +364,35 @@ namespace GameplayTimeTracker
             if (_isRemoteSaveEnabled && Common.Settings.IsRemoteSavingEnabled &&
                 !string.IsNullOrWhiteSpace(_localSavePath))
             {
-                string uploadPath =
-                    $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-                RemoteController.UploadFolder(_localSavePath, uploadPath);
+                RemoteSave();
             }
+        }
+
+        public void RemoteSave()
+        {
+            if (IsRunning) return;
+
+            string uploadPath =
+                $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+            RemoteController.UploadFolder(_localSavePath, uploadPath);
+        }
+
+        public void InitRemoteLoad()
+        {
+            if (!string.IsNullOrWhiteSpace(_localSavePath))
+            {
+                RemoteLoad();
+            }
+        }
+
+        public void RemoteLoad()
+        {
+            if (IsRunning) return;
+
+            string remoteGameFolder = Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, Name)
+                .Replace("\\", "/");
+            RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder),
+                LocalSavePath);
         }
 
         public void EnsureLastWeekData()
@@ -469,7 +498,7 @@ namespace GameplayTimeTracker
 
         public virtual void OnPropertyChanged(string propertyName)
         {
-            // Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
+            Console.WriteLine($"Entry - PropertyChanged: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

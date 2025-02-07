@@ -7,7 +7,7 @@ namespace GameplayTimeTracker.Menu;
 
 public class EntryConfigMenu : CustomMenu
 {
-    private bool ToScale;
+    public ScrollViewer scrollViewer { get; set; }
     public StackPanel stackPanel { get; set; }
     public TextBlock TitleTextBlock { get; set; }
     public CustomButton ConfirmButton { get; set; }
@@ -25,8 +25,10 @@ public class EntryConfigMenu : CustomMenu
         double buttonSize = 20;
         double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
+        scrollViewer = new ScrollViewer { Height = 600, VerticalScrollBarVisibility = ScrollBarVisibility.Hidden };
         stackPanel = new();
-        MenuContentPanel.Children.Add(stackPanel);
+        scrollViewer.Content = stackPanel;
+        MenuContentPanel.Children.Add(scrollViewer);
 
         TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
             vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);
@@ -84,8 +86,56 @@ public class EntryConfigMenu : CustomMenu
 
         CreateEditEntry("Arguments", "Arguments");
 
+        TextBlock remoteTitleBlock =
+            UIHelper.CreateTextBlock("Remote Backup", hA: HorizontalAlignment.Center, fontSize: 17);
+        remoteTitleBlock.Margin = new Thickness(0, 15, 0, 0);
+        BindingHelper.SetColorBinding(remoteTitleBlock, ForegroundProperty, "Font");
+        stackPanel.Children.Add(remoteTitleBlock);
+
+        Grid savePathGrid = UIHelper.CreateAddEntryGrid(Settings, "Local Save Path", new Thickness(5, 0, 0, 30));
+        var saveBox = Common.FindTextBox(savePathGrid);
+        Binding savePathBinding = new Binding("LocalSavePath") { Source = entry, Mode = BindingMode.TwoWay, };
+        BindingOperations.SetBinding(saveBox, TextBox.TextProperty, savePathBinding);
+        saveBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
+        CustomButton savePathBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
+        savePathBrowseButton.Click += (_, _) =>
+        {
+            string newPath = Common.GetFolderDialogPath();
+            if (!string.IsNullOrEmpty(newPath))
+            {
+                saveBox.Text = newPath;
+                entry.IconPath = newPath;
+            }
+        };
+        savePathGrid.Children.Add(savePathBrowseButton);
+        stackPanel.Children.Add(savePathGrid);
+
+        PrefEntry remoteSavePref =
+            new PrefEntry("Remote Backup", Common.Settings.PreferSteamGridDBImage, width: 220,
+                description: "On session end");
+        Binding remoteSavePrefBinding = new Binding("IsRemoteSaveEnabled")
+            { Source = _entry, Mode = BindingMode.TwoWay, };
+        BindingOperations.SetBinding(remoteSavePref.toggleButton, CustomToggleButton.IsToggledProperty,
+            remoteSavePrefBinding);
+        BindingHelper.SetColorBinding(remoteSavePref.textBlock, ForegroundProperty, "Font");
+        stackPanel.Children.Add(remoteSavePref);
+
+        Panel remoteButtonsContainer = new WrapPanel
+            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 10, 0, 15) };
+        CustomButton uploadButton = new CustomButton(w: 110, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon);
+        uploadButton.Margin = new Thickness(0, 0, 5, 0);
+        uploadButton.Click += (_, _) => { entry.RemoteSave(); };
+
+        CustomButton loadButton =
+            new CustomButton(w: 110, h: 40, text: "Load Latest", effect: AppEffects.DropShadowIcon);
+        loadButton.Margin = new Thickness(5, 0, 0, 0);
+        loadButton.Click += (_, _) => { entry.RemoteLoad(); };
+        remoteButtonsContainer.Children.Add(uploadButton);
+        remoteButtonsContainer.Children.Add(loadButton);
+        stackPanel.Children.Add(remoteButtonsContainer);
+
         TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
-        imagesTextBlock.Margin = new Thickness(0, 20, 0, 0);
+        imagesTextBlock.Margin = new Thickness(0, 0, 0, 0);
         BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, "Font");
         stackPanel.Children.Add(imagesTextBlock);
 
@@ -145,7 +195,7 @@ public class EntryConfigMenu : CustomMenu
 
     private void CreateEditEntry(string title, string bindingPath)
     {
-        Grid grid = UIHelper.CreateAddEntryGrid(Settings, title, new Thickness(5, 0, 0, 30));
+        Grid grid = UIHelper.CreateAddEntryGrid(Settings, title, new Thickness(5, 10, 0, 30));
         var textBox = Common.FindTextBox(grid);
         Binding binding = new Binding(bindingPath)
             { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };

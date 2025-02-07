@@ -3,9 +3,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using GameplayTimeTracker.Settings;
 using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.Win32;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace GameplayTimeTracker;
 
@@ -33,6 +35,8 @@ public static class Common
         "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif|Executable files (*.exe)|*.exe|All files (*.*)|*.*";
 
     public static string exeFilter = "Executable files (*.exe, *.lnk)|*.exe;*.lnk|All files (*.*)|*.*";
+
+    public static string folderFilter = "Folder files (*.*)|*.*";
 
     public static string Truncate(string value, int length, bool toDot = false)
     {
@@ -141,6 +145,19 @@ public static class Common
         }
 
         return filePath;
+    }
+
+    public static string GetFolderDialogPath()
+    {
+        using (var folderDialog = new FolderBrowserDialog())
+        {
+            if (folderDialog.ShowDialog() == DialogResult.OK)
+            {
+                return folderDialog.SelectedPath;
+            }
+        }
+
+        return null;
     }
 
 
