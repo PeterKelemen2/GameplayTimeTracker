@@ -134,6 +134,7 @@ public class AppSettings : INotifyPropertyChanged
             {
                 _isRemoteSavingEnabled = value;
                 OnPropertyChanged(nameof(IsRemoteSavingEnabled));
+                DataHandler.WriteSettingsToFile(this);
             }
         }
     }

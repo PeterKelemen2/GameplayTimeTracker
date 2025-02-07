@@ -18,7 +18,7 @@ public class SettingsMenu : CustomMenu
     {
         SettingsContentPanel = new StackPanel();
         // SettingsContentPanel.CacheMode = new BitmapCache();
-        
+
         HeaderPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,
@@ -40,9 +40,15 @@ public class SettingsMenu : CustomMenu
         BindingHelper.SetColorBinding(Backup, ForegroundProperty, "Font");
         Backup.MouseDown += (_, _) => { SetBackupMenu(Backup); };
 
+        var Remote = UIHelper.CreateTextBlock("Remote", margin: blockMargin, isBold: false,
+            fontSize: Common.TextFontSize + 2);
+        BindingHelper.SetColorBinding(Remote, ForegroundProperty, "Font");
+        Remote.MouseDown += (_, _) => { SetRemoteMenu(Remote); };
+
         HeaderPanel.Children.Add(PrefBlock);
         HeaderPanel.Children.Add(Themes);
         HeaderPanel.Children.Add(Backup);
+        HeaderPanel.Children.Add(Remote);
         Border headerBorder = new Border
         {
             BorderThickness = new Thickness(0, 0, 0, 1),
@@ -108,4 +114,37 @@ public class SettingsMenu : CustomMenu
 
         HighlightCurrentTextBlock(selectedTextBlock);
     }
+
+    private void SetRemoteMenu(TextBlock selectedTextBlock)
+    {
+        var remoteMenu = new RemoteMenu();
+        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
+        {
+            MenuContentPanel.Children.Remove(SettingsContentPanel);
+        }
+
+        SettingsContentPanel = remoteMenu.Panel;
+        MenuContentPanel.Children.Add(SettingsContentPanel);
+
+        HighlightCurrentTextBlock(selectedTextBlock);
+    }
+
+    // private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
+    // {
+    //     var menuInstance = Activator.CreateInstance(typeof(T));
+    //
+    //     if (menuInstance is not null && menuInstance is IMenu menu)
+    //     {
+    //         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
+    //         {
+    //             MenuContentPanel.Children.Remove(SettingsContentPanel);
+    //         }
+    //
+    //         SettingsContentPanel = menu.Panel;
+    //         MenuContentPanel.Children.Add(SettingsContentPanel);
+    //
+    //         HighlightCurrentTextBlock(selectedTextBlock);
+    //     }
+    // }
+
 }
