@@ -10,8 +10,9 @@ namespace GameplayTimeTracker.Menu;
 
 public class SettingsMenu : CustomMenu
 {
-    StackPanel HeaderPanel = new();
-    ScrollViewer ContentScrollViewer = new();
+    private StackPanel HeaderPanel = new();
+    private ScrollViewer ContentScrollViewer = new();
+    private Type currentMenuType;
 
     public SettingsMenu(double width = 400, bool toScale = true)
         : base(width, toScale)
@@ -72,6 +73,9 @@ public class SettingsMenu : CustomMenu
 
     private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
     {
+        if (currentMenuType == typeof(T))
+            return;
+
         var menuInstance = Activator.CreateInstance(typeof(T));
         double previousHeight = 0.0;
 
@@ -87,11 +91,12 @@ public class SettingsMenu : CustomMenu
 
             // Ensure the new menu is measured before animation
             MenuContentPanel.Children.Add(ContentScrollViewer);
+
             ContentScrollViewer.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
             double newHeight = ContentScrollViewer.DesiredSize.Height;
 
             AnimateHeightTransition(ContentScrollViewer, previousHeight, newHeight);
-
+            currentMenuType = typeof(T);
             HighlightCurrentTextBlock(selectedTextBlock);
         }
     }
