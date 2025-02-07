@@ -4,22 +4,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu.Content;
 
-public class RemoteMenu : UserControl
+public class RemoteMenu : MenuContent
 {
-    public StackPanel Panel;
-
     public RemoteMenu()
     {
-        Panel = new StackPanel();
         PrefEntry savingEnabledPref = new PrefEntry("Remote Saving Enabled", Common.Settings.IsRemoteSavingEnabled);
         Binding savingEnabledBinding = new Binding("IsRemoteSavingEnabled")
             { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(savingEnabledPref.toggleButton, CustomToggleButton.IsToggledProperty,
             savingEnabledBinding);
         BindingHelper.SetColorBinding(savingEnabledPref.textBlock, ForegroundProperty, "Font");
-        Panel.Children.Add(savingEnabledPref);
+        _stackPanel.Children.Add(savingEnabledPref);
     }
 }

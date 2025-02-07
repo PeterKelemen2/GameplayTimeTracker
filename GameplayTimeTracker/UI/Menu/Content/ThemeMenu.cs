@@ -5,22 +5,19 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Settings;
+using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu.Content;
 
-public class ThemeMenu : UserControl
+public class ThemeMenu : MenuContent
 {
-    public StackPanel Panel = new();
     public ComboBox ThemeComboBox = new();
-    // private AppSettings appSettings;
+
     private ScrollViewer colorEntryScrollViewer;
     private StackPanel colorEntryPanel;
 
     public ThemeMenu()
     {
-        // appSettings = settings;
-        Panel = new StackPanel();
-
         colorEntryScrollViewer = new ScrollViewer
         {
             Height = 400,
@@ -30,7 +27,7 @@ public class ThemeMenu : UserControl
         };
         CreateComboBox();
         CreateColorEntries();
-        Panel.Children.Add(colorEntryScrollViewer);
+        _stackPanel.Children.Add(colorEntryScrollViewer);
     }
 
     private void CreateColorEntries()
@@ -113,7 +110,7 @@ public class ThemeMenu : UserControl
                 }
             }
         };
-        Panel.Children.Add(ThemeComboBox);
+        _stackPanel.Children.Add(ThemeComboBox);
 
         if (ThemeComboBox.Items.Contains(Common.Settings.CurrentTheme.ThemeName))
         {

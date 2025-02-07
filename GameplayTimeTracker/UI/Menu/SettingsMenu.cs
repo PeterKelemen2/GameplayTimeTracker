@@ -9,16 +9,12 @@ namespace GameplayTimeTracker.Menu;
 
 public class SettingsMenu : CustomMenu
 {
-    StackPanel SettingsContentPanel = new();
-
     StackPanel HeaderPanel = new();
+    ScrollViewer ContentScrollViewer = new();
 
     public SettingsMenu(double width = 400, bool toScale = true)
         : base(width, toScale)
     {
-        SettingsContentPanel = new StackPanel();
-        // SettingsContentPanel.CacheMode = new BitmapCache();
-
         HeaderPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,
@@ -28,22 +24,22 @@ public class SettingsMenu : CustomMenu
         var PrefBlock = UIHelper.CreateTextBlock("Preferences", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, "Font");
-        PrefBlock.MouseDown += (_, _) => { SetPrefMenu(PrefBlock); };
+        PrefBlock.MouseDown += (_, _) => { SetMenu<PrefMenu>(PrefBlock); };
 
         var Themes = UIHelper.CreateTextBlock("Themes", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Themes, ForegroundProperty, "Font");
-        Themes.MouseDown += (_, _) => { SetThemeMenu(Themes); };
+        Themes.MouseDown += (_, _) => { SetMenu<ThemeMenu>(Themes); };
 
         var Backup = UIHelper.CreateTextBlock("Backup", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Backup, ForegroundProperty, "Font");
-        Backup.MouseDown += (_, _) => { SetBackupMenu(Backup); };
+        Backup.MouseDown += (_, _) => { SetMenu<BackupMenu>(Backup); };
 
         var Remote = UIHelper.CreateTextBlock("Remote", margin: blockMargin, isBold: false,
             fontSize: Common.TextFontSize + 2);
         BindingHelper.SetColorBinding(Remote, ForegroundProperty, "Font");
-        Remote.MouseDown += (_, _) => { SetRemoteMenu(Remote); };
+        Remote.MouseDown += (_, _) => { SetMenu<RemoteMenu>(Remote); };
 
         HeaderPanel.Children.Add(PrefBlock);
         HeaderPanel.Children.Add(Themes);
@@ -56,9 +52,9 @@ public class SettingsMenu : CustomMenu
             Child = HeaderPanel,
         };
         MenuContentPanel.Children.Add(headerBorder);
-        MenuContentPanel.Children.Add(SettingsContentPanel);
+        MenuContentPanel.Children.Add(ContentScrollViewer);
 
-        SetPrefMenu(PrefBlock);
+        SetMenu<PrefMenu>(PrefBlock);
     }
 
     private void HighlightCurrentTextBlock(TextBlock selectedTextBlock)
@@ -73,78 +69,21 @@ public class SettingsMenu : CustomMenu
         }
     }
 
-    private void SetPrefMenu(TextBlock selectedTextBlock)
+    private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
     {
-        var prefMenu = new PrefMenu();
-        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
+        var menuInstance = Activator.CreateInstance(typeof(T));
+
+        if (menuInstance is not null && menuInstance is MenuContent menu)
         {
-            MenuContentPanel.Children.Remove(SettingsContentPanel);
+            if (MenuContentPanel.Children.Contains(ContentScrollViewer))
+            {
+                MenuContentPanel.Children.Remove(ContentScrollViewer);
+            }
+
+            ContentScrollViewer = menu._scrollViewer;
+            MenuContentPanel.Children.Add(ContentScrollViewer);
+
+            HighlightCurrentTextBlock(selectedTextBlock);
         }
-
-        SettingsContentPanel = prefMenu.Panel;
-        MenuContentPanel.Children.Add(SettingsContentPanel);
-
-        HighlightCurrentTextBlock(selectedTextBlock);
     }
-
-    private void SetThemeMenu(TextBlock selectedTextBlock)
-    {
-        var themeMenu = new ThemeMenu();
-        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
-        {
-            MenuContentPanel.Children.Remove(SettingsContentPanel);
-        }
-
-        SettingsContentPanel = themeMenu.Panel;
-        MenuContentPanel.Children.Add(SettingsContentPanel);
-
-        HighlightCurrentTextBlock(selectedTextBlock);
-    }
-
-    private void SetBackupMenu(TextBlock selectedTextBlock)
-    {
-        var backupMenu = new BackupMenu(Common.Settings);
-        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
-        {
-            MenuContentPanel.Children.Remove(SettingsContentPanel);
-        }
-
-        SettingsContentPanel = backupMenu.Panel;
-        MenuContentPanel.Children.Add(SettingsContentPanel);
-
-        HighlightCurrentTextBlock(selectedTextBlock);
-    }
-
-    private void SetRemoteMenu(TextBlock selectedTextBlock)
-    {
-        var remoteMenu = new RemoteMenu();
-        if (MenuContentPanel.Children.Contains(SettingsContentPanel))
-        {
-            MenuContentPanel.Children.Remove(SettingsContentPanel);
-        }
-
-        SettingsContentPanel = remoteMenu.Panel;
-        MenuContentPanel.Children.Add(SettingsContentPanel);
-
-        HighlightCurrentTextBlock(selectedTextBlock);
-    }
-
-    // private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
-    // {
-    //     var menuInstance = Activator.CreateInstance(typeof(T));
-    //
-    //     if (menuInstance is not null && menuInstance is IMenu menu)
-    //     {
-    //         if (MenuContentPanel.Children.Contains(SettingsContentPanel))
-    //         {
-    //             MenuContentPanel.Children.Remove(SettingsContentPanel);
-    //         }
-    //
-    //         SettingsContentPanel = menu.Panel;
-    //         MenuContentPanel.Children.Add(SettingsContentPanel);
-    //
-    //         HighlightCurrentTextBlock(selectedTextBlock);
-    //     }
-    // }
-
 }

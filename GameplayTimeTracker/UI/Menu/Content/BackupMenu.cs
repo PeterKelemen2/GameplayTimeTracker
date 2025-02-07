@@ -11,9 +11,8 @@ using System.Windows.Documents;
 
 namespace GameplayTimeTracker.UI.Menu.Content;
 
-public class BackupMenu : UserControl
+public class BackupMenu : MenuContent
 {
-    public StackPanel Panel = new();
     private AppSettings appSettings;
     private ScrollViewer backupEntryScrollViewer;
     private ScrollViewer backupContentScrollViewer;
@@ -29,16 +28,14 @@ public class BackupMenu : UserControl
     private double scrollWidth = 350;
     private double scrollHeight = 200;
 
-    public BackupMenu(AppSettings settings)
+    public BackupMenu()
     {
-        appSettings = settings;
-        Panel = new StackPanel();
-
+        appSettings = Common.Settings;
         TextBlock backupListBlock =
             UIHelper.CreateTextBlock("Select a backup", hA: HorizontalAlignment.Center, fontSize: 20);
         backupListBlock.Margin = new Thickness(0, 10, 0, 0);
 
-        Panel.Children.Add(backupListBlock);
+        _stackPanel.Children.Add(backupListBlock);
 
         backupEntryScrollViewer = new ScrollViewer
         {
@@ -65,7 +62,7 @@ public class BackupMenu : UserControl
         backupEntriesPanel = new StackPanel();
         ShowBackupEntries();
         backupEntryScrollViewer.Content = backupEntriesPanel;
-        Panel.Children.Add(backupEntryBorder);
+        _stackPanel.Children.Add(backupEntryBorder);
 
         ContentPanel = new StackPanel();
         ContentPanel.Visibility = Visibility.Collapsed;
@@ -95,7 +92,7 @@ public class BackupMenu : UserControl
         backupContentScrollViewer.Content = backupContentPanel;
 
         ContentPanel.Children.Add(backupContentBorder);
-        Panel.Children.Add(ContentPanel);
+        _stackPanel.Children.Add(ContentPanel);
 
         restoreBackupButton = new CustomButton(text: "Restore Backup", w: 170, h: 40, isBold: true,
             effect: AppEffects.DropShadowMedium);
@@ -105,7 +102,7 @@ public class BackupMenu : UserControl
             DataHandler.RestoreBackup(currentSelectedPath);
             ((MainWindow)Application.Current.MainWindow).LoadAndShowData();
         };
-        Panel.Children.Add(restoreBackupButton);
+        _stackPanel.Children.Add(restoreBackupButton);
         restoreBackupButton.Disable();
 
         createBackupButton = new CustomButton(text: "Create Backup", w: 170, h: 40, isBold: true,
@@ -116,7 +113,7 @@ public class BackupMenu : UserControl
             DataHandler.CreateBackup();
             ShowBackupEntries();
         };
-        Panel.Children.Add(createBackupButton);
+        _stackPanel.Children.Add(createBackupButton);
     }
 
     private void ShowBackupEntries()
