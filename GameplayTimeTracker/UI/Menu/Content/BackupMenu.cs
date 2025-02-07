@@ -186,8 +186,9 @@ public class BackupMenu : MenuContent
             ContentPanel.Visibility = Visibility.Visible;
             ContentPanel.Measure(new Size(scrollWidth, double.PositiveInfinity));
             ContentPanel.Arrange(new Rect(ContentPanel.DesiredSize));
-            AppAnimations.BackupPanelGrowAnimation.To = ContentPanel.ActualHeight;
-            ContentPanel.BeginAnimation(HeightProperty, AppAnimations.BackupPanelGrowAnimation);
+            AppAnimations.BackupPanelGrowAnimation.From = _scrollViewer.ActualHeight;
+            AppAnimations.BackupPanelGrowAnimation.To = ContentPanel.ActualHeight + _scrollViewer.ActualHeight;
+            _scrollViewer.BeginAnimation(HeightProperty, AppAnimations.BackupPanelGrowAnimation);
             restoreBackupButton.Enable();
         }
 
