@@ -55,6 +55,7 @@ public partial class MainWindow : Window
 
     public void OnLoaded(object sender, RoutedEventArgs e)
     {
+        Root.Focusable = true;
         SetBaseColorBindings();
         LoadAndShowData();
         SetUpFooter();
@@ -304,7 +305,7 @@ public partial class MainWindow : Window
             if (!files.All(file =>
                     System.IO.Path.GetExtension(file).Equals(".exe", StringComparison.OrdinalIgnoreCase)))
                 return;
-            
+
             DragDropGrid.Visibility = Visibility.Visible;
             isAnimating = true; // Prevent further animations while one is in progress
 

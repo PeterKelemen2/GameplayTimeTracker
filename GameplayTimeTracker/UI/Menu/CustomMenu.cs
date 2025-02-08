@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
@@ -55,7 +56,6 @@ public class CustomMenu : UserControl
             Width = width,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
-            
         };
         MenuContentBorder = new Border
         {
@@ -71,6 +71,18 @@ public class CustomMenu : UserControl
 
         var translateTransform = new TranslateTransform(0, 0);
         MenuContentBorder.RenderTransform = translateTransform;
+
+        RootPanel.KeyDown += RootPanel_KeyDown;
+    }
+
+    private void RootPanel_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            Close();
+            Console.WriteLine($"{GetType()} closed with ESC.");
+            e.Handled = true;
+        }
     }
 
     public void Open()
@@ -112,6 +124,7 @@ public class CustomMenu : UserControl
             }
 
             IsOpen = true;
+            RootPanel.Focus();
         }
     }
 
@@ -157,6 +170,8 @@ public class CustomMenu : UserControl
                 ContentPanel.RenderTransform = new ScaleTransform(1, 1);
                 ContentPanel.RenderTransformOrigin = new Point(0.5, 0.5);
             }
+
+            RootPanel.KeyDown -= RootPanel_KeyDown;
         }
     }
 
