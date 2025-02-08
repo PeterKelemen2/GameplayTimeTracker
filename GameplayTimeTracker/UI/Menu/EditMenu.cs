@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using GameplayTimeTracker.UI.Menu.Content;
 using Path = System.IO.Path;
 
 namespace GameplayTimeTracker.Menu;
@@ -98,10 +99,12 @@ public class EditMenu : EntryConfigMenu
             statsGraph.Open();
         };
         leftSide.Children.Add(ShowStatsButton);
-        
+
         leftSide.Children.Remove(remoteStackPanel);
         rightSide.Children.Add(remoteStackPanel);
-        
+
+        RemoteContent remoteContent = new RemoteContent(_entry);
+        rightSide.Children.Add(remoteContent);
     }
 
     private void IconButton_Click(object sender, RoutedEventArgs e)

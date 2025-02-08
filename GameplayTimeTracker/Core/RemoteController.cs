@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Renci.SshNet;
 
 namespace GameplayTimeTracker;
@@ -150,29 +151,30 @@ public static class RemoteController
         }
     }
 
-    public static void ListGameSubfolders(string remotePath, string gameName)
+    public static async Task<List<string>> ListGameSubfoldersAsync(string remotePath, string gameName)
     {
+        List<string> filesList = new List<string>();
         // Combine the remote path with the game name
         string gameFolderPath = Path.Combine(remotePath, gameName).Replace("\\", "/");
 
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
-                   remote.Password))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
-            sftp.Connect();
+            await Task.Run(() => sftp.Connect());
 
             // Ensure the game folder exists on the remote server
-            if (sftp.Exists(gameFolderPath))
+            if (await Task.Run(() => sftp.Exists(gameFolderPath)))
             {
-                var entries = sftp.ListDirectory(gameFolderPath);
+                var folders = await Task.Run(() => sftp.ListDirectory(gameFolderPath));
 
                 // Iterate through the entries and list subfolders
                 Console.WriteLine($"Subfolders in {gameFolderPath}:");
-                foreach (var entry in entries)
+                foreach (var file in folders)
                 {
-                    if (entry.IsDirectory && entry.Name != "." && entry.Name != "..")
+                    if (file.IsDirectory && file.Name != "." && file.Name != "..")
                     {
-                        Console.WriteLine($"- {entry.FullName}");
+                        Console.WriteLine($"- {file.FullName}");
+                        filesList.Add(file.FullName);
                     }
                 }
             }
@@ -181,9 +183,12 @@ public static class RemoteController
                 Console.WriteLine($"The specified folder does not exist: {gameFolderPath}");
             }
 
-            sftp.Disconnect();
+            await Task.Run(() => sftp.Disconnect());
         }
+
+        return filesList;
     }
+
 
     public static string GetPathWithLatestName(string remotePath)
     {
