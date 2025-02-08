@@ -76,6 +76,7 @@ public class EntryConfigMenu : CustomMenu
         remoteButtonsContainer.Children.Add(uploadButton);
         remoteButtonsContainer.Children.Add(loadButton);
         // stackPanel.Children.Add(remoteButtonsContainer);
+        stackPanel.Children.Add(remoteStackPanel);
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)

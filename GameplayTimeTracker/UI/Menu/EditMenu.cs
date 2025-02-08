@@ -98,8 +98,10 @@ public class EditMenu : EntryConfigMenu
             statsGraph.Open();
         };
         leftSide.Children.Add(ShowStatsButton);
-
+        
+        leftSide.Children.Remove(remoteStackPanel);
         rightSide.Children.Add(remoteStackPanel);
+        
     }
 
     private void IconButton_Click(object sender, RoutedEventArgs e)
