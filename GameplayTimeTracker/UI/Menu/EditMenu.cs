@@ -33,7 +33,6 @@ public class EditMenu : EntryConfigMenu
         TitleTextBlock.Inlines.Add(new Run { Text = entry.Name, FontWeight = FontWeights.Bold });
         TitleTextBlock.TextTrimming = TextTrimming.CharacterEllipsis;
         TitleTextBlock.Padding = new Thickness(10, 0, 10, 0);
-        ConfirmButton.Click += (_, _) => { Close(); };
 
         CreateTitleBlock("Refresh Images");
 

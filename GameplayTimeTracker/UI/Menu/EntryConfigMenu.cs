@@ -27,109 +27,30 @@ public class EntryConfigMenu : CustomMenu
         _entry = entry;
         ToScale = toScale;
 
-
-        // scrollViewer = new ScrollViewer { Height = 500, VerticalScrollBarVisibility = ScrollBarVisibility.Hidden };
         stackPanel = new();
-        // scrollViewer.Content = stackPanel;
         MenuContentPanel.Children.Add(stackPanel);
 
-        // TitleTextBlock = UIHelper.CreateTextBlock(text: "Configure Entry", hA: HorizontalAlignment.Center,
-        //     vA: VerticalAlignment.Center, margin: new Thickness(20), fontSize: Common.EditTitleFontSize, isBold: true);
-        // BindingHelper.SetColorBinding(TitleTextBlock, ForegroundProperty, "Font");
-        // stackPanel.Children.Add(TitleTextBlock);
         TitleTextBlock =
             CreateTitleBlock("Configure Entry", margin: new Thickness(20), fontSize: Common.EditTitleFontSize);
-        stackPanel.Children.Add(TitleTextBlock);
 
         GeneralTitleTextBlock = CreateTitleBlock("General");
-        stackPanel.Children.Add(GeneralTitleTextBlock);
-
-        // Grid nameGrid = UIHelper.CreateAddEntryGrid(Settings, "Name", new Thickness(5, 0, 0, 30));
-        // var nameTextBox = Common.FindTextBox(nameGrid);
-        // Binding nameBinding = new Binding("Name")
-        //     { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-        // BindingOperations.SetBinding(nameTextBox, TextBox.TextProperty, nameBinding);
-        // nameTextBox.GotFocus += (s, e) => { _entry.IsEditing = true; };
-        // nameTextBox.LostFocus += (s, e) => { _entry.IsEditing = false; };
-        // stackPanel.Children.Add(nameGrid);
 
         CreateEditEntryBrowse("Name", "Name", bindName: true, updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
-        // Grid timeGrid = UIHelper.CreateAddEntryGrid(Settings, "Playtime", new Thickness(5, 10, 0, 30));
-        // var timeBox = Common.FindTextBox(timeGrid);
-        // timeBox.Text =
-        //     new TimeArrayConverter().Convert(entry.TotalPlay, typeof(string), null, CultureInfo.InvariantCulture) as
-        //         string;
-        // Binding timeBinding = new Binding("TotalPlay")
-        // {
-        //     Source = entry,
-        //     Mode = BindingMode.TwoWay,
-        //     Converter = new TimeArrayConverter(),
-        // };
-        // BindingOperations.SetBinding(timeBox, TextBox.TextProperty, timeBinding);
-        //
-        // timeBox.GotFocus += (s, e) =>
-        // {
-        //     BindingOperations.ClearBinding(timeBox, TextBox.TextProperty);
-        //     timeBox.Text = entry.TotalPlayFormatted;
-        // };
-        //
-        // timeBox.LostFocus += (s, e) =>
-        // {
-        //     entry.TotalPlay =
-        //         new TimeArrayConverter().ConvertBack(timeBox.Text, typeof(int[]), null, CultureInfo.InvariantCulture) as
-        //             int[];
-        //     BindingOperations.SetBinding(timeBox, TextBox.TextProperty, timeBinding);
-        // };
-        // stackPanel.Children.Add(timeGrid);
         string timeBoxText =
             new TimeArrayConverter().Convert(entry.TotalPlay, typeof(string), null, CultureInfo.InvariantCulture) as
                 string;
         CreateEditEntryBrowse("Playtime", "TotalPlay", textBoxText: timeBoxText, bindTime: true);
-
-        // Grid exeGrid = UIHelper.CreateAddEntryGrid(Settings, "Path", new Thickness(5, 10, 0, 30));
-        // ExeBox = Common.FindTextBox(exeGrid);
-        // ExeBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
-        // Binding exeBinding = new Binding("ExePath") { Source = entry, Mode = BindingMode.TwoWay, };
-        // BindingOperations.SetBinding(ExeBox, TextBox.TextProperty, exeBinding);
-        // CustomButton exeBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        // exeBrowseButton.Click += ExeBrowse_Click;
-        // exeGrid.Children.Add(exeBrowseButton);
-        // stackPanel.Children.Add(exeGrid);
         CreateEditEntryBrowse("Path", "ExePath", buttonClick: ExeBrowse_Click);
-
         CreateEditEntryBrowse("Arguments", "Arguments");
 
-        // TextBlock remoteTitleBlock =
-        //     UIHelper.CreateTextBlock("Remote Backup", hA: HorizontalAlignment.Center, fontSize: 17);
-        // remoteTitleBlock.Margin = new Thickness(0, 15, 0, 0);
-        // BindingHelper.SetColorBinding(remoteTitleBlock, ForegroundProperty, "Font");
         TextBlock remoteTitleBlock = CreateTitleBlock("Remote Backup", margin: new Thickness(0, 15, 0, 0));
-        stackPanel.Children.Add(remoteTitleBlock);
 
-        Grid savePathGrid = UIHelper.CreateAddEntryGrid(Settings, "Local Save Path", new Thickness(5, 0, 0, 30));
-        var saveBox = Common.FindTextBox(savePathGrid);
-        Binding savePathBinding = new Binding("LocalSavePath") { Source = entry, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(saveBox, TextBox.TextProperty, savePathBinding);
-        saveBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
-        CustomButton savePathBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        savePathBrowseButton.Click += (_, _) =>
-        {
-            string newPath = Common.GetFolderDialogPath();
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                saveBox.Text = newPath;
-                entry.LocalSavePath = newPath;
-            }
-        };
-        // savePathGrid.Children.Add(savePathBrowseButton);
-        stackPanel.Children.Add(savePathGrid);
         CreateEditEntryBrowse("Local Save Path", "LocalSavePath", buttonClick: SavePath_Click);
 
         PrefEntry remoteSavePref =
             new PrefEntry("Remote Backup", Common.Settings.PreferSteamGridDBImage, width: 220,
-                description: "On session end");
-        remoteSavePref.Margin = new Thickness(0, 0, 0, 20);
+                description: "On session end", margin: new Thickness(0, 0, 0, 20));
         Binding remoteSavePrefBinding = new Binding("IsRemoteSaveEnabled")
             { Source = _entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(remoteSavePref.toggleButton, CustomToggleButton.IsToggledProperty,
@@ -142,7 +63,6 @@ public class EntryConfigMenu : CustomMenu
         CustomButton uploadButton = new CustomButton(w: 110, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon);
         uploadButton.Margin = new Thickness(0, 0, 5, 0);
         uploadButton.Click += (_, _) => { entry.RemoteSave(); };
-
         CustomButton loadButton =
             new CustomButton(w: 110, h: 40, text: "Load Latest", effect: AppEffects.DropShadowIcon);
         loadButton.Margin = new Thickness(5, 0, 0, 0);
@@ -151,10 +71,7 @@ public class EntryConfigMenu : CustomMenu
         remoteButtonsContainer.Children.Add(loadButton);
         // stackPanel.Children.Add(remoteButtonsContainer);
 
-        TextBlock imagesTextBlock = UIHelper.CreateTextBlock("Images", hA: HorizontalAlignment.Center, fontSize: 17);
-        imagesTextBlock.Margin = new Thickness(0, 0, 0, 0);
-        BindingHelper.SetColorBinding(imagesTextBlock, ForegroundProperty, "Font");
-        // stackPanel.Children.Add(imagesTextBlock);
+        TextBlock imagesTextBlock = CreateTitleBlock("Images");
 
         Grid iconGrid = UIHelper.CreateAddEntryGrid(Settings, "Icon Path", new Thickness(5, 0, 0, 30));
         var iconBox = Common.FindTextBox(iconGrid);
@@ -192,31 +109,18 @@ public class EntryConfigMenu : CustomMenu
         };
         heroGrid.Children.Add(heroBrowseButton);
         // stackPanel.Children.Add(heroGrid);
-
-        ConfirmButton =
-            new CustomButton(w: 120, h: 40, text: "Finish", effect: AppEffects.DropShadowIcon,
-                type: BType.Positive);
-        ConfirmButton.Margin = new Thickness(0, 20, 0, 10);
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)
     {
         string newPath = Common.GetFolderDialogPath();
-        if (!string.IsNullOrEmpty(newPath))
-        {
-            // saveBox.Text = newPath;
-            _entry.LocalSavePath = newPath;
-        }
+        if (!string.IsNullOrEmpty(newPath)) _entry.LocalSavePath = newPath;
     }
 
     private void ExeBrowse_Click(object sender, RoutedEventArgs e)
     {
         string newPath = Common.GetDialogPath(Common.exeFilter);
-        if (!newPath.Equals(""))
-        {
-            ExeBox.Text = newPath;
-            _entry.ExePath = newPath;
-        }
+        if (!newPath.Equals("")) _entry.ExePath = newPath;
     }
 
     private void CreateEditEntryBrowse(string text, string bindPath, string textBoxText = "",
@@ -299,13 +203,16 @@ public class EntryConfigMenu : CustomMenu
         stackPanel.Children.Add(grid);
     }
 
-    public TextBlock CreateTitleBlock(string title, double fontSize = 17, Thickness margin = new(), bool isBold = true)
+    public TextBlock CreateTitleBlock(string title, double fontSize = 17, Thickness margin = new(), bool isBold = true,
+        bool toAdd = true)
     {
         TextBlock textBlock =
             UIHelper.CreateTextBlock(title, hA: HorizontalAlignment.Center, fontSize: fontSize, margin: margin,
                 isBold: isBold);
         BindingHelper.SetColorBinding(textBlock, ForegroundProperty, "Font");
-        // stackPanel.Children.Add(textBlock);
+
+        if (toAdd) stackPanel.Children.Add(textBlock);
+
         return textBlock;
     }
 }

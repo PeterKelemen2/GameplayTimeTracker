@@ -16,7 +16,8 @@ public class PrefEntry : UserControl
     public bool PrefValue { get; set; }
     private double padding = 15;
 
-    public PrefEntry(string prefName, bool prefValue, double width = 380, string description = "")
+    public PrefEntry(string prefName, bool prefValue, double width = 380, string description = "",
+        Thickness margin = new())
     {
         PrefName = prefName;
         PrefValue = prefValue;
@@ -25,7 +26,7 @@ public class PrefEntry : UserControl
         {
             Width = width,
             Height = 50,
-            Margin = new Thickness(0),
+            Margin = margin,
             HorizontalAlignment = HorizontalAlignment.Center,
         };
 
@@ -51,6 +52,7 @@ public class PrefEntry : UserControl
             };
             textBlock.Inlines.Add(descRun);
         }
+
         containerGrid.Children.Add(textBlock);
 
         toggleButton = new CustomToggleButton();

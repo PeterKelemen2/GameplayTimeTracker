@@ -13,19 +13,10 @@ public class PrefMenu : MenuContent
 {
     public PrefMenu()
     {
-        PrefEntry pref1 = new PrefEntry("Start With System", Common.Settings.StartWithSystem);
-        Binding swsBinding = new Binding("StartWithSystem") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref1.toggleButton, CustomToggleButton.IsToggledProperty, swsBinding);
-        BindingHelper.SetColorBinding(pref1.textBlock, ForegroundProperty, "Font");
-        _stackPanel.Children.Add(pref1);
+        CreatePref("Start With System", "", "StartWithSystem", Common.Settings.StartWithSystem);
 
-        PrefEntry pref2 = new PrefEntry("Prefer SteamGridDB Images", Common.Settings.PreferSteamGridDBImage,
-            description: "Uses local icon image if disabled");
-        Binding preferSGDBBinding = new Binding("PreferSteamGridDBImage")
-            { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref2.toggleButton, CustomToggleButton.IsToggledProperty, preferSGDBBinding);
-        BindingHelper.SetColorBinding(pref2.textBlock, ForegroundProperty, "Font");
-        _stackPanel.Children.Add(pref2);
+        CreatePref("Prefer SteamGridDB Images", "Uses local icon image if disabled", "PreferSteamGridDBImage",
+            Common.Settings.PreferSteamGridDBImage);
 
         Grid apiKeyGrid = new Grid { Margin = new Thickness(40, 10, 25, 10) };
 
@@ -42,20 +33,9 @@ public class PrefMenu : MenuContent
         apiKeyGrid.Children.Add(sgdbApiKeyBox);
         _stackPanel.Children.Add(apiKeyGrid);
 
-        PrefEntry pref3 = new PrefEntry("Quick Add", Common.Settings.QuickAdd, description: "No edit menu when adding");
-        Binding quickAddBinding = new Binding("QuickAdd") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(pref3.toggleButton, CustomToggleButton.IsToggledProperty, quickAddBinding);
-        BindingHelper.SetColorBinding(pref3.textBlock, ForegroundProperty, "Font");
-        _stackPanel.Children.Add(pref3);
+        CreatePref("Quick Add", "No edit menu when adding", "QuickAdd", Common.Settings.QuickAdd);
 
-        PrefEntry performancePref = new PrefEntry("Performance Mode", Common.Settings.StartWithSystem,
-            description: "More modest animations");
-        Binding performanceBinding = new Binding("PerformanceMode")
-            { Source = Common.Settings, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(performancePref.toggleButton, CustomToggleButton.IsToggledProperty,
-            performanceBinding);
-        BindingHelper.SetColorBinding(performancePref.textBlock, ForegroundProperty, "Font");
-        _stackPanel.Children.Add(performancePref);
+        CreatePref("Performance Mode", "More modest animations", "PerformanceMode", Common.Settings.PerformanceMode);
 
         Grid displayGrid = new Grid { Width = 380, Margin = new Thickness(25, 10, 25, 10) };
 
@@ -113,6 +93,15 @@ public class PrefMenu : MenuContent
 
         frequencyGrid.Children.Add(SaveFrequencyComboBox);
         _stackPanel.Children.Add(frequencyGrid);
+    }
+
+    private void CreatePref(string name, string desc, string bindPath, bool value)
+    {
+        PrefEntry pref = new PrefEntry(name, value, description: desc);
+        Binding swsBinding = new Binding(bindPath) { Source = Common.Settings, Mode = BindingMode.TwoWay, };
+        BindingOperations.SetBinding(pref.toggleButton, CustomToggleButton.IsToggledProperty, swsBinding);
+        BindingHelper.SetColorBinding(pref.textBlock, ForegroundProperty, "Font");
+        _stackPanel.Children.Add(pref);
     }
 
     private void OnFadeOutCompleted(object sender, EventArgs e)
