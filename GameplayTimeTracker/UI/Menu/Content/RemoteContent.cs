@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ public class RemoteContent : UserControl
     private List<string> filesList;
     private double scrollWidth = 300;
     private double scrollHeight = 200;
+    private string currentSelectedPath = "";
 
     public RemoteContent(Entry entry)
     {
@@ -66,6 +68,7 @@ public class RemoteContent : UserControl
         foreach (var file in files)
         {
             string saveName = file.Split("/").LastOrDefault();
+            Border textBorder = new Border { CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5) };
             TextBlock textBlock = new TextBlock
             {
                 Text = saveName,
@@ -75,11 +78,33 @@ public class RemoteContent : UserControl
                         (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Padding = new Thickness(5),
-                Margin = new Thickness(5),
+            };
+            textBorder.Child = textBlock;
+
+            textBorder.MouseDown += (s, e) =>
+            {
+                currentSelectedPath = Path.Combine(AppFiles.BackupDataFolder, file);
+                HighlightSelected(textBorder);
+                Console.WriteLine(currentSelectedPath);
             };
 
-            savesStackPanel.Children.Add(textBlock);
+            savesStackPanel.Children.Add(textBorder);
             Console.WriteLine(file);
+        }
+    }
+
+    private void HighlightSelected(Border border)
+    {
+        foreach (UIElement element in savesStackPanel.Children)
+        {
+            if (element is Border b)
+            {
+                b.Background = b == border
+                    ? new SolidColorBrush(ColorHelper.AdjustBrightness(
+                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]),
+                        0.8))
+                    : new SolidColorBrush(Colors.Transparent);
+            }
         }
     }
 }
