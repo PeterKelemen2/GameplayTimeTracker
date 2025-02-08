@@ -69,7 +69,7 @@ public static class EntryController
 
                 if (!Common.Settings.QuickAdd)
                 {
-                    EntryConfigMenu configMenu = new EditMenu(newEntry);
+                    EntryConfigMenu configMenu = new EntryConfigMenu(newEntry);
                     configMenu.Open();
                 }
             }

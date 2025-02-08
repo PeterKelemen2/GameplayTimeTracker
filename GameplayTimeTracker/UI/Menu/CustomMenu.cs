@@ -18,7 +18,7 @@ public class CustomMenu : UserControl
     public Panel ContentPanel;
     public Grid ContainerGrid;
     private Rectangle BgRectangle;
-    public Panel MenuContentPanel;
+    public StackPanel MenuContentPanel;
     private Border MenuContentBorder;
     public BlurEffect BlurEffect;
     public AppSettings Settings;
@@ -55,6 +55,7 @@ public class CustomMenu : UserControl
             Width = width,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
+            
         };
         MenuContentBorder = new Border
         {

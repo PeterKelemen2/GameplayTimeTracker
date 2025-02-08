@@ -133,6 +133,18 @@ public static class Common
         return $"{arr[0]}h {arr[1]}m {arr[2]}s";
     }
 
+    public static bool CompareTimeArrays(int[] arr1, int[] arr2)
+    {
+        if (arr1.Length != arr2.Length) return false;
+
+        for (int i = 0; i < arr1.Length; i++)
+        {
+            if (arr1[i] != arr2[i]) return false;
+        }
+
+        return true;
+    }
+
     public static string GetDialogPath(string filter)
     {
         string filePath = "";

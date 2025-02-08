@@ -174,6 +174,7 @@ namespace GameplayTimeTracker
                 {
                     _localSavePath = value;
                     OnPropertyChanged(nameof(LocalSavePath));
+                    InitSave();
                 }
             }
         }

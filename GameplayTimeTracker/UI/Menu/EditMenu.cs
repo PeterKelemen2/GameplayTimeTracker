@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Media;
 using WrapPanel = Xceed.Wpf.Toolkit.Panels.WrapPanel;
 
 namespace GameplayTimeTracker.Menu;
@@ -15,6 +16,17 @@ public class EditMenu : EntryConfigMenu
         double width = 350, bool toScale = true)
         : base(entry, width, toScale)
     {
+        MenuContentPanel.Orientation = Orientation.Horizontal;
+        MenuContentPanel.Width = Double.NaN;
+
+        MenuContentPanel.Children.Remove(stackPanel);
+        stackPanel.Width = width;
+
+        StackPanel leftSide = stackPanel;
+        StackPanel rightSide = new StackPanel { Width = width, Background = Brushes.Black };
+        MenuContentPanel.Children.Add(leftSide);
+        MenuContentPanel.Children.Add(rightSide);
+
         ToScale = toScale;
         TitleTextBlock.FontWeight = FontWeights.Regular;
         TitleTextBlock.Text = "Editing ";
@@ -26,7 +38,7 @@ public class EditMenu : EntryConfigMenu
         CreateTitleBlock("Refresh Images");
 
         Panel buttonContainer = new WrapPanel
-            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,15) };
+            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 15) };
         var RefreshSGDBButton =
             new CustomButton(w: 120, h: 40, text: "Full SGDB", effect: AppEffects.DropShadowIcon);
         RefreshSGDBButton.Margin = new Thickness(5);
