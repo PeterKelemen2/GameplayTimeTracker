@@ -123,6 +123,7 @@ public class BackupMenu : MenuContent
         foreach (var file in backupFilesList)
         {
             Console.WriteLine(file);
+            Border textBorder = new Border { CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5) };
             TextBlock bEntryBlock = new TextBlock
             {
                 Text = file,
@@ -130,19 +131,20 @@ public class BackupMenu : MenuContent
                 Foreground =
                     new SolidColorBrush(
                         (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Center,
                 Padding = new Thickness(5),
-                Margin = new Thickness(5),
             };
+            textBorder.Child = bEntryBlock;
+
             bEntryBlock.MouseDown += (s, e) =>
             {
                 currentSelectedPath = Path.Combine(AppFiles.BackupDataFolder, file);
-                HighlightSelected(bEntryBlock);
+                HighlightSelected(textBorder);
                 Console.WriteLine(currentSelectedPath);
                 ShowBackupContents(file);
             };
 
-            backupEntriesPanel.Children.Add(bEntryBlock);
+            backupEntriesPanel.Children.Add(textBorder);
         }
     }
 
@@ -179,7 +181,7 @@ public class BackupMenu : MenuContent
         }
     }
 
-    private void HighlightSelected(TextBlock textBlock)
+    private void HighlightSelected(Border border)
     {
         if (ContentPanel.Visibility == Visibility.Collapsed)
         {
@@ -194,9 +196,9 @@ public class BackupMenu : MenuContent
 
         foreach (UIElement element in backupEntriesPanel.Children)
         {
-            if (element is TextBlock tb)
+            if (element is Border b)
             {
-                tb.Background = tb == textBlock
+                b.Background = b == border
                     ? new SolidColorBrush(ColorHelper.AdjustBrightness(
                         (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 0.8))
                     : new SolidColorBrush(Colors.Transparent);
