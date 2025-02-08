@@ -9,6 +9,8 @@ public class EntryConfigMenu : CustomMenu
 {
     public ScrollViewer scrollViewer { get; set; }
     public StackPanel stackPanel { get; set; }
+    public StackPanel remoteStackPanel { get; set; }
+
     public TextBlock TitleTextBlock { get; set; }
     public TextBlock GeneralTitleTextBlock { get; set; }
     public CustomButton ConfirmButton { get; set; }
@@ -31,22 +33,26 @@ public class EntryConfigMenu : CustomMenu
         MenuContentPanel.Children.Add(stackPanel);
 
         TitleTextBlock =
-            CreateTitleBlock("Configure Entry", margin: new Thickness(20), fontSize: Common.EditTitleFontSize);
+            CreateTitleBlock(stackPanel, "Configure Entry", margin: new Thickness(20),
+                fontSize: Common.EditTitleFontSize);
 
-        GeneralTitleTextBlock = CreateTitleBlock("General");
+        GeneralTitleTextBlock = CreateTitleBlock(stackPanel, "General", margin: new Thickness(0, 0, 0, 0));
 
-        CreateEditEntryBrowse("Name", "Name", bindName: true, updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
+        CreateEditEntry(stackPanel, "Name", "Name", bindName: true, first: true,
+            updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
         string timeBoxText =
             new TimeArrayConverter().Convert(entry.TotalPlay, typeof(string), null, CultureInfo.InvariantCulture) as
                 string;
-        CreateEditEntryBrowse("Playtime", "TotalPlay", textBoxText: timeBoxText, bindTime: true);
-        CreateEditEntryBrowse("Path", "ExePath", buttonClick: ExeBrowse_Click);
-        CreateEditEntryBrowse("Arguments", "Arguments");
+        CreateEditEntry(stackPanel, "Playtime", "TotalPlay", textBoxText: timeBoxText, bindTime: true);
+        CreateEditEntry(stackPanel, "Path", "ExePath", buttonClick: ExeBrowse_Click);
+        CreateEditEntry(stackPanel, "Arguments", "Arguments");
 
-        TextBlock remoteTitleBlock = CreateTitleBlock("Remote Backup", margin: new Thickness(0, 15, 0, 0));
+        remoteStackPanel = new();
+        TextBlock remoteTitleBlock = CreateTitleBlock(remoteStackPanel, "Remote Backup",
+            margin: new Thickness(0, 15, 0, 0), fontSize: 21);
 
-        CreateEditEntryBrowse("Local Save Path", "LocalSavePath", buttonClick: SavePath_Click);
+        CreateEditEntry(remoteStackPanel, "Local Save Path", "LocalSavePath", buttonClick: SavePath_Click);
 
         PrefEntry remoteSavePref =
             new PrefEntry("Remote Backup", Common.Settings.PreferSteamGridDBImage, width: 220,
@@ -56,7 +62,7 @@ public class EntryConfigMenu : CustomMenu
         BindingOperations.SetBinding(remoteSavePref.toggleButton, CustomToggleButton.IsToggledProperty,
             remoteSavePrefBinding);
         BindingHelper.SetColorBinding(remoteSavePref.textBlock, ForegroundProperty, "Font");
-        stackPanel.Children.Add(remoteSavePref);
+        remoteStackPanel.Children.Add(remoteSavePref);
 
         Panel remoteButtonsContainer = new WrapPanel
             { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 10, 0, 15) };
@@ -70,45 +76,6 @@ public class EntryConfigMenu : CustomMenu
         remoteButtonsContainer.Children.Add(uploadButton);
         remoteButtonsContainer.Children.Add(loadButton);
         // stackPanel.Children.Add(remoteButtonsContainer);
-
-        TextBlock imagesTextBlock = CreateTitleBlock("Images");
-
-        Grid iconGrid = UIHelper.CreateAddEntryGrid(Settings, "Icon Path", new Thickness(5, 0, 0, 30));
-        var iconBox = Common.FindTextBox(iconGrid);
-        Binding iconPathBinding = new Binding("IconPath") { Source = entry, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(iconBox, TextBox.TextProperty, iconPathBinding);
-        iconBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
-        CustomButton iconBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        iconBrowseButton.Click += (_, _) =>
-        {
-            string newPath = Common.GetDialogPath(Common.imageFilter);
-            if (!newPath.Equals(""))
-            {
-                iconBox.Text = newPath;
-                entry.IconPath = newPath;
-            }
-        };
-        iconGrid.Children.Add(iconBrowseButton);
-        // stackPanel.Children.Add(iconGrid);
-
-        Grid heroGrid = UIHelper.CreateAddEntryGrid(Settings, "Hero Path", new Thickness(5, 10, 0, 30));
-        heroGrid.Margin = new Thickness(0, 0, 0, 15);
-        var heroBox = Common.FindTextBox(heroGrid);
-        Binding heroPathBinding = new Binding("HeroPath") { Source = entry, Mode = BindingMode.TwoWay, };
-        BindingOperations.SetBinding(heroBox, TextBox.TextProperty, heroPathBinding);
-        heroBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
-        CustomButton heroBrowseButton = UIHelper.CreateBrowseButtonRB(buttonSize, buttonSize, buttonMargin);
-        heroBrowseButton.Click += (_, _) =>
-        {
-            string newPath = Common.GetDialogPath(Common.imageFilter);
-            if (!newPath.Equals(""))
-            {
-                heroBox.Text = newPath;
-                entry.HeroPath = newPath;
-            }
-        };
-        heroGrid.Children.Add(heroBrowseButton);
-        // stackPanel.Children.Add(heroGrid);
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)
@@ -123,12 +90,12 @@ public class EntryConfigMenu : CustomMenu
         if (!newPath.Equals("")) _entry.ExePath = newPath;
     }
 
-    private void CreateEditEntryBrowse(string text, string bindPath, string textBoxText = "",
+    public void CreateEditEntry(Panel parent, string text, string bindPath, string textBoxText = "",
         RoutedEventHandler buttonClick = null,
-        bool bindTime = false, bool bindName = false,
+        bool bindTime = false, bool bindName = false, bool first = false,
         UpdateSourceTrigger updateSourceTrigger = UpdateSourceTrigger.Default)
     {
-        Grid grid = UIHelper.CreateAddEntryGrid(Settings, text, new Thickness(5, 10, 0, 30));
+        Grid grid = UIHelper.CreateAddEntryGrid(Settings, text, new Thickness(5, first ? 0 : 10, 0, 30));
         TextBox textBox = Common.FindTextBox(grid);
         if (!string.IsNullOrEmpty(textBoxText))
         {
@@ -151,7 +118,7 @@ public class EntryConfigMenu : CustomMenu
 
         if (bindName) AssignFocusHandlersName(textBox);
 
-        stackPanel.Children.Add(grid);
+        parent.Children.Add(grid);
     }
 
     private void AssignFocusHandlersName(TextBox textBox)
@@ -193,17 +160,8 @@ public class EntryConfigMenu : CustomMenu
         };
     }
 
-    private void CreateEditEntry(string title, string bindingPath)
-    {
-        Grid grid = UIHelper.CreateAddEntryGrid(Settings, title, new Thickness(5, 10, 0, 30));
-        var textBox = Common.FindTextBox(grid);
-        Binding binding = new Binding(bindingPath)
-            { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-        BindingOperations.SetBinding(textBox, TextBox.TextProperty, binding);
-        stackPanel.Children.Add(grid);
-    }
-
-    public TextBlock CreateTitleBlock(string title, double fontSize = 17, Thickness margin = new(), bool isBold = true,
+    public TextBlock CreateTitleBlock(Panel parent, string title, double fontSize = 17, Thickness margin = new(),
+        bool isBold = true,
         bool toAdd = true)
     {
         TextBlock textBlock =
@@ -211,7 +169,7 @@ public class EntryConfigMenu : CustomMenu
                 isBold: isBold);
         BindingHelper.SetColorBinding(textBlock, ForegroundProperty, "Font");
 
-        if (toAdd) stackPanel.Children.Add(textBlock);
+        if (toAdd) parent.Children.Add(textBlock);
 
         return textBlock;
     }
