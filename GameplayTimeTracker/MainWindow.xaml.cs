@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -233,13 +234,10 @@ public partial class MainWindow : Window
 
     private void ExitButton_YesClick(object sender, RoutedEventArgs e)
     {
-        foreach (var entry in Common.Repository.EntriesList)
-        {
-            if (entry.IsRunning)
-            {
-                entry.IncrementTodaysHistory(toSave: false);
-            }
-        }
+        Common.Repository.EntriesList
+            .Where(entry => entry.IsRunning)
+            .ToList()
+            .ForEach(entry => entry.IncrementTodaysHistory(toSave: false));
 
         DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
         Application.Current.Shutdown();
@@ -300,6 +298,13 @@ public partial class MainWindow : Window
     {
         if (!isAnimating)
         {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (!files.All(file =>
+                    System.IO.Path.GetExtension(file).Equals(".exe", StringComparison.OrdinalIgnoreCase)))
+                return;
+            
             DragDropGrid.Visibility = Visibility.Visible;
             isAnimating = true; // Prevent further animations while one is in progress
 
