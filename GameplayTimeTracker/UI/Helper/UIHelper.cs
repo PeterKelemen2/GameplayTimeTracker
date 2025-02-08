@@ -46,9 +46,9 @@ public static class UIHelper
             HorizontalAlignment = hA,
             VerticalAlignment = vA,
             Margin = margin,
-            // Margin = new Thickness(leftMargin + 5, 5, 0, 5),
-            Effect = AppEffects.dropShadowText,
+            Effect = AppEffects.DropOuterGlow,
         };
+        TextOptions.SetTextRenderingMode(sampleTextBlock, TextRenderingMode.Aliased);
 
         if (description != "")
         {

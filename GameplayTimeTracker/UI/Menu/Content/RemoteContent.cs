@@ -64,6 +64,22 @@ public class RemoteContent : UserControl
         // Clear previous content
         savesStackPanel.Children.Clear();
 
+        if (files.Count == 0)
+        {
+            TextBlock textBlock = new TextBlock
+            {
+                Text = "No saves were found!",
+                FontSize = 21,
+                Foreground =
+                    new SolidColorBrush(
+                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Padding = new Thickness(5),
+            };
+            savesStackPanel.Children.Add(textBlock);
+            return;
+        }
+
         // Add new content
         foreach (var file in files)
         {

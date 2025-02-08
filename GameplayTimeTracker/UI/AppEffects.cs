@@ -22,12 +22,12 @@ public static class AppEffects
         RenderingBias = RenderingBias.Performance
     };
     
-    public static readonly  DropShadowEffect dropShadowText = new DropShadowEffect
+    public static readonly DropShadowEffect dropShadowText = new DropShadowEffect
     {
         BlurRadius = 8,
         ShadowDepth = 0,
         Color = Colors.Black,
-        Opacity = 1,
+        Opacity = 0.7,
         Direction = 200,
     };
 
