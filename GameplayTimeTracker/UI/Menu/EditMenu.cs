@@ -103,8 +103,11 @@ public class EditMenu : EntryConfigMenu
         leftSide.Children.Remove(remoteStackPanel);
         rightSide.Children.Add(remoteStackPanel);
 
-        RemoteContent remoteContent = new RemoteContent(_entry);
-        rightSide.Children.Add(remoteContent);
+        Dispatcher.BeginInvoke((Action)(() =>
+        {
+            RemoteContent remoteContent = new RemoteContent(_entry);
+            rightSide.Children.Add(remoteContent);
+        }));
     }
 
     private void IconButton_Click(object sender, RoutedEventArgs e)

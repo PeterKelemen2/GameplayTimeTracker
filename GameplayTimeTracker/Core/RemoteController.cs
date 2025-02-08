@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
 
@@ -160,14 +161,40 @@ public static class RemoteController
         var remote = Common.Settings.RemoteMachine;
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
-            await Task.Run(() => sftp.Connect());
+            // Create a CancellationTokenSource for timeout
+            var cts = new CancellationTokenSource();
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10), cts.Token); // Set a timeout of 10 seconds
 
-            // Ensure the game folder exists on the remote server
-            if (await Task.Run(() => sftp.Exists(gameFolderPath)))
+            // Create a task to connect asynchronously, with timeout
+            var connectTask = Task.Run(() => sftp.Connect());
+
+            // Wait for either the connection to complete or timeout
+            if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
             {
-                var folders = await Task.Run(() => sftp.ListDirectory(gameFolderPath));
+                Console.WriteLine("Connection timed out.");
+                return filesList; // Return empty list if the connection times out
+            }
 
-                // Iterate through the entries and list subfolders
+            // Proceed only if the connection was successful
+            try
+            {
+                // Ensure the game folder exists on the remote server with a timeout
+                var existsTask = Task.Run(() => sftp.Exists(gameFolderPath));
+                if (await Task.WhenAny(existsTask, timeoutTask) == timeoutTask)
+                {
+                    Console.WriteLine("Operation timed out while checking folder existence.");
+                    return filesList; // Return empty list if the operation times out
+                }
+
+                // List directories asynchronously with timeout
+                var foldersTask = Task.Run(() => sftp.ListDirectory(gameFolderPath));
+                if (await Task.WhenAny(foldersTask, timeoutTask) == timeoutTask)
+                {
+                    Console.WriteLine("Operation timed out while listing directories.");
+                    return filesList; // Return empty list if the operation times out
+                }
+
+                var folders = foldersTask.Result;
                 Console.WriteLine($"Subfolders in {gameFolderPath}:");
                 foreach (var file in folders)
                 {
@@ -178,12 +205,15 @@ public static class RemoteController
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"The specified folder does not exist: {gameFolderPath}");
+                Console.WriteLine($"Error: {ex.Message}");
             }
-
-            await Task.Run(() => sftp.Disconnect());
+            finally
+            {
+                sftp.Disconnect();
+                cts.Cancel(); // Cancel the timeout task if everything completed successfully
+            }
         }
 
         return filesList;
