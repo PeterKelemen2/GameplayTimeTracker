@@ -78,6 +78,10 @@
       <Content Include="Assets\arrow.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\loading.png" />
+      <Content Include="Assets\loading.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

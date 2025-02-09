@@ -171,4 +171,12 @@ public class AppAnimations
         Duration = new Duration(TimeSpan.FromSeconds(0.4)),
         EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
     };
+    
+    public static  DoubleAnimation RotationAnimation = new DoubleAnimation
+    {
+        From = 0,
+        To = 360,
+        Duration = TimeSpan.FromSeconds(1),
+        RepeatBehavior = RepeatBehavior.Forever
+    };
 }

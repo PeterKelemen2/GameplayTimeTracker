@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace GameplayTimeTracker.UI.Menu.Content;
 
@@ -41,7 +43,25 @@ public class RemoteContent : UserControl
 
         Content = savesBorder;
 
+        AddLoadingIndicator();
         LoadSubfoldersAsync();
+    }
+
+    private void AddLoadingIndicator()
+    {
+        Image loading = new Image
+        {
+            Width = 64, Height = 64,
+            Margin = new Thickness(0, scrollHeight / 2 - 32, 0, 0),
+            Source = new BitmapImage(new Uri(AppFiles.LoadingImage, UriKind.RelativeOrAbsolute)),
+            RenderTransformOrigin = new Point(0.5, 0.5)
+        };
+
+        RotateTransform rotateTransform = new RotateTransform();
+        loading.RenderTransform = rotateTransform;
+        rotateTransform.BeginAnimation(RotateTransform.AngleProperty, AppAnimations.RotationAnimation);
+
+        savesStackPanel.Children.Add(loading);
     }
 
     private async void LoadSubfoldersAsync()
@@ -63,9 +83,11 @@ public class RemoteContent : UserControl
     {
         // Clear previous content
         savesStackPanel.Children.Clear();
+        Console.WriteLine(files.Count);
 
         if (files.Count == 0)
         {
+            Console.WriteLine("No saves were found!");
             TextBlock textBlock = new TextBlock
             {
                 Text = "No saves were found!",

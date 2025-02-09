@@ -10,6 +10,8 @@ namespace GameplayTimeTracker;
 
 public static class RemoteController
 {
+    private static double delayDuration = 5;
+
     public static void UploadFolder(string localFolderPath, string remoteFolderPath)
     {
         if (!Directory.Exists(localFolderPath))
@@ -163,7 +165,7 @@ public static class RemoteController
         {
             // Create a CancellationTokenSource for timeout
             var cts = new CancellationTokenSource();
-            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10), cts.Token); // Set a timeout of 10 seconds
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(delayDuration), cts.Token);
 
             // Create a task to connect asynchronously, with timeout
             var connectTask = Task.Run(() => sftp.Connect());

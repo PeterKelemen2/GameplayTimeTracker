@@ -18,6 +18,7 @@ public static class AppFiles
     public const string AddIcon = "Assets/add.png";
     public const string CogIcon = "Assets/cog.png";
     public const string ArrowIcon = "Assets/arrow.png";
+    public const string LoadingImage = "Assets/loading.png";
     public const string AppIconPath = "Assets/GameplayTimeTracker.ico";
     
     public const string SettingsFileName = "settings.json";

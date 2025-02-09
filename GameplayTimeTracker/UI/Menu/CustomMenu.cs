@@ -93,7 +93,6 @@ public class CustomMenu : UserControl
             RootPanel.Children.Add(ContainerGrid);
 
             AppAnimations.FlyInAnimation.From = mainWindow.Height;
-            AppAnimations.FlyInAnimation.To = 0;
             AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentPanel.ActualHeight * 0.5);
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
