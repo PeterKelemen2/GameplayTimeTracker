@@ -10,7 +10,7 @@ namespace GameplayTimeTracker;
 
 public static class RemoteController
 {
-    private static double delayDuration = 5;
+    private static double delayDuration = 10;
 
     public static void UploadFolder(string localFolderPath, string remoteFolderPath)
     {

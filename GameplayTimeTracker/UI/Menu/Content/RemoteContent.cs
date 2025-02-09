@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -62,6 +63,7 @@ public class RemoteContent : UserControl
         rotateTransform.BeginAnimation(RotateTransform.AngleProperty, AppAnimations.RotationAnimation);
 
         savesStackPanel.Children.Add(loading);
+        savesStackPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
     }
 
     private async void LoadSubfoldersAsync()
@@ -79,11 +81,12 @@ public class RemoteContent : UserControl
         }
     }
 
-    private void ShowSaves(List<string> files)
+    private async void ShowSaves(List<string> files)
     {
-        // Clear previous content
+        // Fade out before clearing content
+        await FadeOutElement(savesStackPanel);
+
         savesStackPanel.Children.Clear();
-        Console.WriteLine(files.Count);
 
         if (files.Count == 0)
         {
@@ -92,43 +95,69 @@ public class RemoteContent : UserControl
             {
                 Text = "No saves were found!",
                 FontSize = 21,
+                FontWeight = FontWeights.Bold,
                 Foreground =
                     new SolidColorBrush(
                         (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
                 HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, scrollHeight / 2 - 21, 0, 0),
                 Padding = new Thickness(5),
             };
+
             savesStackPanel.Children.Add(textBlock);
-            return;
         }
-
-        // Add new content
-        foreach (var file in files)
+        else
         {
-            string saveName = file.Split("/").LastOrDefault();
-            Border textBorder = new Border { CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5) };
-            TextBlock textBlock = new TextBlock
+            // Add new content
+            foreach (var file in files)
             {
-                Text = saveName,
-                FontSize = Common.TitleFontSize,
-                Foreground =
-                    new SolidColorBrush(
-                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Padding = new Thickness(5),
-            };
-            textBorder.Child = textBlock;
+                string saveName = file.Split("/").LastOrDefault();
+                Border textBorder = new Border { CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5) };
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = saveName,
+                    FontSize = Common.TitleFontSize,
+                    Foreground =
+                        new SolidColorBrush(
+                            (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Padding = new Thickness(5),
+                };
+                textBorder.Child = textBlock;
 
-            textBorder.MouseDown += (s, e) =>
-            {
-                currentSelectedPath = Path.Combine(AppFiles.BackupDataFolder, file);
-                HighlightSelected(textBorder);
-                Console.WriteLine(currentSelectedPath);
-            };
+                textBorder.MouseDown += (s, e) =>
+                {
+                    currentSelectedPath = Path.Combine(AppFiles.BackupDataFolder, file);
+                    HighlightSelected(textBorder);
+                    Console.WriteLine(currentSelectedPath);
+                };
 
-            savesStackPanel.Children.Add(textBorder);
-            Console.WriteLine(file);
+                savesStackPanel.Children.Add(textBorder);
+                Console.WriteLine(file);
+            }
         }
+
+        // Fade in after everything is added
+        await FadeInElement(savesStackPanel);
+    }
+
+
+    private Task FadeOutElement(UIElement element)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+        DoubleAnimation fadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
+        fadeOut.Completed += (s, e) => tcs.SetResult(true);
+        element.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+        return tcs.Task;
+    }
+
+    private Task FadeInElement(UIElement element)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+        DoubleAnimation fadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
+        fadeIn.Completed += (s, e) => tcs.SetResult(true);
+        element.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+        return tcs.Task;
     }
 
     private void HighlightSelected(Border border)

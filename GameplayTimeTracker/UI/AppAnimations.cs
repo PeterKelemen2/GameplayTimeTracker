@@ -9,6 +9,7 @@ public class AppAnimations
     public static double scaleAnimDuration = 0.5;
     public static double deleteAnimDuration = 0.6;
     public static double fadeAnimDuration = 0.3;
+    public static double fastFadeAnimDuration = 0.3;
     public static double fadeMainPanelDuration = 0.1;
     public static double dragAnimDuration = 0.1;
 
