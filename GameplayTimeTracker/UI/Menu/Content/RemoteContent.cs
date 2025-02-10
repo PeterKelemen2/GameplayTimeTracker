@@ -14,16 +14,23 @@ namespace GameplayTimeTracker.UI.Menu.Content;
 public class RemoteContent : UserControl
 {
     StackPanel savesStackPanel;
+    StackPanel container;
     private Entry _entry;
     private List<string> filesList;
     private double scrollWidth = 300;
     private double scrollHeight = 200;
     private string currentSelectedPath = "";
 
+    public RemoteContent()
+    {
+    }
+
     public RemoteContent(Entry entry)
     {
         _entry = entry;
         filesList = new List<string>();
+
+        container = new StackPanel();
 
         ScrollViewer savesScrollViewer = new ScrollViewer
             { Height = scrollHeight, Width = scrollWidth, VerticalScrollBarVisibility = ScrollBarVisibility.Hidden };
@@ -42,14 +49,64 @@ public class RemoteContent : UserControl
 
         savesScrollViewer.Content = savesStackPanel;
 
-        Content = savesBorder;
+        container.Children.Add(savesBorder);
+        Content = container;
+        CreateButtons();
+        // AddLoadingIndicator();
+        // LoadSubfoldersAsync();
+        LoadData();
+    }
 
+    private void LoadData()
+    {
         AddLoadingIndicator();
         LoadSubfoldersAsync();
     }
 
-    private void AddLoadingIndicator()
+    private void CreateButtons()
     {
+        StackPanel buttonsStackPanel = new StackPanel
+            { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
+        var uploadButton = new CustomButton(w: 120, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon,
+            hA: HorizontalAlignment.Center);
+        uploadButton.Margin = new Thickness(5);
+        uploadButton.Click += UploadButton_Click;
+        var downloadButton = new CustomButton(w: 120, h: 40, text: "Download", effect: AppEffects.DropShadowIcon,
+            hA: HorizontalAlignment.Center);
+        downloadButton.Margin = new Thickness(5);
+        downloadButton.Click += DownloadButton_Click;
+
+        buttonsStackPanel.Children.Add(uploadButton);
+        buttonsStackPanel.Children.Add(downloadButton);
+        container.Children.Add(buttonsStackPanel);
+    }
+
+    private void DownloadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(currentSelectedPath)) return;
+        Console.WriteLine($"Downloading selected save from {currentSelectedPath}");
+
+        string remoteGameFolder = Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, _entry.Name)
+            .Replace("\\", "/");
+        RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder), _entry.LocalSavePath);
+    }
+
+    private void UploadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!Directory.Exists(_entry.LocalSavePath)) return;
+        Console.WriteLine($"Uploading local save to {_entry.LocalSavePath}");
+
+        string uploadPath =
+            $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{_entry.Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+        RemoteController.UploadFolder(_entry.LocalSavePath, uploadPath);
+
+        LoadData();
+    }
+
+    private async void AddLoadingIndicator()
+    {
+        await FadeOutElement(savesStackPanel);
+        savesStackPanel.Children.Clear();
         Image loading = new Image
         {
             Width = 64, Height = 64,
@@ -63,7 +120,7 @@ public class RemoteContent : UserControl
         rotateTransform.BeginAnimation(RotateTransform.AngleProperty, AppAnimations.RotationAnimation);
 
         savesStackPanel.Children.Add(loading);
-        savesStackPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
+        await FadeInElement(savesStackPanel);
     }
 
     private async void LoadSubfoldersAsync()
