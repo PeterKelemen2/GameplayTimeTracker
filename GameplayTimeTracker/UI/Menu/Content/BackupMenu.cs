@@ -23,7 +23,7 @@ public class BackupMenu : MenuContent
     private StackPanel ContentPanel;
     private CustomButton createBackupButton;
     private CustomButton restoreBackupButton;
-    private List<string> backupFilesList = new();
+    private List<string?> backupFilesList = new();
     private string currentSelectedPath = "";
     private double scrollWidth = 350;
     private double scrollHeight = 200;
@@ -119,7 +119,9 @@ public class BackupMenu : MenuContent
     private void ShowBackupEntries()
     {
         backupEntriesPanel.Children.Clear();
-        backupFilesList = GetAllFiles(AppFiles.BackupDataFolder);
+        backupFilesList = GetAllFiles(AppFiles.BackupDataFolder)
+            .OrderByDescending(Path.GetFileName)
+            .ToList();
         foreach (var file in backupFilesList)
         {
             Console.WriteLine(file);
