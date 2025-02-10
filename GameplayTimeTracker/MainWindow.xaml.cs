@@ -94,7 +94,7 @@ public partial class MainWindow : Window
     private async void StartCheckingEntries()
     {
         Stopwatch stopwatch = new Stopwatch();
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
             stopwatch.Start();
 
@@ -102,12 +102,14 @@ public partial class MainWindow : Window
             while (true)
             {
                 stopwatch.Restart();
-                Application.Current.Dispatcher.Invoke(() =>
+
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Common.Repository.ManageEntriesState();
                     cycleCount++;
-                });
+                }));
 
+                // Periodically save to file
                 if (cycleCount >= Common.Settings.SavingFrequencyInMinutes * 60)
                 {
                     DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
@@ -115,13 +117,12 @@ public partial class MainWindow : Window
                 }
 
                 stopwatch.Stop();
-                Console.WriteLine($"Cycle took {stopwatch.Elapsed.TotalMilliseconds.ToString("F2")}ms");
+                double cycleTime = stopwatch.Elapsed.TotalMilliseconds;
+                double remainingTime = 1000 - cycleTime;
 
-                if ((int)stopwatch.ElapsedMilliseconds < 1000)
-                {
-                    Task.Delay(1000 - (int)stopwatch.ElapsedMilliseconds).Wait();
-                }
-                // Task.Delay(10).Wait();
+                if (remainingTime > 0) await Task.Delay((int)remainingTime);
+
+                Console.WriteLine($"Cycle took {cycleTime.ToString("F2")}ms, remaining time: {remainingTime:F2}ms");
             }
         });
     }
@@ -137,8 +138,6 @@ public partial class MainWindow : Window
         Common.Repository = new EntryRepository();
         Common.Repository.TotalRuntime = Common.Repository.GetTotalTimeArrays();
         Common.CardRepository = new GameCardRepository();
-        // GameCountRun.Text = entryRepository.EntriesList.Count.ToString();
-        // TotalTimeRun.Text = Common.GetPrettyTimeFromDouble(entryRepository.GetTotalTime());
     }
 
     public void ShowCards()
