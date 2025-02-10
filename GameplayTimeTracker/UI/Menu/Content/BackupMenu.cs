@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GameplayTimeTracker.Settings;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Documents;
 
@@ -174,12 +175,13 @@ public class BackupMenu : MenuContent
                 TextAlignment = TextAlignment.Left,
             };
 
+            string? totalPlayFormatted = new TimeArrayConverter().Convert(entry.TotalPlay) as string;
             var entryNameRun = new Run { Text = Common.Trim(entry.Name, 25, true), FontWeight = FontWeights.Bold, };
-            var entryTimeRun = new Run { Text = $" - {entry.TotalPlayFormatted}", FontWeight = FontWeights.Regular, };
+            var entryTimeRun = new Run { Text = $" - {totalPlayFormatted}", FontWeight = FontWeights.Regular, };
             entryBlock.Inlines.Add(entryNameRun);
             entryBlock.Inlines.Add(entryTimeRun);
             backupContentPanel.Children.Add(entryBlock);
-            Console.WriteLine($"{entry.Name} - {entry.TotalPlayFormatted}");
+            Console.WriteLine($"{entry.Name} - {totalPlayFormatted}");
         }
     }
 

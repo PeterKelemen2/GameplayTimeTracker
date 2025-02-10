@@ -23,8 +23,8 @@ namespace GameplayTimeTracker
         private double _lastTime;
         private double _totalPerc;
         private double _lastPerc;
-        private int[] _totalArray = new int[3]; // H M S
-        private int[] _lastArray = new int[3];
+        private int[] _totalPlayArray = new int[3]; // H M S
+        private int[] _lastPlayArray = new int[3];
         private bool _isRunning;
         private string _runningString;
         private string _lastPlayStateString = "Started: ";
@@ -71,12 +71,11 @@ namespace GameplayTimeTracker
 
         public int[] TotalPlay
         {
-            get => _totalArray;
+            get => _totalPlayArray;
             set
             {
-                if (SetField(ref _totalArray, value))
+                if (SetField(ref _totalPlayArray, value))
                 {
-                    OnPropertyChanged(nameof(TotalPlayFormatted));
                     if (Repository != null)
                     {
                         Repository.UpdateTotalPercentages();
@@ -87,28 +86,16 @@ namespace GameplayTimeTracker
             }
         }
 
-        [JsonIgnore]
-        public string TotalPlayFormatted =>
-            TotalPlay != null && TotalPlay.Length == 3
-                ? $"{TotalPlay[0]}h {TotalPlay[1]}m {TotalPlay[2]}s"
-                : "0h 0m 0s";
-
         [JsonPropertyName("lastPlay")]
         public int[] LastPlay
         {
-            get => _lastArray;
+            get => _lastPlayArray;
             set
             {
-                SetField(ref _lastArray, value);
-                OnPropertyChanged(nameof(LastPlayFormatted));
+                SetField(ref _lastPlayArray, value);
+                // OnPropertyChanged(nameof(LastPlayFormatted));
             }
         }
-
-        [JsonIgnore]
-        public string LastPlayFormatted =>
-            LastPlay != null && LastPlay.Length == 3
-                ? $"{LastPlay[0]}h {LastPlay[1]}m {LastPlay[2]}s"
-                : "0h 0m 0s";
 
         [JsonIgnore]
         public string RunningFormatted
@@ -132,7 +119,6 @@ namespace GameplayTimeTracker
             {
                 SetField(ref _exePath, value);
                 IsLaunchable = File.Exists(_exePath) && Path.GetExtension(_exePath).ToLower() == ".exe";
-                Console.WriteLine($"Launchable: {IsLaunchable}");
                 InitSave();
             }
         }
@@ -457,7 +443,7 @@ namespace GameplayTimeTracker
 
         private void IncTArray(int[] arr)
         {
-            int[] newArray = (int[])arr.Clone(); // Clone the array
+            int[] newArray = (int[])arr.Clone();
             newArray[2]++; // Increment seconds
             newArray = Common.NormalizeTimeArray(newArray);
 
@@ -466,6 +452,7 @@ namespace GameplayTimeTracker
             else if (arr == TotalPlay)
                 TotalPlay = newArray; // Reassign to trigger notification
         }
+
 
         public double GetTotalPlaytimeAsDouble()
         {

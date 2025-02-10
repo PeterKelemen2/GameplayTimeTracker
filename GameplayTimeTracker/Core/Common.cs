@@ -86,14 +86,24 @@ public static class Common
         return array1 != null && array2 != null && array1.SequenceEqual(array2);
     }
 
-    public static int[] NormalizeTimeArray(int[] array)
+    public static int[] NormalizeTimeArray(int[] arr)
     {
-        array[1] += array[2] / 60;
-        array[2] %= 60;
-        array[0] += array[1] / 60;
-        array[1] %= 60;
+        if (arr.Length == 3)
+        {
+            if (arr[2] >= 60)
+            {
+                arr[1] += arr[2] / 60;
+                arr[2] %= 60;
 
-        return array;
+                if (arr[1] >= 60)
+                {
+                    arr[0] += arr[1] / 60;
+                    arr[1] %= 60;
+                }
+            }
+        }
+
+        return arr;
     }
 
     public static int[] AddTimeArrays(int[] array1, int[] array2)

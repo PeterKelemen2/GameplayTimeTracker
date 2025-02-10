@@ -41,9 +41,7 @@ public class EntryConfigMenu : CustomMenu
         CreateEditEntry(stackPanel, "Name", "Name", bindName: true, first: true,
             updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
-        string timeBoxText =
-            new TimeArrayConverter().Convert(entry.TotalPlay, typeof(string), null, CultureInfo.InvariantCulture) as
-                string;
+        string? timeBoxText = new TimeArrayConverter().Convert(entry.TotalPlay) as string;
         CreateEditEntry(stackPanel, "Playtime", "TotalPlay", textBoxText: timeBoxText, bindTime: true);
         CreateEditEntry(stackPanel, "Path", "ExePath", buttonClick: ExeBrowse_Click);
         CreateEditEntry(stackPanel, "Arguments", "Arguments");
@@ -131,15 +129,13 @@ public class EntryConfigMenu : CustomMenu
         textBox.GotFocus += (s, e) =>
         {
             BindingOperations.ClearBinding(textBox, TextBox.TextProperty);
-            textBox.Text = _entry.TotalPlayFormatted;
+            textBox.Text = new TimeArrayConverter().Convert(_entry.TotalPlay) as string ?? string.Empty;
             prevTime = _entry.TotalPlay;
         };
 
         textBox.LostFocus += (s, e) =>
         {
-            var textBoxTime =
-                new TimeArrayConverter().ConvertBack(textBox.Text, typeof(int[]), null, CultureInfo.InvariantCulture) as
-                    int[];
+            var textBoxTime = new TimeArrayConverter().ConvertBack(textBox.Text) as int[];
 
             if (!Common.TimeArraysEqual(textBoxTime, prevTime)) _entry.TotalPlay = textBoxTime;
 

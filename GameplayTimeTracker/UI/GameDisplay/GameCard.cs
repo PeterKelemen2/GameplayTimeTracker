@@ -167,10 +167,11 @@ public class GameCard : UserControl
         };
         var totalTimeRun = new Run { FontWeight = FontWeights.Regular };
         TotalPlaytimeBlock.Inlines.Add(totalTimeRun);
-        Binding totalPlayBinding = new Binding("TotalPlayFormatted")
+        Binding totalPlayBinding = new Binding("TotalPlay")
         {
             Source = DataEntry,
             Mode = BindingMode.OneWay,
+            Converter = new TimeArrayConverter(),
         };
         BindingOperations.SetBinding(totalTimeRun, Run.TextProperty, totalPlayBinding);
         BindingHelper.SetColorBinding(TotalPlaytimeBlock, ForegroundProperty, "Font");
@@ -186,10 +187,11 @@ public class GameCard : UserControl
         };
         var lastTimeRun = new Run { FontWeight = FontWeights.Regular };
         LastPlaytimeBlock.Inlines.Add(lastTimeRun);
-        Binding lastPlayBinding = new Binding("LastPlayFormatted")
+        Binding lastPlayBinding = new Binding("LastPlay")
         {
             Source = DataEntry,
             Mode = BindingMode.OneWay,
+            Converter = new TimeArrayConverter(),
         };
         BindingOperations.SetBinding(lastTimeRun, Run.TextProperty, lastPlayBinding);
         BindingHelper.SetColorBinding(LastPlaytimeBlock, ForegroundProperty, "Font");
@@ -361,7 +363,7 @@ public class GameCard : UserControl
             string newImagePath = System.IO.Path.Combine(AppFiles.SavedImagesPath,
                 $"{DataEntry.Name.Replace(" ", "_")}_{guid}.png");
             ImageHelper.ScatterImage(DataEntry.IconPath, newImagePath);
-        
+
             Dispatcher.Invoke(() => DataEntry.HeroPath = newImagePath);
         });
     }

@@ -7,7 +7,7 @@ namespace GameplayTimeTracker;
 
 public class TimeArrayConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object value, Type targetType = null, object parameter = null, CultureInfo culture = null)
     {
         if (value is int[] timeArray && timeArray.Length == 3)
         {
@@ -17,7 +17,7 @@ public class TimeArrayConverter : IValueConverter
         return "0h 0m 0s";
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object value, Type targetType = null, object parameter = null, CultureInfo culture = null)
     {
         if (value is string formattedString)
         {
@@ -34,6 +34,6 @@ public class TimeArrayConverter : IValueConverter
             return new[] { h, m, s };
         }
 
-        return new int[] { 0, 0, 0 };
+        return new[] { 0, 0, 0 };
     }
 }
