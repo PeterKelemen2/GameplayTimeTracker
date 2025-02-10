@@ -133,7 +133,7 @@ public static class Common
         return $"{arr[0]}h {arr[1]}m {arr[2]}s";
     }
 
-    public static bool CompareTimeArrays(int[] arr1, int[] arr2)
+    public static bool TimeArraysEqual(int[] arr1, int[] arr2)
     {
         if (arr1.Length != arr2.Length) return false;
 

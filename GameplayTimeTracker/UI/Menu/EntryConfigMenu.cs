@@ -126,10 +126,13 @@ public class EntryConfigMenu : CustomMenu
             Converter = new TimeArrayConverter(),
         };
         BindingOperations.SetBinding(textBox, TextBox.TextProperty, timeBinding);
+
+        int[] prevTime = { 0, 0, 0 };
         textBox.GotFocus += (s, e) =>
         {
             BindingOperations.ClearBinding(textBox, TextBox.TextProperty);
             textBox.Text = _entry.TotalPlayFormatted;
+            prevTime = _entry.TotalPlay;
         };
 
         textBox.LostFocus += (s, e) =>
@@ -138,13 +141,7 @@ public class EntryConfigMenu : CustomMenu
                 new TimeArrayConverter().ConvertBack(textBox.Text, typeof(int[]), null, CultureInfo.InvariantCulture) as
                     int[];
 
-            if (Common.CompareTimeArrays(textBoxTime, _entry.TotalPlay))
-            {
-                _entry.TotalPlay =
-                    new TimeArrayConverter().ConvertBack(textBox.Text, typeof(int[]), null,
-                            CultureInfo.InvariantCulture) as
-                        int[];
-            }
+            if (!Common.TimeArraysEqual(textBoxTime, prevTime)) _entry.TotalPlay = textBoxTime;
 
             BindingOperations.SetBinding(textBox, TextBox.TextProperty, timeBinding);
         };

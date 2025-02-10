@@ -190,7 +190,6 @@ public class RemoteContent : UserControl
             Dispatcher.Invoke(() =>
             {
                 ShowSaves(remoteContent);
-                // countRun.Text = remoteContent.Count.ToString();
                 ChangeRunText(remoteContent.Count.ToString());
             });
         }
@@ -203,7 +202,6 @@ public class RemoteContent : UserControl
     private async Task ChangeRunText(string text)
     {
         int stepTime = (int)(AppAnimations.fastFadeAnimDuration / countRun.Text.Length * 1000);
-        Console.WriteLine($"Step time: {stepTime}ms");
         while (countRun.Text.Length > 0)
         {
             countRun.Text = countRun.Text.Remove(countRun.Text.Length - 1, 1);
