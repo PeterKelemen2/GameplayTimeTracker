@@ -124,10 +124,12 @@ public class GameCard : UserControl
             Padding = new Thickness(10, 0, 10, 0)
         };
         RunningTextBlock.DataContext = DataEntry;
-        Binding runningBinding = new Binding("RunningFormatted")
+        // Binding runningBinding = new Binding("RunningFormatted")
+        Binding runningBinding = new Binding
         {
-            Source = DataEntry,
+            Source = DataEntry.IsRunning,
             Mode = BindingMode.OneWay,
+            Converter = new RunningStateConverter()
         };
         BindingOperations.SetBinding(RunningTextBlock, TextBlock.TextProperty, runningBinding);
         BindingHelper.SetColorBinding(RunningTextBlock, ForegroundProperty, "Running");
@@ -209,17 +211,15 @@ public class GameCard : UserControl
         LastPlayedOnBlock.Inlines.Add(lastPlayedOnRun);
         LastPlayedOnBlock.Inlines.Add(lastPlayDateRun);
 
-        Binding lastPlayStateBinding = new Binding("LastRunningStateFormatted")
+        Binding lastPlayStateBinding = new Binding
         {
-            Source = DataEntry,
-            Mode = BindingMode.OneWay,
+            Source = DataEntry.IsRunning, Mode = BindingMode.OneWay, Converter = new LastRunningStateConverter(),
         };
         BindingOperations.SetBinding(lastPlayedOnRun, Run.TextProperty, lastPlayStateBinding);
 
-        Binding lastPlayDateBinding = new Binding("LastDateFormatted")
+        Binding lastPlayDateBinding = new Binding
         {
-            Source = DataEntry,
-            Mode = BindingMode.OneWay,
+            Source = DataEntry.LastDate, Mode = BindingMode.OneWay, Converter = new DateConverter(),
         };
         BindingOperations.SetBinding(lastPlayDateRun, Run.TextProperty, lastPlayDateBinding);
         BindingHelper.SetColorBinding(LastPlayedOnBlock, ForegroundProperty, "Font");

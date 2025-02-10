@@ -15,7 +15,6 @@ namespace GameplayTimeTracker
         private string _name;
         private string _exePath;
         private bool _isLaunchable = true;
-
         private string _iconPath = AppFiles.DefaultIconPath;
         private string _heroPath = AppFiles.DefaultHeroPath;
         private string _arguments;
@@ -25,19 +24,12 @@ namespace GameplayTimeTracker
         private double _lastPerc;
         private int[] _totalPlayArray = new int[3]; // H M S
         private int[] _lastPlayArray = new int[3];
-        private bool _isRunning;
-        private string _runningString;
-        private string _lastPlayStateString = "Started: ";
+        private bool _isRunning = false;
         private string _localSavePath = "";
         private bool _isSavePathValid = true;
         private bool _isRemoteSaveEnabled = false;
         public bool _isEditing = false;
-
         private DateTime _lastDate;
-
-        // private Dictionary<DateTime, int[]> playTimeHistory = new();
-        private string _lastDateString = "Never";
-        private bool _wasRunning = false;
         private EntryRepository _repository;
 
         [JsonIgnore]
@@ -50,6 +42,7 @@ namespace GameplayTimeTracker
         [JsonIgnore]
         public bool IsEditing
         {
+            get => _isEditing;
             set
             {
                 SetField(ref _isEditing, value);
@@ -74,14 +67,12 @@ namespace GameplayTimeTracker
             get => _totalPlayArray;
             set
             {
-                if (SetField(ref _totalPlayArray, value))
+                SetField(ref _totalPlayArray, value);
+                if (Repository != null)
                 {
-                    if (Repository != null)
-                    {
-                        Repository.UpdateTotalPercentages();
-                        LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
-                        // Repository.PrintEntryList();
-                    }
+                    Repository.UpdateTotalPercentages();
+                    LastPerc = Math.Round(GetLastPlaytimeAsDouble() / GetTotalPlaytimeAsDouble(), 2);
+                    // Repository.PrintEntryList();
                 }
             }
         }
@@ -90,25 +81,7 @@ namespace GameplayTimeTracker
         public int[] LastPlay
         {
             get => _lastPlayArray;
-            set
-            {
-                SetField(ref _lastPlayArray, value);
-                // OnPropertyChanged(nameof(LastPlayFormatted));
-            }
-        }
-
-        [JsonIgnore]
-        public string RunningFormatted
-        {
-            get => _runningString;
-            set { SetField(ref _runningString, value); }
-        }
-
-        [JsonIgnore]
-        public string LastRunningStateFormatted
-        {
-            get => _lastPlayStateString;
-            set { SetField(ref _lastPlayStateString, value); }
+            set { SetField(ref _lastPlayArray, value); }
         }
 
         [JsonPropertyName("exePath")]
@@ -254,7 +227,7 @@ namespace GameplayTimeTracker
         public double TotalPerc
         {
             get => _totalPerc;
-            set { SetField(ref _totalPerc, value); }
+            set => SetField(ref _totalPerc, value);
         }
 
         [JsonIgnore]
@@ -272,31 +245,17 @@ namespace GameplayTimeTracker
         }
 
         [JsonIgnore]
-        public string LastDateFormatted =>
-            LastDate.Year > 1000
-                ? (LastDate.Date == DateTime.Now.Date
-                    ? $"Today, {LastDate.ToString("HH:mm")}"
-                    : LastDate.ToString("yyyy.MM.dd HH:mm"))
-                : "Never";
-
-        [JsonIgnore]
         public bool IsRunning
         {
-            get => _runningString == "Running!";
+            get => _isRunning;
             set
             {
-                if (value != IsRunning)
+                if (value != _isRunning)
                 {
-                    _runningString = value ? "Running!" : "";
-                    _lastPlayStateString = value ? "Started: " : "Ended: ";
-                    _wasRunning = value;
+                    _isRunning = value;
                     LastDate = DateTime.Now;
 
                     OnPropertyChanged(nameof(IsRunning));
-                    OnPropertyChanged(nameof(RunningFormatted));
-                    OnPropertyChanged(nameof(LastDateFormatted));
-                    OnPropertyChanged(nameof(LastRunningStateFormatted));
-
                     _repository?.UpdateRunningEntryCount();
 
                     if (value)
@@ -334,13 +293,6 @@ namespace GameplayTimeTracker
             {
                 DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
             }
-        }
-
-        [JsonIgnore]
-        public bool WasRunning
-        {
-            get => _wasRunning;
-            set => SetField(ref _wasRunning, value);
         }
 
         [JsonPropertyName("playtimeHistory")] public Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
@@ -432,25 +384,18 @@ namespace GameplayTimeTracker
         public void ResetLastPlaytime()
         {
             LastPlay = new int[3];
-            // LastDate = DateTime.Now;
         }
 
         public void IncrementTime()
         {
-            IncTArray(LastPlay);
-            IncTArray(TotalPlay);
+            LastPlay = IncTArray(LastPlay);
+            TotalPlay = IncTArray(TotalPlay);
         }
 
-        private void IncTArray(int[] arr)
+        private int[] IncTArray(int[] arr)
         {
-            int[] newArray = (int[])arr.Clone();
-            newArray[2]++; // Increment seconds
-            newArray = Common.NormalizeTimeArray(newArray);
-
-            if (arr == LastPlay)
-                LastPlay = newArray; // Reassign to trigger notification
-            else if (arr == TotalPlay)
-                TotalPlay = newArray; // Reassign to trigger notification
+            arr[2]++;
+            return Common.NormalizeTimeArray(arr);
         }
 
 
@@ -499,7 +444,6 @@ namespace GameplayTimeTracker
 
         public async Task RefreshImagesFromSGDB()
         {
-            // AppSettings settings = DataHandler.GetSettingsFromFile();
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(Name);
 
             if (!Common.Settings.SGDBApiKey.Equals(string.Empty))

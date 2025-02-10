@@ -103,7 +103,8 @@ public static class Common
             }
         }
 
-        return arr;
+        // return arr;
+        return new[] { arr[0], arr[1], arr[2] };
     }
 
     public static int[] AddTimeArrays(int[] array1, int[] array2)
