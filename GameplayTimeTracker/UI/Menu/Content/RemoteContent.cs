@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using GameplayTimeTracker.Menu;
 
 namespace GameplayTimeTracker.UI.Menu.Content;
 
@@ -85,8 +86,13 @@ public class RemoteContent : UserControl
     {
         if (string.IsNullOrEmpty(currentSelectedPath)) return;
         Console.WriteLine($"Downloading selected save from {currentSelectedPath}");
-        
-        await RemoteController.DownloadFolderAsync(currentSelectedPath, _entry.LocalSavePath);
+
+        bool downloadSuccess =
+            await RemoteController.DownloadFolderAsync(currentSelectedPath, _entry.LocalSavePath);
+        string message = downloadSuccess ? "Download successful!" : "Failed to download";
+        var downloadPrompt = new PromptMenu(width: 300, textArray: new[] { message }, boldArray: new[] { true },
+            toScale: false);
+        downloadPrompt.Open();
     }
 
     private async void UploadButton_Click(object sender, RoutedEventArgs e)
@@ -96,7 +102,11 @@ public class RemoteContent : UserControl
 
         string uploadPath =
             $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{_entry.Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-        await RemoteController.UploadFolderAsync(_entry.LocalSavePath, uploadPath);
+        bool success = await RemoteController.UploadFolderAsync(_entry.LocalSavePath, uploadPath);
+        string message = success ? "Upload successful!" : "Failed to upload";
+        var uploadPrompt = new PromptMenu(width: 300, textArray: new[] { message }, boldArray: new[] { true },
+            toScale: false);
+        uploadPrompt.Open();
 
         LoadData();
     }

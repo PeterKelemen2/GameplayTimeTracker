@@ -12,14 +12,8 @@ public static class RemoteController
 {
     private static double delayDuration = 10;
 
-    public static async Task UploadFolderAsync(string localFolderPath, string remoteFolderPath)
+    public static async Task<bool> UploadFolderAsync(string localFolderPath, string remoteFolderPath)
     {
-        if (!Directory.Exists(localFolderPath))
-        {
-            Console.WriteLine("Local folder doesn't exist");
-            return;
-        }
-
         var remote = Common.Settings.RemoteMachine;
 
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
@@ -33,10 +27,12 @@ public static class RemoteController
                 await UploadDirectoryRecursiveAsync(sftp, localFolderPath, remoteFolderPath);
 
                 Console.WriteLine("Folder upload complete.");
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
             }
             finally
             {
@@ -100,7 +96,7 @@ public static class RemoteController
         }
     }
 
-    public static async Task DownloadFolderAsync(string remoteFolderPath, string localFolderPath)
+    public static async Task<bool> DownloadFolderAsync(string remoteFolderPath, string localFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
@@ -118,10 +114,12 @@ public static class RemoteController
                 await DownloadDirectoryRecursiveAsync(sftp, remoteFolderPath, localFolderPath);
 
                 Console.WriteLine("Folder download complete.");
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
             }
             finally
             {
