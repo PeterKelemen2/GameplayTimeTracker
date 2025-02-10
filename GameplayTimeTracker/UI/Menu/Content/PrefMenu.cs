@@ -24,7 +24,7 @@ public class PrefMenu : MenuContent
             UIHelper.CreateTextBlock(text: "SGDB API Key", margin: new Thickness(0, 0, 0, 0), isBold: false,
                 vA: VerticalAlignment.Center);
         SetSGDBClickableText(sgdbApiKeyBlock);
-        TextBox sgdbApiKeyBox = UIHelper.CreateTextBox();
+        TextBox sgdbApiKeyBox = UIHelper.CreateTextBox(width: 220);
         Binding sgdbApiKeyBinding = new Binding("SGDBApiKey") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(sgdbApiKeyBox, TextBox.TextProperty, sgdbApiKeyBinding);
         BindingHelper.SetColorBinding(sgdbApiKeyBlock, ForegroundProperty, "Font");
