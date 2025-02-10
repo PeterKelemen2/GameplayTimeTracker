@@ -306,6 +306,7 @@ public class CustomButton : UserControl
         {
             bool newValue = (bool)e.NewValue;
             button.OnActiveChanged(newValue);
+            Console.WriteLine($"Button changed to {newValue}");
         }
     }
 

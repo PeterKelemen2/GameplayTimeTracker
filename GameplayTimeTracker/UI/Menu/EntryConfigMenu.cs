@@ -52,7 +52,8 @@ public class EntryConfigMenu : CustomMenu
         TextBlock remoteTitleBlock = CreateTitleBlock(remoteStackPanel, "Remote Backup",
             margin: new Thickness(0, 15, 0, 0), fontSize: 21);
 
-        CreateEditEntry(remoteStackPanel, "Local Save Path", "LocalSavePath", buttonClick: SavePath_Click);
+        CreateEditEntry(remoteStackPanel, "Local Save Path", "LocalSavePath", buttonClick: SavePath_Click,
+            updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
         PrefEntry remoteSavePref =
             new PrefEntry("Remote Backup", Common.Settings.PreferSteamGridDBImage, width: 220,
@@ -64,18 +65,6 @@ public class EntryConfigMenu : CustomMenu
         BindingHelper.SetColorBinding(remoteSavePref.textBlock, ForegroundProperty, "Font");
         remoteStackPanel.Children.Add(remoteSavePref);
 
-        Panel remoteButtonsContainer = new WrapPanel
-            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 10, 0, 15) };
-        CustomButton uploadButton = new CustomButton(w: 110, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon);
-        uploadButton.Margin = new Thickness(0, 0, 5, 0);
-        uploadButton.Click += (_, _) => { entry.RemoteSave(); };
-        CustomButton loadButton =
-            new CustomButton(w: 110, h: 40, text: "Load Latest", effect: AppEffects.DropShadowIcon);
-        loadButton.Margin = new Thickness(5, 0, 0, 0);
-        loadButton.Click += (_, _) => { entry.RemoteLoad(); };
-        remoteButtonsContainer.Children.Add(uploadButton);
-        remoteButtonsContainer.Children.Add(loadButton);
-        // stackPanel.Children.Add(remoteButtonsContainer);
         stackPanel.Children.Add(remoteStackPanel);
     }
 
@@ -104,9 +93,9 @@ public class EntryConfigMenu : CustomMenu
         }
 
         textBox.Padding = new Thickness(5, 0, buttonSize + buttonMargin * 2, 0);
-        Binding exeBinding = new Binding(bindPath)
+        Binding textBoxBinding = new Binding(bindPath)
             { Source = _entry, Mode = BindingMode.TwoWay, UpdateSourceTrigger = updateSourceTrigger };
-        BindingOperations.SetBinding(textBox, TextBox.TextProperty, exeBinding);
+        BindingOperations.SetBinding(textBox, TextBox.TextProperty, textBoxBinding);
 
         if (buttonClick != null)
         {

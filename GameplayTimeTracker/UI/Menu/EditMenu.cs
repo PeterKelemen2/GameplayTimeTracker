@@ -106,11 +106,9 @@ public class EditMenu : EntryConfigMenu
         var remoteContent = new RemoteContent();
         Dispatcher.BeginInvoke((Action)(() =>
         {
-            remoteContent = new RemoteContent(_entry);
+            remoteContent = new RemoteContent(entry);
             rightSide.Children.Add(remoteContent);
         }));
-        
-        
     }
 
     private void IconButton_Click(object sender, RoutedEventArgs e)

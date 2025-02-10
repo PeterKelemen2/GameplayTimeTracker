@@ -15,6 +15,7 @@ namespace GameplayTimeTracker
         private string _name;
         private string _exePath;
         private bool _isLaunchable = true;
+
         private string _iconPath = AppFiles.DefaultIconPath;
         private string _heroPath = AppFiles.DefaultHeroPath;
         private string _arguments;
@@ -28,6 +29,7 @@ namespace GameplayTimeTracker
         private string _runningString;
         private string _lastPlayStateString = "Started: ";
         private string _localSavePath = "";
+        private bool _isSavePathValid = true;
         private bool _isRemoteSaveEnabled = false;
         public bool _isEditing = false;
 
@@ -37,7 +39,6 @@ namespace GameplayTimeTracker
         private string _lastDateString = "Never";
         private bool _wasRunning = false;
         private EntryRepository _repository;
-
 
         [JsonIgnore]
         public EntryRepository Repository
@@ -55,6 +56,7 @@ namespace GameplayTimeTracker
                 if (!_isEditing) Name = Name.Trim();
             }
         }
+
 
         [JsonPropertyName("gameName")]
         public string Name
@@ -129,7 +131,7 @@ namespace GameplayTimeTracker
             set
             {
                 SetField(ref _exePath, value);
-                IsLaunchable = File.Exists(_exePath) && Path.GetExtension(_exePath).ToLower() == ".exe" ? true : false;
+                IsLaunchable = File.Exists(_exePath) && Path.GetExtension(_exePath).ToLower() == ".exe";
                 Console.WriteLine($"Launchable: {IsLaunchable}");
                 InitSave();
             }
@@ -140,6 +142,13 @@ namespace GameplayTimeTracker
         {
             get => _isLaunchable;
             set { SetField(ref _isLaunchable, value); }
+        }
+
+        [JsonIgnore]
+        public bool IsSavePathValid
+        {
+            get => _isSavePathValid;
+            set { SetField(ref _isSavePathValid, value); }
         }
 
         [JsonPropertyName("arguments")]
@@ -170,12 +179,10 @@ namespace GameplayTimeTracker
             get => _localSavePath;
             set
             {
-                if (value != _localSavePath)
-                {
-                    _localSavePath = value;
-                    OnPropertyChanged(nameof(LocalSavePath));
-                    InitSave();
-                }
+                SetField(ref _localSavePath, value);
+                IsSavePathValid = Directory.Exists(_localSavePath);
+                Console.WriteLine($"Entry - IsSavePathValid: {_isSavePathValid}");
+                InitSave();
             }
         }
 

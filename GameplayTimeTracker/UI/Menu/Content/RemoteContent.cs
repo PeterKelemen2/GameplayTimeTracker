@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -53,8 +54,6 @@ public class RemoteContent : UserControl
         container.Children.Add(savesBorder);
         Content = container;
         CreateButtons();
-        // AddLoadingIndicator();
-        // LoadSubfoldersAsync();
         LoadData();
     }
 
@@ -68,14 +67,19 @@ public class RemoteContent : UserControl
     {
         StackPanel buttonsStackPanel = new StackPanel
             { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
+        Binding uploadBinding = new Binding("IsSavePathValid") { Source = _entry, Mode = BindingMode.OneWay };
+
         var uploadButton = new CustomButton(w: 120, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon,
             hA: HorizontalAlignment.Center);
         uploadButton.Margin = new Thickness(5);
         uploadButton.Click += UploadButton_Click;
+        BindingOperations.SetBinding(uploadButton, CustomButton.ActiveProperty, uploadBinding);
+
         var downloadButton = new CustomButton(w: 120, h: 40, text: "Download", effect: AppEffects.DropShadowIcon,
             hA: HorizontalAlignment.Center);
         downloadButton.Margin = new Thickness(5);
         downloadButton.Click += DownloadButton_Click;
+        BindingOperations.SetBinding(downloadButton, CustomButton.ActiveProperty, uploadBinding);
 
         buttonsStackPanel.Children.Add(uploadButton);
         buttonsStackPanel.Children.Add(downloadButton);
