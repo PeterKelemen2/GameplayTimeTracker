@@ -284,11 +284,8 @@ namespace GameplayTimeTracker
 
         public void IncrementPlaytimeHistory(bool toSave = true)
         {
+            EnsureLastWeekData();
             DateTime today = DateTime.Today;
-            if (!PlaytimeHistory.ContainsKey(today))
-            {
-                PlaytimeHistory[today] = new int[3]; // Ensure today's entry exists
-            }
 
             int daysBetween = (LastDate.Date - _prevDate.Date).Days;
 
@@ -317,7 +314,7 @@ namespace GameplayTimeTracker
                     currentDay = _prevDate.Date.AddDays(i);
                     if (!PlaytimeHistory.ContainsKey(currentDay))
                     {
-                        PlaytimeHistory[currentDay] = new int[3];
+                        PlaytimeHistory[currentDay] = new[] { 24, 0, 0 };
                     }
 
                     int[] fullDayTime = new[] { 24, 0, 0 }; // Full 24 hours
