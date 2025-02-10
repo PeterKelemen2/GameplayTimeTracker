@@ -126,7 +126,7 @@ public class EntryRepository : INotifyPropertyChanged
             totalTimeArray = Common.AddTimeArrays(totalTimeArray, entry.TotalPlay);
         }
 
-        totalTimeArray = Common.NormalizeTimeArray(totalTimeArray);
+        totalTimeArray = Common.NormalizeTime(totalTimeArray);
 
         return totalTimeArray;
     }

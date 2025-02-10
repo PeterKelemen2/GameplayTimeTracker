@@ -227,7 +227,7 @@ public partial class MainWindow : Window
         Common.Repository.EntriesList
             .Where(entry => entry.IsRunning)
             .ToList()
-            .ForEach(entry => entry.IncrementTodaysHistory(toSave: false));
+            .ForEach(entry => entry.IncrementPlaytimeHistory(toSave: false));
 
         DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
         Application.Current.Shutdown();

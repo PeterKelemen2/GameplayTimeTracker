@@ -109,7 +109,7 @@ public class StatsGraph : CustomMenu
                 return sum;
             });
 
-        totalTime = Common.NormalizeTimeArray(totalTime);
+        totalTime = Common.NormalizeTime(totalTime);
 
         return totalTime;
     }

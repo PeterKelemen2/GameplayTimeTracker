@@ -86,7 +86,7 @@ public static class Common
         return array1 != null && array2 != null && array1.SequenceEqual(array2);
     }
 
-    public static int[] NormalizeTimeArray(int[] arr)
+    public static int[] NormalizeTime(int[] arr)
     {
         if (arr.Length == 3)
         {

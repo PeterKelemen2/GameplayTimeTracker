@@ -268,7 +268,7 @@ namespace GameplayTimeTracker
                     }
                     else
                     {
-                        IncrementTodaysHistory();
+                        IncrementPlaytimeHistory();
                         InitSave();
                         InitRemoteSave();
                     }
@@ -282,7 +282,7 @@ namespace GameplayTimeTracker
             }
         }
 
-        public void IncrementTodaysHistory(bool toSave = true)
+        public void IncrementPlaytimeHistory(bool toSave = true)
         {
             DateTime today = DateTime.Today;
             if (!PlaytimeHistory.ContainsKey(today))
@@ -298,15 +298,12 @@ namespace GameplayTimeTracker
                 DateTime midnight = currentDay.AddDays(1); // Midnight of the next day
 
                 // First day: from _prevDate to midnight
-                TimeSpan beforeMidnight = midnight - _prevDate;
-                int[] firstDayTime = Common.NormalizeTimeArray(new[]
-                {
-                    beforeMidnight.Hours, beforeMidnight.Minutes, beforeMidnight.Seconds
-                });
+                TimeSpan toMid = midnight - _prevDate;
+                int[] firstDayTime = Common.NormalizeTime(new[] { toMid.Hours, toMid.Minutes, toMid.Seconds });
 
                 if (PlaytimeHistory.ContainsKey(currentDay))
                 {
-                    PlaytimeHistory[currentDay] = Common.NormalizeTimeArray(
+                    PlaytimeHistory[currentDay] = Common.NormalizeTime(
                         Common.AddTimeArrays(PlaytimeHistory[currentDay], firstDayTime));
                 }
                 else
@@ -324,21 +321,18 @@ namespace GameplayTimeTracker
                     }
 
                     int[] fullDayTime = new[] { 24, 0, 0 }; // Full 24 hours
-                    PlaytimeHistory[currentDay] = Common.NormalizeTimeArray(
-                        Common.AddTimeArrays(PlaytimeHistory[currentDay], fullDayTime));
+                    PlaytimeHistory[currentDay] =
+                        Common.NormalizeTime(Common.AddTimeArrays(PlaytimeHistory[currentDay], fullDayTime));
                 }
 
                 // Last day: from midnight to LastDate
                 DateTime lastMidnight = LastDate.Date;
-                TimeSpan afterMidnight = LastDate - lastMidnight;
-                int[] lastDayTime = Common.NormalizeTimeArray(new int[]
-                {
-                    afterMidnight.Hours, afterMidnight.Minutes, afterMidnight.Seconds
-                });
+                TimeSpan fromMid = LastDate - lastMidnight;
+                int[] lastDayTime = Common.NormalizeTime(new[] { fromMid.Hours, fromMid.Minutes, fromMid.Seconds });
 
                 if (PlaytimeHistory.ContainsKey(lastMidnight))
                 {
-                    PlaytimeHistory[lastMidnight] = Common.NormalizeTimeArray(
+                    PlaytimeHistory[lastMidnight] = Common.NormalizeTime(
                         Common.AddTimeArrays(PlaytimeHistory[lastMidnight], lastDayTime));
                 }
                 else
@@ -349,7 +343,7 @@ namespace GameplayTimeTracker
             else
             {
                 // Normal case: Just add LastPlay to today's time
-                PlaytimeHistory[today] = Common.NormalizeTimeArray(
+                PlaytimeHistory[today] = Common.NormalizeTime(
                     Common.AddTimeArrays(PlaytimeHistory[today], LastPlay));
             }
 
@@ -462,7 +456,7 @@ namespace GameplayTimeTracker
         private int[] IncTArray(int[] arr)
         {
             arr[2]++;
-            return Common.NormalizeTimeArray(arr);
+            return Common.NormalizeTime(arr);
         }
 
 
