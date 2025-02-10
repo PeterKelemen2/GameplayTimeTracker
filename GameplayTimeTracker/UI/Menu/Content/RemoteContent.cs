@@ -68,23 +68,25 @@ public class RemoteContent : UserControl
     {
         StackPanel buttonsStackPanel = new StackPanel
             { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
-        Binding uploadBinding = new Binding("IsSavePathValid") { Source = _entry, Mode = BindingMode.OneWay };
+        Binding validPathBinding = new Binding("IsSavePathValid") { Source = _entry, Mode = BindingMode.OneWay };
 
-        var uploadButton = new CustomButton(w: 120, h: 40, text: "Upload", effect: AppEffects.DropShadowIcon,
-            hA: HorizontalAlignment.Center);
-        uploadButton.Margin = new Thickness(5);
-        uploadButton.Click += UploadButton_Click;
-        BindingOperations.SetBinding(uploadButton, CustomButton.ActiveProperty, uploadBinding);
-
-        var downloadButton = new CustomButton(w: 120, h: 40, text: "Download", effect: AppEffects.DropShadowIcon,
-            hA: HorizontalAlignment.Center);
-        downloadButton.Margin = new Thickness(5);
-        downloadButton.Click += DownloadButton_Click;
-        BindingOperations.SetBinding(downloadButton, CustomButton.ActiveProperty, uploadBinding);
+        var uploadButton = GetButton("Upload", UploadButton_Click, validPathBinding);
+        var downloadButton = GetButton("Download", DownloadButton_Click, validPathBinding);
 
         buttonsStackPanel.Children.Add(uploadButton);
         buttonsStackPanel.Children.Add(downloadButton);
         container.Children.Add(buttonsStackPanel);
+    }
+
+    private CustomButton GetButton(string text, RoutedEventHandler action, Binding binding)
+    {
+        var button = new CustomButton(w: 120, h: 40, text: text, effect: AppEffects.DropShadowIcon,
+            hA: HorizontalAlignment.Center);
+        button.Margin = new Thickness(5);
+        button.Click += action;
+        BindingOperations.SetBinding(button, CustomButton.ActiveProperty, binding);
+
+        return button;
     }
 
     private async void DownloadButton_Click(object sender, RoutedEventArgs e)
@@ -92,10 +94,10 @@ public class RemoteContent : UserControl
         if (string.IsNullOrEmpty(currentSelectedPath)) return;
         Console.WriteLine($"Downloading selected save from {currentSelectedPath}");
 
-        bool downloadSuccess =
+        bool success =
             await RemoteController.DownloadFolderAsync(currentSelectedPath, _entry.LocalSavePath);
-        string message = downloadSuccess ? "Download successful!" : "Failed to download";
-        var downloadPrompt = new PromptMenu(width: 300, textArray: new[] { message }, boldArray: new[] { true },
+        var downloadPrompt = new PromptMenu(width: 300,
+            textArray: new[] { success ? "Download successful!" : "Failed to download" }, boldArray: new[] { true },
             toScale: false);
         downloadPrompt.Open();
     }
@@ -108,8 +110,8 @@ public class RemoteContent : UserControl
         string uploadPath =
             $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{_entry.Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
         bool success = await RemoteController.UploadFolderAsync(_entry.LocalSavePath, uploadPath);
-        string message = success ? "Upload successful!" : "Failed to upload";
-        var uploadPrompt = new PromptMenu(width: 300, textArray: new[] { message }, boldArray: new[] { true },
+        var uploadPrompt = new PromptMenu(width: 300,
+            textArray: new[] { success ? "Upload successful!" : "Failed to upload" }, boldArray: new[] { true },
             toScale: false);
         uploadPrompt.Open();
 
