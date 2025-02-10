@@ -103,6 +103,8 @@ public class EditMenu : EntryConfigMenu
         leftSide.Children.Remove(remoteStackPanel);
         rightSide.Children.Add(remoteStackPanel);
 
+        CreateTitleBlock(rightSide, "Manage saves");
+
         var remoteContent = new RemoteContent();
         Dispatcher.BeginInvoke((Action)(() =>
         {
