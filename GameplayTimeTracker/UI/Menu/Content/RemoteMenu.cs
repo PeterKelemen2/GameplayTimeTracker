@@ -29,7 +29,8 @@ public class RemoteMenu : MenuContent
         CreatePrefEntry("Port", "RemoteMachine.Port");
         CreatePrefEntry("User", "RemoteMachine.User");
         CreatePrefEntry("Password", "RemoteMachine.Password");
-        CreatePrefEntry("Remote Folder", "RemoteMachine.RemoteFolder", 20);
+        CreatePrefEntry("Remote folder", "RemoteMachine.RemoteFolder", 20);
+        CreatePrefEntry("Retain saves for days", "RemoteMachine.RetainForDays", 20);
     }
 
     private void CreatePrefEntry(string blockText = "", string bindPath = "", double bottomMargin = 0)
@@ -42,10 +43,10 @@ public class RemoteMenu : MenuContent
 
         TextBlock prefTextBlock =
             UIHelper.CreateTextBlock(text: blockText, margin: new Thickness(5, 0, 0, 2), isBold: false,
-                vA: VerticalAlignment.Center);
+                vA: VerticalAlignment.Center, fontSize: 15);
         BindingHelper.SetColorBinding(prefTextBlock, ForegroundProperty, "Font");
 
-        TextBox prefTextBox = UIHelper.CreateTextBox();
+        TextBox prefTextBox = UIHelper.CreateTextBox(width: 250);
         Binding boxBinding = new Binding(bindPath) { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(prefTextBox, TextBox.TextProperty, boxBinding);
         prefTextBox.Margin = new Thickness(0, 0, 0, 10);

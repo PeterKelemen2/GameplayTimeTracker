@@ -12,6 +12,7 @@ public class RemoteMachine : INotifyPropertyChanged
     private string _user;
     private string _password;
     private string _remoteFolder;
+    private int _retainForDays = 30;
 
     [JsonPropertyName("Address")]
     public string Address
@@ -46,6 +47,13 @@ public class RemoteMachine : INotifyPropertyChanged
     {
         get => _remoteFolder;
         set { SetField(ref _remoteFolder, value); }
+    }
+
+    [JsonPropertyName("Retain For Days")]
+    public int RetainForDays
+    {
+        get => _retainForDays;
+        set { SetField(ref _retainForDays, value); }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
