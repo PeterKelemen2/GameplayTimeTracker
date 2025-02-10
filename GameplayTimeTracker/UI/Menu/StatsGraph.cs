@@ -109,10 +109,6 @@ public class StatsGraph : CustomMenu
                 return sum;
             });
 
-        // totalTime[1] += totalTime[2] / 60;
-        // totalTime[2] %= 60;
-        // totalTime[0] += totalTime[1] / 60;
-        // totalTime[1] %= 60;
         totalTime = Common.NormalizeTimeArray(totalTime);
 
         return totalTime;

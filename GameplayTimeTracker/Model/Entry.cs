@@ -4,9 +4,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using GameplayTimeTracker.SGDB;
 using Application = System.Windows.Application;
+using DateTime = System.DateTime;
+using Task = System.Threading.Tasks.Task;
 
 namespace GameplayTimeTracker
 {
@@ -29,6 +30,7 @@ namespace GameplayTimeTracker
         private bool _isSavePathValid = true;
         private bool _isRemoteSaveEnabled = false;
         public bool _isEditing = false;
+        private DateTime _prevDate;
         private DateTime _lastDate;
         private EntryRepository _repository;
 
@@ -253,6 +255,7 @@ namespace GameplayTimeTracker
                 if (value != _isRunning)
                 {
                     _isRunning = value;
+                    _prevDate = LastDate;
                     LastDate = DateTime.Now;
 
                     OnPropertyChanged(nameof(IsRunning));
@@ -281,19 +284,83 @@ namespace GameplayTimeTracker
 
         public void IncrementTodaysHistory(bool toSave = true)
         {
-            if (PlaytimeHistory.ContainsKey(DateTime.Today))
+            DateTime today = DateTime.Today;
+            if (!PlaytimeHistory.ContainsKey(today))
             {
-                PlaytimeHistory[DateTime.Today] =
-                    Common.NormalizeTimeArray(Common.AddTimeArrays(PlaytimeHistory[DateTime.Today],
-                        LastPlay));
-                Console.WriteLine($"Todays play time: {PlaytimeHistory[DateTime.Today]}");
+                PlaytimeHistory[today] = new int[3]; // Ensure today's entry exists
             }
+
+            int daysBetween = (LastDate.Date - _prevDate.Date).Days;
+
+            if (daysBetween >= 1) // Session spans multiple days
+            {
+                DateTime currentDay = _prevDate.Date;
+                DateTime midnight = currentDay.AddDays(1); // Midnight of the next day
+
+                // First day: from _prevDate to midnight
+                TimeSpan beforeMidnight = midnight - _prevDate;
+                int[] firstDayTime = Common.NormalizeTimeArray(new[]
+                {
+                    beforeMidnight.Hours, beforeMidnight.Minutes, beforeMidnight.Seconds
+                });
+
+                if (PlaytimeHistory.ContainsKey(currentDay))
+                {
+                    PlaytimeHistory[currentDay] = Common.NormalizeTimeArray(
+                        Common.AddTimeArrays(PlaytimeHistory[currentDay], firstDayTime));
+                }
+                else
+                {
+                    PlaytimeHistory[currentDay] = firstDayTime;
+                }
+
+                // Full days between _prevDate and LastDate
+                for (int i = 1; i < daysBetween; i++)
+                {
+                    currentDay = _prevDate.Date.AddDays(i);
+                    if (!PlaytimeHistory.ContainsKey(currentDay))
+                    {
+                        PlaytimeHistory[currentDay] = new int[3];
+                    }
+
+                    int[] fullDayTime = new[] { 24, 0, 0 }; // Full 24 hours
+                    PlaytimeHistory[currentDay] = Common.NormalizeTimeArray(
+                        Common.AddTimeArrays(PlaytimeHistory[currentDay], fullDayTime));
+                }
+
+                // Last day: from midnight to LastDate
+                DateTime lastMidnight = LastDate.Date;
+                TimeSpan afterMidnight = LastDate - lastMidnight;
+                int[] lastDayTime = Common.NormalizeTimeArray(new int[]
+                {
+                    afterMidnight.Hours, afterMidnight.Minutes, afterMidnight.Seconds
+                });
+
+                if (PlaytimeHistory.ContainsKey(lastMidnight))
+                {
+                    PlaytimeHistory[lastMidnight] = Common.NormalizeTimeArray(
+                        Common.AddTimeArrays(PlaytimeHistory[lastMidnight], lastDayTime));
+                }
+                else
+                {
+                    PlaytimeHistory[lastMidnight] = lastDayTime;
+                }
+            }
+            else
+            {
+                // Normal case: Just add LastPlay to today's time
+                PlaytimeHistory[today] = Common.NormalizeTimeArray(
+                    Common.AddTimeArrays(PlaytimeHistory[today], LastPlay));
+            }
+
+            Console.WriteLine($"Today's play time: {string.Join(":", PlaytimeHistory[today])}");
 
             if (toSave)
             {
                 DataHandler.WriteEntriesToFile(_repository.EntriesList, AppFiles.DataFilePath);
             }
         }
+
 
         [JsonPropertyName("playtimeHistory")] public Dictionary<DateTime, int[]> PlaytimeHistory { get; set; }
 
