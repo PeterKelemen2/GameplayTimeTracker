@@ -369,13 +369,13 @@ namespace GameplayTimeTracker
             }
         }
 
-        public void RemoteSave()
+        public async void RemoteSave()
         {
             if (IsRunning) return;
 
             string uploadPath =
                 $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-            RemoteController.UploadFolder(_localSavePath, uploadPath);
+            await RemoteController.UploadFolderAsync(_localSavePath, uploadPath);
         }
 
         public void InitRemoteLoad()
@@ -386,13 +386,13 @@ namespace GameplayTimeTracker
             }
         }
 
-        public void RemoteLoad()
+        public async void RemoteLoad()
         {
             if (IsRunning) return;
 
             string remoteGameFolder = Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, Name)
                 .Replace("\\", "/");
-            RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder),
+            await RemoteController.DownloadFolderAsync(RemoteController.GetPathWithLatestName(remoteGameFolder),
                 LocalSavePath);
         }
 

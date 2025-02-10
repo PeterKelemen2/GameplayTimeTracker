@@ -12,7 +12,7 @@ public static class RemoteController
 {
     private static double delayDuration = 10;
 
-    public static void UploadFolder(string localFolderPath, string remoteFolderPath)
+    public static async Task UploadFolderAsync(string localFolderPath, string remoteFolderPath)
     {
         if (!Directory.Exists(localFolderPath))
         {
@@ -21,53 +21,59 @@ public static class RemoteController
         }
 
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
-                   remote.Password))
+
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
             try
             {
-                sftp.Connect();
+                await Task.Run(() => sftp.Connect());
                 Console.WriteLine($"Trying to upload to {remoteFolderPath}");
-                EnsureRemoteFolderExists(sftp, remoteFolderPath);
 
-                UploadDirectoryRecursive(sftp, localFolderPath, remoteFolderPath);
+                await Task.Run(() => EnsureRemoteFolderExists(sftp, remoteFolderPath));
+                await UploadDirectoryRecursiveAsync(sftp, localFolderPath, remoteFolderPath);
 
                 Console.WriteLine("Folder upload complete.");
-                sftp.Disconnect();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                sftp.Disconnect();
+            }
         }
     }
 
-    private static void UploadDirectoryRecursive(SftpClient sftp, string localFolderPath, string remoteFolderPath)
+
+    private static async Task UploadDirectoryRecursiveAsync(SftpClient sftp, string localFolderPath,
+        string remoteFolderPath)
     {
         var files = Directory.GetFiles(localFolderPath);
         var directories = Directory.GetDirectories(localFolderPath);
 
-        // Upload all files in the current directory
+        // Upload files asynchronously
         foreach (var file in files)
         {
             using (var fileStream = File.OpenRead(file))
             {
                 string remoteFilePath = Path.Combine(remoteFolderPath, Path.GetFileName(file)).Replace("\\", "/");
-                sftp.UploadFile(fileStream, remoteFilePath);
+                await Task.Run(() => sftp.UploadFile(fileStream, remoteFilePath));
                 Console.WriteLine($"Uploaded file: {remoteFilePath}");
             }
         }
 
-        // Recursively upload all subdirectories
+        // Upload directories asynchronously
         foreach (var directory in directories)
         {
             string folderName = Path.GetFileName(directory);
             string remoteSubFolderPath = Path.Combine(remoteFolderPath, folderName).Replace("\\", "/");
 
-            EnsureRemoteFolderExists(sftp, remoteSubFolderPath);
-            UploadDirectoryRecursive(sftp, directory, remoteSubFolderPath);
+            await Task.Run(() => EnsureRemoteFolderExists(sftp, remoteSubFolderPath));
+            await UploadDirectoryRecursiveAsync(sftp, directory, remoteSubFolderPath);
         }
     }
+
 
     private static void EnsureRemoteFolderExists(SftpClient sftp, string remoteFolderPath)
     {
@@ -94,15 +100,14 @@ public static class RemoteController
         }
     }
 
-    public static void DownloadFolder(string remoteFolderPath, string localFolderPath)
+    public static async Task DownloadFolderAsync(string remoteFolderPath, string localFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
-        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
-                   remote.Password))
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
             try
             {
-                sftp.Connect();
+                await Task.Run(() => sftp.Connect());
 
                 // Ensure the local folder exists
                 if (!Directory.Exists(localFolderPath))
@@ -110,25 +115,30 @@ public static class RemoteController
                     Directory.CreateDirectory(localFolderPath);
                 }
 
-                DownloadDirectoryRecursive(sftp, remoteFolderPath, localFolderPath);
+                await DownloadDirectoryRecursiveAsync(sftp, remoteFolderPath, localFolderPath);
 
                 Console.WriteLine("Folder download complete.");
-                sftp.Disconnect();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                sftp.Disconnect();
+            }
         }
     }
 
-    private static void DownloadDirectoryRecursive(SftpClient sftp, string remoteFolderPath, string localFolderPath)
+
+    private static async Task DownloadDirectoryRecursiveAsync(SftpClient sftp, string remoteFolderPath,
+        string localFolderPath)
     {
-        var entries = sftp.ListDirectory(remoteFolderPath);
+        var entries = await Task.Run(() => sftp.ListDirectory(remoteFolderPath));
 
         foreach (var entry in entries)
         {
-            // Skip the current directory and parent directory entries
+            // Skip current and parent directory entries
             if (entry.Name == "." || entry.Name == "..")
                 continue;
 
@@ -141,20 +151,22 @@ public static class RemoteController
                 Directory.CreateDirectory(localPath);
 
                 // Recursive call for subdirectories
-                DownloadDirectoryRecursive(sftp, remotePath, localPath);
+                await DownloadDirectoryRecursiveAsync(sftp, remotePath, localPath);
             }
             else if (entry.IsRegularFile)
             {
                 Console.WriteLine($"Downloading file: {remotePath} to {localPath}");
                 using (var fileStream = File.Create(localPath))
                 {
-                    sftp.DownloadFile(remotePath, fileStream);
+                    await Task.Run(() => sftp.DownloadFile(remotePath, fileStream));
                 }
             }
         }
     }
 
-    public static async Task<List<string>> ListGameSubfoldersAsync(string remotePath, string gameName)
+
+    public static async Task<List<string>> ListGameSubfoldersAsync(string remotePath, string gameName,
+        bool oldestFirst = true)
     {
         List<string> filesList = new List<string>();
         // Combine the remote path with the game name
@@ -218,15 +230,14 @@ public static class RemoteController
             }
         }
 
+
+        if (oldestFirst) filesList = filesList.OrderByDescending(x => x).ToList();
         return filesList;
     }
 
 
     public static string GetPathWithLatestName(string remotePath)
     {
-        // Combine the remote path with the game name
-        // string gameFolderPath = remotePath;
-
         var remote = Common.Settings.RemoteMachine;
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User,
                    remote.Password))

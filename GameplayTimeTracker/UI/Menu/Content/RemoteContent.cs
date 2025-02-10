@@ -81,24 +81,22 @@ public class RemoteContent : UserControl
         container.Children.Add(buttonsStackPanel);
     }
 
-    private void DownloadButton_Click(object sender, RoutedEventArgs e)
+    private async void DownloadButton_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(currentSelectedPath)) return;
         Console.WriteLine($"Downloading selected save from {currentSelectedPath}");
-
-        string remoteGameFolder = Path.Combine(Common.Settings.RemoteMachine.RemoteFolder, _entry.Name)
-            .Replace("\\", "/");
-        RemoteController.DownloadFolder(RemoteController.GetPathWithLatestName(remoteGameFolder), _entry.LocalSavePath);
+        
+        await RemoteController.DownloadFolderAsync(currentSelectedPath, _entry.LocalSavePath);
     }
 
-    private void UploadButton_Click(object sender, RoutedEventArgs e)
+    private async void UploadButton_Click(object sender, RoutedEventArgs e)
     {
         if (!Directory.Exists(_entry.LocalSavePath)) return;
         Console.WriteLine($"Uploading local save to {_entry.LocalSavePath}");
 
         string uploadPath =
             $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{_entry.Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-        RemoteController.UploadFolder(_entry.LocalSavePath, uploadPath);
+        await RemoteController.UploadFolderAsync(_entry.LocalSavePath, uploadPath);
 
         LoadData();
     }
