@@ -78,7 +78,7 @@ public class StatsGraph : CustomMenu
                 "Progress Bar 2", true);
             statStackPanel.Children.Add(bar);
 
-            int[] currTimeArr = entry.PlaytimeHistory.ElementAt(i).Value;
+            int[] currTimeArr = Common.NormalizeTime(entry.PlaytimeHistory.ElementAt(i).Value);
             TextBlock time = new TextBlock
             {
                 Text = $"{currTimeArr[0]}h {currTimeArr[1]}m",

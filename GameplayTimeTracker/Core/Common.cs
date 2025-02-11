@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -88,22 +89,15 @@ public static class Common
 
     public static int[] NormalizeTime(int[] arr)
     {
-        if (arr.Length == 3)
+        for (int i = arr.Length - 1; i >= 1; i--)
         {
-            if (arr[2] >= 60)
+            if (arr[i] >= 60)
             {
-                arr[1] += arr[2] / 60;
-                arr[2] %= 60;
-
-                if (arr[1] >= 60)
-                {
-                    arr[0] += arr[1] / 60;
-                    arr[1] %= 60;
-                }
+                arr[i - 1] += arr[i] / 60;
+                arr[i] %= 60;
             }
         }
 
-        // return arr;
         return new[] { arr[0], arr[1], arr[2] };
     }
 
