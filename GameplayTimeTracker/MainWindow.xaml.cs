@@ -203,7 +203,7 @@ public partial class MainWindow : Window
             e.Cancel = true;
 
             var exitPrompt = new PromptMenu(
-                width: 400,
+                width: 300,
                 textArray: new[]
                 {
                     "Would you really like to exit?",
