@@ -41,13 +41,13 @@ public class ColorEntry : UserControl
 
         bg = new Rectangle
         {
-            Fill = ColorHelper.CreateLinGradBrushHor(c1, c2),
             Width = containerGrid.Width,
             Height = containerGrid.Height,
             RadiusX = 5,
             RadiusY = 5,
             Effect = AppEffects.dropShadowText
         };
+        BindingHelper.SetGradientColorBinding(bg, Shape.FillProperty, "Card 1", "Card 2", true);
         containerGrid.Children.Add(bg);
 
         nameBlock = new TextBlock
@@ -55,20 +55,20 @@ public class ColorEntry : UserControl
             Text = colorName,
             FontSize = fontSize,
             FontWeight = FontWeights.Bold,
-            Foreground = new SolidColorBrush(AppColors.Font),
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(10, 10, 0, 0),
         };
+        BindingHelper.SetColorBinding(nameBlock, ForegroundProperty, "Font");
         containerGrid.Children.Add(nameBlock);
 
         valueBlock = new TextBlock
         {
             Text = colorValue,
             FontSize = fontSize,
-            Foreground = new SolidColorBrush(AppColors.Font),
             VerticalAlignment = VerticalAlignment.Bottom,
             Margin = new Thickness(10, 0, 0, 10),
         };
+        BindingHelper.SetColorBinding(valueBlock, ForegroundProperty, "Font");
         containerGrid.Children.Add(valueBlock);
 
         colorPicker = new ColorPicker();
