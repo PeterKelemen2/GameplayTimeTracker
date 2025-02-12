@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
@@ -77,13 +78,22 @@ public class ColorEntry : UserControl
         colorPicker.ShowDropDownButton = false;
         colorPicker.HorizontalAlignment = HorizontalAlignment.Right;
         colorPicker.Margin = new Thickness(0, 0, 10, 0);
-        colorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(colorValue);
         colorPicker.UsingAlphaChannel = false;
-        colorPicker.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorValue));
         colorPicker.BorderThickness = new Thickness(0);
-        colorPicker.BorderBrush = new SolidColorBrush(AppColors.Font);
         colorPicker.Padding = new Thickness(0, colorPicker.Height, 0, 0);
         colorPicker.Effect = AppEffects.dropShadowText;
+
+        Binding newBinding = new Binding
+        {
+            Source = Common.Settings.CurrentTheme.Colors,
+            Path = new PropertyPath($"[{colorName}]"),
+            Mode = BindingMode.TwoWay,
+        };
+
+        BindingOperations.SetBinding(colorPicker, ColorPicker.SelectedColorProperty, newBinding);
+        BindingHelper.SetColorBinding(colorPicker, BackgroundProperty, colorName);
+
+        Console.WriteLine($"Color picker value: {Common.Settings.CurrentTheme.Colors[colorName]}");
         containerGrid.Children.Add(colorPicker);
 
         Content = containerGrid;
