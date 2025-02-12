@@ -25,10 +25,24 @@ public class PrefMenu : MenuContent
                 vA: VerticalAlignment.Center);
         SetSGDBClickableText(sgdbApiKeyBlock);
         TextBox sgdbApiKeyBox = UIHelper.CreateTextBox(width: 220);
-        Binding sgdbApiKeyBinding = new Binding("SGDBApiKey") { Source = Common.Settings, Mode = BindingMode.TwoWay, };
+        Binding sgdbApiKeyBinding = new Binding("SGDBApiKey")
+        {
+            Source = Common.Settings, Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            // Converter = new ApiKeyTextConverter()
+        };
         BindingOperations.SetBinding(sgdbApiKeyBox, TextBox.TextProperty, sgdbApiKeyBinding);
         BindingHelper.SetColorBinding(sgdbApiKeyBlock, ForegroundProperty, "Font");
         sgdbApiKeyBox.Margin = new Thickness(95, 0, 0, 0);
+        sgdbApiKeyBox.Text = new ApiKeyTextConverter().Convert(Common.Settings.SGDBApiKey) as string;
+        sgdbApiKeyBox.GotFocus += (s, e) =>
+        {
+            if (sgdbApiKeyBox.Text.Equals("No API key set.")) sgdbApiKeyBox.Text = "";
+        };
+        sgdbApiKeyBox.LostFocus += (s, e) =>
+        {
+            if (sgdbApiKeyBox.Text.Equals("")) sgdbApiKeyBox.Text = "No API key set.";
+        };
         apiKeyGrid.Children.Add(sgdbApiKeyBlock);
         apiKeyGrid.Children.Add(sgdbApiKeyBox);
         _stackPanel.Children.Add(apiKeyGrid);

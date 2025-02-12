@@ -48,14 +48,14 @@ public class RemoteMenu : MenuContent
         CreatePrefEntry(row2, "Password", "RemoteMachine.Password", margin: prefMargin, boxWidth: prefBoxWidth);
         RemoteConfigPanel.Children.Add(row2);
 
-        CreatePrefEntry(RemoteConfigPanel, "Remote folder", "RemoteMachine.RemoteFolder", new Thickness(0, 0, 0, 10));
+        CreatePrefEntry(RemoteConfigPanel, "Remote folder", "RemoteMachine.RemoteFolder", new Thickness(0, 0, 0, 15));
 
-        TextBlock PreferencesTitle =
-            UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
-        PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
-        RemoteConfigPanel.Children.Add(PreferencesTitle);
-        CreatePrefEntry(RemoteConfigPanel, "Save if session longer (m)", "RemoteMachine.BackupIfSessionLonger",
-            new Thickness(0, 0, 0, 20));
+        // TextBlock PreferencesTitle =
+        //     UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
+        // PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
+        // RemoteConfigPanel.Children.Add(PreferencesTitle);
+        // CreatePrefEntry(RemoteConfigPanel, "Save if session longer (m)", "RemoteMachine.BackupIfSessionLonger",
+        //     new Thickness(0, 0, 0, 20));
     }
 
     private void CreatePrefEntry(Panel parent, string blockText = "", string bindPath = "", Thickness margin = new(),
