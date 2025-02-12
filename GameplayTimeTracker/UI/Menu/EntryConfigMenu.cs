@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +11,8 @@ public class EntryConfigMenu : CustomMenu
     public ScrollViewer scrollViewer { get; set; }
     public StackPanel stackPanel { get; set; }
     public StackPanel remoteStackPanel { get; set; }
+    PrefEntry remoteSavePref { get; set; }
+
 
     public TextBlock TitleTextBlock { get; set; }
     public TextBlock GeneralTitleTextBlock { get; set; }
@@ -18,13 +21,13 @@ public class EntryConfigMenu : CustomMenu
     public TextBox IconBox { get; set; }
     public TextBox HeroBox { get; set; }
     public Entry _entry { get; set; }
-
     static double buttonSize = 20;
     static double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
     public EntryConfigMenu(Entry entry,
         double width = 350, bool toScale = true)
-        : base(width, toScale)
+        :
+        base(width, toScale)
     {
         _entry = entry;
         ToScale = toScale;
@@ -53,17 +56,36 @@ public class EntryConfigMenu : CustomMenu
         CreateEditEntry(remoteStackPanel, "Local Save Path", "LocalSavePath", buttonClick: SavePath_Click,
             updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
-        PrefEntry remoteSavePref =
-            new PrefEntry("Remote Backup", Common.Settings.PreferSteamGridDBImage, width: 220,
+        remoteSavePref =
+            new PrefEntry("Remote Backup", Common.Settings.IsRemoteSavingEnabled, width: 220,
                 description: "On session end", margin: new Thickness(0, 0, 0, 20));
         Binding remoteSavePrefBinding = new Binding("IsRemoteSaveEnabled")
             { Source = _entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(remoteSavePref.toggleButton, CustomToggleButton.IsToggledProperty,
             remoteSavePrefBinding);
         BindingHelper.SetColorBinding(remoteSavePref.textBlock, ForegroundProperty, "Font");
+        remoteSavePref.toggleButton.ToggledChanged += (state) =>
+        {
+            RemoteSavePrefToggledChanged(remoteSavePref.toggleButton.IsToggled);
+        };
+
         remoteStackPanel.Children.Add(remoteSavePref);
 
         stackPanel.Children.Add(remoteStackPanel);
+    }
+
+    private void RemoteSavePrefToggledChanged(bool buttonToggled)
+    {
+        if (!Common.Settings.IsRemoteSavingEnabled && buttonToggled)
+        {
+            PromptMenu turnOnBackup = new PromptMenu(new[]
+                    { "Remote saving is disabled in the settings.", "Do you want to enable it?" },
+                new double[] { 17, 17 }, new[] { true, true },
+                type: PromptMenu.PromptType.YesNo, toScale: false,
+                yesHandler: (_, _) => { Common.Settings.IsRemoteSavingEnabled = true; },
+                noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; });
+            turnOnBackup.Open();
+        }
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)

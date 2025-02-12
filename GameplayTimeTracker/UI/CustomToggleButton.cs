@@ -23,12 +23,16 @@ public class CustomToggleButton : UserControl
         remove => RemoveHandler(ClickEvent, value);
     }
 
+    public event Action<bool> ToggledChanged;
+
     private static void OnCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is CustomToggleButton toggleButton)
         {
             bool newValue = (bool)e.NewValue;
             toggleButton.UpdateVisualState(newValue);
+
+            toggleButton.ToggledChanged?.Invoke(newValue);
         }
     }
 

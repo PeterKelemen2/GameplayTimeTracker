@@ -54,8 +54,8 @@ public class RemoteMenu : MenuContent
             UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
         PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
         RemoteConfigPanel.Children.Add(PreferencesTitle);
-        CreatePrefEntry(RemoteConfigPanel, "Retain saves for days", "RemoteMachine.RetainForDays",
-            new Thickness(0, 0, 0, 5));
+        // CreatePrefEntry(RemoteConfigPanel, "Retain saves for days", "RemoteMachine.RetainForDays",
+        //     new Thickness(0, 0, 0, 5));
         CreatePrefEntry(RemoteConfigPanel, "Save if session longer (m)", "RemoteMachine.BackupIfSessionLonger",
             new Thickness(0, 0, 0, 20));
     }
