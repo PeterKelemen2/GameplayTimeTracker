@@ -14,7 +14,6 @@ namespace GameplayTimeTracker.UI.Menu.Content;
 
 public class BackupMenu : MenuContent
 {
-    private AppSettings appSettings;
     private ScrollViewer backupEntryScrollViewer;
     private ScrollViewer backupContentScrollViewer;
     private TextBlock backupContentBlock;
@@ -31,7 +30,6 @@ public class BackupMenu : MenuContent
 
     public BackupMenu()
     {
-        appSettings = Common.Settings;
         TextBlock backupListBlock =
             UIHelper.CreateTextBlock("Select a backup", hA: HorizontalAlignment.Center, fontSize: 20);
         backupListBlock.Margin = new Thickness(0, 10, 0, 0);
@@ -49,16 +47,16 @@ public class BackupMenu : MenuContent
             Height = scrollHeight, Width = scrollWidth,
             CornerRadius = new CornerRadius(Common.BorderRadius),
             Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
-            Margin = new Thickness(10),
+                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.2)),
+            Margin = new Thickness(10), Effect = AppEffects.DropShadowIcon,
             Child = backupEntryScrollViewer,
-            Effect = AppEffects.DropShadowIcon
         };
 
-        if (!Path.Exists(AppFiles.BackupDataFolder))
-        {
-            Directory.CreateDirectory(AppFiles.BackupDataFolder);
-        }
+        Directory.CreateDirectory(AppFiles.BackupDataFolder);
+        // if (!Path.Exists(AppFiles.BackupDataFolder))
+        // {
+        //     Directory.CreateDirectory(AppFiles.BackupDataFolder);
+        // }
 
         backupEntriesPanel = new StackPanel();
         ShowBackupEntries();
@@ -83,7 +81,7 @@ public class BackupMenu : MenuContent
             Height = scrollHeight, Width = scrollWidth,
             CornerRadius = new CornerRadius(Common.BorderRadius),
             Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 1.2)),
+                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]), 1.2)),
             Margin = new Thickness(10),
             Child = backupContentScrollViewer,
             Effect = AppEffects.DropShadowIcon
@@ -121,6 +119,8 @@ public class BackupMenu : MenuContent
     {
         backupEntriesPanel.Children.Clear();
         backupFilesList = GetAllFiles(AppFiles.BackupDataFolder)
+            .Where(file => Path.GetExtension(file).Equals(".json", StringComparison.OrdinalIgnoreCase) &&
+                           IsBackupValid(Path.Combine(AppFiles.BackupDataFolder, file)))
             .OrderByDescending(Path.GetFileName)
             .ToList();
         foreach (var file in backupFilesList)
@@ -133,27 +133,28 @@ public class BackupMenu : MenuContent
                 FontSize = Common.TitleFontSize,
                 Foreground =
                     new SolidColorBrush(
-                        (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
+                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Padding = new Thickness(5),
             };
             textBorder.Child = bEntryBlock;
 
-            bEntryBlock.MouseDown += (s, e) =>
+            textBorder.MouseDown += (s, e) =>
             {
                 currentSelectedPath = Path.Combine(AppFiles.BackupDataFolder, file);
-                HighlightSelected(textBorder);
                 Console.WriteLine(currentSelectedPath);
-                ShowBackupContents(file);
+                HighlightSelected(textBorder);
+                ShowBackupFileContents(file);
             };
 
             backupEntriesPanel.Children.Add(textBorder);
         }
     }
 
-    private void ShowBackupContents(string backupPath)
+    private void ShowBackupFileContents(string backupPath)
     {
         string path = Path.Combine(AppFiles.BackupDataFolder, backupPath);
+
         ObservableCollection<Entry> entryList = new();
         entryList = DataHandler.GetEntriesFromFile(path);
         Common.CheckForOldTime(entryList);
@@ -161,28 +162,48 @@ public class BackupMenu : MenuContent
         backupContentPanel.Children.Clear();
         foreach (var entry in entryList)
         {
-            TextBlock entryBlock = new TextBlock
-            {
-                // Text = entry.Name,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                FontSize = Common.TitleFontSize,
-                Foreground =
-                    new SolidColorBrush(
-                        (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Font"])),
-                Margin = new Thickness(10, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap,
-                TextAlignment = TextAlignment.Left,
-            };
+            AddEntryToBackupContents(entry);
+        }
+    }
 
+    private void AddEntryToBackupContents(Entry entry)
+    {
+        TextBlock entryBlock = new TextBlock
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = Common.TitleFontSize,
+            Foreground =
+                new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
+            Margin = new Thickness(10, 5, 0, 5),
+            FontWeight = FontWeights.Bold, TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Left,
+        };
+
+        bool success = false;
+        try
+        {
             string? totalPlayFormatted = new TimeArrayConverter().Convert(entry.TotalPlay) as string;
             var entryNameRun = new Run { Text = Common.Trim(entry.Name, 25, true), FontWeight = FontWeights.Bold, };
             var entryTimeRun = new Run { Text = $" - {totalPlayFormatted}", FontWeight = FontWeights.Regular, };
             entryBlock.Inlines.Add(entryNameRun);
             entryBlock.Inlines.Add(entryTimeRun);
-            backupContentPanel.Children.Add(entryBlock);
-            Console.WriteLine($"{entry.Name} - {totalPlayFormatted}");
+
+            success = true;
         }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        if (!success)
+        {
+            entryBlock.Text = "No data found.";
+            entryBlock.FontWeight = FontWeights.SemiBold;
+            entryBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            entryBlock.Margin = new Thickness(0, scrollHeight / 2 - entryBlock.FontSize, 0, 0);
+        }
+
+        backupContentPanel.Children.Add(entryBlock);
     }
 
     private void HighlightSelected(Border border)
@@ -204,10 +225,30 @@ public class BackupMenu : MenuContent
             {
                 b.Background = b == border
                     ? new SolidColorBrush(ColorHelper.AdjustBrightness(
-                        (Color)ColorConverter.ConvertFromString(appSettings.CurrentTheme.Colors["Background"]), 0.8))
+                        (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Background"]),
+                        0.8))
                     : new SolidColorBrush(Colors.Transparent);
             }
         }
+    }
+
+    private bool IsBackupValid(string backupPath)
+    {
+        bool isValid = false;
+        if (Path.GetExtension(backupPath) != ".json") return false;
+
+        try
+        {
+            ObservableCollection<Entry> entryList = new();
+            entryList = DataHandler.GetEntriesFromFile(backupPath);
+            if (entryList.Count > 0) return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return isValid;
     }
 
     List<string?> GetAllFiles(string folderPath, string extension = ".json")
