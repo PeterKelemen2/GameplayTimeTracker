@@ -37,6 +37,8 @@ public class PrefMenu : MenuContent
 
         CreatePref("Performance Mode", "More modest animations", "PerformanceMode", Common.Settings.PerformanceMode);
 
+        CreatePref("Backup On Exit", "Application Data File", "BackupOnExit", Common.Settings.BackupOnExit);
+
         Grid displayGrid = new Grid { Width = 380, Margin = new Thickness(25, 10, 25, 10) };
 
         TextBlock DisplayTypeBlock = UIHelper.CreateTextBlock(text: "Display", isBold: false, fontSize: 17);

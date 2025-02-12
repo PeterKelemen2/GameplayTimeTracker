@@ -230,6 +230,8 @@ public partial class MainWindow : Window
             .ForEach(entry => entry.IncrementPlaytimeHistory(toSave: false));
 
         DataHandler.WriteEntriesToFile(Common.Repository.EntriesList, AppFiles.DataFilePath);
+
+        if (Common.Settings.BackupOnExit) DataHandler.CreateBackup();
         Application.Current.Shutdown();
     }
 

@@ -13,6 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private bool _performanceMode = true;
+    private bool _backupOnExit = true;
     private bool _isRemoteSavingEnabled = false;
     private RemoteMachine _remoteMachine = new();
 
@@ -69,6 +70,14 @@ public class AppSettings : INotifyPropertyChanged
         get => _performanceMode;
         set { SetField(ref _performanceMode, value); }
     }
+
+    [JsonPropertyName("Backup On Exit")]
+    public bool BackupOnExit
+    {
+        get => _backupOnExit;
+        set { SetField(ref _backupOnExit, value); }
+    }
+
 
     [JsonPropertyName("Display Type")]
     public GameDisplay Display
