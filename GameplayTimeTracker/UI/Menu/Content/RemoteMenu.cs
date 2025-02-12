@@ -54,15 +54,15 @@ public class RemoteMenu : MenuContent
             UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
         PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
         RemoteConfigPanel.Children.Add(PreferencesTitle);
-        // CreatePrefEntry(RemoteConfigPanel, "Retain saves for days", "RemoteMachine.RetainForDays",
-        //     new Thickness(0, 0, 0, 5));
         CreatePrefEntry(RemoteConfigPanel, "Save if session longer (m)", "RemoteMachine.BackupIfSessionLonger",
             new Thickness(0, 0, 0, 20));
     }
 
     private void CreatePrefEntry(Panel parent, string blockText = "", string bindPath = "", Thickness margin = new(),
-        double boxWidth = 200)
+        object? bindSource = null, double boxWidth = 200)
     {
+        bindSource ??= Common.Settings;
+
         StackPanel prefPanel = new StackPanel
         {
             Margin = margin,
@@ -77,7 +77,7 @@ public class RemoteMenu : MenuContent
         TextBox prefTextBox = UIHelper.CreateTextBox(width: boxWidth);
         Binding boxBinding = new Binding(bindPath)
         {
-            Source = Common.Settings, Mode = BindingMode.TwoWay,
+            Source = bindSource, Mode = BindingMode.TwoWay,
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
         };
         BindingOperations.SetBinding(prefTextBox, TextBox.TextProperty, boxBinding);

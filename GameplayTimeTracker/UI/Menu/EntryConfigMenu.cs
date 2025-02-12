@@ -93,6 +93,7 @@ public class EntryConfigMenu : CustomMenu
         remoteSavePref.toggleButton.ToggledChanged += ToggleButton_ToggleChanged;
 
         CreateEditEntry(remoteStackPanel, "Save if session longer (m)", "RemoteSaveAfterMinutes");
+        CreateEditEntry(remoteStackPanel, "Retain saves for days", "RetainSaveForDays");
 
         remoteStackPanel.Children.Add(remoteSavePref);
         stackPanel.Children.Add(remoteStackPanel);

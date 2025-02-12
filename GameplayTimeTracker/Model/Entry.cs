@@ -30,6 +30,7 @@ namespace GameplayTimeTracker
         private bool _isSavePathValid = true;
         private bool _isRemoteSaveEnabled = false;
         private int _remoteSaveAfterMinutes = 60;
+        private int _retainSavesForDays = 30;
         public bool _isEditing = false;
         private DateTime _prevDate;
         private DateTime _lastDate;
@@ -142,6 +143,19 @@ namespace GameplayTimeTracker
             set
             {
                 SetField(ref _remoteSaveAfterMinutes, value);
+                if (value < 0) _remoteSaveAfterMinutes = 0;
+                InitSave();
+            }
+        }
+
+        [JsonPropertyName("retainSaveForDays")]
+        public int RetainSaveForDays
+        {
+            get => _retainSavesForDays;
+            set
+            {
+                SetField(ref _retainSavesForDays, value);
+                if (value < 7) _retainSavesForDays = 7;
                 InitSave();
             }
         }
@@ -379,7 +393,7 @@ namespace GameplayTimeTracker
         {
             if (_isRemoteSaveEnabled &&
                 Common.Settings.IsRemoteSavingEnabled &&
-                Common.IsEntryEligibleForBackup(this) &&
+                // Common.IsEntryEligibleForBackup(this) &&
                 !string.IsNullOrWhiteSpace(_localSavePath))
             {
                 RemoteSave();
@@ -391,8 +405,9 @@ namespace GameplayTimeTracker
             if (IsRunning) return;
             if (!Directory.Exists(_localSavePath)) return;
 
-            string uploadPath =
-                $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+            string savesPath = $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/";
+            string uploadPath = $"{savesPath}{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
+            await RemoteController.DeleteSavesOlderThanDays(savesPath, 0);
             await RemoteController.UploadFolderAsync(_localSavePath, uploadPath);
         }
 

@@ -325,4 +325,71 @@ public static class RemoteController
 
         return null;
     }
+
+    public static async Task DeleteSavesOlderThanDays(string remoteSaves, int days)
+    {
+        var remote = Common.Settings.RemoteMachine;
+
+        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        {
+            Console.WriteLine("Remote machine is unreachable.");
+            return;
+        }
+
+        using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
+        {
+            try
+            {
+                await Task.Run(() => sftp.Connect());
+                Console.WriteLine($"Connected to {remote.Address}, checking {remoteSaves}");
+
+                // Get all folders in the remote directory
+                var folders = await Task.Run(() => sftp.ListDirectory(remoteSaves)
+                    .Where(f => f.IsDirectory && f.Name != "." && f.Name != ".."));
+
+                DateTime thresholdDate = DateTime.UtcNow.AddDays(-days);
+
+                foreach (var folder in folders)
+                {
+                    if (folder.LastWriteTimeUtc < thresholdDate)
+                    {
+                        Console.WriteLine($"Deleting folder: {folder.FullName}");
+                        await Task.Run(() => DeleteDirectoryRecursive(sftp, folder.FullName));
+                    }
+                }
+
+                Console.WriteLine("Cleanup complete.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                sftp.Disconnect();
+            }
+        }
+    }
+
+    private static void DeleteDirectoryRecursive(SftpClient sftp, string directory)
+    {
+        var filesAndDirs = sftp.ListDirectory(directory);
+
+        foreach (var item in filesAndDirs)
+        {
+            if (item.Name == "." || item.Name == "..")
+                continue;
+
+            if (item.IsDirectory)
+            {
+                DeleteDirectoryRecursive(sftp, item.FullName); // Recursively delete subdirectories
+            }
+            else
+            {
+                sftp.DeleteFile(item.FullName); // Delete files
+            }
+        }
+
+        sftp.DeleteDirectory(directory); // Finally, delete the directory itself
+    }
 }
