@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Windows.Markup;
 using GameplayTimeTracker.SGDB;
 using Application = System.Windows.Application;
 using DateTime = System.DateTime;
@@ -179,15 +180,19 @@ namespace GameplayTimeTracker
             get => _iconPath;
             set
             {
-                if (value == _iconPath || !File.Exists(value)) return;
                 string newIconPath = value;
+                Console.WriteLine($" TRYING TO SET ICON PATH {value}");
+                Console.WriteLine($" ICON PATH EXISTS: {File.Exists(value)}");
+
                 try
                 {
-                    if (Path.GetExtension(value).Equals(".exe", StringComparison.OrdinalIgnoreCase))
+                    if (Path.GetExtension(value).Equals(".exe", StringComparison.OrdinalIgnoreCase) ||
+                        !File.Exists(value))
                     {
                         string baseName = $"{Name.Replace(" ", "_")}_{Guid.NewGuid()}";
                         newIconPath = Path.Combine(AppFiles.SavedImagesPath, $"{baseName}_icon.png");
-                        ImageHelper.SaveIconFromExe(value, newIconPath);
+                        Console.WriteLine($" TRYING TO SET ICON PATH IN TRY {newIconPath}");
+                        ImageHelper.SaveIconFromExe(ExePath, newIconPath);
                     }
 
                     SetField(ref _iconPath, newIconPath);

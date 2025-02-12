@@ -5,8 +5,7 @@
         <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
-<!--        <UseWindowsForms>true</UseWindowsForms>-->
-        <AssemblyName>GameplayTimeTracker</AssemblyName>
+        <AssemblyName>Gameplay Time Tracker</AssemblyName>
         <AssemblyVersion>2.0.0</AssemblyVersion>
         <ApplicationIcon>Assets\GameplayTimeTracker.ico</ApplicationIcon>
     </PropertyGroup>

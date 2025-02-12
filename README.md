@@ -2,7 +2,8 @@
 
 **Gameplay Time Tracker** is a desktop application developed in `C#` using the `WPF` framework. It allows users to
 monitor and track the total time spent on specific applications or games by observing their executables.
-Monitored applications can be launched from the interface as well.
+Monitored applications can be launched from the interface as well. Each game's save files can be backed up to a remote
+machine, saves will be retained for a specified number of days.
 
 ## Data Update Process (Version 1.3.2 and Later)
 
@@ -10,11 +11,8 @@ In version `1.3.1`, a new method for storing elapsed time was introduced, along 
 convert legacy data. In version `1.3.2`, this process has been automated. Upon the first launch after
 updating to version `1.3.2`, the user will be prompted to update from the previous data format.
 
-If the update has already been performed, you can restore the most recent **backup** from the
-Settings menu. Alternatively, you may set the `dataNeedsUpdating` flag to `false` in the settings file.
-
-To safeguard against data loss, the application automatically creates a backup of the current data before
-initiating the update.
+If legacy data conversion is required, it is strongly recommended to complete this process using a build prior to
+version `2.0.0`, as this functionality has been removed in the rewritten version.
 
 
 <p align="center">

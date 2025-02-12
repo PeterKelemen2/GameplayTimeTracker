@@ -34,6 +34,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         MainScrollViewer.PreviewMouseWheel += MainScrollViewer_PreviewMouseWheel;
         Common.Settings = DataHandler.GetSettingsFromFile();
+        AppFiles.EnsureAppFolders();
         dragDropOverlay = new DragDropOverlay();
         DragDropGrid.Children.Add(dragDropOverlay);
 

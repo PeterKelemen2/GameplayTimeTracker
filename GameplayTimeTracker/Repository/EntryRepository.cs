@@ -96,6 +96,10 @@ public class EntryRepository : INotifyPropertyChanged
         EntriesList = DataHandler.GetEntriesFromFile(AppFiles.DataFilePath);
         foreach (Entry entry in EntriesList)
         {
+            // Forcing to update icon from exe if it's the default image
+            if (entry.IconPath.Equals(AppFiles.DefaultIconPath)) entry.IconPath = entry.ExePath;
+            if (entry.HeroPath.Equals(AppFiles.DefaultHeroPath)) entry.HeroPath = entry.ExePath;
+            
             entry.Repository = this;
             entry.EnsureLastWeekData();
             entry.PrintHistory();
