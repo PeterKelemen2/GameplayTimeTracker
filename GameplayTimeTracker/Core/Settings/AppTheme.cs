@@ -12,7 +12,7 @@ public class AppTheme : INotifyPropertyChanged
 {
     private string _themeName = "Default";
 
-    private ObservableDictionary<string, string> _colors = AppColors.GetColorsDict();
+    private ObservableDictionary<string, string> _colors = AppColors.GetDefaultColorsDict();
 
     [JsonPropertyName("Theme Name")]
     public string ThemeName

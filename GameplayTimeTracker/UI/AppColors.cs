@@ -19,7 +19,7 @@ public static class AppColors
     public static Color Shadow = (Color)ColorConverter.ConvertFromString("#151515");
     public static Color Transparent = (Color)ColorConverter.ConvertFromString("#00000000");
 
-    public static ObservableDictionary<string, string> GetColorsDict()
+    public static ObservableDictionary<string, string> GetDefaultColorsDict()
     {
         ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
         {
@@ -31,6 +31,50 @@ public static class AppColors
             { "Progress Bar 1", "#89ACF2" },
             { "Progress Bar 2", "#B7BDF8" },
             { "Font", "#DAE4FF" },
+            { "Running", "#C3E88D" },
+            { "Button", "#3BC9E3" },
+            { "Positive Button", "#90EE90" },
+            { "Negative Button", "#ED0C0C" },
+            { "Shadow", "#151515" },
+            { "Transparent", "#00000000" },
+        };
+        return colors;
+    }
+
+    public static ObservableDictionary<string, string> GetPinkColorsDict()
+    {
+        ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
+        {
+            { "Footer", "#FFFF6CFF" },
+            { "Footer Font", "#DAE4FF" },
+            { "Background", "#45092b" },
+            { "Card 1", "#7d2055" },
+            { "Card 2", "#FFBA2579" },
+            { "Progress Bar 1", "#89ACF2" },
+            { "Progress Bar 2", "#B7BDF8" },
+            { "Font", "#FFF0F8FF" },
+            { "Running", "#C3E88D" },
+            { "Button", "#3BC9E3" },
+            { "Positive Button", "#90EE90" },
+            { "Negative Button", "#ED0C0C" },
+            { "Shadow", "#151515" },
+            { "Transparent", "#00000000" },
+        };
+        return colors;
+    }
+
+    public static ObservableDictionary<string, string> GetCustomColorsDict()
+    {
+        ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
+        {
+            { "Footer", "#FF7B5EFF" },
+            { "Footer Font", "#DAE4FF" },
+            { "Background", "#FF8B008B" },
+            { "Card 1", "#FFD958FF" },
+            { "Card 2", "#FF00DDE0" },
+            { "Progress Bar 1", "#FF7FFFD4" },
+            { "Progress Bar 2", "#B7BDF8" },
+            { "Font", "#FFF0F8FF" },
             { "Running", "#C3E88D" },
             { "Button", "#3BC9E3" },
             { "Positive Button", "#90EE90" },

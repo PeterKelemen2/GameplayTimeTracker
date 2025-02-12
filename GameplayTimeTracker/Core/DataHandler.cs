@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using GameplayTimeTracker.Settings;
@@ -56,13 +58,32 @@ public static class DataHandler
             WriteSettingsToFile(settings);
         }
 
-        if (settings.ThemesList.Count == 0)
+
+        var requiredThemes = new List<AppTheme>
         {
-            AppTheme theme = new AppTheme();
-            settings.ThemesList.Add(theme);
-            settings.CurrentTheme = theme;
-            WriteSettingsToFile(settings);
+            new AppTheme { ThemeName = "Default", Colors = AppColors.GetDefaultColorsDict() },
+            new AppTheme { ThemeName = "Pink", Colors = AppColors.GetPinkColorsDict() },
+            new AppTheme { ThemeName = "Custom", Colors = AppColors.GetCustomColorsDict() }
+        };
+
+        bool isModified = false;
+        // Add missing themes
+        foreach (var theme in requiredThemes)
+        {
+            if (!settings.ThemesList.Any(t => t.ThemeName == theme.ThemeName))
+            {
+                settings.ThemesList.Add(theme);
+                isModified = true;
+            }
         }
+
+        // Ensure a theme is selected
+        if (settings.CurrentTheme == null || !settings.ThemesList.Contains(settings.CurrentTheme))
+        {
+            settings.CurrentTheme = settings.ThemesList.First();
+        }
+
+        if (isModified) WriteSettingsToFile(settings);
 
         ManageStartupShortcut(settings.StartWithSystem);
 
