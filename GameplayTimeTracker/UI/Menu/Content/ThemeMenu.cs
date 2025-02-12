@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 using GameplayTimeTracker.Settings;
 using GameplayTimeTracker.UI.Menu.Content;
 
@@ -11,6 +11,8 @@ namespace GameplayTimeTracker.Menu.Content;
 public class ThemeMenu : MenuContent
 {
     public ComboBox ThemeComboBox = new();
+    private DispatcherTimer colorChangeTimer;
+    private ColorEntry currentColorEntry;
 
     private ScrollViewer colorEntryScrollViewer;
     private StackPanel colorEntryPanel;
@@ -27,7 +29,11 @@ public class ThemeMenu : MenuContent
         CreateComboBox();
         CreateColorEntries();
         _stackPanel.Children.Add(colorEntryScrollViewer);
+
+        colorChangeTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.5) };
+        colorChangeTimer.Tick += OnColorChangeTimerTick;
     }
+
 
     private void CreateColorEntries()
     {
@@ -40,7 +46,6 @@ public class ThemeMenu : MenuContent
             colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
             {
                 ColorPicker_SelectedColorChanged(s, e, colorEntry, Common.Settings.CurrentTheme);
-                DataHandler.WriteSettingsToFile(Common.Settings);
             };
             colorEntryPanel.Children.Add(colorEntry);
         }
@@ -55,18 +60,18 @@ public class ThemeMenu : MenuContent
 
         if (selectedColor.HasValue)
         {
+            if (colorChangeTimer.IsEnabled) colorChangeTimer.Stop();
+            colorChangeTimer.Start();
+
             // Update the specific ColorEntry
             Color color = selectedColor.Value;
-            colorEntry.colorPicker.Background = new SolidColorBrush(color);
-            colorEntry.valueBlock.Text = color.ToString();
-            colorEntry.ColorValue = color.ToString();
             Common.Settings.CurrentTheme.Colors[colorEntry.ColorName] = color.ToString();
 
             // Update the theme's and source's color dictionary
-            theme.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
+            theme.UpdateColor(colorEntry.ColorName, color.ToString());
             foreach (var t in Common.Settings.ThemesList)
             {
-                if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
+                if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, color.ToString());
             }
         }
         else
@@ -75,6 +80,16 @@ public class ThemeMenu : MenuContent
             colorEntry.colorPicker.Background = new SolidColorBrush(Colors.Transparent);
             Console.WriteLine($"No color selected for {colorEntry.Name}.");
         }
+    }
+
+    private void OnColorChangeTimerTick(object sender, EventArgs e)
+    {
+        // Stop the timer to prevent further ticks
+        colorChangeTimer.Stop();
+
+        // Save the settings after the delay
+        DataHandler.WriteSettingsToFile(Common.Settings);
+        Console.WriteLine("Settings saved after 1 second of inactivity.");
     }
 
     private void CreateComboBox()
@@ -101,8 +116,6 @@ public class ThemeMenu : MenuContent
         {
             Console.WriteLine($"{ThemeComboBox.SelectedItem}");
             UpdateCurrentTheme(ThemeComboBox.SelectedItem.ToString());
-
-            DataHandler.WriteSettingsToFile(Common.Settings);
         };
         _stackPanel.Children.Add(ThemeComboBox);
     }
