@@ -16,6 +16,10 @@ public class EditMenu : EntryConfigMenu
     static double buttonSize = 20;
     static double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
+    public EditMenu() : base()
+    {
+    }
+
     public EditMenu(Entry entry,
         double width = 350, bool toScale = true)
         : base(entry, width, toScale)

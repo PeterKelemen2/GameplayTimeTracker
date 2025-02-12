@@ -20,6 +20,7 @@ public class PromptMenu : CustomMenu
     public TextBlock promptTextBlock;
     public PrefEntry dontShowAgainPref;
 
+
     public PromptMenu(
         string[] textArray, double[] sizeArray = null, bool[] boldArray = null, double lineSpacing = 5,
         double width = 300, PromptType type = PromptType.Ok, bool dontShowAgainQuestion = false,
@@ -61,7 +62,7 @@ public class PromptMenu : CustomMenu
         if (dontShowAgainQuestion)
         {
             dontShowAgainPref = new PrefEntry("Don't show again", false, 220);
-            dontShowAgainPref.Margin = new Thickness(10,-10,0,10);
+            dontShowAgainPref.Margin = new Thickness(10, -10, 0, 10);
             Binding dontShowBinding = new Binding("DontShowApiKeyPrompt")
                 { Source = Common.Settings, Mode = BindingMode.TwoWay, };
             BindingOperations.SetBinding(dontShowAgainPref.toggleButton, CustomToggleButton.IsToggledProperty,

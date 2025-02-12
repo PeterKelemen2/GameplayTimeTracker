@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Media;
 using GameplayTimeTracker.Menu.Content;
 using GameplayTimeTracker.UI.Menu.Content;
+using Binding = System.Windows.Data.Binding;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Panel = System.Windows.Controls.Panel;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -13,8 +20,10 @@ public class EntryConfigMenu : CustomMenu
     public ScrollViewer scrollViewer { get; set; }
     public StackPanel stackPanel { get; set; }
     public StackPanel remoteStackPanel { get; set; }
-    PrefEntry remoteSavePref { get; set; }
 
+    PrefEntry remoteSavePref { get; set; }
+    private PromptMenu remoteSavePrompt;
+    private PromptMenu remoteConfigPrompt;
 
     public TextBlock TitleTextBlock { get; set; }
     public TextBlock GeneralTitleTextBlock { get; set; }
@@ -25,6 +34,20 @@ public class EntryConfigMenu : CustomMenu
     public Entry _entry { get; set; }
     static double buttonSize = 20;
     static double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
+
+    public EntryConfigMenu()
+    {
+    }
+
+    public override void Close()
+    {
+        if (remoteSavePref != null)
+        {
+            remoteSavePref.toggleButton.ToggledChanged -= ToggleButton_ToggleChanged;
+        }
+
+        base.Close();
+    }
 
     public EntryConfigMenu(Entry entry,
         double width = 350, bool toScale = true)
@@ -59,62 +82,84 @@ public class EntryConfigMenu : CustomMenu
             updateSourceTrigger: UpdateSourceTrigger.PropertyChanged);
 
         remoteSavePref =
-            new PrefEntry("Remote Backup", Common.Settings.IsRemoteSavingEnabled, width: 220,
+            new PrefEntry("Remote Backup", false, width: 220,
                 description: "On session end", margin: new Thickness(0, 0, 0, 20));
         Binding remoteSavePrefBinding = new Binding("IsRemoteSaveEnabled")
             { Source = _entry, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(remoteSavePref.toggleButton, CustomToggleButton.IsToggledProperty,
             remoteSavePrefBinding);
         BindingHelper.SetColorBinding(remoteSavePref.textBlock, ForegroundProperty, "Font");
-        remoteSavePref.toggleButton.ToggledChanged += (state) =>
-        {
-            RemoteSavePrefToggledChanged(remoteSavePref.toggleButton.IsToggled);
-        };
+
+        remoteSavePref.toggleButton.ToggledChanged += ToggleButton_ToggleChanged;
 
         CreateEditEntry(remoteStackPanel, "Save if session longer (m)", "RemoteSaveAfterMinutes");
 
         remoteStackPanel.Children.Add(remoteSavePref);
-
         stackPanel.Children.Add(remoteStackPanel);
+
+        ContainerGrid.CacheMode = new BitmapCache();
+        // CreatePrompts();
     }
 
-    private void RemoteSavePrefToggledChanged(bool buttonToggled)
+    private void ToggleButton_ToggleChanged(bool state)
     {
-        if (!Common.Settings.IsRemoteSavingEnabled && buttonToggled)
+        _ = RemoteSavePrefToggledChanged(state);
+    }
+
+    private bool isRemoteSavePromptOpen = false;
+
+    private async Task RemoteSavePrefToggledChanged(bool currentState)
+    {
+        CreatePrompts();
+
+        if (currentState)
         {
-            PromptMenu turnOnBackup = new PromptMenu(new[]
-                    { "Remote saving is disabled in the settings.", "Do you want to enable it?" },
-                boldArray: new[] { false, true },
-                type: PromptMenu.PromptType.YesNo, toScale: false,
-                yesHandler: (_, _) =>
+            if (Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
+            {
+                if (!Common.Settings.IsRemoteSavingEnabled)
                 {
-                    if (!Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
+                    remoteSavePref.toggleButton.IsToggled = false;
+                    remoteSavePrompt.Open();
+                    while (remoteSavePrompt.IsOpen)
                     {
-                        PromptMenu remoteConfigPrompt = new PromptMenu(
-                            new[]
-                            {
-                                "Remote machine is not properly configured.",
-                                "Do you want to configure it now?"
-                            },
-                            boldArray: new[] { false, true },
-                            type: PromptMenu.PromptType.YesNo, toScale: false,
-                            yesHandler: (_, _) =>
-                            {
-                                SettingsMenu sm = new SettingsMenu(toScale: false);
-                                sm.Open();
-                                sm.SetMenu<RemoteMenu>(sm.RemoteBlock);
-                            }
-                        );
-                        remoteConfigPrompt.Open();
+                        await Task.Delay(100);
                     }
-                    else
-                    {
-                        Common.Settings.IsRemoteSavingEnabled = true;
-                    }
-                },
-                noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; });
-            turnOnBackup.Open();
+                }
+            }
         }
+        else
+        {
+            remoteSavePref.toggleButton.IsToggled = false;
+        }
+    }
+
+    private void CreatePrompts()
+    {
+        remoteConfigPrompt = new PromptMenu(
+            new[]
+                { "Remote machine is not properly configured.", "Do you want to configure it now?" },
+            boldArray: new[] { true, true },
+            type: PromptMenu.PromptType.YesNo, toScale: false,
+            yesHandler: (_, _) =>
+            {
+                SettingsMenu sm = new SettingsMenu(toScale: false);
+                sm.Open();
+                sm.SetMenu<RemoteMenu>(sm.RemoteBlock);
+            },
+            noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; }
+        );
+
+        remoteSavePrompt = new PromptMenu(new[]
+                { "Remote saving is disabled in the settings.", "Do you want to enable it?" },
+            boldArray: new[] { true, true },
+            type: PromptMenu.PromptType.YesNo, toScale: false,
+            yesHandler: (_, _) =>
+            {
+                Common.Settings.IsRemoteSavingEnabled = true;
+                remoteSavePref.toggleButton.IsToggled = true;
+            },
+            noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; }
+        );
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)

@@ -47,6 +47,7 @@ public class GameCard : UserControl
     public CustomButton LaunchButton { get; set; }
     public CustomButton EditButton { get; set; }
     public CustomButton RemoveButton { get; set; }
+    private EditMenu configMenu;
 
     public GameCard()
     {
@@ -323,10 +324,8 @@ public class GameCard : UserControl
 
     private void ToggleEdit_Click(object sender, RoutedEventArgs e)
     {
-        // EditMenu = new EditMenu(DataEntry);
-        // EditMenu.Open();
-        EditMenu configMenu = new EditMenu(DataEntry);
-        configMenu.Open();
+        EditMenu = new EditMenu(DataEntry);
+        EditMenu.Open();
     }
 
     private DispatcherTimer progressBarTimer;

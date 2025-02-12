@@ -32,8 +32,8 @@ public class CustomMenu : UserControl
 
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
 
-        BlurEffect = new BlurEffect { Radius = 0 };
-        ContentPanel.Effect = BlurEffect;
+        // BlurEffect = new BlurEffect { Radius = 0 };
+        // ContentPanel.Effect = BlurEffect;
 
         ContainerGrid = new Grid
         {
@@ -90,6 +90,9 @@ public class CustomMenu : UserControl
     {
         if (!IsOpen)
         {
+            BlurEffect = new BlurEffect { Radius = 0 };
+            ContentPanel.Effect = BlurEffect;
+
             RootPanel.Children.Add(ContainerGrid);
 
             AppAnimations.FlyInAnimation.From = mainWindow.Height;
@@ -97,7 +100,7 @@ public class CustomMenu : UserControl
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
             MenuContentBorder.RenderTransform.BeginAnimation(TranslateTransform.YProperty,
-            AppAnimations.FlyInAnimation);
+                AppAnimations.FlyInAnimation);
             MenuContentBorder.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
             MenuContentPanel.BeginAnimation(OpacityProperty, AppAnimations.FadeIn);
 
@@ -129,13 +132,17 @@ public class CustomMenu : UserControl
         }
     }
 
-    public void Close()
+    public virtual void Close()
     {
         if (IsOpen)
         {
             if (RootPanel.Children.Contains(ContainerGrid))
             {
-                AppAnimations.MenuBgOpacityOut.Completed += (s, a) => { RootPanel.Children.Remove(ContainerGrid); };
+                AppAnimations.MenuBgOpacityOut.Completed += (s, a) =>
+                {
+                    RootPanel.Children.Remove(ContainerGrid);
+                    ContainerGrid.Children.Clear();
+                };
                 IsOpen = false;
             }
 
