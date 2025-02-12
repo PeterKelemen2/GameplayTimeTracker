@@ -75,7 +75,11 @@ public class RemoteMenu : MenuContent
         BindingHelper.SetColorBinding(prefTextBlock, ForegroundProperty, "Font");
 
         TextBox prefTextBox = UIHelper.CreateTextBox(width: boxWidth);
-        Binding boxBinding = new Binding(bindPath) { Source = Common.Settings, Mode = BindingMode.TwoWay, };
+        Binding boxBinding = new Binding(bindPath)
+        {
+            Source = Common.Settings, Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        };
         BindingOperations.SetBinding(prefTextBox, TextBox.TextProperty, boxBinding);
         prefTextBox.Margin = new Thickness(0, 0, 0, 10);
 
