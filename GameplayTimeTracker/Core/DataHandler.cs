@@ -80,7 +80,8 @@ public static class DataHandler
         // Ensure a theme is selected
         if (settings.CurrentTheme == null)
         {
-            settings.CurrentTheme = settings.ThemesList.First();
+            AppTheme newCurrent = new AppTheme { ThemeName = "Dark", Colors = AppColors.GetDarkColorsDict() };
+            settings.CurrentTheme = newCurrent;
         }
 
         if (isModified) WriteSettingsToFile(settings);

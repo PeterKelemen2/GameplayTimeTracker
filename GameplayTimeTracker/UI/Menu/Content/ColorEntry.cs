@@ -27,8 +27,7 @@ public class ColorEntry : UserControl
     {
     }
 
-    public ColorEntry(string colorName, string colorValue, Color c1, Color c2,
-        double width = 370)
+    public ColorEntry(string colorName, string colorValue, double width = 370)
     {
         ColorName = colorName;
         ColorValue = colorValue;

@@ -41,8 +41,7 @@ public class ThemeMenu : MenuContent
         Console.WriteLine($"Theme: {Common.Settings.CurrentTheme.ThemeName}");
         foreach (var color in Common.Settings.CurrentTheme.Colors)
         {
-            ColorEntry colorEntry =
-                new ColorEntry(color.Key, color.Value, AppColors.CardColor1, AppColors.CardColor2);
+            ColorEntry colorEntry = new ColorEntry(color.Key, color.Value);
             colorEntry.colorPicker.SelectedColorChanged += (s, e) =>
             {
                 ColorPicker_SelectedColorChanged(s, e, colorEntry, Common.Settings.CurrentTheme);
@@ -68,10 +67,15 @@ public class ThemeMenu : MenuContent
             Common.Settings.CurrentTheme.Colors[colorEntry.ColorName] = color.ToString();
 
             // Update the theme's and source's color dictionary
-            theme.UpdateColor(colorEntry.ColorName, color.ToString());
+            // theme.UpdateColor(colorEntry.ColorName, color.ToString());
+            // foreach (var t in Common.Settings.ThemesList)
+            // {
+            //     if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, color.ToString());
+            // }
             foreach (var t in Common.Settings.ThemesList)
             {
-                if (t.ThemeName == theme.ThemeName) t.UpdateColor(colorEntry.ColorName, color.ToString());
+                if (t.ThemeName.Equals(Common.Settings.CurrentTheme.ThemeName))
+                    t.Colors[colorEntry.ColorName] = color.ToString();
             }
         }
         else
@@ -128,11 +132,10 @@ public class ThemeMenu : MenuContent
         {
             var newTheme = new AppTheme
             {
-                ThemeName = selectedTheme.ThemeName,
                 Colors = new ObservableDictionary<string, string>(selectedTheme.Colors)
             };
 
-            Common.Settings.CurrentTheme.ThemeName = newTheme.ThemeName;
+            Common.Settings.CurrentTheme.ThemeName = selectedTheme.ThemeName;
             Common.Settings.CurrentTheme.Colors.Clear();
             foreach (var kvp in selectedTheme.Colors)
             {
