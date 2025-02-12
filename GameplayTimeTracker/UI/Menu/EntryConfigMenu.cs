@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using GameplayTimeTracker.Menu.Content;
+using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu;
 
@@ -82,9 +84,34 @@ public class EntryConfigMenu : CustomMenu
         {
             PromptMenu turnOnBackup = new PromptMenu(new[]
                     { "Remote saving is disabled in the settings.", "Do you want to enable it?" },
-                new double[] { 17, 17 }, new[] { true, true },
+                boldArray: new[] { false, true },
                 type: PromptMenu.PromptType.YesNo, toScale: false,
-                yesHandler: (_, _) => { Common.Settings.IsRemoteSavingEnabled = true; },
+                yesHandler: (_, _) =>
+                {
+                    if (!Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
+                    {
+                        PromptMenu remoteConfigPrompt = new PromptMenu(
+                            new[]
+                            {
+                                "Remote machine is not properly configured.",
+                                "Do you want to configure it now?"
+                            },
+                            boldArray: new[] { false, true },
+                            type: PromptMenu.PromptType.YesNo, toScale: false,
+                            yesHandler: (_, _) =>
+                            {
+                                SettingsMenu sm = new SettingsMenu(toScale: false);
+                                sm.Open();
+                                sm.SetMenu<RemoteMenu>(sm.RemoteBlock);
+                            }
+                        );
+                        remoteConfigPrompt.Open();
+                    }
+                    else
+                    {
+                        Common.Settings.IsRemoteSavingEnabled = true;
+                    }
+                },
                 noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; });
             turnOnBackup.Open();
         }

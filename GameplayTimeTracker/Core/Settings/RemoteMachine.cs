@@ -56,6 +56,14 @@ public class RemoteMachine : INotifyPropertyChanged
         set { SetField(ref _retainForDays, value); }
     }
 
+    public bool IsRemoteMachineConfigured()
+    {
+        return !string.IsNullOrEmpty(_address) &&
+               !string.IsNullOrEmpty(_user) &&
+               !string.IsNullOrEmpty(_password) &&
+               !string.IsNullOrEmpty(_remoteFolder);
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected bool SetField<T>(ref T field, T value,

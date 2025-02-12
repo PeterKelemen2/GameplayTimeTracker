@@ -13,6 +13,10 @@ public class SettingsMenu : CustomMenu
     private StackPanel HeaderPanel = new();
     private ScrollViewer ContentScrollViewer = new();
     private Type currentMenuType;
+    public TextBlock PrefBlock;
+    public TextBlock ThemeBlock;
+    public TextBlock BackupBlock;
+    public TextBlock RemoteBlock;
 
     public SettingsMenu(double width = 400, bool toScale = true)
         : base(width, toScale)
@@ -23,30 +27,30 @@ public class SettingsMenu : CustomMenu
             HorizontalAlignment = HorizontalAlignment.Center,
         };
         var blockMargin = new Thickness(10);
-        var PrefBlock = UIHelper.CreateTextBlock("Preferences", isBold: false, fontSize: Common.TextFontSize + 2);
+        PrefBlock = UIHelper.CreateTextBlock("Preferences", isBold: false, fontSize: Common.TextFontSize + 2);
         PrefBlock.Padding = blockMargin;
         BindingHelper.SetColorBinding(PrefBlock, ForegroundProperty, "Font");
         PrefBlock.MouseDown += (_, _) => { SetMenu<PrefMenu>(PrefBlock); };
 
-        var Themes = UIHelper.CreateTextBlock("Themes", isBold: false, fontSize: Common.TextFontSize + 2);
-        Themes.Padding = blockMargin;
-        BindingHelper.SetColorBinding(Themes, ForegroundProperty, "Font");
-        Themes.MouseDown += (_, _) => { SetMenu<ThemeMenu>(Themes); };
+        ThemeBlock = UIHelper.CreateTextBlock("Themes", isBold: false, fontSize: Common.TextFontSize + 2);
+        ThemeBlock.Padding = blockMargin;
+        BindingHelper.SetColorBinding(ThemeBlock, ForegroundProperty, "Font");
+        ThemeBlock.MouseDown += (_, _) => { SetMenu<ThemeMenu>(ThemeBlock); };
 
-        var Backup = UIHelper.CreateTextBlock("Backup", isBold: false, fontSize: Common.TextFontSize + 2);
-        Backup.Padding = blockMargin;
-        BindingHelper.SetColorBinding(Backup, ForegroundProperty, "Font");
-        Backup.MouseDown += (_, _) => { SetMenu<BackupMenu>(Backup); };
+        BackupBlock = UIHelper.CreateTextBlock("Backup", isBold: false, fontSize: Common.TextFontSize + 2);
+        BackupBlock.Padding = blockMargin;
+        BindingHelper.SetColorBinding(BackupBlock, ForegroundProperty, "Font");
+        BackupBlock.MouseDown += (_, _) => { SetMenu<BackupMenu>(BackupBlock); };
 
-        var Remote = UIHelper.CreateTextBlock("Remote", isBold: false, fontSize: Common.TextFontSize + 2);
-        Remote.Padding = blockMargin;
-        BindingHelper.SetColorBinding(Remote, ForegroundProperty, "Font");
-        Remote.MouseDown += (_, _) => { SetMenu<RemoteMenu>(Remote); };
+        RemoteBlock = UIHelper.CreateTextBlock("Remote", isBold: false, fontSize: Common.TextFontSize + 2);
+        RemoteBlock.Padding = blockMargin;
+        BindingHelper.SetColorBinding(RemoteBlock, ForegroundProperty, "Font");
+        RemoteBlock.MouseDown += (_, _) => { SetMenu<RemoteMenu>(RemoteBlock); };
 
         HeaderPanel.Children.Add(PrefBlock);
-        HeaderPanel.Children.Add(Themes);
-        HeaderPanel.Children.Add(Backup);
-        HeaderPanel.Children.Add(Remote);
+        HeaderPanel.Children.Add(ThemeBlock);
+        HeaderPanel.Children.Add(BackupBlock);
+        HeaderPanel.Children.Add(RemoteBlock);
         Border headerBorder = new Border
         {
             BorderThickness = new Thickness(0, 0, 0, 1),
@@ -71,7 +75,7 @@ public class SettingsMenu : CustomMenu
         }
     }
 
-    private void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
+    public void SetMenu<T>(TextBlock selectedTextBlock) where T : new()
     {
         if (currentMenuType == typeof(T))
             return;
