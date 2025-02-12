@@ -365,7 +365,9 @@ namespace GameplayTimeTracker
 
         public void InitRemoteSave()
         {
-            if (_isRemoteSaveEnabled && Common.Settings.IsRemoteSavingEnabled &&
+            if (_isRemoteSaveEnabled &&
+                Common.Settings.IsRemoteSavingEnabled &&
+                Common.IsEntryEligibleForBackup(this) &&
                 !string.IsNullOrWhiteSpace(_localSavePath))
             {
                 RemoteSave();
@@ -375,6 +377,7 @@ namespace GameplayTimeTracker
         public async void RemoteSave()
         {
             if (IsRunning) return;
+            if (!Directory.Exists(_localSavePath)) return;
 
             string uploadPath =
                 $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";

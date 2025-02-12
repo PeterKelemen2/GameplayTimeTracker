@@ -14,16 +14,21 @@ public class RemoteMenu : MenuContent
 
     public RemoteMenu()
     {
-        PrefEntry savingEnabledPref = new PrefEntry("Remote Save Enabled", Common.Settings.IsRemoteSavingEnabled);
+        RemoteConfigPanel = new StackPanel();
+        _stackPanel.Children.Add(RemoteConfigPanel);
+
+        TextBlock MainTitle =
+            UIHelper.CreateTextBlock("Remote Saving", hA: HorizontalAlignment.Center, fontSize: 17);
+        MainTitle.Margin = new Thickness(0, 15, 0, -5);
+        RemoteConfigPanel.Children.Add(MainTitle);
+
+        PrefEntry savingEnabledPref = new PrefEntry("Remote Save Enabled", Common.Settings.IsRemoteSavingEnabled, 270);
         Binding savingEnabledBinding = new Binding("IsRemoteSavingEnabled")
             { Source = Common.Settings, Mode = BindingMode.TwoWay, };
         BindingOperations.SetBinding(savingEnabledPref.toggleButton, CustomToggleButton.IsToggledProperty,
             savingEnabledBinding);
         BindingHelper.SetColorBinding(savingEnabledPref.textBlock, ForegroundProperty, "Font");
-        _stackPanel.Children.Add(savingEnabledPref);
-
-        RemoteConfigPanel = new StackPanel();
-        _stackPanel.Children.Add(RemoteConfigPanel);
+        RemoteConfigPanel.Children.Add(savingEnabledPref);
 
         TextBlock RemoteMachineTitle =
             UIHelper.CreateTextBlock("Remote Machine", hA: HorizontalAlignment.Center, fontSize: 17);
@@ -46,7 +51,7 @@ public class RemoteMenu : MenuContent
         CreatePrefEntry(RemoteConfigPanel, "Remote folder", "RemoteMachine.RemoteFolder", new Thickness(0, 0, 0, 10));
 
         TextBlock PreferencesTitle =
-            UIHelper.CreateTextBlock("Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
+            UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
         PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
         RemoteConfigPanel.Children.Add(PreferencesTitle);
         CreatePrefEntry(RemoteConfigPanel, "Retain saves for days", "RemoteMachine.RetainForDays",

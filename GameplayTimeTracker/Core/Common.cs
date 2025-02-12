@@ -187,4 +187,30 @@ public static class Common
 
         return null;
     }
+
+    private static int[] GetTimeFromMinutes(int minutes)
+    {
+        return new[] { minutes / 60, minutes % 60, 0 };
+    }
+
+    private static bool CompareTimeArrays(int[] arr1, int[] arr2)
+    {
+        // Entry last play
+        double arr1Double = GetDoubleTimeFromArray(arr1);
+
+        // Target
+        double arr2Double = GetDoubleTimeFromArray(arr2);
+
+        double tolerance = arr2Double - GetDoubleTimeFromArray(new[] { 0, 5, 0 });
+
+        return arr1Double >= tolerance;
+    }
+
+    public static bool IsEntryEligibleForBackup(Entry entry)
+    {
+        int targetMinutes = Settings.RemoteMachine.BackupIfSessionLonger;
+        int[] targetTime = NormalizeTime(GetTimeFromMinutes(targetMinutes));
+
+        return CompareTimeArrays(entry.LastPlay, targetTime);
+    }
 }
