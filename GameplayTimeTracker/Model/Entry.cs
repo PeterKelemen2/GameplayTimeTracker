@@ -407,7 +407,7 @@ namespace GameplayTimeTracker
 
             string savesPath = $"{Common.Settings.RemoteMachine.RemoteFolder.TrimEnd('/')}/{Name}/";
             string uploadPath = $"{savesPath}{DateTime.Now:yyyy-MM-dd-HH-mm-ss}";
-            await RemoteController.DeleteSavesOlderThanDays(savesPath, 0);
+            await RemoteController.DeleteSavesOlderThanDays(savesPath, _retainSavesForDays);
             await RemoteController.UploadFolderAsync(_localSavePath, uploadPath);
         }
 
