@@ -110,19 +110,21 @@ public class EntryConfigMenu : CustomMenu
 
     private async Task RemoteSavePrefToggledChanged(bool currentState)
     {
-        CreatePrompts();
-
         if (currentState)
         {
-            if (Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
-            {
-                if (!Common.Settings.IsRemoteSavingEnabled) OpenWaitForRemoteSavePrompt();
-            }
-            else
-            {
-                if (!Common.Settings.IsRemoteSavingEnabled) OpenWaitForRemoteSavePrompt();
+            if (!Common.Settings.IsRemoteSavingEnabled) Common.Settings.IsRemoteSavingEnabled = true;
 
+            if (!Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
+            {
                 remoteSavePref.toggleButton.IsToggled = false;
+                remoteConfigPrompt = new PromptMenu(
+                    new[]
+                        { "Remote machine is not properly configured.", "Do you want to configure it now?" },
+                    boldArray: new[] { true, true },
+                    type: PromptMenu.PromptType.YesNo, toScale: false,
+                    yesHandler: async (_, _) => { OpenAndWaitSettingsMenu(); },
+                    noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; }
+                );
                 remoteConfigPrompt.Open();
             }
         }
@@ -133,13 +135,6 @@ public class EntryConfigMenu : CustomMenu
     }
 
 
-    public async void OpenWaitForRemoteSavePrompt()
-    {
-        remoteSavePref.toggleButton.IsToggled = false;
-        remoteSavePrompt.Open();
-        while (remoteSavePrompt.IsOpen) await Task.Delay(100);
-    }
-
     private async void OpenAndWaitSettingsMenu()
     {
         SettingsMenu sm = new SettingsMenu(toScale: false);
@@ -147,41 +142,7 @@ public class EntryConfigMenu : CustomMenu
         sm.SetMenu<RemoteMenu>(sm.RemoteBlock);
         while (sm.IsOpen) await Task.Delay(100);
 
-        Console.WriteLine("##### Settings menu closed, checking config!");
-        if (Common.Settings.RemoteMachine.IsRemoteMachineConfigured())
-        {
-            Console.WriteLine("####### Remote machine configured!");
-            remoteSavePref.toggleButton.IsToggled = true;
-        }
-        else
-        {
-            Console.WriteLine("####### Remote machine not configured!");
-            remoteSavePref.toggleButton.IsToggled = false;
-        }
-    }
-
-    private void CreatePrompts()
-    {
-        remoteConfigPrompt = new PromptMenu(
-            new[]
-                { "Remote machine is not properly configured.", "Do you want to configure it now?" },
-            boldArray: new[] { true, true },
-            type: PromptMenu.PromptType.YesNo, toScale: false,
-            yesHandler: async (_, _) => { OpenAndWaitSettingsMenu(); },
-            noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; }
-        );
-
-        remoteSavePrompt = new PromptMenu(new[]
-                { "Remote saving is disabled in the settings.", "Do you want to enable it?" },
-            boldArray: new[] { true, true },
-            type: PromptMenu.PromptType.YesNo, toScale: false,
-            yesHandler: (_, _) =>
-            {
-                Common.Settings.IsRemoteSavingEnabled = true;
-                remoteSavePref.toggleButton.IsToggled = true;
-            },
-            noHandler: (_, _) => { remoteSavePref.toggleButton.IsToggled = false; }
-        );
+        remoteSavePref.toggleButton.IsToggled = Common.Settings.RemoteMachine.IsRemoteMachineConfigured();
     }
 
     private void SavePath_Click(object sender, RoutedEventArgs e)
