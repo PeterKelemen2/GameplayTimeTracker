@@ -19,11 +19,11 @@ public static class AppColors
     public static Color Shadow = (Color)ColorConverter.ConvertFromString("#151515");
     public static Color Transparent = (Color)ColorConverter.ConvertFromString("#00000000");
 
-    public static ObservableDictionary<string, string> GetDefaultColorsDict()
+    public static ObservableDictionary<string, string> GetDarkColorsDict()
     {
         ObservableDictionary<string, string> colors = new ObservableDictionary<string, string>
         {
-            { "Footer", "#6A6F99" },
+            { "Footer", "#FF3377A6" },
             { "Footer Font", "#DAE4FF" },
             { "Background", "#1E2030" },
             { "Card 1", "#414769" },

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -43,15 +42,10 @@ public class ThemeMenu : MenuContent
                 ColorPicker_SelectedColorChanged(s, e, colorEntry, Common.Settings.CurrentTheme);
                 DataHandler.WriteSettingsToFile(Common.Settings);
             };
-            BindingHelper.SetColorBinding(colorEntry.valueBlock, ForegroundProperty, "Font");
-            BindingHelper.SetColorBinding(colorEntry.nameBlock, ForegroundProperty, "Font");
-            BindingHelper.SetGradientColorBinding(colorEntry.bg, Shape.FillProperty,
-                "Card 1", "Card 2", true);
             colorEntryPanel.Children.Add(colorEntry);
         }
 
         colorEntryScrollViewer.Content = colorEntryPanel;
-        // Panel.Children.Add(colorEntryScrollViewer);
     }
 
     private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e,
@@ -66,6 +60,7 @@ public class ThemeMenu : MenuContent
             colorEntry.colorPicker.Background = new SolidColorBrush(color);
             colorEntry.valueBlock.Text = color.ToString();
             colorEntry.ColorValue = color.ToString();
+            Common.Settings.CurrentTheme.Colors[colorEntry.ColorName] = color.ToString();
 
             // Update the theme's and source's color dictionary
             theme.UpdateColor(colorEntry.ColorName, colorEntry.ColorValue);
@@ -97,39 +92,44 @@ public class ThemeMenu : MenuContent
             ThemeComboBox.Items.Add(theme.ThemeName);
         }
 
-        ThemeComboBox.SelectionChanged += (s, e) =>
-        {
-            foreach (var theme in Common.Settings.ThemesList)
-            {
-                if (theme.ThemeName == ThemeComboBox.SelectedItem.ToString())
-                {
-                    ForceCurrentThemeDictUpdate(Common.Settings.CurrentTheme, theme);
-                    CreateColorEntries();
-                    DataHandler.WriteSettingsToFile(Common.Settings);
-                    return;
-                }
-            }
-        };
-        _stackPanel.Children.Add(ThemeComboBox);
-
         if (ThemeComboBox.Items.Contains(Common.Settings.CurrentTheme.ThemeName))
         {
             ThemeComboBox.SelectedItem = Common.Settings.CurrentTheme.ThemeName;
         }
+
+        ThemeComboBox.SelectionChanged += (s, e) =>
+        {
+            Console.WriteLine($"{ThemeComboBox.SelectedItem}");
+            UpdateCurrentTheme(ThemeComboBox.SelectedItem.ToString());
+
+            DataHandler.WriteSettingsToFile(Common.Settings);
+        };
+        _stackPanel.Children.Add(ThemeComboBox);
     }
 
-    private void ForceCurrentThemeDictUpdate(AppTheme currentTheme, AppTheme newTheme)
+    private void UpdateCurrentTheme(string newThemeName)
     {
-        var keys = new List<string>(currentTheme.Colors.Keys); // Create a copy of the keys
+        var selectedTheme = Common.Settings.ThemesList.Find(t => t.ThemeName == newThemeName);
 
-        foreach (var key in keys)
+        if (selectedTheme != null)
         {
-            if (newTheme.Colors.ContainsKey(key))
+            var newTheme = new AppTheme
             {
-                currentTheme.UpdateColor(key, newTheme.Colors[key]);
-            }
-        }
+                ThemeName = selectedTheme.ThemeName,
+                Colors = new ObservableDictionary<string, string>(selectedTheme.Colors)
+            };
 
-        currentTheme.ThemeName = newTheme.ThemeName;
+            Common.Settings.CurrentTheme.ThemeName = newTheme.ThemeName;
+            Common.Settings.CurrentTheme.Colors.Clear();
+            foreach (var kvp in selectedTheme.Colors)
+            {
+                Common.Settings.CurrentTheme.Colors.Add(kvp.Key, kvp.Value);
+            }
+
+            ThemeComboBox.SelectedItem = newTheme.ThemeName;
+            CreateColorEntries();
+
+            DataHandler.WriteSettingsToFile(Common.Settings);
+        }
     }
 }

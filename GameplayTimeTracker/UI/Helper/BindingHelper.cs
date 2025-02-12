@@ -7,14 +7,15 @@ namespace GameplayTimeTracker;
 
 public class BindingHelper
 {
-    public static void SetColorBinding(UIElement element, DependencyProperty property, string colorName)
+    public static void SetColorBinding(UIElement element, DependencyProperty property, string colorName,
+        bool twoWay = false)
     {
         Binding newBinding = new Binding
         {
             Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{colorName}]"),
             Converter = new ColorToBrushConverter(),
-            Mode = BindingMode.OneWay,
+            Mode = twoWay ? BindingMode.TwoWay : BindingMode.OneWay,
         };
         BindingOperations.SetBinding(element, property, newBinding);
     }

@@ -1,5 +1,4 @@
-﻿
-namespace GameplayTimeTracker;
+﻿namespace GameplayTimeTracker;
 
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +12,18 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
 
     public event NotifyCollectionChangedEventHandler CollectionChanged;
     public event PropertyChangedEventHandler PropertyChanged;
+
+    public ObservableDictionary()
+    {
+    }
+
+    public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
+    {
+        foreach (var kvp in dictionary)
+        {
+            this.Add(kvp.Key, kvp.Value);
+        }
+    }
 
     public void Add(TKey key, TValue value)
     {

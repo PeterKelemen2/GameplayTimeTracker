@@ -61,7 +61,7 @@ public static class DataHandler
 
         var requiredThemes = new List<AppTheme>
         {
-            new AppTheme { ThemeName = "Default", Colors = AppColors.GetDefaultColorsDict() },
+            new AppTheme { ThemeName = "Dark", Colors = AppColors.GetDarkColorsDict() },
             new AppTheme { ThemeName = "Pink", Colors = AppColors.GetPinkColorsDict() },
             new AppTheme { ThemeName = "Custom", Colors = AppColors.GetCustomColorsDict() }
         };
@@ -78,7 +78,7 @@ public static class DataHandler
         }
 
         // Ensure a theme is selected
-        if (settings.CurrentTheme == null || !settings.ThemesList.Contains(settings.CurrentTheme))
+        if (settings.CurrentTheme == null)
         {
             settings.CurrentTheme = settings.ThemesList.First();
         }
