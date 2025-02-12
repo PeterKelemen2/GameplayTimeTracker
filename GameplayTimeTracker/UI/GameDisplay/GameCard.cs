@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -80,7 +81,12 @@ public class GameCard : UserControl
             Stretch = Stretch.Uniform,
         };
         Binding heroBinding = new Binding("HeroPath") { Source = DataEntry, Mode = BindingMode.OneWay, };
+        Binding heroBindingOpacity = new Binding("IsRunning")
+            { Source = DataEntry, Mode = BindingMode.OneWay, Converter = new RunningToOpacityConverter() };
+
         BindingOperations.SetBinding(HeroImage, Image.SourceProperty, heroBinding);
+        BindingOperations.SetBinding(HeroImage, OpacityProperty, heroBindingOpacity);
+
         RenderOptions.SetBitmapScalingMode(HeroImage, BitmapScalingMode.HighQuality);
         ContainerGrid.Children.Add(HeroImage);
 
