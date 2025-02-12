@@ -5,6 +5,8 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
+using Color = System.Windows.Media.Color;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace GameplayTimeTracker.Menu.Content;
 
@@ -64,11 +66,16 @@ public class ColorEntry : UserControl
 
         valueBlock = new TextBlock
         {
-            Text = colorValue,
             FontSize = fontSize,
             VerticalAlignment = VerticalAlignment.Bottom,
             Margin = new Thickness(10, 0, 0, 10),
         };
+        Binding valueBlockBinding = new Binding($"[{colorName}]")
+        {
+            Source = Common.Settings.CurrentTheme.Colors,
+            Mode = BindingMode.OneWay,
+        };
+        BindingOperations.SetBinding(valueBlock, TextBlock.TextProperty, valueBlockBinding);
         BindingHelper.SetColorBinding(valueBlock, ForegroundProperty, "Font");
         containerGrid.Children.Add(valueBlock);
 
@@ -83,14 +90,14 @@ public class ColorEntry : UserControl
         colorPicker.Padding = new Thickness(0, colorPicker.Height, 0, 0);
         colorPicker.Effect = AppEffects.dropShadowText;
 
-        Binding newBinding = new Binding
+        Binding colorPickerSelection = new Binding
         {
             Source = Common.Settings.CurrentTheme.Colors,
             Path = new PropertyPath($"[{colorName}]"),
             Mode = BindingMode.TwoWay,
         };
 
-        BindingOperations.SetBinding(colorPicker, ColorPicker.SelectedColorProperty, newBinding);
+        BindingOperations.SetBinding(colorPicker, ColorPicker.SelectedColorProperty, colorPickerSelection);
         BindingHelper.SetColorBinding(colorPicker, BackgroundProperty, colorName);
 
         Console.WriteLine($"Color picker value: {Common.Settings.CurrentTheme.Colors[colorName]}");
