@@ -29,6 +29,7 @@ namespace GameplayTimeTracker
         private string _localSavePath = "";
         private bool _isSavePathValid = true;
         private bool _isRemoteSaveEnabled = false;
+        private int _remoteSaveAfterMinutes = 60;
         public bool _isEditing = false;
         private DateTime _prevDate;
         private DateTime _lastDate;
@@ -130,6 +131,17 @@ namespace GameplayTimeTracker
             set
             {
                 SetField(ref _isRemoteSaveEnabled, value);
+                InitSave();
+            }
+        }
+
+        [JsonPropertyName("remoteSaveAfterMinutes")]
+        public int RemoteSaveAfterMinutes
+        {
+            get => _remoteSaveAfterMinutes;
+            set
+            {
+                SetField(ref _remoteSaveAfterMinutes, value);
                 InitSave();
             }
         }

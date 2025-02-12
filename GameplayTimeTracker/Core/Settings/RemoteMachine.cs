@@ -13,7 +13,6 @@ public class RemoteMachine : INotifyPropertyChanged
     private string _password;
     private string _remoteFolder;
     private int _retainForDays = 30;
-    private int _backupIfSessionLonger = 30;
 
     [JsonPropertyName("Address")]
     public string Address
@@ -55,13 +54,6 @@ public class RemoteMachine : INotifyPropertyChanged
     {
         get => _retainForDays;
         set { SetField(ref _retainForDays, value); }
-    }
-
-    [JsonPropertyName("Backup If Longer")]
-    public int BackupIfSessionLonger
-    {
-        get => _backupIfSessionLonger;
-        set { SetField(ref _backupIfSessionLonger, value); }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
