@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
@@ -12,9 +13,36 @@ public static class RemoteController
 {
     private static double delayDuration = 10;
 
+    public static async Task<bool> IsRemoteMachineAvailableAsync(string address, int port)
+    {
+        try
+        {
+            using (var tcpClient = new TcpClient())
+            {
+                Console.WriteLine($"Connecting to {address}:{port}");
+                var connectTask = tcpClient.ConnectAsync(address, port);
+                var timeoutTask = Task.Delay(3000); // Timeout: 3 sec
+                var completedTask = await Task.WhenAny(connectTask, timeoutTask);
+
+                Console.WriteLine($"Connected: {tcpClient.Connected}");
+                return completedTask == connectTask && tcpClient.Connected;
+            }
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static async Task<bool> UploadFolderAsync(string localFolderPath, string remoteFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
+
+        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        {
+            Console.WriteLine("Remote machine is unreachable.");
+            return false;
+        }
 
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
@@ -99,6 +127,12 @@ public static class RemoteController
     public static async Task<bool> DownloadFolderAsync(string remoteFolderPath, string localFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
+        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        {
+            Console.WriteLine("Remote machine is unreachable.");
+            return false;
+        }
+
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
             try
@@ -171,6 +205,12 @@ public static class RemoteController
         string gameFolderPath = Path.Combine(remotePath, gameName).Replace("\\", "/");
 
         var remote = Common.Settings.RemoteMachine;
+        // if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        // {
+        //     Console.WriteLine("Remote machine is unreachable.");
+        //     return filesList;
+        // }
+
         using (var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password))
         {
             // Create a CancellationTokenSource for timeout

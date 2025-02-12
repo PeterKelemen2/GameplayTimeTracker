@@ -29,6 +29,7 @@ public class RemoteContent : UserControl
     private double scrollHeight = 200;
     private string currentSelectedPath = "";
     private Run countRun;
+    private bool isRemoteReachable = true;
 
     public RemoteContent()
     {
@@ -184,8 +185,18 @@ public class RemoteContent : UserControl
     {
         try
         {
-            var remoteContent = await RemoteController
-                .ListGameSubfoldersAsync(Common.Settings.RemoteMachine.RemoteFolder, _entry.Name).ConfigureAwait(false);
+            var remote = Common.Settings.RemoteMachine;
+            List<string> remoteContent = new List<string>();
+
+            if (await RemoteController.IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+            {
+                remoteContent = await RemoteController
+                    .ListGameSubfoldersAsync(remote.RemoteFolder, _entry.Name).ConfigureAwait(false);
+            }
+            else
+            {
+                isRemoteReachable = false;
+            }
 
             Dispatcher.Invoke(() =>
             {
@@ -223,10 +234,12 @@ public class RemoteContent : UserControl
 
         if (files.Count == 0)
         {
-            Console.WriteLine("No saves were found!");
+            string message = isRemoteReachable ? "No saves were found!" : "Server unreachable!";
+
+            Console.WriteLine(message);
             TextBlock textBlock = new TextBlock
             {
-                Text = "No saves were found!", FontSize = 21, FontWeight = FontWeights.Bold,
+                Text = message, FontSize = 21, FontWeight = FontWeights.Bold,
                 Foreground =
                     new SolidColorBrush(
                         (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
@@ -279,7 +292,7 @@ public class RemoteContent : UserControl
     private Task FadeOutElement(UIElement element)
     {
         var tcs = new TaskCompletionSource<bool>();
-        DoubleAnimation fadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
+        DoubleAnimation fadeOut = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
         fadeOut.Completed += (s, e) => tcs.SetResult(true);
         element.BeginAnimation(UIElement.OpacityProperty, fadeOut);
         return tcs.Task;
@@ -288,7 +301,7 @@ public class RemoteContent : UserControl
     private Task FadeInElement(UIElement element)
     {
         var tcs = new TaskCompletionSource<bool>();
-        DoubleAnimation fadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
+        DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(AppAnimations.fastFadeAnimDuration));
         fadeIn.Completed += (s, e) => tcs.SetResult(true);
         element.BeginAnimation(UIElement.OpacityProperty, fadeIn);
         return tcs.Task;
