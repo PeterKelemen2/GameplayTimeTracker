@@ -4,6 +4,9 @@
 monitor and track the total time spent on specific applications or games by observing their executables.
 Monitored applications can be launched from the interface as well. Each game's save files can be backed up to a remote
 machine, saves will be retained for a specified number of days.
+<p align="center">
+	<img alt="Screenshot" src="https://imgur.com/b0lroBC.png" width="500"/>
+</p>
 
 ## Data Update Process (Version 1.3.2 and Later)
 
@@ -14,10 +17,6 @@ updating to version `1.3.2`, the user will be prompted to update from the previo
 If legacy data conversion is required, it is strongly recommended to complete this process using a build prior to
 version `2.0.0`, as this functionality has been removed in the rewritten version.
 
-
-<p align="center">
-	<img alt="Screenshot" src="https://imgur.com/b0lroBC.png" width="500"/>
-</p>
 
 ## Application Configuration
 
