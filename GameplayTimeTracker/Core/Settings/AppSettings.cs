@@ -13,7 +13,7 @@ public class AppSettings : INotifyPropertyChanged
     private bool _preferSGDBImages = true;
     private bool _quickAdd = false;
     private bool _performanceMode = false;
-    private bool _backupOnExit = true;
+    private bool _backupOnExit = false;
     private bool _isRemoteSavingEnabled = false;
     private RemoteMachine _remoteMachine = new();
 
