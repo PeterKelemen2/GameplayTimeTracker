@@ -18,10 +18,11 @@ public static class Launcher
             if (entry.IsRunning)
             {
                 Console.WriteLine("Already running");
-                var alreadyRunningPrompt = new PromptMenu(
-                    width: 300, textArray: new[] { entry.Name, "is already running." }, boldArray: new[] { true, false }
-                );
-                alreadyRunningPrompt.Open();
+                // var alreadyRunningPrompt = new PromptMenu(
+                //     width: 300, textArray: new[] { entry.Name, "is already running." }, boldArray: new[] { true, false }
+                // );
+                // alreadyRunningPrompt.Open();
+                EventPopup alreadyRunning = new EventPopup($" {entry.Name} already running!");
                 return;
             }
 

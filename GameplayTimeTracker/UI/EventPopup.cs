@@ -59,9 +59,11 @@ public class EventPopup : UserControl
         TextBlock textBlock = new TextBlock
         {
             Text = text,
-            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
-            FontSize = Common.TextFontSize, TextWrapping = TextWrapping.Wrap,
-            Effect = AppEffects.dropShadowText, Margin = new Thickness(7, 2, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center,
+            FontSize = Common.TitleFontSize, 
+            FontWeight = FontWeights.SemiBold,
+            TextWrapping = TextWrapping.Wrap,
+            Effect = AppEffects.dropShadowText, Margin = new Thickness(10, 0, 0, 8),
         };
         BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, "Font");
         grid.Children.Add(textBlock);

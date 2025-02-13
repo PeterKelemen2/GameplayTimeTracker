@@ -56,14 +56,7 @@ public partial class MainWindow : Window
         Common.TaskbarIcon.Visibility = Visibility.Visible;
         TaskbarManager.UpdateTrayToolTip();
         TaskbarManager.UpdateTrayEntries();
-
-        EventPopup eventPopup =
-            new EventPopup("This is a popup This is a popup This is a popup This is a popup This is a popup ");
-        EventPopup badEventPopup =
-            new EventPopup("This is a popup This is a popup This is a popup This is a popup This is a popup ",
-                EventType.Negative);
-
-
+        
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
             var sgdbApiKeyPrompt = new PromptMenu(
