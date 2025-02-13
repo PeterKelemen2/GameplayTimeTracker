@@ -121,7 +121,7 @@ public class BackupMenu : MenuContent
         backupFilesList = GetAllFiles(AppFiles.BackupDataFolder)
             .Where(file => Path.GetExtension(file).Equals(".json", StringComparison.OrdinalIgnoreCase) &&
                            IsBackupValid(Path.Combine(AppFiles.BackupDataFolder, file)))
-            .OrderByDescending(Path.GetFileName)
+            .OrderByDescending(file => File.GetLastWriteTime(Path.Combine(AppFiles.BackupDataFolder, file)))
             .ToList();
         foreach (var file in backupFilesList)
         {
