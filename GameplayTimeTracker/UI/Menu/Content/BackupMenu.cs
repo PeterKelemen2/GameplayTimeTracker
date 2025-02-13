@@ -53,15 +53,11 @@ public class BackupMenu : MenuContent
         };
 
         Directory.CreateDirectory(AppFiles.BackupDataFolder);
-        // if (!Path.Exists(AppFiles.BackupDataFolder))
-        // {
-        //     Directory.CreateDirectory(AppFiles.BackupDataFolder);
-        // }
 
         backupEntriesPanel = new StackPanel();
-        ShowBackupEntries();
         backupEntryScrollViewer.Content = backupEntriesPanel;
         _stackPanel.Children.Add(backupEntryBorder);
+        ShowBackupEntries();
 
         ContentPanel = new StackPanel();
         ContentPanel.Visibility = Visibility.Collapsed;
@@ -123,19 +119,22 @@ public class BackupMenu : MenuContent
                            IsBackupValid(Path.Combine(AppFiles.BackupDataFolder, file)))
             .OrderByDescending(file => File.GetLastWriteTime(Path.Combine(AppFiles.BackupDataFolder, file)))
             .ToList();
+
         foreach (var file in backupFilesList)
         {
             Console.WriteLine(file);
-            Border textBorder = new Border { CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5) };
+            Border textBorder = new Border
+            {
+                CornerRadius = new CornerRadius(8.5), Margin = new Thickness(5),
+                Background = new SolidColorBrush(Colors.Transparent),
+            };
             TextBlock bEntryBlock = new TextBlock
             {
-                Text = file,
-                FontSize = Common.TitleFontSize,
+                Text = file, FontSize = Common.TitleFontSize,
                 Foreground =
                     new SolidColorBrush(
                         (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Font"])),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Padding = new Thickness(5),
+                HorizontalAlignment = HorizontalAlignment.Center, Padding = new Thickness(5),
             };
             textBorder.Child = bEntryBlock;
 
