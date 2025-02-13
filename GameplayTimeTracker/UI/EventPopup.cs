@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace GameplayTimeTracker;
 
@@ -15,45 +18,124 @@ public class EventPopup : UserControl
 {
     private double W = 250;
     private double H = 70;
+    private double animDuration = 0.5;
+    double shownDuration = 3;
+    private Grid grid;
+    private Border gridBorder;
+    private Border timeIndicatorBorder;
+    private DispatcherTimer dispatcherTimer;
 
     public EventPopup(string text, EventType eventType = EventType.Positive)
     {
         StackPanel popPanel = Application.Current.MainWindow.FindName("PopPanel") as StackPanel;
 
-        Grid grid = new Grid { Width = W, Height = H, Effect = AppEffects.DropShadowRectangle };
-        
-        Rectangle bg = new Rectangle
-        {
-            Width = W, Height = H,
-            RadiusX = 10, RadiusY = 10,
-        };
-        BindingHelper.SetColorBinding(bg, Shape.FillProperty, "Button");
-        grid.Children.Add(bg);
+        grid = new Grid { Width = W, Height = H, };
 
-        Border timeBorder = new Border
+        gridBorder = new Border
         {
-            Width = W, Height = 8,
-            CornerRadius = new CornerRadius(0, 0, 9, 9),
+            Child = grid,
+            Effect = AppEffects.DropShadowRectangle, RenderTransform = new TranslateTransform(),
+            CornerRadius = new CornerRadius(10),
+            ClipToBounds = true,
+            Clip = new RectangleGeometry(new Rect(0, 0, W, H), 10, 10)
+        };
+        BindingHelper.SetColorBinding(gridBorder, BackgroundProperty, "Button");
+
+        timeIndicatorBorder = new Border
+        {
+            Width = W + 3, Height = 8,
+            CornerRadius = new CornerRadius(0, 3, 0, 0),
             Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
                 (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Button"]),
                 0.7)),
-            VerticalAlignment = VerticalAlignment.Bottom,
+            VerticalAlignment = VerticalAlignment.Bottom, HorizontalAlignment = HorizontalAlignment.Left,
         };
-        grid.Children.Add(timeBorder);
+        grid.Children.Add(timeIndicatorBorder);
 
         TextBlock textBlock = new TextBlock
         {
             Text = text,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            FontSize = Common.TextFontSize,
-            TextWrapping = TextWrapping.Wrap,
-            Effect = AppEffects.dropShadowText,
-            Margin = new Thickness(7, 2, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+            FontSize = Common.TextFontSize, TextWrapping = TextWrapping.Wrap,
+            Effect = AppEffects.dropShadowText, Margin = new Thickness(7, 2, 0, 0),
         };
         BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, "Font");
         grid.Children.Add(textBlock);
 
-        popPanel.Children.Add(grid);
+        popPanel.Children.Add(gridBorder);
+
+        dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(shownDuration) };
+        dispatcherTimer.Tick += ClosePopup;
+
+        Open();
+    }
+
+    private void Close()
+    {
+        dispatcherTimer.Stop();
+        Console.WriteLine(" ####### CLOSING EVENT POPUP");
+        DoubleAnimation fadeOut = new DoubleAnimation
+        {
+            To = 0,
+            Duration = TimeSpan.FromSeconds(animDuration),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        DoubleAnimation slideOutEventAnimation = new DoubleAnimation
+        {
+            From = 0,
+            To = W * 2,
+            Duration = TimeSpan.FromSeconds(animDuration),
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseIn }
+        };
+
+        TranslateTransform transform = new TranslateTransform();
+        gridBorder.RenderTransform = transform;
+        transform.BeginAnimation(TranslateTransform.XProperty, slideOutEventAnimation);
+
+        gridBorder.BeginAnimation(OpacityProperty, fadeOut);
+    }
+
+    private void Open()
+    {
+        DoubleAnimation slideInEventAnimation = new DoubleAnimation
+        {
+            From = W * 2,
+            To = 0,
+            Duration = TimeSpan.FromSeconds(animDuration),
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        DoubleAnimation shrinkTime = new DoubleAnimation
+        {
+            To = 0,
+            Duration = TimeSpan.FromSeconds(shownDuration),
+        };
+
+        DoubleAnimation fadeIn = new DoubleAnimation
+        {
+            From = 0,
+            To = 1,
+            Duration = TimeSpan.FromSeconds(animDuration),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
+        fadeIn.Completed += (_, __) =>
+        {
+            dispatcherTimer.Start();
+            timeIndicatorBorder.BeginAnimation(Border.WidthProperty, shrinkTime);
+        };
+        // shrinkTime.Completed += (_, __) => { Close(); };
+
+
+        TranslateTransform transform = new TranslateTransform();
+        gridBorder.RenderTransform = transform;
+        transform.BeginAnimation(TranslateTransform.XProperty, slideInEventAnimation);
+
+        gridBorder.BeginAnimation(OpacityProperty, fadeIn);
+    }
+
+
+    private void ClosePopup(object? sender, EventArgs e)
+    {
+        Close();
     }
 }

@@ -12,6 +12,7 @@ public class AppAnimations
     public static double fastFadeAnimDuration = 0.3;
     public static double fadeMainPanelDuration = 0.1;
     public static double dragAnimDuration = 0.1;
+    public static double slideDur = 3;
 
 
     // private static double[] scaleAnimValues = { 1.0, 1.07 };
@@ -179,5 +180,21 @@ public class AppAnimations
         To = 360,
         Duration = TimeSpan.FromSeconds(1),
         RepeatBehavior = RepeatBehavior.Forever
+    };
+    
+    public static DoubleAnimation SlideInEventAnimation = new DoubleAnimation
+    {
+        // From = W * 2,
+        To = 0,
+        Duration = TimeSpan.FromSeconds(slideDur),
+        EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+    };
+    
+    public static DoubleAnimation SlideOutEventAnimation = new DoubleAnimation
+    {
+        From = 0,
+        // To = 0,
+        Duration = TimeSpan.FromSeconds(slideDur),
+        EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseIn }
     };
 }
