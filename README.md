@@ -20,8 +20,7 @@ version `2.0.0`, as this functionality has been removed in the rewritten version
 
 ## Application Configuration
 
-The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`
-There are two main parts that can be set by the user both on the user interface and in the configuration file.
+The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`.
 
 - **Preferences**
     - `Start With System`
