@@ -68,6 +68,7 @@
 
         <Grid x:Name="DragDropGrid" Panel.ZIndex="97" Visibility="Collapsed">
         </Grid>
+
         <Grid x:Name="MainGrid">
 
             <Grid.RowDefinitions>
@@ -120,6 +121,9 @@
                     <Run x:Name="TotalTimeRun" Text="0" FontWeight="Normal" />
                 </TextBlock>
             </Grid>
+            <StackPanel x:Name="PopPanel" HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom" Margin="0,0,15,15">
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

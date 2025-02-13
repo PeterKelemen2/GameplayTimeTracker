@@ -57,6 +57,9 @@ public partial class MainWindow : Window
         TaskbarManager.UpdateTrayToolTip();
         TaskbarManager.UpdateTrayEntries();
 
+        EventPopup eventPopup = new EventPopup("This is a popup This is a popup This is a popup This is a popup This is a popup ", EventType.Positive);
+
+
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
             var sgdbApiKeyPrompt = new PromptMenu(
