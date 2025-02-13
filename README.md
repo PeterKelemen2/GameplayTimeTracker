@@ -19,73 +19,55 @@ version `2.0.0`, as this functionality has been removed in the rewritten version
 	<img alt="Screenshot" src="https://imgur.com/b0lroBC.png" width="500"/>
 </p>
 
-## Configuration
+## Application Configuration
 
 The configuration file will be generated in `%USERPROFILE%\Documents\Gameplay Time Tracker\settings.json`
 There are two main parts that can be set by the user both on the user interface and in the configuration file.
 
 - **Preferences**
-    - `startWithSystem` ,
+    - `Start With System`
         - Default value: `true`
-        - When set to `true`, the application will automatically start with the system by creating a shortcut in the
-          startup directory.
-    - `horizontalTileGradient` ,
+        - When enabled (`true`), the application will automatically start upon system boot by creating a shortcut in
+          the system's startup directory.
+    - `Prefer SteamGridDB Images`
         - Default value: `true`
-        - When set to `true`, the gradient brush of the Tile entries will be in a horizontal orientation.
-        - When set to `false`, the orientation will be vertical.
-    - `horizontalEditGradient` ,
-        - Default value: `true`
-        - When set to `true`, the gradient brush of the Tile's edit menu will be in a horizontal orientation.
-        - When set to `false`, the orientation will be vertical.
-    - `bigBgImages`
+        - When enabled (`true`), the application will attempt to load Icon and Hero images from
+          [SteamGridDB](https://www.steamgriddb.com/)
+        - When disabled (`false`), the images will be loaded directly from the executable of the selected application.
+    - `SteamGridDB API key`
+        - Default value: `empty`
+        - When provided, this key enables the integration with [SteamGridDB](https://www.steamgriddb.com/), allowing the
+          application to retrieve assets from the SteamGridDB service.
+    - `Quick Add`
         - Default value: `false`
-        - When set to `true`, the background blurred image of the icon is wider
-    - `dataNeedsUpdating`
-        - Default value: `true`
-        - When set to `true`, the app will prompt the user to update legacy time data
-
+        - When disabled (`false`), the application will prompt the user with a basic configuration menu after loading
+          an executable.
+        - When enabled (`true`), the executable will be added with default values without prompting for configuration.
+    - `Performance Mode`
+        - Default value: `false`
+        - When enabled (`true`), the application will perform reduced animations to improve performance, particularly
+          useful for lower-end systems.
+    - `Backup On Exit`
+        - Default value: `false`
+        - When enabled (`true`), the application will create a backup of the currently loaded data file under
+          `%USERPROFILE%\Documents\Gameplay Time Tracker\Backup Data\` upon exiting.
+    - `Display`
+        - Default value: `Horizontal`
+        - Specifies the layout of the application.
+        - Currently available options: `Horizontal`,`Vertical`, `Compact`
+    - `Save Frequency`
+        - Default value: `1`
+        - Specifies the interval, in minutes, at which the application will save data to the file.
+    <p align="center">
+        <img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="240"/>   
+    </p>
 
 - **Themes**
-    - `selectedTheme`
-        - Default value: `Default`
-        - Specifies the name of the theme to load on startup.
-    - `themeList`
-        - A list of themes, each containing a unique name and a set of colors for different UI components.
-        - By default, three themes are included:
-            - **Default**: A dark-themed design.
-            - **Pink**: A vibrant pink-themed design.
-            - **Custom**: A placeholder for user-defined customization.
-- **Menus**
-    - Preferences
-        - All the previously mentioned settings can be configured here.
-        - A backup can be created, that will be stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Backup Data\`
-        - Restoring backup happens by selecting a previously saved backup.
-    - Themes
-        - Clicking the buttons allows the user to quickly switch the colors of the corresponding element.
-        - Theme updates dynamically as the user changes the colors.
-
-<p align="center">
-	<img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="240"/>
-</p>
-
-<p align="center">
-<img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="240"/>
-</p>
-
-<p align="center">
-<img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="240"/>
-</p>
-
-<p align="center">
-<img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="240"/>
-</p>
-
-If a theme or its colors are missing from the configuration file, the application will regenerate default themes to
-ensure proper functionality.
-
-Each theme contains the following customizable color properties:
-
-Note: Only the `Edit` and `Remove` buttons are using the specified color values at the moment.
+    - Users can specify the color scheme of the application.
+    - Each color component of the theme can be individually configured through the user interface.
+    - Default themes: `Dark`, `Pink`, `Custom`.
+    - If a theme is deleted from the settings file, it will be automatically recreated using the default color values.
+    - Currently available colors:
 
 | Property          | Description                                  | Example Value |
 |-------------------|----------------------------------------------|---------------|
@@ -104,40 +86,80 @@ Note: Only the `Edit` and `Remove` buttons are using the specified color values 
 | `Shadow`          | Currently not in use.                        | `"#FF151515"` | 
 | `Transparent`     | Currently not in use.                        | `"#00000000"` | 
 
-## Data
-
-Each monitored application is tracked with the following properties:
 <p align="center">
-	<img alt="Editing game" src="https://imgur.com/iyZ431H.png" width="500"/>
+    <img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="240"/>
 </p>
 
+- **Backup**
+    - Users can create and load backup data files.
+    - When selecting a backup file, its contents will be displayed to assist in identifying and choosing the correct
+      file.
+    <p align="center">
+        <img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="240"/>
+    </p>
+
+- **Remote Machine**
+    - Users have the option to enable remote saving functionality.
+    - To configure a remote machine, the `Address`, `Port`, `User` and `Password` must be provided.
+    - A remote folder must also be specified to allow saves to be uploaded to the remote machine.
+    - After configuring the remote machine, users can test the connection by using the provided test button.
+    <p align="center">
+        <img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="240"/>
+    </p>
+
+## Data Configuration
+
+Each monitored application is tracked with the following attributes:
+
 <p align="center">
-	<img alt="Stats graph" src="https://imgur.com/XQmGRW4.png" width="200"/>
+	<img alt="Editing Menu" src="https://imgur.com/iyZ431H.png" width="500"/>
 </p>
 
-- `gameName`
-    - String representation of the application's name.
-    - This is initially gathered from the _File Description_ of the executable, if available.
-- `totalTime`
-    - An integer representing the total time the application has been open, measured in minutes.
-- `lastPlayedTime`
-    - An integer representing the duration of the most recent session, measured in minutes.
+- **Name**
+    - The name of the application as a string.
+    - Initially, this value is derived from the `File Description` of the executable, if available.
+- **Total Playtime**
+    - An integer array representing the total duration the application has been open.
+    - To ensure compatibility, the time format from previous versions, which used double precision, will be
+      automatically converted.
+- **Last Playtime**
+    - An integer array representing the duration of the most recent application session.
     - This value is automatically updated and cannot be edited manually.
-- `iconPath`
-    - A string specifying the path to a `.png` icon extracted from the application's executable.
-    - If no icon is extracted or the path is invalid, a fallback image (`assets\no_icon.png`) is used.
-    - Icon images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Saved Icons\`.
-- `exePath`
+- **Path**
     - A string specifying the full path to the application's executable file.
-    - The Launch button will only be enabled if the path exists or the file is an executable.
-- `arguments`
-    - A string specifying launch parameters for the executable. Arguments are extracted from shortcut
-      files upon addition.
+    - The Launch button will be enabled only if the specified path exists or the file is a valid an executable.
+- **Arguments**
+    - A string that contains any launch parameters for the executable.
+    - Arguments are automatically extracted from shortcut files during the application's addition.
+- **Icon Path** and **Hero Path**
+    - Strings specifying the paths to `.png` files representing the application’s icon and hero image.
+    - Icons are either extracted from the application's executable or retrieved from `SteamGridDB`.
+    - If no valid icon is found or the path is invalid, a default image (`Assets/DefaultIcon.png`) will be used as a
+      fallback.
+    - If retrieving assets from `SteamGridDB` fails, or if `Prefer SteamGridDB Images` is disabled, a Hero image will be
+      generated from the Icon image.
+    - All images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Images\`.
+- **Statistics Graph**
+    - By pressing the `Show Stats` button, a graph displaying the playtime data of the last 7 days will be shown.
+    <p align="center">
+        <img alt="Stats graph" src="https://imgur.com/XQmGRW4.png" width="240"/>
+    </p>
 
-### Editing
+### Remote Backup Configuration
 
-- All properties except `lastPlayedTime` and `dataNeedsUpdating` can be modified via the application's edit menu.
-- Clicking the `Open Folder` button, the user can open the folder containing the executable file previously chosen.
+- Each loaded application can be individually configure for creating backups.
+- **Local Save Path**
+    - Specifies the directory where the application's save files are stored.
+- **Save if session longer**
+    - Defines the minimum session duration (in minutes) required for a backup to be created.
+    - A threshold of 5 minutes is applied to this calculation.
+- **Retentions Period**
+    - Specifies the number of days save files will be retained before being deleted.
+- **Backup Method: `Manual`** or **`Automatic`**
+    - Enabling the `Remote Backup` option allows automatic backups when a session ends.
+    - Manual backups can be performed at any time, regardless of the session duration.
+- **Restoring Saves**
+    - Save files can be retrieved from the remote machine by selecting an available backup entry.
 
 ## License
 
@@ -145,5 +167,4 @@ This project is licensed under the [GNU General Public License v3.0](https://www
 
 You are free to use, modify, and distribute this software under the terms of the GPL. See the [LICENSE](./LICENSE) file
 for full details.
-
 
