@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Threading;
 using GameplayTimeTracker.UI.Menu.Content;
 
 namespace GameplayTimeTracker.Menu.Content;
 
 public class RemoteMenu : MenuContent
 {
-    private StackPanel RemoteConfigPanel;
+    private TextBlock ConnectionBlock;
 
     public RemoteMenu()
     {
-        RemoteConfigPanel = new StackPanel();
-        _stackPanel.Children.Add(RemoteConfigPanel);
-
         TextBlock MainTitle =
             UIHelper.CreateTextBlock("Remote Saving", hA: HorizontalAlignment.Center, fontSize: 17);
         MainTitle.Margin = new Thickness(0, 15, 0, -5);
-        RemoteConfigPanel.Children.Add(MainTitle);
+        _stackPanel.Children.Add(MainTitle);
 
         PrefEntry savingEnabledPref = new PrefEntry("Remote Save Enabled", Common.Settings.IsRemoteSavingEnabled, 270);
         Binding savingEnabledBinding = new Binding("IsRemoteSavingEnabled")
@@ -28,35 +27,87 @@ public class RemoteMenu : MenuContent
         BindingOperations.SetBinding(savingEnabledPref.toggleButton, CustomToggleButton.IsToggledProperty,
             savingEnabledBinding);
         BindingHelper.SetColorBinding(savingEnabledPref.textBlock, ForegroundProperty, "Font");
-        RemoteConfigPanel.Children.Add(savingEnabledPref);
+        _stackPanel.Children.Add(savingEnabledPref);
 
         TextBlock RemoteMachineTitle =
             UIHelper.CreateTextBlock("Remote Machine", hA: HorizontalAlignment.Center, fontSize: 17);
         RemoteMachineTitle.Margin = new Thickness(0, 5, 0, 5);
-        RemoteConfigPanel.Children.Add(RemoteMachineTitle);
+        _stackPanel.Children.Add(RemoteMachineTitle);
         Thickness prefMargin = new Thickness(10, 0, 10, 0);
         double prefBoxWidth = 140;
         StackPanel row1 = new StackPanel
             { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
         CreatePrefEntry(row1, "Address", "RemoteMachine.Address", margin: prefMargin, boxWidth: prefBoxWidth);
         CreatePrefEntry(row1, "Port", "RemoteMachine.Port", margin: prefMargin, boxWidth: prefBoxWidth);
-        RemoteConfigPanel.Children.Add(row1);
+        _stackPanel.Children.Add(row1);
 
         StackPanel row2 = new StackPanel
             { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
         CreatePrefEntry(row2, "User", "RemoteMachine.User", margin: prefMargin, boxWidth: prefBoxWidth);
         CreatePrefEntry(row2, "Password", "RemoteMachine.Password", margin: prefMargin, boxWidth: prefBoxWidth);
-        RemoteConfigPanel.Children.Add(row2);
+        _stackPanel.Children.Add(row2);
 
-        CreatePrefEntry(RemoteConfigPanel, "Remote folder", "RemoteMachine.RemoteFolder", new Thickness(0, 0, 0, 15));
+        CreatePrefEntry(_stackPanel, "Remote folder", "RemoteMachine.RemoteFolder", new Thickness(0, 0, 0, 0));
 
-        // TextBlock PreferencesTitle =
-        //     UIHelper.CreateTextBlock("Backup Preferences", hA: HorizontalAlignment.Center, fontSize: 17);
-        // PreferencesTitle.Margin = new Thickness(0, 0, 0, 5);
-        // RemoteConfigPanel.Children.Add(PreferencesTitle);
-        // CreatePrefEntry(RemoteConfigPanel, "Save if session longer (m)", "RemoteMachine.BackupIfSessionLonger",
-        //     new Thickness(0, 0, 0, 20));
+        ConnectionBlock = UIHelper.CreateTextBlock("", hA: HorizontalAlignment.Center, fontSize: 17);
+        ConnectionBlock.Margin = new Thickness(0, 5, 0, 5);
+        BindingHelper.SetColorBinding(ConnectionBlock, ForegroundProperty, "Font");
+        _stackPanel.Children.Add(ConnectionBlock);
+
+        CustomButton testConnectionButton = new CustomButton(text: "Test Connection", w: 140, h: 40);
+        testConnectionButton.Margin = new Thickness(0, 0, 0, 15);
+        testConnectionButton.Click += ShowConnectedText;
+        _stackPanel.Children.Add(testConnectionButton);
     }
+
+    private async void ShowConnectedText(object sender, RoutedEventArgs e)
+    {
+        if (sender is CustomButton button)
+        {
+            ConnectionBlock.Foreground = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString(
+                    Common.Settings.CurrentTheme.Colors["Font"]));
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+            dispatcherTimer.Tick += (_, _) =>
+            {
+                ConnectionBlock.Foreground = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString(
+                        Common.Settings.CurrentTheme.Colors["Font"]));
+                ConnectionBlock.Text = string.Empty;
+                dispatcherTimer.Stop();
+            };
+            button.Disable();
+            try
+            {
+                ConnectionBlock.Text = "Testing connection...";
+
+                bool success = await Task.Run(() => RemoteController.TestSftpConnection());
+
+                dispatcherTimer.Start();
+                string message = success ? "Connection successful!" : "Connection could not be established!";
+                ConnectionBlock.Text = message;
+                ConnectionBlock.Foreground =
+                    success
+                        ? new SolidColorBrush(
+                            (Color)ColorConverter.ConvertFromString(
+                                Common.Settings.CurrentTheme.Colors["Positive Button"]))
+                        : new SolidColorBrush(ColorHelper.AdjustBrightness(
+                            (Color)ColorConverter.ConvertFromString(
+                                Common.Settings.CurrentTheme.Colors["Negative Button"]),
+                            1.2));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                button.Enable();
+            }
+        }
+    }
+
 
     private void CreatePrefEntry(Panel parent, string blockText = "", string bindPath = "", Thickness margin = new(),
         object? bindSource = null, double boxWidth = 200)

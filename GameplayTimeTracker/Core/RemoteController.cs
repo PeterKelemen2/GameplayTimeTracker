@@ -14,6 +14,41 @@ public static class RemoteController
 {
     private static double delayDuration = 10;
 
+    public static async Task<bool> TestSftpConnection()
+    {
+        var remote = Common.Settings.RemoteMachine;
+
+        if (!await IsRemoteMachineAvailableAsync())
+        {
+            Console.WriteLine("Remote machine is unreachable.");
+            return false;
+        }
+
+        var sftp = new SftpClient(remote.Address, remote.Port, remote.User, remote.Password);
+
+        try
+        {
+            Console.WriteLine($"Attempting SFTP connection to {remote.Address}:{remote.Port}...");
+            sftp.Connect();
+            return sftp.IsConnected;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"SFTP connection failed: {ex.Message}");
+            return false;
+        }
+        finally
+        {
+            if (sftp.IsConnected)
+            {
+                sftp.Disconnect();
+            }
+
+            sftp.Dispose();
+        }
+    }
+
+
     public static async Task<bool> IsRemoteMachineAvailableAsync()
     {
         var remote = Common.Settings.RemoteMachine;
@@ -27,12 +62,6 @@ public static class RemoteController
                 var completedTask = await Task.WhenAny(connectTask, timeoutTask);
 
                 Console.WriteLine($"Connected: {tcpClient.Connected}");
-                // Application.Current.Dispatcher.Invoke(() =>
-                // {
-                //     string message = tcpClient.Connected ? "available" : "unavailable";
-                //     EventPopup machineAvailable = new EventPopup($"Remote {message}!",
-                //         tcpClient.Connected ? EventType.Positive : EventType.Negative);
-                // });
                 return completedTask == connectTask && tcpClient.Connected;
             }
         }
