@@ -60,7 +60,7 @@ public class EventPopup : UserControl
         {
             Text = text,
             HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center,
-            FontSize = Common.TitleFontSize, 
+            FontSize = Common.TitleFontSize,
             FontWeight = FontWeights.SemiBold,
             TextWrapping = TextWrapping.Wrap,
             Effect = AppEffects.dropShadowText, Margin = new Thickness(10, 0, 0, 8),

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using GameplayTimeTracker.Menu;
 using Gdk;
 
@@ -18,10 +19,6 @@ public static class Launcher
             if (entry.IsRunning)
             {
                 Console.WriteLine("Already running");
-                // var alreadyRunningPrompt = new PromptMenu(
-                //     width: 300, textArray: new[] { entry.Name, "is already running." }, boldArray: new[] { true, false }
-                // );
-                // alreadyRunningPrompt.Open();
                 EventPopup alreadyRunning = new EventPopup($" {entry.Name} already running!");
                 return;
             }
@@ -58,12 +55,18 @@ public static class Launcher
                 if (process != null)
                 {
                     Console.WriteLine($"Launched {gameName}. Waiting for it to exit...");
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        EventPopup startedRunning = new EventPopup($" {entry.Name} launched!");
+                    });
+
                     process.WaitForExit();
 
                     // Notify the user on the UI thread
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         Console.WriteLine($"{gameName} has exited. Exit code: {process.ExitCode}");
+                        EventPopup stoppedRunning = new EventPopup($" {entry.Name} closed!");
                     });
                 }
                 else
@@ -72,8 +75,7 @@ public static class Launcher
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         Console.WriteLine($"Failed to start {gameName}");
-                        // PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {gameName}", type: PopupType.OK);
-                        // popupMenu.OpenMenu();
+                        EventPopup failedToRun = new EventPopup($" {entry.Name} failed to launch!", EventType.Negative);
                     });
                 }
             });
@@ -100,13 +102,9 @@ public static class Launcher
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex}");
-            // Ensure error messages are shown on the UI thread
             Application.Current.Dispatcher.Invoke(() =>
             {
-                // MessageBox.Show($"Could not launch {GameName}\n\n{ex.Message}", "Something went wrong!",
-                //     MessageBoxButton.OK, MessageBoxImage.Error);
-                // PopupMenu popupMenu = new PopupMenu(text: $"Failed to start {GameName}", type: PopupType.OK);
-                // popupMenu.OpenMenu();
+                EventPopup failedToRun = new EventPopup($" {entry.Name} failed to launch!", EventType.Negative);
             });
         }
     }
