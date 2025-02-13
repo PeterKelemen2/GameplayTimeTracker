@@ -188,7 +188,7 @@ public class RemoteContent : UserControl
             var remote = Common.Settings.RemoteMachine;
             List<string> remoteContent = new List<string>();
 
-            if (await RemoteController.IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+            if (await RemoteController.IsRemoteMachineAvailableAsync())
             {
                 remoteContent = await RemoteController
                     .ListGameSubfoldersAsync(remote.RemoteFolder, _entry.Name).ConfigureAwait(false);

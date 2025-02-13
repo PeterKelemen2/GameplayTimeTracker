@@ -51,12 +51,13 @@ public partial class MainWindow : Window
         LoadAndShowData();
         SetUpFooter();
         StartCheckingEntries();
+        CheckRemote();
 
         Common.TaskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
         Common.TaskbarIcon.Visibility = Visibility.Visible;
         TaskbarManager.UpdateTrayToolTip();
         TaskbarManager.UpdateTrayEntries();
-        
+
         if (Common.Settings.SGDBApiKey.Length == 0 && !Common.Settings.DontShowApiKeyPrompt)
         {
             var sgdbApiKeyPrompt = new PromptMenu(
@@ -89,6 +90,17 @@ public partial class MainWindow : Window
             };
 
             sgdbApiKeyPrompt.Open();
+        }
+    }
+
+    private async void CheckRemote()
+    {
+        await Task.Delay(1000);
+        bool isAvailable = await RemoteController.IsRemoteMachineAvailableAsync();
+        Console.WriteLine($"Remote machine available: {isAvailable}");
+        if (!isAvailable)
+        {
+            EventPopup machineAvailable = new EventPopup($"Remote unavailable!", EventType.Negative);
         }
     }
 

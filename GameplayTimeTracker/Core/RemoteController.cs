@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Renci.SshNet;
 
 namespace GameplayTimeTracker;
@@ -13,18 +14,25 @@ public static class RemoteController
 {
     private static double delayDuration = 10;
 
-    public static async Task<bool> IsRemoteMachineAvailableAsync(string address, int port)
+    public static async Task<bool> IsRemoteMachineAvailableAsync()
     {
+        var remote = Common.Settings.RemoteMachine;
         try
         {
             using (var tcpClient = new TcpClient())
             {
-                Console.WriteLine($"Connecting to {address}:{port}");
-                var connectTask = tcpClient.ConnectAsync(address, port);
+                Console.WriteLine($"Connecting to {remote.Address}:{remote.Port}");
+                var connectTask = tcpClient.ConnectAsync(remote.Address, remote.Port);
                 var timeoutTask = Task.Delay(3000); // Timeout: 3 sec
                 var completedTask = await Task.WhenAny(connectTask, timeoutTask);
 
                 Console.WriteLine($"Connected: {tcpClient.Connected}");
+                // Application.Current.Dispatcher.Invoke(() =>
+                // {
+                //     string message = tcpClient.Connected ? "available" : "unavailable";
+                //     EventPopup machineAvailable = new EventPopup($"Remote {message}!",
+                //         tcpClient.Connected ? EventType.Positive : EventType.Negative);
+                // });
                 return completedTask == connectTask && tcpClient.Connected;
             }
         }
@@ -38,7 +46,7 @@ public static class RemoteController
     {
         var remote = Common.Settings.RemoteMachine;
 
-        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        if (!await IsRemoteMachineAvailableAsync())
         {
             Console.WriteLine("Remote machine is unreachable.");
             return false;
@@ -55,6 +63,10 @@ public static class RemoteController
                 await UploadDirectoryRecursiveAsync(sftp, localFolderPath, remoteFolderPath);
 
                 Console.WriteLine("Folder upload complete.");
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    EventPopup stoppedRunning = new EventPopup($"Upload successful!");
+                });
                 return true;
             }
             catch (Exception ex)
@@ -127,7 +139,7 @@ public static class RemoteController
     public static async Task<bool> DownloadFolderAsync(string remoteFolderPath, string localFolderPath)
     {
         var remote = Common.Settings.RemoteMachine;
-        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        if (!await IsRemoteMachineAvailableAsync())
         {
             Console.WriteLine("Remote machine is unreachable.");
             return false;
@@ -148,6 +160,10 @@ public static class RemoteController
                 await DownloadDirectoryRecursiveAsync(sftp, remoteFolderPath, localFolderPath);
 
                 Console.WriteLine("Folder download complete.");
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    EventPopup stoppedRunning = new EventPopup($"Download successful!");
+                });
                 return true;
             }
             catch (Exception ex)
@@ -330,7 +346,7 @@ public static class RemoteController
     {
         var remote = Common.Settings.RemoteMachine;
 
-        if (!await IsRemoteMachineAvailableAsync(remote.Address, remote.Port))
+        if (!await IsRemoteMachineAvailableAsync())
         {
             Console.WriteLine("Remote machine is unreachable.");
             return;
