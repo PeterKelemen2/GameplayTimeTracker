@@ -59,7 +59,7 @@ There are two main parts that can be set by the user both on the user interface 
         - Default value: `1`
         - Specifies the interval, in minutes, at which the application will save data to the file.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="400"/>   
+        <img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="350"/>   
     </p>
 
 - **Themes**
@@ -87,7 +87,7 @@ There are two main parts that can be set by the user both on the user interface 
     | `Transparent`     | Currently not in use.                        | `"#00000000"` | 
 
 <p align="center">
-    <img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="400"/>
+    <img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="350"/>
 </p>
 
 - **Backup**
@@ -95,7 +95,7 @@ There are two main parts that can be set by the user both on the user interface 
     - When selecting a backup file, its contents will be displayed to assist in identifying and choosing the correct
       file.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="400"/>
+        <img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="350"/>
     </p>
 
 - **Remote Machine**
@@ -104,7 +104,7 @@ There are two main parts that can be set by the user both on the user interface 
     - A remote folder must also be specified to allow saves to be uploaded to the remote machine.
     - After configuring the remote machine, users can test the connection by using the provided test button.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="400"/>
+        <img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="350"/>
     </p>
 
 ## Data Configuration
