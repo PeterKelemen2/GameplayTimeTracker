@@ -16,7 +16,7 @@ version `2.0.0`, as this functionality has been removed in the rewritten version
 
 
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/1jRT6Vo.png" width="500"/>
+	<img alt="Screenshot" src="https://imgur.com/b0lroBC.png" width="500"/>
 </p>
 
 ## Configuration
@@ -65,8 +65,19 @@ There are two main parts that can be set by the user both on the user interface 
         - Theme updates dynamically as the user changes the colors.
 
 <p align="center">
-	<img alt="Screenshot" src="https://i.imgur.com/a2678sj.png" width="240" style="margin-right: 20px;"/>
-	<img alt="Screenshot" src="https://i.imgur.com/nnGBVMk.png" width="240"/>
+	<img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="240"/>
+</p>
+
+<p align="center">
+<img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="240"/>
+</p>
+
+<p align="center">
+<img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="240"/>
+</p>
+
+<p align="center">
+<img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="240"/>
 </p>
 
 If a theme or its colors are missing from the configuration file, the application will regenerate default themes to
@@ -76,31 +87,32 @@ Each theme contains the following customizable color properties:
 
 Note: Only the `Edit` and `Remove` buttons are using the specified color values at the moment.
 
-| Property              | Description                                  | Example Value |
-|-----------------------|----------------------------------------------|---------------|
-| `bgColor`             | Background color of the application.         | `"#1E2030"`   | 
-| `tileColor1`          | First gradient color of a tile.              | `"#414769"`   | 
-| `tileColor2`          | Second gradient color of a tile.             | `"#2E324A"`   | 
-| `leftColor`           | Left-side gradient color of a progress bar.  | `"#89ACF2"`   | 
-| `rightColor`          | Right-side gradient color of a progress bar. | `"#B7BDF8"`   |
-| `editColor1`          | First gradient color of and edit dropdown.   | `"#7DD6EB"`   | 
-| `editColor2`          | Second highlight color of and edit dropdown. | `"#7DD6EB"`   |
-| `shadowColor`         | Shadow color under a tile.                   | `"#151515"`   | 
-| `fontColor`           | Text color.                                  | `"#DAE4FF"`   | 
-| `runningColor`        | Highlight text color for running apps.       | `"#C3E88D"`   |
-| `footerColor`         | Footer bar color.                            | `"#90EE90"`   |
-| `button`              | Normal button color.                         | `"#FF3BC9E3"` |
-| `buttonHover`         | Normal button hover color.                   | `"#FFADD8E6"` |
-| `positiveButton`      | Positive button color.                       | `"#FF90EE90"` |
-| `positiveButtonHover` | Positive button hover color.                 | `"#FFB5FFB5"` |
-| `negativeButton`      | Negative button color.                       | `"#FFED0C0C"` |
-| `negativeButtonHover` | Negative button hover color.                 | `"#FFE33B3B"` |
+| Property          | Description                                  | Example Value |
+|-------------------|----------------------------------------------|---------------|
+| `Background`      | Background color of the application.         | `"#1E2030"`   | 
+| `Card 1`          | First gradient color of a card.              | `"#414769"`   | 
+| `Card 2`          | Second gradient color of a card.             | `"#2E324A"`   | 
+| `Progress Bar 1`  | Left-side gradient color of a progress bar.  | `"#89ACF2"`   | 
+| `Progress Bar 2`  | Right-side gradient color of a progress bar. | `"#B7BDF8"`   |
+| `Font`            | Text color.                                  | `"#DAE4FF"`   | 
+| `Running`         | Highlight text color for running apps.       | `"#C3E88D"`   |
+| `Footer`          | Footer bar color.                            | `"#FF3377A6"` |
+| `Footer Font`     | Footer bar font color.                       | `"#FFDAE4FF"` |
+| `Button`          | Normal button color.                         | `"#FF3BC9E3"` |
+| `Positive Button` | Positive button color.                       | `"#FF90EE90"` |
+| `Negative Button` | Negative button color.                       | `"#FFED0C0C"` |
+| `Shadow`          | Currently not in use.                        | `"#FF151515"` | 
+| `Transparent`     | Currently not in use.                        | `"#00000000"` | 
 
 ## Data
 
 Each monitored application is tracked with the following properties:
 <p align="center">
-	<img alt="Editing using the Custom theme" src="https://i.imgur.com/E12tyFx.png" width="500"/>
+	<img alt="Editing game" src="https://imgur.com/iyZ431H.png" width="500"/>
+</p>
+
+<p align="center">
+	<img alt="Stats graph" src="https://imgur.com/XQmGRW4.png" width="200"/>
 </p>
 
 - `gameName`
