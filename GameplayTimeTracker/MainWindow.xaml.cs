@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using GameplayTimeTracker.Helper;
 using GameplayTimeTracker.Menu;
@@ -53,14 +54,6 @@ public partial class MainWindow : Window
         SetUpFooter();
         StartCheckingEntries();
         CheckRemote();
-
-        List<EntryProxy> entryProxies = DataHandler.GetEntryProxiesFromFile(
-            "C:\\Users\\Peti\\Documents\\Gameplay Time Tracker\\Backup Data\\backup-2025-2-12-21-9-13.json");
-        // foreach (EntryProxy entryProxy in entryProxies)
-        // {
-        //     Console.WriteLine(
-        //         $"EntryProxy -- {entryProxy.Name} | {entryProxy.GetPrettyTime()}");
-        // }
 
         Common.TaskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
         Common.TaskbarIcon.Visibility = Visibility.Visible;
@@ -224,6 +217,9 @@ public partial class MainWindow : Window
         {
             e.Cancel = true;
 
+            bool toScale = true;
+            if (MainGrid.Effect is BlurEffect blurEffect) toScale = blurEffect.Radius < 1;
+
             var exitPrompt = new PromptMenu(
                 width: 300,
                 textArray: new[]
@@ -232,9 +228,10 @@ public partial class MainWindow : Window
                 },
                 boldArray: new[] { true, },
                 type: PromptMenu.PromptType.YesNo,
-                yesHandler: ExitButton_YesClick
-                // noHandler: (s, e) => { Console.WriteLine("Closing canceled."); }
+                yesHandler: ExitButton_YesClick,
+                toScale: toScale
             );
+
             exitPrompt.Open();
         }
         catch (Exception ex)
