@@ -222,7 +222,6 @@ public static class Common
 
     public static bool IsEntryEligibleForBackup(Entry entry)
     {
-        // int targetMinutes = Settings.RemoteMachine.BackupIfSessionLonger;
         int targetMinutes = entry.RemoteSaveAfterMinutes;
         int[] targetTime = NormalizeTime(GetTimeFromMinutes(targetMinutes));
 

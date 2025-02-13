@@ -398,7 +398,7 @@ namespace GameplayTimeTracker
         {
             if (_isRemoteSaveEnabled &&
                 Common.Settings.IsRemoteSavingEnabled &&
-                // Common.IsEntryEligibleForBackup(this) &&
+                Common.IsEntryEligibleForBackup(this) &&
                 !string.IsNullOrWhiteSpace(_localSavePath))
             {
                 RemoteSave();
