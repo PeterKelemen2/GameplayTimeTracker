@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,6 +53,14 @@ public partial class MainWindow : Window
         SetUpFooter();
         StartCheckingEntries();
         CheckRemote();
+
+        List<EntryProxy> entryProxies = DataHandler.GetEntryProxiesFromFile(
+            "C:\\Users\\Peti\\Documents\\Gameplay Time Tracker\\Backup Data\\backup-2025-2-12-21-9-13.json");
+        // foreach (EntryProxy entryProxy in entryProxies)
+        // {
+        //     Console.WriteLine(
+        //         $"EntryProxy -- {entryProxy.Name} | {entryProxy.GetPrettyTime()}");
+        // }
 
         Common.TaskbarIcon = (TaskbarIcon)FindResource("AppTaskbarIcon");
         Common.TaskbarIcon.Visibility = Visibility.Visible;

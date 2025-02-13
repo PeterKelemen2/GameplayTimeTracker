@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -78,6 +79,19 @@ public static class Common
             if (IsArrayEqual(entry.LastPlay, empty) && entry.LastTime > 0.0)
             {
                 entry.LastPlay = Common.GetArrayFromDoubleTime(entry.LastTime);
+            }
+        }
+    }
+
+    public static void CheckForOldTimeProxy(List<EntryProxy> entries)
+    {
+        int[] empty = { 0, 0, 0 };
+
+        foreach (var entry in entries)
+        {
+            if (IsArrayEqual(entry.TotalPlay, empty) && entry.TotalPlayOld > 0.0)
+            {
+                entry.TotalPlay = Common.GetArrayFromDoubleTime(entry.TotalPlayOld);
             }
         }
     }

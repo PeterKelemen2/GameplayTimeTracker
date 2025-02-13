@@ -13,6 +13,20 @@ namespace GameplayTimeTracker;
 
 public static class DataHandler
 {
+    public static List<EntryProxy> GetEntryProxiesFromFile(string filePath)
+    {
+        List<EntryProxy> entries = new();
+        if (File.Exists(filePath))
+        {
+            string jsonString = File.ReadAllText(filePath);
+            if (string.IsNullOrWhiteSpace(jsonString)) return entries;
+
+            entries = JsonSerializer.Deserialize<List<EntryProxy>>(jsonString);
+        }
+
+        return entries;
+    }
+
     public static ObservableCollection<Entry> GetEntriesFromFile(string filePath)
     {
         ObservableCollection<Entry> entries = new();

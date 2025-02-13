@@ -155,9 +155,8 @@ public class BackupMenu : MenuContent
     {
         string path = Path.Combine(AppFiles.BackupDataFolder, backupPath);
 
-        ObservableCollection<Entry> entryList = new();
-        entryList = DataHandler.GetEntriesFromFile(path);
-        Common.CheckForOldTime(entryList);
+        List<EntryProxy> entryList = DataHandler.GetEntryProxiesFromFile(path);
+        Common.CheckForOldTimeProxy(entryList);
         Console.WriteLine($"Found {entryList.Count} entries from {path}");
         backupContentPanel.Children.Clear();
         foreach (var entry in entryList)
@@ -166,7 +165,7 @@ public class BackupMenu : MenuContent
         }
     }
 
-    private void AddEntryToBackupContents(Entry entry)
+    private void AddEntryToBackupContents(EntryProxy entry)
     {
         TextBlock entryBlock = new TextBlock
         {
@@ -239,8 +238,7 @@ public class BackupMenu : MenuContent
 
         try
         {
-            ObservableCollection<Entry> entryList = new();
-            entryList = DataHandler.GetEntriesFromFile(backupPath);
+            List<EntryProxy> entryList = DataHandler.GetEntryProxiesFromFile(backupPath);
             if (entryList.Count > 0) return true;
         }
         catch (Exception ex)
