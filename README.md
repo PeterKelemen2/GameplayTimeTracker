@@ -59,7 +59,7 @@ There are two main parts that can be set by the user both on the user interface 
         - Default value: `1`
         - Specifies the interval, in minutes, at which the application will save data to the file.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="240"/>   
+        <img alt="Screenshot" src="https://imgur.com/qwEaPfG.png" width="400"/>   
     </p>
 
 - **Themes**
@@ -69,25 +69,25 @@ There are two main parts that can be set by the user both on the user interface 
     - If a theme is deleted from the settings file, it will be automatically recreated using the default color values.
     - Currently available colors:
 
-| Property          | Description                                  | Example Value |
-|-------------------|----------------------------------------------|---------------|
-| `Background`      | Background color of the application.         | `"#1E2030"`   | 
-| `Card 1`          | First gradient color of a card.              | `"#414769"`   | 
-| `Card 2`          | Second gradient color of a card.             | `"#2E324A"`   | 
-| `Progress Bar 1`  | Left-side gradient color of a progress bar.  | `"#89ACF2"`   | 
-| `Progress Bar 2`  | Right-side gradient color of a progress bar. | `"#B7BDF8"`   |
-| `Font`            | Text color.                                  | `"#DAE4FF"`   | 
-| `Running`         | Highlight text color for running apps.       | `"#C3E88D"`   |
-| `Footer`          | Footer bar color.                            | `"#FF3377A6"` |
-| `Footer Font`     | Footer bar font color.                       | `"#FFDAE4FF"` |
-| `Button`          | Normal button color.                         | `"#FF3BC9E3"` |
-| `Positive Button` | Positive button color.                       | `"#FF90EE90"` |
-| `Negative Button` | Negative button color.                       | `"#FFED0C0C"` |
-| `Shadow`          | Currently not in use.                        | `"#FF151515"` | 
-| `Transparent`     | Currently not in use.                        | `"#00000000"` | 
+    | Property          | Description                                  | Example Value |
+    |-------------------|----------------------------------------------|---------------|
+    | `Background`      | Background color of the application.         | `"#1E2030"`   | 
+    | `Card 1`          | First gradient color of a card.              | `"#414769"`   | 
+    | `Card 2`          | Second gradient color of a card.             | `"#2E324A"`   | 
+    | `Progress Bar 1`  | Left-side gradient color of a progress bar.  | `"#89ACF2"`   | 
+    | `Progress Bar 2`  | Right-side gradient color of a progress bar. | `"#B7BDF8"`   |
+    | `Font`            | Text color.                                  | `"#DAE4FF"`   | 
+    | `Running`         | Highlight text color for running apps.       | `"#C3E88D"`   |
+    | `Footer`          | Footer bar color.                            | `"#FF3377A6"` |
+    | `Footer Font`     | Footer bar font color.                       | `"#FFDAE4FF"` |
+    | `Button`          | Normal button color.                         | `"#FF3BC9E3"` |
+    | `Positive Button` | Positive button color.                       | `"#FF90EE90"` |
+    | `Negative Button` | Negative button color.                       | `"#FFED0C0C"` |
+    | `Shadow`          | Currently not in use.                        | `"#FF151515"` | 
+    | `Transparent`     | Currently not in use.                        | `"#00000000"` | 
 
 <p align="center">
-    <img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="240"/>
+    <img alt="Screenshot" src="https://imgur.com/vKxtCzd.png" width="400"/>
 </p>
 
 - **Backup**
@@ -95,7 +95,7 @@ There are two main parts that can be set by the user both on the user interface 
     - When selecting a backup file, its contents will be displayed to assist in identifying and choosing the correct
       file.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="240"/>
+        <img alt="Screenshot" src="https://imgur.com/OLDWa8J.png" width="400"/>
     </p>
 
 - **Remote Machine**
@@ -104,7 +104,7 @@ There are two main parts that can be set by the user both on the user interface 
     - A remote folder must also be specified to allow saves to be uploaded to the remote machine.
     - After configuring the remote machine, users can test the connection by using the provided test button.
     <p align="center">
-        <img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="240"/>
+        <img alt="Screenshot" src="https://imgur.com/Oo0ecNr.png" width="400"/>
     </p>
 
 ## Data Configuration
@@ -142,7 +142,7 @@ Each monitored application is tracked with the following attributes:
 - **Statistics Graph**
     - By pressing the `Show Stats` button, a graph displaying the playtime data of the last 7 days will be shown.
     <p align="center">
-        <img alt="Stats graph" src="https://imgur.com/XQmGRW4.png" width="240"/>
+        <img alt="Stats graph" src="https://imgur.com/XQmGRW4.png" width="400"/>
     </p>
 
 ### Remote Backup Configuration
