@@ -139,6 +139,10 @@ Each monitored application is tracked with the following attributes:
     - If retrieving assets from `SteamGridDB` fails, or if `Prefer SteamGridDB Images` is disabled, a Hero image will be
       generated from the Icon image.
     - All images are stored in `%USERPROFILE%\Documents\Gameplay Time Tracker\Images\`.
+    - Refresh assets using the following options:
+      - `Full SGDB`: Reloads all assets from `SteamGridDB`
+      - `Hero Local`: Generates a hero image from the current icon.
+      - `Icon Local`: Extracts the icon from the executable at the specified path.
 - **Statistics Graph**
     - By pressing the `Show Stats` button, a graph displaying the playtime data of the last 7 days will be shown.
     <p align="center">
