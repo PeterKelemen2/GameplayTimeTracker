@@ -23,31 +23,35 @@ public class EventPopup : UserControl
     private Grid grid;
     private Border gridBorder;
     private Border timeIndicatorBorder;
+    private Border shadowBorder;
     private DispatcherTimer dispatcherTimer;
 
     public EventPopup(string text, EventType eventType = EventType.Positive)
     {
         StackPanel popPanel = Application.Current.MainWindow.FindName("PopPanel") as StackPanel;
 
-        grid = new Grid { Width = W, Height = H, };
+        grid = new Grid { Width = W, Height = H };
 
         gridBorder = new Border
         {
             Child = grid,
-            Effect = AppEffects.DropShadowRectangle, RenderTransform = new TranslateTransform(),
+            RenderTransform = new TranslateTransform(),
             CornerRadius = new CornerRadius(10),
-            ClipToBounds = true,
-            Clip = new RectangleGeometry(new Rect(0, 0, W, H), 10, 10)
+            Clip = new RectangleGeometry(new Rect(0, 0, W, H), 10, 10),
+            Margin = new Thickness(5)
         };
-        BindingHelper.SetColorBinding(gridBorder, BackgroundProperty, "Button");
+
+        shadowBorder = new Border
+        {
+            Effect = AppEffects.DropShadowRectangle, // Apply shadow to this wrapper
+            Child = gridBorder
+        };
 
         timeIndicatorBorder = new Border
         {
             Width = W + 3, Height = 8,
             CornerRadius = new CornerRadius(0, 3, 0, 0),
-            Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
-                (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Button"]),
-                0.7)),
+            Effect = AppEffects.dropShadowText,
             VerticalAlignment = VerticalAlignment.Bottom, HorizontalAlignment = HorizontalAlignment.Left,
         };
         grid.Children.Add(timeIndicatorBorder);
@@ -62,7 +66,23 @@ public class EventPopup : UserControl
         BindingHelper.SetColorBinding(textBlock, TextBlock.ForegroundProperty, "Font");
         grid.Children.Add(textBlock);
 
-        popPanel.Children.Add(gridBorder);
+        switch (eventType)
+        {
+            case EventType.Positive:
+                BindingHelper.SetColorBinding(gridBorder, BackgroundProperty, "Button");
+                timeIndicatorBorder.Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Button"]),
+                    0.7));
+                break;
+            case EventType.Negative:
+                BindingHelper.SetColorBinding(gridBorder, BackgroundProperty, "Negative Button");
+                timeIndicatorBorder.Background = new SolidColorBrush(ColorHelper.AdjustBrightness(
+                    (Color)ColorConverter.ConvertFromString(Common.Settings.CurrentTheme.Colors["Negative Button"]),
+                    0.7));
+                break;
+        }
+
+        popPanel.Children.Add(shadowBorder);
 
         dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(shownDuration) };
         dispatcherTimer.Tick += ClosePopup;
