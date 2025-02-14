@@ -14,7 +14,6 @@ namespace GameplayTimeTracker.Menu;
 public class EditMenu : EntryConfigMenu
 {
     static double buttonSize = 20;
-    static double buttonMargin = (Common.TextBoxHeight - buttonSize) * 0.5;
 
     public EditMenu() : base()
     {
@@ -31,7 +30,9 @@ public class EditMenu : EntryConfigMenu
         stackPanel.Width = width;
 
         StackPanel leftSide = stackPanel;
-        StackPanel rightSide = new StackPanel { Width = width };
+        leftSide.CacheMode = new BitmapCache();
+
+        StackPanel rightSide = new StackPanel { Width = width, CacheMode = new BitmapCache() };
 
         Rectangle separator = new Rectangle
             { Width = 1, RadiusX = 2.5, RadiusY = 2.5 };
@@ -41,9 +42,6 @@ public class EditMenu : EntryConfigMenu
         MenuContentPanel.Children.Add(leftSide);
         MenuContentPanel.Children.Add(separator);
         MenuContentPanel.Children.Add(rightSide);
-        
-        leftSide.CacheMode = new BitmapCache();
-        rightSide.CacheMode = new BitmapCache();
 
         ToScale = toScale;
         TitleTextBlock.FontWeight = FontWeights.Regular;
@@ -131,29 +129,4 @@ public class EditMenu : EntryConfigMenu
         string newPath = Common.GetDialogPath(Common.imageFilter);
         if (!newPath.Equals("")) _entry.HeroPath = newPath;
     }
-
-    // private async void RefreshLocalHero(Entry entry)
-    // {
-    //     await Task.Run(() =>
-    //     {
-    //         Guid guid = Guid.NewGuid();
-    //         string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_hero.png");
-    //         ImageHelper.ScatterImage(entry.IconPath, newImagePath);
-    //
-    //         Dispatcher.Invoke(() => entry.HeroPath = newImagePath);
-    //     });
-    // }
-
-    // private async void RefreshLocalIcon(Entry entry)
-    // {
-    //     await Task.Run(() =>
-    //     {
-    //         Guid guid = Guid.NewGuid();
-    //         string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
-    //         string cloned = string.Copy(newImagePath);
-    //         // bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-    //         ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-    //         Dispatcher.Invoke(() => entry.IconPath = newImagePath);
-    //     });
-    // }
 }

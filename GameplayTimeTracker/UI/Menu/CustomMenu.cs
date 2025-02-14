@@ -39,6 +39,7 @@ public class CustomMenu : UserControl
         {
             Width = RootPanel.ActualWidth,
             Height = RootPanel.ActualHeight,
+            CacheMode = new BitmapCache()
         };
         // ContainerGrid.CacheMode = new BitmapCache();
 

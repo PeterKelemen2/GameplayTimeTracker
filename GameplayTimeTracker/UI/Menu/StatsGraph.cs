@@ -37,6 +37,7 @@ public class StatsGraph : CustomMenu
         MenuContentPanel.Children.Add(titleTextBlock);
 
         Grid grid = new Grid { Width = width, ClipToBounds = false };
+        grid.CacheMode = new BitmapCache();
 
         StackPanel statStackPanel = new StackPanel
         {
