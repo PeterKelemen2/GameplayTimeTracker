@@ -54,6 +54,7 @@ public class CustomMenu : UserControl
             Width = width,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
+            
         };
         MenuContentBorder = new Border
         {
@@ -61,7 +62,8 @@ public class CustomMenu : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             CornerRadius = new CornerRadius(15),
             Child = MenuContentPanel,
-            Effect = AppEffects.DropShadowRectangle
+            Effect = AppEffects.DropShadowRectangle,
+            CacheMode = new BitmapCache()
         };
         ContainerGrid.Children.Add(MenuContentBorder);
         BindingHelper.SetGradientColorBinding(MenuContentBorder, BackgroundProperty, "Card 1", "Card 2",

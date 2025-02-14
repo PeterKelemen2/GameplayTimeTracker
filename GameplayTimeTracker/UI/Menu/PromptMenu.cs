@@ -57,6 +57,9 @@ public class PromptMenu : CustomMenu
                 { Text = ".\n", Foreground = Brushes.Transparent, FontSize = lineSpacing });
         }
 
+        promptTextBlock.CacheMode = new BitmapCache();
+        RenderOptions.SetBitmapScalingMode(promptTextBlock, BitmapScalingMode.HighQuality);
+        
         MenuContentPanel.Children.Add(promptTextBlock);
 
         if (dontShowAgainQuestion)

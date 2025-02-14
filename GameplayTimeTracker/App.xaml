@@ -5,6 +5,11 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style x:Key="RoundedTextBox" TargetType="TextBox">
+            <Setter Property="CacheMode">
+                <Setter.Value>
+                    <BitmapCache />
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">

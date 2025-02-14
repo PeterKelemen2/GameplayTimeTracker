@@ -34,16 +34,13 @@ public class EditMenu : EntryConfigMenu
         StackPanel rightSide = new StackPanel { Width = width };
 
         Rectangle separator = new Rectangle
-            { Width = 1, RadiusX = 2.5, RadiusY = 2.5 };
+            { Width = 1, RadiusX = 2.5, RadiusY = 2.5, CacheMode = new BitmapCache(0.5) };
         BindingHelper.SetColorBinding(separator, Shape.FillProperty, "Font");
         MenuContentPanel.SizeChanged += (s, e) => { separator.Height = MenuContentPanel.RenderSize.Height - 40; };
 
         MenuContentPanel.Children.Add(leftSide);
         MenuContentPanel.Children.Add(separator);
         MenuContentPanel.Children.Add(rightSide);
-        
-        leftSide.CacheMode = new BitmapCache();
-        rightSide.CacheMode = new BitmapCache();
 
         ToScale = toScale;
         TitleTextBlock.FontWeight = FontWeights.Regular;
