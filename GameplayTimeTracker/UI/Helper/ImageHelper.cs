@@ -138,33 +138,17 @@ public class ImageHelper
         if (Path.GetExtension(source).ToLower().Equals(".exe"))
         {
             Console.WriteLine("Getting icon from exe");
-            using var s = File.Create(destination);
-            Console.WriteLine($"Writing icon file to {s}");
-            IconExtractor.Extract1stIconTo(source, s);
+            using (var s = File.Create(destination))
+            {
+                Console.WriteLine($"Writing icon file to {s}");
+                IconExtractor.Extract1stIconTo(source, s);
+            }
         }
 
         if (IsImageFile(source))
         {
             File.Copy(source, destination);
         }
-        // if (!File.Exists(destination) && File.Exists(source))
-        // {
-        //     Console.WriteLine("Destination doesn't exist, source does, getting file");
-        //     Console.WriteLine($"From {source}");
-        //     Console.WriteLine($"Destination: {destination}");
-        //     if (Path.GetExtension(source).ToLower().Equals(".exe"))
-        //     {
-        //         Console.WriteLine("Getting icon from exe");
-        //         using var s = File.Create(destination);
-        //         Console.WriteLine($"Writing icon file to {s}");
-        //         IconExtractor.Extract1stIconTo(source, s);
-        //     }
-        //
-        //     if (IsImageFile(source))
-        //     {
-        //         File.Copy(source, destination);
-        //     }
-        // }
     }
 
     private static bool IsImageFile(string filePath)

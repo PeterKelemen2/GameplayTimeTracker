@@ -17,8 +17,8 @@ public class SGDBFileHandler
             name = new string(name.Where(c => !invalidChars.Contains(c)).ToArray()).Replace(" ", "_") + "_";
         }
 
-        files.Add("icon", Path.Combine(AppFiles.SavedImagesPath, $"{name}{guid}_icon.png"));
-        files.Add("hero", Path.Combine(AppFiles.SavedImagesPath, $"{name}{guid}_hero.png"));
+        files.Add("icon", Path.Combine(AppFiles.SavedImagesPath, $"sgdb_{name}{guid}_icon.png"));
+        files.Add("hero", Path.Combine(AppFiles.SavedImagesPath, $"sgdb_{name}{guid}_hero.png"));
 
         return files;
     }

@@ -75,14 +75,14 @@ public class EditMenu : EntryConfigMenu
             new CustomButton(w: 120, h: 40, text: "Hero Local", effect: AppEffects.DropShadowIcon,
                 hA: HorizontalAlignment.Center);
         RefreshLocalHeroButton.Margin = new Thickness(5);
-        RefreshLocalHeroButton.Click += async (_, _) => { RefreshLocalHero(entry); };
+        RefreshLocalHeroButton.Click += async (_, _) => { EntryController.RefreshLocalHero(entry); };
         row1.Children.Add(RefreshLocalHeroButton);
 
         var RefreshLocalIconFromExeButton =
             new CustomButton(w: 120, h: 40, text: "Icon Local", effect: AppEffects.DropShadowIcon,
                 hA: HorizontalAlignment.Center);
         RefreshLocalIconFromExeButton.Margin = new Thickness(5);
-        RefreshLocalIconFromExeButton.Click += async (_, _) => { RefreshLocalIcon(entry); };
+        RefreshLocalIconFromExeButton.Click += async (_, _) => { EntryController.RefreshLocalIcon(entry); };
         Binding activeBinding = new Binding("IsLaunchable")
         {
             Source = entry,
@@ -129,28 +129,28 @@ public class EditMenu : EntryConfigMenu
         if (!newPath.Equals("")) _entry.HeroPath = newPath;
     }
 
-    private async void RefreshLocalHero(Entry entry)
-    {
-        await Task.Run(() =>
-        {
-            Guid guid = Guid.NewGuid();
-            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_hero.png");
-            ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+    // private async void RefreshLocalHero(Entry entry)
+    // {
+    //     await Task.Run(() =>
+    //     {
+    //         Guid guid = Guid.NewGuid();
+    //         string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_hero.png");
+    //         ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+    //
+    //         Dispatcher.Invoke(() => entry.HeroPath = newImagePath);
+    //     });
+    // }
 
-            Dispatcher.Invoke(() => entry.HeroPath = newImagePath);
-        });
-    }
-
-    private async void RefreshLocalIcon(Entry entry)
-    {
-        await Task.Run(() =>
-        {
-            Guid guid = Guid.NewGuid();
-            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
-            string cloned = string.Copy(newImagePath);
-            // bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-            ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
-            Dispatcher.Invoke(() => entry.IconPath = newImagePath);
-        });
-    }
+    // private async void RefreshLocalIcon(Entry entry)
+    // {
+    //     await Task.Run(() =>
+    //     {
+    //         Guid guid = Guid.NewGuid();
+    //         string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
+    //         string cloned = string.Copy(newImagePath);
+    //         // bool success = ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+    //         ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+    //         Dispatcher.Invoke(() => entry.IconPath = newImagePath);
+    //     });
+    // }
 }

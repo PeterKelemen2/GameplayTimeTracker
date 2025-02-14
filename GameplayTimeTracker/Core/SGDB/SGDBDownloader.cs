@@ -10,7 +10,8 @@ namespace GameplayTimeTracker.SGDB
 {
     public class SGDBDownloader
     {
-        public static async Task DownloadImageAsync(string imageUrl, string outputFilePath, double scaleModifier = 0.5,
+        public static async Task<bool> DownloadImageAsync(string imageUrl, string outputFilePath,
+            double scaleModifier = 0.5,
             int[] sizeLimits = null)
         {
             try
@@ -41,11 +42,13 @@ namespace GameplayTimeTracker.SGDB
                                     Image resizedImage = ResizeImage(originalImage, sizeLimits[0], sizeLimits[1]);
                                     resizedImage.Save(outputFilePath, ImageFormat.Png);
                                     Console.WriteLine($"Image successfully downloaded and resized to {outputFilePath}");
+                                    return true;
                                 }
                                 else
                                 {
                                     originalImage.Save(outputFilePath, ImageFormat.Png);
                                     Console.WriteLine($"Image successfully downloaded to {outputFilePath}");
+                                    return true;
                                 }
                             }
                         }
@@ -56,6 +59,8 @@ namespace GameplayTimeTracker.SGDB
             {
                 Console.WriteLine($"An error occurred while downloading or processing the image: {ex}");
             }
+
+            return false;
         }
 
         private static void ProcessWebPImage(Stream inputStream, string outputFilePath, int[] sizeLimits)
@@ -109,7 +114,7 @@ namespace GameplayTimeTracker.SGDB
             return resizedBitmap;
         }
 
-        public static async Task DownloadAndProcessIcoAsync(string imageUrl, string outputFilePath)
+        public static async Task<bool> DownloadAndProcessIcoAsync(string imageUrl, string outputFilePath)
         {
             try
             {
@@ -121,15 +126,19 @@ namespace GameplayTimeTracker.SGDB
                     byte[] iconBytes = await response.Content.ReadAsByteArrayAsync();
                     await File.WriteAllBytesAsync(outputFilePath, iconBytes);
                     Console.WriteLine($"ICO file downloaded to {outputFilePath}");
+                    
                 }
 
                 // Process the ICO file to extract the highest resolution frame
                 ExtractHighestResolutionFrame(outputFilePath);
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
+
+            return false;
         }
 
         private static void ExtractHighestResolutionFrame(string icoFilePath)

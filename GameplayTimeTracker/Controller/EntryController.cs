@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using GameplayTimeTracker.Menu;
 using GameplayTimeTracker.SGDB;
 using Shellify;
@@ -104,11 +105,44 @@ public static class EntryController
     {
         try
         {
+            EventPopup SGDBfetch = new EventPopup("Started loading from SGDB!");
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
-            await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles);
 
-            entry.IconPath = iconFiles["icon"];
-            entry.HeroPath = iconFiles["hero"];
+            var fetchResult = await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles);
+
+            if (fetchResult.GameFound)
+            {
+                entry.IconPath = iconFiles["icon"];
+                entry.HeroPath = iconFiles["hero"];
+                // if (!fetchResult.HeroFound && entry.IconPath.Equals(AppFiles.DefaultIconPath)) RefreshLocalHero(entry);
+                // if (!fetchResult.IconFound && entry.HeroPath.Equals(AppFiles.DefaultHeroPath)) RefreshLocalIcon(entry);
+                if (fetchResult.HeroFound)
+                {
+                    entry.HeroPath = iconFiles["hero"];
+                }
+                else
+                {
+                    if (entry.IconPath.Equals(AppFiles.DefaultHeroPath)) RefreshLocalHero(entry);
+                }
+
+                if (fetchResult.IconFound)
+                {
+                    entry.IconPath = iconFiles["icon"];
+                }
+                else
+                {
+                    if (entry.IconPath.Equals(AppFiles.DefaultIconPath)) RefreshLocalIcon(entry);
+                }
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    EventPopup gameNotFound = new EventPopup("Couldn't find Game on SGDB.", EventType.Negative);
+                });
+                if (entry.IconPath.Equals(AppFiles.DefaultIconPath)) RefreshLocalIcon(entry);
+                if (entry.HeroPath.Equals(AppFiles.DefaultHeroPath)) RefreshLocalHero(entry);
+            }
         }
         catch (Exception ex)
         {
@@ -116,19 +150,51 @@ public static class EntryController
         }
     }
 
-
     public static void HandleLocalImages(Entry entry)
     {
+        EventPopup localFetch = new EventPopup("Started loading local images!");
+
         Guid guid = Guid.NewGuid();
-        string iconPath = Path.Combine(AppFiles.SavedImagesPath,
-            $"{entry.Name.Replace(" ", "_")}_{guid.ToString()}_icon.png");
-        string heroPath = Path.Combine(AppFiles.SavedImagesPath,
-            $"{entry.Name.Replace(" ", "_")}_{guid.ToString()}_hero.png");
+        string newName = $"{entry.Name.Replace(" ", "_")}_{guid.ToString()}";
+        string newIconPath = Path.Combine(AppFiles.SavedImagesPath, $"{newName}_icon.png");
+        string newHeroPath = Path.Combine(AppFiles.SavedImagesPath, $"{newName}_hero.png");
 
-        ImageHelper.SaveIconFromExe(entry.ExePath, iconPath);
-        entry.IconPath = iconPath;
+        ImageHelper.SaveIconFromExe(entry.ExePath, newIconPath);
+        entry.IconPath = newIconPath;
 
-        ImageHelper.ScatterImage(iconPath, heroPath);
-        entry.HeroPath = heroPath;
+        ImageHelper.ScatterImage(newIconPath, newHeroPath);
+        entry.HeroPath = newHeroPath;
+    }
+
+    public static async void RefreshLocalHero(Entry entry)
+    {
+        await Task.Run(() =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_hero.png");
+            ImageHelper.ScatterImage(entry.IconPath, newImagePath);
+
+            entry.HeroPath = newImagePath;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                EventPopup localHero = new EventPopup("Loading local Hero...");
+            });
+        });
+    }
+
+    public static async void RefreshLocalIcon(Entry entry)
+    {
+        await Task.Run(() =>
+        {
+            Guid guid = Guid.NewGuid();
+            string newImagePath = Path.Combine(AppFiles.SavedImagesPath, $"_{guid}_icon.png");
+            ImageHelper.SaveIconFromExe(entry.ExePath, newImagePath);
+            entry.IconPath = newImagePath;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                EventPopup localIcon = new EventPopup("Loading local Icon...");
+            });
+            // EventPopup localHero = new EventPopup("Loading local Icon...");
+        });
     }
 }
