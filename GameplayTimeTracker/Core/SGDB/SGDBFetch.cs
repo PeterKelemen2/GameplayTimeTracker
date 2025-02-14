@@ -37,15 +37,9 @@ public static class SGDBFetch
             if (hero != null)
             {
                 Console.WriteLine(hero.FullImageUrl);
-                await SGDBDownloader.DownloadImageAsync(hero.FullImageUrl,
+                result.HeroFound = await SGDBDownloader.DownloadImageAsync(hero.FullImageUrl,
                     Path.Combine(AppFiles.SavedImagesPath, files["hero"]),
                     sizeLimits: new[] { 960, 310 });
-                EventPopup heroOk = new EventPopup("Hero found!");
-                result.HeroFound = true;
-            }
-            else
-            {
-                EventPopup heroNotOk = new EventPopup("Couldn't find Hero.", EventType.Negative);
             }
 
             var icons = await sgdb.GetIconsByGameIdAsync(game.Id);
@@ -55,25 +49,18 @@ public static class SGDBFetch
                 bool iconResult;
                 if (icon.Format == SteamGridDbFormats.Ico)
                 {
-                    iconResult = await SGDBDownloader.DownloadAndProcessIcoAsync(icon.FullImageUrl,
+                    result.IconFound = await SGDBDownloader.DownloadAndProcessIcoAsync(icon.FullImageUrl,
                         Path.Combine(AppFiles.SavedImagesPath, files["icon"]));
                 }
                 else
                 {
-                    iconResult = await SGDBDownloader.DownloadImageAsync(icon.FullImageUrl,
+                    result.IconFound = await SGDBDownloader.DownloadImageAsync(icon.FullImageUrl,
                         Path.Combine(AppFiles.SavedImagesPath, files["icon"]),
                         sizeLimits: new[] { 256, 256 });
                 }
-
-                result.IconFound = iconResult;
-                EventPopup iconOk = new EventPopup("Icon found!");
-            }
-            else
-            {
-                EventPopup iconNotOk = new EventPopup("Couldn't find Icon.", EventType.Negative);
             }
         }
-        
+
         return result;
     }
 }
