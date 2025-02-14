@@ -315,6 +315,8 @@ namespace GameplayTimeTracker
             EnsureLastWeekData();
             DateTime today = DateTime.Today;
 
+            if (_prevDate.Date == default || _prevDate == DateTime.MinValue) _prevDate = today;
+
             int daysBetween = (LastDate.Date - _prevDate.Date).Days;
 
             if (daysBetween >= 1) // Session spans multiple days
@@ -456,7 +458,9 @@ namespace GameplayTimeTracker
                 }
             }
 
-            PlaytimeHistory = filteredHistory.OrderBy(entry => entry.Key).ToDictionary(k => k.Key, v => v.Value);
+            PlaytimeHistory = filteredHistory
+                .OrderBy(entry => entry.Key)
+                .ToDictionary(k => k.Key, v => v.Value);
         }
 
         public void PrintHistory()
@@ -534,15 +538,7 @@ namespace GameplayTimeTracker
 
         public async Task RefreshImagesFromSGDB()
         {
-            Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(Name);
-
-            if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
-            {
-                await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, Name, iconFiles);
-            }
-
-            IconPath = iconFiles["icon"];
-            HeroPath = iconFiles["hero"];
+            await EntryController.HandleSGDBImages(this);
         }
     }
 }
