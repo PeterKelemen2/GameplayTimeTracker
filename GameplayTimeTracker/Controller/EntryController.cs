@@ -127,13 +127,7 @@ public static class EntryController
             }
             else
             {
-                var sgdbApiKeyPrompt = new PromptMenu(
-                    width: 350,
-                    textArray: new[]
-                        { "You don't have a SteamGridDB API Key set.", "Local images were used.", },
-                    boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
-                );
-                sgdbApiKeyPrompt.Open();
+                EventPopup gameFound = new EventPopup("No SGDB API key found, local images were used!");
                 HandleLocalImages(entry);
             }
         }
@@ -147,26 +141,25 @@ public static class EntryController
     {
         try
         {
-            EventPopup SGDBfetch = new EventPopup("Started loading from SGDB!");
-
+            EventPopup starting = new EventPopup("Fetching SGDB Assets...");
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
 
-            var fetchResult = await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles);
+            var fetchResult = await SGDBFetch.FetchSGDBAsync(entry.Name, iconFiles);
 
             if (fetchResult.GameFound)
             {
                 if (fetchResult.HeroFound && File.Exists(iconFiles["hero"])) entry.HeroPath = iconFiles["hero"];
                 if (fetchResult.IconFound && File.Exists(iconFiles["icon"])) entry.IconPath = iconFiles["icon"];
 
-                EventPopup gameFound = new EventPopup("Game found on SteamGridDB!");
+                EventPopup gameFound = new EventPopup("App found on SteamGridDB!");
                 if (fetchResult.IconFound && fetchResult.HeroFound)
                 {
-                    EventPopup bothImagesFound = new EventPopup("Icon and Hero images found!");
+                    EventPopup bothImagesFound = new EventPopup("Icon and Hero images updated!");
                 }
             }
             else
             {
-                EventPopup gameNotFound = new EventPopup("Couldn't find Game on SGDB.", EventType.Negative);
+                EventPopup gameNotFound = new EventPopup("App not found on SteamGridDB!", EventType.Negative);
             }
 
             return fetchResult;
@@ -174,6 +167,7 @@ public static class EntryController
         catch (Exception ex)
         {
             // HandleLocalImages(entry);
+            EventPopup gameNotFound = new EventPopup("Something went wrong.", EventType.Negative);
             Console.WriteLine(ex);
         }
 

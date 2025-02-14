@@ -64,8 +64,7 @@ public static class DataHandler
             writer.Write(jsonString);
         }
     }
-
-
+    
     public static AppSettings GetSettingsFromFile()
     {
         AppSettings settings = new();
@@ -120,7 +119,13 @@ public static class DataHandler
         }
 
         string jsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(AppFiles.SettingsFilePath, jsonString);
+        
+        using (var fs = new FileStream(AppFiles.SettingsFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new StreamWriter(fs))
+        {
+            writer.Write(jsonString);
+        }
+        // File.WriteAllText(AppFiles.SettingsFilePath, jsonString);
     }
 
     public static void ManageStartupShortcut(bool enable)

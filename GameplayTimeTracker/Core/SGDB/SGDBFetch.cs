@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using craftersmine.SteamGridDBNet;
 
@@ -16,15 +17,15 @@ public class SGDBFetchResult
 
 public static class SGDBFetch
 {
-    public static async Task<SGDBFetchResult> FetchSGDBAsync(string apiKey, string gameName,
+    public static async Task<SGDBFetchResult> FetchSGDBAsync(string gameName,
         Dictionary<string, string> files)
     {
-        if (!Path.Exists(AppFiles.SavedImagesPath))
-        {
-            Directory.CreateDirectory(AppFiles.SavedImagesPath);
-        }
+        if (Common.Settings.SGDBApiKey.Length == 0 || Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
+            return new SGDBFetchResult();
 
-        SteamGridDb sgdb = new SteamGridDb(apiKey);
+        Directory.CreateDirectory(AppFiles.SavedImagesPath);
+
+        SteamGridDb sgdb = new SteamGridDb(Common.Settings.SGDBApiKey);
         SteamGridDbGame[]? games = await sgdb.SearchForGamesAsync(gameName);
         var game = games?.FirstOrDefault();
 

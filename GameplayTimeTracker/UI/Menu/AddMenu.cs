@@ -26,7 +26,7 @@ public class AddMenu : EntryConfigMenu
 
         if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
         {
-            Task.Run(async () => await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles))
+            Task.Run(async () => await SGDBFetch.FetchSGDBAsync(entry.Name, iconFiles))
                 .Wait();
         }
 
