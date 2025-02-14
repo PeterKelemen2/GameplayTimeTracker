@@ -70,9 +70,6 @@
         </Grid>
 
         <Grid x:Name="MainGrid">
-            <Grid.CacheMode>
-                <BitmapCache />
-            </Grid.CacheMode>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
