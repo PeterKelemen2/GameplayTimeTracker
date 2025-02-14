@@ -41,6 +41,9 @@ public class EditMenu : EntryConfigMenu
         MenuContentPanel.Children.Add(leftSide);
         MenuContentPanel.Children.Add(separator);
         MenuContentPanel.Children.Add(rightSide);
+        
+        leftSide.CacheMode = new BitmapCache();
+        rightSide.CacheMode = new BitmapCache();
 
         ToScale = toScale;
         TitleTextBlock.FontWeight = FontWeights.Regular;

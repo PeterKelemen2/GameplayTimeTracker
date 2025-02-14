@@ -272,7 +272,11 @@ public class GameCard : UserControl
                 boldArray: new[] { false, true },
                 lineSpacing: 5,
                 type: PromptMenu.PromptType.YesNo,
-                yesHandler: (s, e) => { DeleteInstance(); },
+                yesHandler: (s, e) =>
+                {
+                    DeleteInstance();
+                    EventPopup starting = new EventPopup($"Deleted {DataEntry.Name}.");
+                },
                 noHandler: (s, e) => { Console.WriteLine("No clicked"); });
             deletePrompt.Open();
         };
