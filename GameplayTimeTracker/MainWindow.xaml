@@ -70,7 +70,6 @@
         </Grid>
 
         <Grid x:Name="MainGrid">
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="70" />

@@ -32,15 +32,12 @@ public class CustomMenu : UserControl
 
         RootPanel.SizeChanged += ContentGrid_SizeChanged;
 
-        // BlurEffect = new BlurEffect { Radius = 0 };
-        // ContentPanel.Effect = BlurEffect;
-
         ContainerGrid = new Grid
         {
             Width = RootPanel.ActualWidth,
             Height = RootPanel.ActualHeight,
+            CacheMode = new BitmapCache()
         };
-        // ContainerGrid.CacheMode = new BitmapCache();
 
         BgRectangle = new Rectangle
         {
