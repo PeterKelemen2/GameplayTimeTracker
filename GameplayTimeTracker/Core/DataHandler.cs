@@ -56,8 +56,15 @@ public static class DataHandler
         }
 
         string jsonString = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, jsonString);
+
+        // Ensure proper file handling
+        using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new StreamWriter(fs))
+        {
+            writer.Write(jsonString);
+        }
     }
+
 
     public static AppSettings GetSettingsFromFile()
     {

@@ -36,6 +36,7 @@ public static class EntryController
             if (!repository.IsExePresent(exePath))
             {
                 Entry newEntry = new Entry();
+
                 newEntry.ExePath = exePath;
                 newEntry.Arguments = arguments;
                 string name = FileVersionInfo.GetVersionInfo(newEntry.ExePath).FileDescription;
@@ -43,31 +44,36 @@ public static class EntryController
                 name = name.Trim();
                 newEntry.Name = name;
 
-                if (Common.Settings.PreferSteamGridDBImage)
-                {
-                    if (Common.Settings.SGDBApiKey.Length == 0 ||
-                        !Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
-                    {
-                        _ = HandleSGDBImages(newEntry);
-                    }
-                    else
-                    {
-                        var sgdbApiKeyPrompt = new PromptMenu(
-                            width: 350,
-                            textArray: new[]
-                                { "You don't have a SteamGridDB API Key set.", "Local icon image was used.", },
-                            boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
-                        );
-                        sgdbApiKeyPrompt.Open();
-                        HandleLocalImages(newEntry);
-                    }
-                }
-                else
-                {
-                    HandleLocalImages(newEntry);
-                }
-
                 repository.AddEntry(newEntry);
+
+
+                // if (Common.Settings.PreferSteamGridDBImage)
+                // {
+                //     if (Common.Settings.SGDBApiKey.Length == 0 ||
+                //         !Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
+                //     {
+                //         HandleSGDBImages(newEntry);
+                //     }
+                //     else
+                //     {
+                //         var sgdbApiKeyPrompt = new PromptMenu(
+                //             width: 350,
+                //             textArray: new[]
+                //                 { "You don't have a SteamGridDB API Key set.", "Local icon image was used.", },
+                //             boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
+                //         );
+                //         sgdbApiKeyPrompt.Open();
+                //         HandleLocalImages(newEntry);
+                //     }
+                // }
+                // else
+                // {
+                //     HandleLocalImages(newEntry);
+                // }
+
+                SetupImages(newEntry);
+
+                // repository.AddEntry(newEntry);
 
                 if (!Common.Settings.QuickAdd)
                 {
@@ -101,11 +107,48 @@ public static class EntryController
         }
     }
 
-    public static async Task HandleSGDBImages(Entry entry)
+    private static async Task SetupImages(Entry entry)
+    {
+        if (Common.Settings.PreferSteamGridDBImage)
+        {
+            if (Common.Settings.SGDBApiKey.Length == 0 ||
+                !Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
+            {
+                var fetchResult = await HandleSGDBImages(entry);
+                if (!fetchResult.GameFound)
+                {
+                    await HandleLocalImages(entry);
+                }
+                else
+                {
+                    if (!fetchResult.IconFound) await RefreshLocalIcon(entry);
+                    if (!fetchResult.HeroFound) await RefreshLocalHero(entry);
+                }
+            }
+            else
+            {
+                var sgdbApiKeyPrompt = new PromptMenu(
+                    width: 350,
+                    textArray: new[]
+                        { "You don't have a SteamGridDB API Key set.", "Local images were used.", },
+                    boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
+                );
+                sgdbApiKeyPrompt.Open();
+                HandleLocalImages(entry);
+            }
+        }
+        else
+        {
+            HandleLocalImages(entry);
+        }
+    }
+
+    public static async Task<SGDBFetchResult> HandleSGDBImages(Entry entry)
     {
         try
         {
             EventPopup SGDBfetch = new EventPopup("Started loading from SGDB!");
+
             Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
 
             var fetchResult = await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles);
@@ -125,23 +168,27 @@ public static class EntryController
             {
                 EventPopup gameNotFound = new EventPopup("Couldn't find Game on SGDB.", EventType.Negative);
             }
+
+            return fetchResult;
         }
         catch (Exception ex)
         {
             // HandleLocalImages(entry);
             Console.WriteLine(ex);
         }
+
+        return new SGDBFetchResult();
     }
 
-    public static void HandleLocalImages(Entry entry)
+    public static async Task HandleLocalImages(Entry entry)
     {
         EventPopup localFetch = new EventPopup("Started loading local images!");
 
-        RefreshLocalIcon(entry);
-        RefreshLocalHero(entry);
+        await RefreshLocalIcon(entry);
+        await RefreshLocalHero(entry);
     }
 
-    public static async void RefreshLocalHero(Entry entry, string fileName = "")
+    public static async Task RefreshLocalHero(Entry entry, string fileName = "")
     {
         await Task.Run(() =>
         {
@@ -157,12 +204,12 @@ public static class EntryController
             entry.HeroPath = newImagePath;
             Application.Current.Dispatcher.Invoke(() =>
             {
-                EventPopup localHero = new EventPopup("Loaded local Hero!");
+                EventPopup localHero = new EventPopup($"Loaded local Hero for {entry.Name} !");
             });
         });
     }
 
-    public static async void RefreshLocalIcon(Entry entry, string fileName = "")
+    public static async Task RefreshLocalIcon(Entry entry, string fileName = "")
     {
         await Task.Run(() =>
         {
