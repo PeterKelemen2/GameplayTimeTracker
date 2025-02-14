@@ -30,6 +30,11 @@ public static class SGDBFetch
                 await SGDBDownloader.DownloadImageAsync(hero.FullImageUrl,
                     Path.Combine(AppFiles.SavedImagesPath, files["hero"]),
                     sizeLimits: new[] { 960, 310 });
+                EventPopup heroOk = new EventPopup("Hero found!");
+            }
+            else
+            {
+                EventPopup heroNotOk = new EventPopup("Couldn't find Hero.", EventType.Negative);
             }
 
             var icons = await sgdb.GetIconsByGameIdAsync(game.Id);
@@ -49,6 +54,12 @@ public static class SGDBFetch
                         Path.Combine(AppFiles.SavedImagesPath, files["icon"]),
                         sizeLimits: new[] { 256, 256 });
                 }
+
+                EventPopup iconOk = new EventPopup("Icon found!");
+            }
+            else
+            {
+                EventPopup iconNotOk = new EventPopup("Couldn't find Icon.", EventType.Negative);
             }
         }
     }

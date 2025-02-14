@@ -21,6 +21,8 @@ public static class Common
     public static TaskbarIcon TaskbarIcon { get; set; }
 
     public const string RunningText = "Running!";
+    public const string NoApiKeyText = "No API key set.";
+    
     public const double CardPadding = 10;
     public const double TitleFontSize = 17;
     public const double EditTitleFontSize = 21;

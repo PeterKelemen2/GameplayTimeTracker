@@ -313,7 +313,8 @@ public partial class MainWindow : Window
                 return;
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (!files.All(file =>
-                    System.IO.Path.GetExtension(file).Equals(".exe", StringComparison.OrdinalIgnoreCase)))
+                    System.IO.Path.GetExtension(file).Equals(".exe", StringComparison.OrdinalIgnoreCase) ||
+                    System.IO.Path.GetExtension(file).Equals(".lnk", StringComparison.OrdinalIgnoreCase)))
                 return;
 
             DragDropGrid.Visibility = Visibility.Visible;

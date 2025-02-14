@@ -44,14 +44,15 @@ public static class EntryController
 
                 if (Common.Settings.PreferSteamGridDBImage)
                 {
-                    if (Common.Settings.SGDBApiKey.Length > 0)
+                    if (Common.Settings.SGDBApiKey.Length > 0 ||
+                        !Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
                     {
                         HandleSGDBImages(newEntry);
                     }
                     else
                     {
                         var sgdbApiKeyPrompt = new PromptMenu(
-                            width: 400,
+                            width: 350,
                             textArray: new[]
                                 { "You don't have a SteamGridDB API Key set.", "Local icon image was used.", },
                             boldArray: new[] { true, false }, lineSpacing: 5, type: PromptMenu.PromptType.Ok
@@ -103,15 +104,40 @@ public static class EntryController
     {
         Dictionary<string, string> iconFiles = SGDBFileHandler.GetSGDBFiles(entry.Name);
 
-        if (!Common.Settings.SGDBApiKey.Equals(string.Empty))
+        // if (Common.Settings.SGDBApiKey.Length > 0 ||
+        //     !Common.Settings.SGDBApiKey.Equals(Common.NoApiKeyText))
+        // {
+        //     try
+        //     {
+        //         Task.Run(async () =>
+        //                 await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles))
+        //             .Wait();
+        //         entry.IconPath = iconFiles["icon"];
+        //         entry.HeroPath = iconFiles["hero"];
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         HandleLocalImages(entry);
+        //         EventPopup fallbackPopup = new EventPopup("Something went wrong with SteamGridDB.", EventType.Negative);
+        //     }
+        // }
+        //
+        // entry.IconPath = iconFiles["icon"];
+        // entry.HeroPath = iconFiles["hero"];
+
+        try
         {
             Task.Run(async () =>
                     await SGDBFetch.FetchSGDBAsync(Common.Settings.SGDBApiKey, entry.Name, iconFiles))
                 .Wait();
+            entry.IconPath = iconFiles["icon"];
+            entry.HeroPath = iconFiles["hero"];
         }
-
-        entry.IconPath = iconFiles["icon"];
-        entry.HeroPath = iconFiles["hero"];
+        catch (Exception ex)
+        {
+            HandleLocalImages(entry);
+            EventPopup fallbackPopup = new EventPopup("Something went wrong with SteamGridDB.", EventType.Negative);
+        }
     }
 
     public static void HandleLocalImages(Entry entry)

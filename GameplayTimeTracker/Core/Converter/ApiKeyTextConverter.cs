@@ -6,11 +6,9 @@ namespace GameplayTimeTracker;
 
 public class ApiKeyTextConverter : IValueConverter
 {
-    public string noKeySet = "No API key set.";
-
     public object Convert(object value, Type targetType = null, object parameter = null, CultureInfo culture = null)
     {
-        if (value is string apiKey) return string.IsNullOrEmpty(apiKey) ? noKeySet : apiKey;
+        if (value is string apiKey) return string.IsNullOrEmpty(apiKey) ? Common.NoApiKeyText : apiKey;
 
         return "";
     }
@@ -19,8 +17,8 @@ public class ApiKeyTextConverter : IValueConverter
     {
         if (value is string input)
         {
-            if (string.Equals(input, noKeySet)) return "";
-        
+            if (string.Equals(input, Common.NoApiKeyText)) return "";
+
             return input;
         }
 

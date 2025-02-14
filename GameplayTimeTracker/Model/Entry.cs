@@ -181,8 +181,6 @@ namespace GameplayTimeTracker
             set
             {
                 string newIconPath = value;
-                // Console.WriteLine($" TRYING TO SET ICON PATH {value}");
-                // Console.WriteLine($" ICON PATH EXISTS: {File.Exists(value)}");
 
                 try
                 {
@@ -191,7 +189,6 @@ namespace GameplayTimeTracker
                     {
                         string baseName = $"{Name.Replace(" ", "_")}_{Guid.NewGuid()}";
                         newIconPath = Path.Combine(AppFiles.SavedImagesPath, $"{baseName}_icon.png");
-                        // Console.WriteLine($" TRYING TO SET ICON PATH IN TRY {newIconPath}");
                         ImageHelper.SaveIconFromExe(ExePath, newIconPath);
                     }
 
