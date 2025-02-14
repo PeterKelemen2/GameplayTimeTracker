@@ -54,7 +54,6 @@ public class CustomMenu : UserControl
             Width = width,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
-            
         };
         MenuContentBorder = new Border
         {
@@ -89,6 +88,8 @@ public class CustomMenu : UserControl
     {
         if (!IsOpen)
         {
+            ContainerGrid.CacheMode = new BitmapCache(0.5);
+
             BlurEffect = new BlurEffect { Radius = 0 };
             ContentPanel.Effect = BlurEffect;
 
@@ -96,6 +97,8 @@ public class CustomMenu : UserControl
 
             AppAnimations.FlyInAnimation.From = mainWindow.Height;
             AppAnimations.FlyOutAnimation.To = -(mainWindow.Height * 0.5 + MenuContentPanel.ActualHeight * 0.5);
+
+            AppAnimations.FadeIn.Completed += (_, _) => { ContainerGrid.CacheMode = null; };
 
             BgRectangle.BeginAnimation(OpacityProperty, AppAnimations.MenuBgOpacityIn);
             MenuContentBorder.RenderTransform.BeginAnimation(TranslateTransform.YProperty,
@@ -128,6 +131,7 @@ public class CustomMenu : UserControl
 
             IsOpen = true;
             RootPanel.Focus();
+            // MenuContentPanel.CacheMode = null;
         }
     }
 
@@ -135,6 +139,7 @@ public class CustomMenu : UserControl
     {
         if (IsOpen)
         {
+            MenuContentPanel.CacheMode = new BitmapCache(0.5);
             if (RootPanel.Children.Contains(ContainerGrid))
             {
                 AppAnimations.MenuBgOpacityOut.Completed += (s, a) =>

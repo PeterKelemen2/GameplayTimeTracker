@@ -27,6 +27,7 @@ public static class UIHelper
             // Margin = new Thickness(leftMargin, 0, 0, 5)
         };
         sample.Style = (Style)Application.Current.FindResource("RoundedTextBox");
+        sample.CacheMode = new BitmapCache();
 
         return sample;
     }
@@ -47,6 +48,7 @@ public static class UIHelper
             VerticalAlignment = vA,
             Margin = margin,
             Effect = AppEffects.DropOuterGlow,
+            CacheMode = new BitmapCache()
         };
         TextOptions.SetTextRenderingMode(sampleTextBlock, TextRenderingMode.Aliased);
 
