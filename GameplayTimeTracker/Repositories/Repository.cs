@@ -18,6 +18,7 @@ public class Repository<T> where T : class
     public void Add(T entity)
     {
         _db.Set<T>().Add(entity);
+        Console.WriteLine($"{typeof(T)} added successfully!");
         _db.SaveChanges();
     }
 

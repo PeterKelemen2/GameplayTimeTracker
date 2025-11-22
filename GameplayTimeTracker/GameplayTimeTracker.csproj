@@ -20,6 +20,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
 <!--        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">-->
 <!--            <PrivateAssets>all</PrivateAssets>-->
 <!--            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
@@ -99,6 +100,13 @@
     <ItemGroup>
       <Folder Include="ViewModels\" />
       <Folder Include="Views\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Data\gameplaytimetracker.db" />
+      <Resource Include="Data\gameplaytimetracker.db">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows;
+using Cairo;
+using GameplayTimeTracker.Models;
+using GameplayTimeTracker.Services;
 using Window = System.Windows.Window;
 
 namespace GameplayTimeTracker;
@@ -15,20 +18,20 @@ public partial class MainWindow : Window
 
     public void OnLoaded(object sender, RoutedEventArgs e)
     {
-        
-    }
-    
+        Game testGame = new Game
+        {
+            Name = "TestGame",
+        };
 
-    private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-        try
+        // GlobalServices.Repositories.GameRepository.AddGame(testGame);
+
+        GlobalServices.Repositories.GameRepository.DeleteGameById(2);
+
+        var games = GlobalServices.Repositories.GameRepository.GetAllGames();
+
+        foreach (var game in games)
         {
-            Console.WriteLine("Exiting...");
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("An error occurred: " + ex.Message);
-            e.Cancel = true;
+            Console.WriteLine(game);
         }
     }
 }

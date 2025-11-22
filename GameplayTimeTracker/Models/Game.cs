@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GameplayTimeTracker.Models;
+﻿namespace GameplayTimeTracker.Models;
 
 public class Game : BaseDataModel
 {
@@ -11,4 +9,9 @@ public class Game : BaseDataModel
     public Playtime TotalPlaytime { get; set; } = new Playtime();
 
     public string Name { get; set; } = "";
+
+    public override string ToString()
+    {
+        return $"ID: {Id}, Name: {Name}, LastPlaytimeId: {LastPlaytimeId}, TotalPlaytimeId: {TotalPlaytimeId}";
+    }
 }
