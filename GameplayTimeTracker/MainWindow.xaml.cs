@@ -17,11 +17,7 @@ public partial class MainWindow : Window
     {
         
     }
-
-    private async void CheckRemote()
-    {
-
-    }
+    
 
     private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
