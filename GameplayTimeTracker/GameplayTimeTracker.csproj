@@ -91,4 +91,11 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Repositories\" />
+      <Folder Include="Services\" />
+      <Folder Include="ViewModels\" />
+      <Folder Include="Views\" />
+    </ItemGroup>
+
 </Project>
