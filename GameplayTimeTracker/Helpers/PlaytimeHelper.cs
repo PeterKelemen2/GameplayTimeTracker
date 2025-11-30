@@ -5,21 +5,6 @@ namespace GameplayTimeTracker.Helpers;
 
 public static class PlaytimeHelper
 {
-    // public static void NormalizeTime(Playtime playtime)
-    // {
-    //     if (playtime.Seconds >= 60)
-    //     {
-    //         playtime.Minutes += playtime.Seconds / 60;
-    //         playtime.Seconds %= 60;
-    //     }
-    //
-    //     if (playtime.Minutes >= 60)
-    //     {
-    //         playtime.Hours += playtime.Minutes / 60;
-    //         playtime.Minutes %= 60;
-    //     }
-    // }
-
     public static (int, int, int) NormalizeTime(TimeSpan duration)
     {
         int[] arr = new[] { duration.Hours, duration.Minutes, duration.Seconds };

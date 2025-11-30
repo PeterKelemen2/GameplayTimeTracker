@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameplayTimeTracker.Data;
+using GameplayTimeTracker.Extensions;
 using GameplayTimeTracker.Helpers;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Services;
+using GameplayTimeTracker.Validators;
 
 namespace GameplayTimeTracker.Repositories;
 
@@ -15,56 +18,21 @@ public class PlaytimeRepository : Repository<Playtime>
 
     public void AddPlaytime(Playtime playtime)
     {
-        if (playtime == null)
+        var validator = new PlaytimeValidator();
+        var errors = validator.Validate(playtime).ToList();
+
+        if (errors.Any())
         {
-            Console.WriteLine("Playtime is null");
+            Console.WriteLine("Playtime validation failed:");
+            foreach (var err in errors)
+                Console.WriteLine($" - {err}");
+
             return;
         }
 
-        if (playtime.GameId == 0)
-        {
-            Console.WriteLine("Playtime has no GameId!");
-            return;
-        }
+        GlobalServices.Repositories.PlaytimeHistoryRepository.AddToPlaytimeHistoryByPlaytime(playtime);
 
-        if (playtime.Id == 0)
-        {
-            playtime.CreatedOn = DateTime.Now;
-        }
-
-        if (playtime.StartDate >= playtime.EndDate)
-        {
-            Console.WriteLine("Playtime dates incorrect!");
-            return;
-        }
-
-        var today = DateTime.Now;
-        int daysBetween = (playtime.StartDate - playtime.EndDate).Days;
-
-        var startDate = playtime.StartDate;
-
-        if (daysBetween >= 1)
-        {
-            DateTime currentDay = startDate.Date;
-            DateTime midnight = currentDay.AddDays(1);
-
-            TimeSpan toMidnight = midnight - currentDay;
-            var dur = PlaytimeHelper.NormalizeTime(toMidnight);
-            var existingHistoryItem =
-                GlobalServices.Repositories.PlaytimeHistoryRepository.GetHistoryItemWithDate(currentDay);
-
-            if (existingHistoryItem != null)
-            {
-                // Update item with added playtime
-            }
-            else
-            {
-                // Create new with playtime
-            }
-            // https://github.com/PeterKelemen2/GameplayTimeTracker/blob/rework/GameplayTimeTracker/Model/Entry.cs ~350
-        }
-
-        // _db.Playtimes.Add(playtime);
-        // _db.SaveChanges();
+        _db.Playtimes.Add(playtime);
+        _db.SaveChanges();
     }
 }

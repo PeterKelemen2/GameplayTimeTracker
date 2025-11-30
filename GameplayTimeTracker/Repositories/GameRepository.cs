@@ -14,6 +14,8 @@ public class GameRepository : Repository<Game>
     {
     }
 
+    public bool ExistsById(int id) => _db.Games.Any(g => g.Id == id);
+
     public Game? GetGameById(int id) => _db.Games
         .Include(g => g.LastPlaytime)
         .Include(g => g.TotalPlaytime)

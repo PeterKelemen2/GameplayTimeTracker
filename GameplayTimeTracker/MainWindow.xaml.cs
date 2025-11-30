@@ -24,7 +24,7 @@ public partial class MainWindow : Window
             Name = "TestGame",
         };
 
-        // GlobalServices.Repositories.GameRepository.AddGame(testGame);
+        GlobalServices.Repositories.GameRepository.AddGame(testGame);
 
         // GlobalServices.Repositories.GameRepository.DeleteGameById(2);
         //
@@ -38,14 +38,9 @@ public partial class MainWindow : Window
         Playtime playtime = new Playtime
         {
             GameId = 1,
-            StartDate = new DateTime(2025, 11, 22, 16, 30, 0),
-            EndDate = new DateTime(2025, 11, 23, 16, 30, 0),
+            StartDate = new DateTime(2025, 11, 23, 23, 30, 0),
+            EndDate = new DateTime(2025, 11, 25, 01, 30, 0),
         };
-        // var dur = PlaytimeHelper.GetDurationFromDates(playtime.StartDate, playtime.EndDate);
-        // Console.WriteLine("Duration: " + dur);
-        playtime.Hours = 24;
-        playtime.Minutes = 0;
-        playtime.Seconds = 0;
 
         GlobalServices.Repositories.PlaytimeRepository.AddPlaytime(playtime);
     }
