@@ -25,7 +25,7 @@ public class DatabaseService
         try
         {
             var pendingMigrations = _db.Database.GetPendingMigrations().ToList();
-            
+
             if (pendingMigrations.Any())
             {
                 Console.WriteLine($"Applying {pendingMigrations.Count} pending migrations:");
@@ -33,10 +33,10 @@ public class DatabaseService
                 {
                     Console.WriteLine($"  - {migration}");
                 }
-                
+
                 BackupDatabase();
                 _db.Database.Migrate();
-                
+
                 Console.WriteLine("✓ Migrations applied successfully");
             }
             else
@@ -50,13 +50,13 @@ public class DatabaseService
         {
             Console.WriteLine($"✗ Migration failed: {ex.Message}");
             RestoreBackup();
-            
+
             MessageBox.Show(
                 $"Database migration failed. The application will now close.\n\nError: {ex.Message}",
                 "Database Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
-            
+
             System.Windows.Application.Current.Shutdown();
         }
     }
@@ -71,7 +71,7 @@ public class DatabaseService
                 var backupPath = dbPath.Replace(".db", $"_backup_{DateTime.Now:yyyyMMddHHmmss}.db");
                 System.IO.File.Copy(dbPath, backupPath, true);
                 Console.WriteLine($"✓ Backup created: {System.IO.Path.GetFileName(backupPath)}");
-                
+
                 CleanOldBackups();
             }
         }
@@ -90,13 +90,16 @@ public class DatabaseService
             var backupFiles = System.IO.Directory.GetFiles(directory, "*_backup_*.db")
                 .OrderByDescending(f => f)
                 .Skip(5);
-            
+
             foreach (var file in backupFiles)
             {
                 System.IO.File.Delete(file);
             }
         }
-        catch { /* Ignore cleanup errors */ }
+        catch
+        {
+            /* Ignore cleanup errors */
+        }
     }
 
     private void RestoreBackup()
@@ -108,7 +111,7 @@ public class DatabaseService
             var latestBackup = System.IO.Directory.GetFiles(directory, "*_backup_*.db")
                 .OrderByDescending(f => f)
                 .FirstOrDefault();
-            
+
             if (latestBackup != null)
             {
                 System.IO.File.Copy(latestBackup, dbPath, true);
@@ -135,21 +138,34 @@ public class DatabaseService
             {
                 var now = DateTime.Now;
 
-                Settings s = new Settings { CreatedOn = now };
+                Theme theme;
+                if (!_db.Themes.Any())
+                {
+                    theme = new Theme { CreatedOn = now };
+                    _db.Themes.Add(theme);
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    theme = _db.Themes.FirstOrDefault() ?? new Theme();
+                }
+
+                RemoteMachine machine;
+                if (!_db.RemoteMachines.Any())
+                {
+                    machine = new RemoteMachine();
+                    _db.RemoteMachines.Add(machine);
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    machine = _db.RemoteMachines.FirstOrDefault() ?? new RemoteMachine();
+                }
+
+                Settings s = new Settings { CreatedOn = now, ThemeId = theme.Id, RemoteMachineId = machine.Id };
                 _db.Settings.Add(s);
                 _db.SaveChanges();
 
-                if (!_db.SettingsProfile.Any())
-                {
-                    _db.SettingsProfile.Add(new SettingsProfile
-                    {
-                        ProfileName = "Default",
-                        SettingsId = s.Id,
-                        CreatedOn = now
-                    });
-                    _db.SaveChanges();
-                }
-                
                 Console.WriteLine("✓ Base data seeded");
             }
         }

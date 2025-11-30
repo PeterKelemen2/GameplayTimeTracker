@@ -4,8 +4,7 @@ namespace GameplayTimeTracker.Models;
 
 public class RemoteMachine : BaseDataModel
 {
-    [Display(Name = "Host OS")]
-    public OsType HostOs { get; set; } = OsType.Windows; // This will be replaced by the actual Enum
+    [Display(Name = "Host OS")] public OsType HostOs { get; set; } = OsType.Windows;
 
     [Display(Name = "Host Name")] public string HostName { get; set; } = "localhost";
 

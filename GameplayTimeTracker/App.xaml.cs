@@ -35,7 +35,6 @@ namespace GameplayTimeTracker
             services.AddSingleton<PlaytimeRepository>();
             services.AddSingleton<PlaytimeHistoryRepository>();
             services.AddSingleton<SettingsRepository>();
-            services.AddSingleton<SettingsProfileRepository>();
             
             services.AddSingleton<RepositoryManager>();
 

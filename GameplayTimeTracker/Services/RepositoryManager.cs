@@ -8,19 +8,16 @@ public class RepositoryManager
     public PlaytimeRepository PlaytimeRepository { get; }
     public PlaytimeHistoryRepository PlaytimeHistoryRepository { get; }
     public SettingsRepository SettingsRepository { get; }
-    public SettingsProfileRepository SettingsProfileRepository { get; }
 
     public RepositoryManager(
         GameRepository gameRepo,
         PlaytimeRepository playtimeRepo,
         PlaytimeHistoryRepository historyRepo,
-        SettingsRepository settingsRepo,
-        SettingsProfileRepository profileRepo)
+        SettingsRepository settingsRepo)
     {
         GameRepository = gameRepo;
         PlaytimeRepository = playtimeRepo;
         PlaytimeHistoryRepository = historyRepo;
         SettingsRepository = settingsRepo;
-        SettingsProfileRepository = profileRepo;
     }
 }

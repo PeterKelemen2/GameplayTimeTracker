@@ -6,6 +6,8 @@ public class Settings : BaseDataModel
 {
     public int ThemeId { get; set; } = 0;
     public int RemoteMachineId { get; set; } = 0;
+    
+    [Display(Name = "Profile Name")] public string ProfileName { get; set; } = "";
 
     [Display(Name = "Start With The System")] public bool StartWithSystem { get; set; } = true;
 
