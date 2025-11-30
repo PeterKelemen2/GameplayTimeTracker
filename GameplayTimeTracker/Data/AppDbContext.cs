@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
     public DbSet<PlaytimeHistory> PlaytimeHistories { get; set; }
     public DbSet<Settings> Settings { get; set; }
     public DbSet<SettingsProfile> SettingsProfile { get; set; }
+    public DbSet<Theme> Themes { get; set; }
+    public DbSet<RemoteMachine> RemoteMachines { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -36,23 +38,23 @@ public class AppDbContext : DbContext
             .WithOne()
             .HasForeignKey<Game>(g => g.TotalPlaytimeId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<SettingsProfile>()
             .HasOne<Settings>()
             .WithMany()
             .HasForeignKey(sp => sp.SettingsId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Settings>()
             .HasOne<Theme>()
             .WithMany()
             .HasForeignKey(sp => sp.ThemeId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Settings>()
-            .HasOne<Theme>()
+            .HasOne<RemoteMachine>()
             .WithMany()
             .HasForeignKey(sp => sp.RemoteMachineId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
