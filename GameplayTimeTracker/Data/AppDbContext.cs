@@ -42,5 +42,17 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(sp => sp.SettingsId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Settings>()
+            .HasOne<Theme>()
+            .WithMany()
+            .HasForeignKey(sp => sp.ThemeId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Settings>()
+            .HasOne<Theme>()
+            .WithMany()
+            .HasForeignKey(sp => sp.RemoteMachineId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
