@@ -2,13 +2,14 @@
 using System.Windows.Controls.Primitives;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Services;
+using GameplayTimeTracker.Services.Tracker;
 using Window = System.Windows.Window;
 
 namespace GameplayTimeTracker;
 
 public partial class MainWindow : Window
 {
-    TrackerService trackerService = new TrackerService();
+    GameTrackingManager _gameTrackingManager = new GameTrackingManager();
 
     public MainWindow()
     {
@@ -26,12 +27,14 @@ public partial class MainWindow : Window
                 "C:\\Program Files\\Notepad++\\notepad++.exe"
         };
 
+        var gameList = GlobalServices.Repositories.GameRepository.GetAll();
+        _gameTrackingManager.StartListening(gameList);
 
-        trackerService.StartListening(testGame);
+        // trackerService.StartListening(testGame);
 
         // GlobalServices.Repositories.GameRepository.AddOrUpdate(testGame);
 
-        // GlobalServices.Repositories.GameRepository.DeleteGameById(2);
+        // GlobalServices.Repositories.GameRepository.DeleteById(1);
         //
         // var games = GlobalServices.Repositories.GameRepository.GetAllGames();
         //
