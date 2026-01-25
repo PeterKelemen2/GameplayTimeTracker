@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameplayTimeTracker.Models;
+using GameplayTimeTracker.ViewModels;
 
 namespace GameplayTimeTracker.Services.Tracker;
 
@@ -7,7 +8,7 @@ public class GameTrackingManager
 {
     private readonly List<SingleProcessTracker> _trackers = new();
 
-    public void StartListening(IEnumerable<Game> games)
+    public void StartListening(IEnumerable<GameViewModel> games)
     {
         foreach (var game in games)
         {

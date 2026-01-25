@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management;
 using GameplayTimeTracker.Models;
+using GameplayTimeTracker.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace GameplayTimeTracker.Services.Tracker;
@@ -12,11 +13,11 @@ namespace GameplayTimeTracker.Services.Tracker;
 public class SingleProcessTracker
 {
     private readonly ILogger<SingleProcessTracker> _logger;
-    private readonly Game _game;
+    private readonly GameViewModel _game;
     private readonly HashSet<int> _runningProcesses = new();
     private ManagementEventWatcher? _watcher;
     
-    public SingleProcessTracker(Game game)
+    public SingleProcessTracker(GameViewModel game)
     {
         _game = game;
         _logger = AppLogger.CreateLogger<SingleProcessTracker>();

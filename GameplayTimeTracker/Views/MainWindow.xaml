@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:GameplayTimeTracker"
+        xmlns:gameItems="clr-namespace:GameplayTimeTracker.Views.GameItems"
+        xmlns:vm="clr-namespace:GameplayTimeTracker.ViewModels"
         mc:Ignorable="d"
         Title="Gameplay Time Tracker"
         Height="800"
@@ -12,5 +14,40 @@
         MinWidth="870"
         WindowState="Minimized"
         Icon="pack://application:,,,/Assets/GameplayTimeTracker.ico">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:GameViewModel}">
+            <gameItems:GameRowView />
+        </DataTemplate>
+    </Window.Resources>
     
+    <Grid>
+        <!-- Rows -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <!-- TOP: Scrollable content -->
+        <ListBox Grid.Row="0"
+                 ItemsSource="{Binding Games}"
+                 BorderThickness="0"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+        <!-- BOTTOM: Fixed panel -->
+        <Border Grid.Row="1"
+                Background="#1E1E1E"
+                Padding="10">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <Button Content="Add Game" Width="100" Margin="5" />
+                <Button Content="Settings" Width="100" Margin="5" />
+                <TextBlock Text="Status: Tracking"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0" />
+            </StackPanel>
+        </Border>
+
+    </Grid>
 </Window>

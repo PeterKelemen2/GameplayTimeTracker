@@ -96,7 +96,6 @@
     <ItemGroup>
       <Folder Include="Helpers\" />
       <Folder Include="Migrations\" />
-      <Folder Include="Views\GameItems\" />
       <Folder Include="Views\Menus\" />
     </ItemGroup>
 
