@@ -3,9 +3,6 @@ using GameplayTimeTracker.Models;
 
 namespace GameplayTimeTracker.Repositories;
 
-public class SettingsRepository : Repository<Settings>
+public class SettingsRepository(AppDbContext db) : Repository<Settings>(db)
 {
-    public SettingsRepository(AppDbContext db) : base(db)
-    {
-    }
 }

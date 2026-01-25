@@ -11,7 +11,17 @@ public class Repository<T>(AppDbContext db)
 {
     protected readonly AppDbContext Db = db;
 
-    public void Add(T entity)
+    public bool ExistsById(int id) => Db.Set<T>().Find(id) != null;
+
+    public virtual T? GetById(int id) => Db.Set<T>().Find(id);
+
+    public void DeleteById(int id)
+    {
+        T? entity = Db.Set<T>().Find(id);
+        if (entity != null) Db.Set<T>().Remove(entity);
+    }
+
+    public virtual void Add(T entity)
     {
         Db.Set<T>().Add(entity);
         Console.WriteLine($"{typeof(T)} added successfully!");
@@ -24,10 +34,17 @@ public class Repository<T>(AppDbContext db)
         Db.SaveChanges();
     }
 
-    public void Delete(T entity)
+    public void Delete(T? entity)
     {
-        Db.Set<T>().Remove(entity);
-        Db.SaveChanges();
+        if (entity != null)
+        {
+            Db.Set<T>().Remove(entity);
+            Db.SaveChanges();
+        }
+        else
+        {
+            Console.WriteLine($"{typeof(T)} not found!");
+        }
     }
 
     public T? Get(Expression<Func<T, bool>> predicate)

@@ -3,27 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using GameplayTimeTracker.Data;
 using GameplayTimeTracker.Models;
-using GameplayTimeTracker.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameplayTimeTracker.Repositories;
 
-public class GameRepository : Repository<Game>
+public class GameRepository(AppDbContext db) : Repository<Game>(db)
 {
-    public GameRepository(AppDbContext db) : base(db)
-    {
-    }
-
-    public bool ExistsById(int id) => Db.Games.Any(g => g.Id == id);
-
-    public Game? GetGameById(int id) => Db.Games
+    public override Game? GetById(int id) => Db.Games
         .Include(g => g.LastPlaytime)
         .Include(g => g.TotalPlaytime)
         .FirstOrDefault(g => g.Id == id);
 
-    public List<Game> GetAllGames() => Db.Games.ToList();
-
-    public void AddGame(Game game)
+    public override void Add(Game game)
     {
         Console.WriteLine($"Adding game: {game}");
 
@@ -42,26 +33,8 @@ public class GameRepository : Repository<Game>
         }
         else
         {
+            Update(game);
             Db.SaveChanges();
-        }
-    }
-
-    public void DeleteGameById(int id)
-    {
-        var game = GetGameById(id);
-        if (game != null) DeleteGame(game);
-    }
-
-    public void DeleteGame(Game? game)
-    {
-        if (game != null)
-        {
-            Db.Games.Remove(game);
-            Db.SaveChanges();
-        }
-        else
-        {
-            Console.WriteLine("Game not found");
         }
     }
 }

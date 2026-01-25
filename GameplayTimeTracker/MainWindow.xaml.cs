@@ -21,7 +21,7 @@ public partial class MainWindow : Window
             Name = "TestGame",
         };
 
-        GlobalServices.Repositories.GameRepository.AddGame(testGame);
+        GlobalServices.Repositories.GameRepository.Add(testGame);
 
         // GlobalServices.Repositories.GameRepository.DeleteGameById(2);
         //

@@ -11,7 +11,7 @@ public class PlaytimeRepository(AppDbContext db) : Repository<Playtime>(db)
 {
     private readonly PlaytimeValidator _validator = new PlaytimeValidator();
 
-    public void AddPlaytime(Playtime playtime)
+    public override void Add(Playtime playtime)
     {
         // var validator = new PlaytimeValidator();
         var errors = _validator.Validate(playtime).ToList();
