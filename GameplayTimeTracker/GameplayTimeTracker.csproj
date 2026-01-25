@@ -94,18 +94,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Page Update="MainWindow.xaml">
-        <Generator>MSBuild:Compile</Generator>
-        <XamlRuntime>Wpf</XamlRuntime>
-        <SubType>Designer</SubType>
-      </Page>
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="Helpers\" />
       <Folder Include="Migrations\" />
-      <Folder Include="ViewModels\" />
-      <Folder Include="Views\" />
+      <Folder Include="Views\GameItems\" />
+      <Folder Include="Views\Menus\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -113,6 +105,14 @@
       <Resource Include="Data\gameplaytimetracker.db">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
 </Project>
