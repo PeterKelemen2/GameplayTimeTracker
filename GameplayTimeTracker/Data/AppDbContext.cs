@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using GameplayTimeTracker.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,5 +46,36 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(sp => sp.RemoteMachineId)
             .OnDelete(DeleteBehavior.Restrict);
+    }
+    
+    
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+    
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+    
+    private void UpdateTimestamps()
+    {
+        var entries = ChangeTracker.Entries<BaseDataModel>();
+
+        foreach (var entry in entries)
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedOn = DateTime.UtcNow;
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.ModifiedOn = DateTime.UtcNow;
+                entry.Property(x => x.CreatedOn).IsModified = false;
+            }
+        }
     }
 }
