@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Management;
 using GameplayTimeTracker.Models;
+using Microsoft.Extensions.Logging;
 
 namespace GameplayTimeTracker.Services.Tracker;
 
 public class SingleProcessTracker
 {
+    private readonly ILogger<SingleProcessTracker> _logger;
     private readonly Game _game;
     private readonly HashSet<int> _runningProcesses = new();
     private ManagementEventWatcher? _watcher;
@@ -17,16 +19,19 @@ public class SingleProcessTracker
     public SingleProcessTracker(Game game)
     {
         _game = game;
+        _logger = AppLogger.CreateLogger<SingleProcessTracker>();
     }
 
     public void Start()
     {
+        _logger.LogDebug("Starting single process tracker...");
         TrackExistingProcesses();
 
         string query = "SELECT * FROM Win32_ProcessStartTrace";
         _watcher = new ManagementEventWatcher(new WqlEventQuery(query));
         _watcher.EventArrived += OnProcessStarted;
         _watcher.Start();
+        _logger.LogInformation("Single process tracker started.");
     }
 
     private void TrackExistingProcesses()
@@ -89,7 +94,7 @@ public class SingleProcessTracker
     {
         _game.IsTracked = true;
         _game.StartTime = startTime;
-        Console.WriteLine($"Session Start: {_game.DisplayName} - ({startTime})");
+        _logger.LogInformation($"Session started: {_game.DisplayName} - ({startTime})");
     }
 
     private void EndSession(DateTime endTime)
@@ -98,13 +103,15 @@ public class SingleProcessTracker
         _game.EndTime = endTime;
 
         var duration = PlaytimeCalcService.GetDurationFromDatesToString(_game.StartTime, _game.EndTime);
-        Console.WriteLine($"Session End: {_game.DisplayName} - ({endTime}) - Duration: {duration}");
+        _logger.LogInformation($"Session ended: {_game.DisplayName} - ({endTime}) - Duration: {duration}");
     }
 
     public void Stop()
     {
+        _logger.LogDebug("Stopping single process tracker...");
         _watcher?.Stop();
         _watcher?.Dispose();
         _watcher = null;
+        _logger.LogDebug("Single process tracker stopped.");
     }
 }
