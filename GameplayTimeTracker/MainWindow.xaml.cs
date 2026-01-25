@@ -23,7 +23,7 @@ public partial class MainWindow : Window
                 "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2510.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
         };
 
-        GlobalServices.Repositories.GameRepository.Add(testGame);
+        GlobalServices.Repositories.GameRepository.AddOrUpdate(testGame);
 
         // GlobalServices.Repositories.GameRepository.DeleteGameById(2);
         //
