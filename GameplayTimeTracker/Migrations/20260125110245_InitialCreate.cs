@@ -1,0 +1,215 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameplayTimeTracker.Migrations
+{
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "PlaytimeHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    GameId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaytimeHistories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Playtimes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    GameId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
+                    LastTotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Playtimes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RemoteMachines",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    HostOs = table.Column<int>(type: "INTEGER", nullable: false),
+                    HostName = table.Column<string>(type: "TEXT", nullable: false),
+                    Port = table.Column<int>(type: "INTEGER", nullable: false),
+                    User = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    SaveFolder = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RemoteMachines", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Themes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ThemeName = table.Column<string>(type: "TEXT", nullable: false),
+                    CFooter = table.Column<string>(type: "TEXT", nullable: false),
+                    CFooterFont = table.Column<string>(type: "TEXT", nullable: false),
+                    CBackground = table.Column<string>(type: "TEXT", nullable: false),
+                    CCard1 = table.Column<string>(type: "TEXT", nullable: false),
+                    CCard2 = table.Column<string>(type: "TEXT", nullable: false),
+                    CProgressBar1 = table.Column<string>(type: "TEXT", nullable: false),
+                    CProgressBar2 = table.Column<string>(type: "TEXT", nullable: false),
+                    ProgressBarGradOrient = table.Column<int>(type: "INTEGER", nullable: false),
+                    CFont = table.Column<string>(type: "TEXT", nullable: false),
+                    CRunningIndicator = table.Column<string>(type: "TEXT", nullable: false),
+                    CButton = table.Column<string>(type: "TEXT", nullable: false),
+                    CButtonFont = table.Column<string>(type: "TEXT", nullable: false),
+                    CButtonPositive = table.Column<string>(type: "TEXT", nullable: false),
+                    CButtonPositiveFont = table.Column<string>(type: "TEXT", nullable: false),
+                    CButtonNegative = table.Column<string>(type: "TEXT", nullable: false),
+                    CButtonNegativeFont = table.Column<string>(type: "TEXT", nullable: false),
+                    CShadow = table.Column<string>(type: "TEXT", nullable: false),
+                    CTransparency = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Themes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LastPlaytimeId = table.Column<int>(type: "INTEGER", nullable: true),
+                    TotalPlaytimeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Playtimes_LastPlaytimeId",
+                        column: x => x.LastPlaytimeId,
+                        principalTable: "Playtimes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Playtimes_TotalPlaytimeId",
+                        column: x => x.TotalPlaytimeId,
+                        principalTable: "Playtimes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Settings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ThemeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RemoteMachineId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProfileName = table.Column<string>(type: "TEXT", nullable: false),
+                    StartWithSystem = table.Column<bool>(type: "INTEGER", nullable: false),
+                    StartMinimized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SGDBApiKey = table.Column<string>(type: "TEXT", nullable: false),
+                    PreferSGDBImages = table.Column<bool>(type: "INTEGER", nullable: false),
+                    QuickAdd = table.Column<bool>(type: "INTEGER", nullable: false),
+                    BackupOnExit = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DpType = table.Column<int>(type: "INTEGER", nullable: false),
+                    SavingFreq = table.Column<int>(type: "INTEGER", nullable: false),
+                    RemoteSavingEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Settings_RemoteMachines_RemoteMachineId",
+                        column: x => x.RemoteMachineId,
+                        principalTable: "RemoteMachines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Settings_Themes_ThemeId",
+                        column: x => x.ThemeId,
+                        principalTable: "Themes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_LastPlaytimeId",
+                table: "Games",
+                column: "LastPlaytimeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_TotalPlaytimeId",
+                table: "Games",
+                column: "TotalPlaytimeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Settings_RemoteMachineId",
+                table: "Settings",
+                column: "RemoteMachineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Settings_ThemeId",
+                table: "Settings",
+                column: "ThemeId");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "PlaytimeHistories");
+
+            migrationBuilder.DropTable(
+                name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Playtimes");
+
+            migrationBuilder.DropTable(
+                name: "RemoteMachines");
+
+            migrationBuilder.DropTable(
+                name: "Themes");
+        }
+    }
+}

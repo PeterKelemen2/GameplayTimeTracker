@@ -99,6 +99,7 @@
 
     <ItemGroup>
       <Folder Include="Helpers\" />
+      <Folder Include="Migrations\" />
       <Folder Include="ViewModels\" />
       <Folder Include="Views\" />
     </ItemGroup>
