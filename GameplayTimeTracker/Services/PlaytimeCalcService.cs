@@ -1,10 +1,9 @@
 ﻿using System;
 using GameplayTimeTracker.Dtos;
-using GameplayTimeTracker.Models;
 
-namespace GameplayTimeTracker.Helpers;
+namespace GameplayTimeTracker.Services;
 
-public static class PlaytimeHelper
+public static class PlaytimeCalcService
 {
     public static DurationDto NormalizeTime(TimeSpan duration)
     {
