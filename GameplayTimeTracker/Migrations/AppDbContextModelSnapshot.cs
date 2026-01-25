@@ -26,26 +26,18 @@ namespace GameplayTimeTracker.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("LastPlaytimeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TotalPlaytimeId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("LastPlaytimeId")
-                        .IsUnique();
-
-                    b.HasIndex("TotalPlaytimeId")
-                        .IsUnique();
 
                     b.ToTable("Games");
                 });
@@ -65,19 +57,15 @@ namespace GameplayTimeTracker.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LastTotalSeconds")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TotalSeconds")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.ToTable("Playtimes");
                 });
@@ -298,22 +286,15 @@ namespace GameplayTimeTracker.Migrations
                     b.ToTable("Themes");
                 });
 
-            modelBuilder.Entity("GameplayTimeTracker.Models.Game", b =>
+            modelBuilder.Entity("GameplayTimeTracker.Models.Playtime", b =>
                 {
-                    b.HasOne("GameplayTimeTracker.Models.Playtime", "LastPlaytime")
-                        .WithOne()
-                        .HasForeignKey("GameplayTimeTracker.Models.Game", "LastPlaytimeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("GameplayTimeTracker.Models.Playtime", "TotalPlaytime")
-                        .WithOne()
-                        .HasForeignKey("GameplayTimeTracker.Models.Game", "TotalPlaytimeId")
+                    b.HasOne("GameplayTimeTracker.Models.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("LastPlaytime");
-
-                    b.Navigation("TotalPlaytime");
+                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("GameplayTimeTracker.Models.Settings", b =>

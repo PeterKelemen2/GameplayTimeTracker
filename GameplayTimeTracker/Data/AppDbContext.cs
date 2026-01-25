@@ -26,16 +26,11 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Game>()
-            .HasOne(g => g.LastPlaytime)
-            .WithOne()
-            .HasForeignKey<Game>(g => g.LastPlaytimeId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Game>()
-            .HasOne(g => g.TotalPlaytime)
-            .WithOne()
-            .HasForeignKey<Game>(g => g.TotalPlaytimeId)
+        // One Game has many Playtimes
+        modelBuilder.Entity<Playtime>()
+            .HasOne< Game >(p => p.Game)   // Playtime.Game navigation property
+            .WithMany()
+            .HasForeignKey(p => p.GameId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Settings>()

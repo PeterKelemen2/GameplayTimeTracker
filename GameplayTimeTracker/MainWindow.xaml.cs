@@ -18,7 +18,9 @@ public partial class MainWindow : Window
     {
         Game testGame = new Game
         {
-            Name = "TestGame",
+            DisplayName = "Notepad",
+            ExePath =
+                "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2510.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
         };
 
         GlobalServices.Repositories.GameRepository.Add(testGame);
@@ -41,6 +43,6 @@ public partial class MainWindow : Window
         //
         // GlobalServices.Repositories.PlaytimeRepository.AddPlaytime(playtime);
 
-        GlobalServices.Repositories.PlaytimeHistoryRepository.DeletePlaytimeHistoryByGameId(1);
+        // GlobalServices.Repositories.PlaytimeHistoryRepository.DeletePlaytimeHistoryByGameId(1);
     }
 }

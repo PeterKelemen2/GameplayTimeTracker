@@ -12,6 +12,22 @@ namespace GameplayTimeTracker.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: false),
+                    ExePath = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlaytimeHistories",
                 columns: table => new
                 {
@@ -26,25 +42,6 @@ namespace GameplayTimeTracker.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PlaytimeHistories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Playtimes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    GameId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
-                    LastTotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Playtimes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,30 +98,24 @@ namespace GameplayTimeTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Playtimes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    LastPlaytimeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TotalPlaytimeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    GameId = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.PrimaryKey("PK_Playtimes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_Playtimes_LastPlaytimeId",
-                        column: x => x.LastPlaytimeId,
-                        principalTable: "Playtimes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Games_Playtimes_TotalPlaytimeId",
-                        column: x => x.TotalPlaytimeId,
-                        principalTable: "Playtimes",
+                        name: "FK_Playtimes_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -168,16 +159,9 @@ namespace GameplayTimeTracker.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_LastPlaytimeId",
-                table: "Games",
-                column: "LastPlaytimeId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Games_TotalPlaytimeId",
-                table: "Games",
-                column: "TotalPlaytimeId",
-                unique: true);
+                name: "IX_Playtimes_GameId",
+                table: "Playtimes",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Settings_RemoteMachineId",
@@ -194,16 +178,16 @@ namespace GameplayTimeTracker.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "PlaytimeHistories");
 
             migrationBuilder.DropTable(
-                name: "PlaytimeHistories");
+                name: "Playtimes");
 
             migrationBuilder.DropTable(
                 name: "Settings");
 
             migrationBuilder.DropTable(
-                name: "Playtimes");
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "RemoteMachines");
