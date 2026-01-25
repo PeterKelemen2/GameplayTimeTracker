@@ -78,14 +78,20 @@ public class TrackerService
         if (game.IsTracked) return;
 
         game.IsTracked = true;
+        game.StartTime = startTime;
         Console.WriteLine($"Session Start: {game.DisplayName} - ({startTime})");
     }
 
-    private void SaveSessionEnd(Game game, DateTime startTime)
+    private void SaveSessionEnd(Game game, DateTime endTime)
     {
+        if (!game.IsTracked) return;
+
         game.IsTracked = false;
-        
-        Console.WriteLine($"Session End: {game.DisplayName} - ({startTime})");
+        game.EndTime = endTime;
+
+        var durString = PlaytimeCalcService.GetDurationFromDatesToString(game.StartTime, game.EndTime);
+
+        Console.WriteLine($"Session End: {game.DisplayName} - ({endTime}) - (Duration: {durString})");
     }
 
     public void StopListening()
