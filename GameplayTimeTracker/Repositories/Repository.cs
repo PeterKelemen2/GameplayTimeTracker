@@ -22,6 +22,7 @@ public class Repository<T>(AppDbContext db)
     {
         T? entity = Db.Set<T>().Find(id);
         if (entity != null) Db.Set<T>().Remove(entity);
+        Db.SaveChanges();
     }
 
     public virtual void Add(T entity)
@@ -55,11 +56,11 @@ public class Repository<T>(AppDbContext db)
         return Db.Set<T>().FirstOrDefault(predicate);
     }
 
-    public List<T> GetAll()
+    public IEnumerable<T> GetAll()
     {
-        return Db.Set<T>().ToList();
+        return Db.Set<T>().AsEnumerable();
     }
-
+    
     public void AddOrUpdate(T entity)
     {
         Db.AddOrUpdateAsync(entity, e => e.Id).Wait();
