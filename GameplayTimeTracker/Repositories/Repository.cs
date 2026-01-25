@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using GameplayTimeTracker.Data;
+using GameplayTimeTracker.Extensions;
+using GameplayTimeTracker.Models;
 
 namespace GameplayTimeTracker.Repositories;
 
 public class Repository<T>(AppDbContext db)
-    where T : class
+    where T : BaseDataModel
 {
     protected readonly AppDbContext Db = db;
 
@@ -55,5 +58,17 @@ public class Repository<T>(AppDbContext db)
     public List<T> GetAll()
     {
         return Db.Set<T>().ToList();
+    }
+
+    public void AddOrUpdate(T entity)
+    {
+        Db.AddOrUpdateAsync(entity, e => e.Id).Wait();
+        Db.SaveChanges();
+    }
+    
+    public async Task AddOrUpdateAsync(T entity)
+    {
+        await Db.AddOrUpdateAsync(entity, e => e.Id);
+        await Db.SaveChangesAsync();
     }
 }
