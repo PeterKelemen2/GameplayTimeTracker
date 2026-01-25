@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameplayTimeTracker.Models;
 
@@ -8,6 +9,8 @@ public class Game : BaseDataModel
     public string ExePath { get; set; } = "";
 
     [NotMapped] public bool IsTracked { get; set; }
+    [NotMapped] public DateTime StartTime { get; set; }
+    [NotMapped] public DateTime EndTime { get; set; }
 
     public override string ToString()
     {
