@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Services;
 using Window = System.Windows.Window;
@@ -7,6 +8,8 @@ namespace GameplayTimeTracker;
 
 public partial class MainWindow : Window
 {
+    TrackerService trackerService = new TrackerService();
+
     public MainWindow()
     {
         InitializeComponent();
@@ -18,12 +21,15 @@ public partial class MainWindow : Window
     {
         Game testGame = new Game
         {
-            DisplayName = "Notepad",
+            DisplayName = "Notepad++",
             ExePath =
-                "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2510.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
+                "C:\\Program Files\\Notepad++\\notepad++.exe"
         };
 
-        GlobalServices.Repositories.GameRepository.AddOrUpdate(testGame);
+
+        trackerService.StartListening(testGame);
+
+        // GlobalServices.Repositories.GameRepository.AddOrUpdate(testGame);
 
         // GlobalServices.Repositories.GameRepository.DeleteGameById(2);
         //
