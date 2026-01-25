@@ -1,13 +1,14 @@
 ﻿using System;
+using GameplayTimeTracker.Dtos;
 using GameplayTimeTracker.Models;
 
 namespace GameplayTimeTracker.Helpers;
 
 public static class PlaytimeHelper
 {
-    public static (int, int, int) NormalizeTime(TimeSpan duration)
+    public static DurationDto NormalizeTime(TimeSpan duration)
     {
-        int[] arr = new[] { duration.Hours, duration.Minutes, duration.Seconds };
+        int[] arr = [duration.Hours, duration.Minutes, duration.Seconds];
 
         for (int i = arr.Length - 1; i >= 1; i--)
         {
@@ -18,15 +19,15 @@ public static class PlaytimeHelper
             }
         }
 
-        return (arr[0], arr[1], arr[2]);
+        return new DurationDto(arr[0], arr[1], arr[2]);
     }
 
-    public static (int, int, int) GetDurationFromDates(DateTime start, DateTime end)
+    public static DurationDto GetDurationFromDates(DateTime start, DateTime end)
     {
         var duration = end - start;
         var hours = duration.Hours;
         var minutes = duration.Minutes;
         var seconds = duration.Seconds;
-        return (hours, minutes, seconds);
+        return new DurationDto(hours, minutes, seconds);
     }
 }

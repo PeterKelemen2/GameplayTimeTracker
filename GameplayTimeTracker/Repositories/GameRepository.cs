@@ -14,14 +14,14 @@ public class GameRepository : Repository<Game>
     {
     }
 
-    public bool ExistsById(int id) => _db.Games.Any(g => g.Id == id);
+    public bool ExistsById(int id) => Db.Games.Any(g => g.Id == id);
 
-    public Game? GetGameById(int id) => _db.Games
+    public Game? GetGameById(int id) => Db.Games
         .Include(g => g.LastPlaytime)
         .Include(g => g.TotalPlaytime)
         .FirstOrDefault(g => g.Id == id);
 
-    public List<Game> GetAllGames() => _db.Games.ToList();
+    public List<Game> GetAllGames() => Db.Games.ToList();
 
     public void AddGame(Game game)
     {
@@ -37,27 +37,27 @@ public class GameRepository : Repository<Game>
             game.LastPlaytime = lastPlaytime;
             game.TotalPlaytime = totalPlaytime;
 
-            _db.Games.Add(game);
-            _db.SaveChanges();
+            Db.Games.Add(game);
+            Db.SaveChanges();
         }
         else
         {
-            _db.SaveChanges();
+            Db.SaveChanges();
         }
     }
 
     public void DeleteGameById(int id)
     {
         var game = GetGameById(id);
-        DeleteGame(game);
+        if (game != null) DeleteGame(game);
     }
 
-    public void DeleteGame(Game game)
+    public void DeleteGame(Game? game)
     {
         if (game != null)
         {
-            _db.Games.Remove(game);
-            _db.SaveChanges();
+            Db.Games.Remove(game);
+            Db.SaveChanges();
         }
         else
         {

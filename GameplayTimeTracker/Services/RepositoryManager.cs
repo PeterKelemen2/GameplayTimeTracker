@@ -2,22 +2,14 @@
 
 namespace GameplayTimeTracker.Services;
 
-public class RepositoryManager
+public class RepositoryManager(
+    GameRepository gameRepo,
+    PlaytimeRepository playtimeRepo,
+    PlaytimeHistoryRepository historyRepo,
+    SettingsRepository settingsRepo)
 {
-    public GameRepository GameRepository { get; }
-    public PlaytimeRepository PlaytimeRepository { get; }
-    public PlaytimeHistoryRepository PlaytimeHistoryRepository { get; }
-    public SettingsRepository SettingsRepository { get; }
-
-    public RepositoryManager(
-        GameRepository gameRepo,
-        PlaytimeRepository playtimeRepo,
-        PlaytimeHistoryRepository historyRepo,
-        SettingsRepository settingsRepo)
-    {
-        GameRepository = gameRepo;
-        PlaytimeRepository = playtimeRepo;
-        PlaytimeHistoryRepository = historyRepo;
-        SettingsRepository = settingsRepo;
-    }
+    public GameRepository GameRepository { get; } = gameRepo;
+    public PlaytimeRepository PlaytimeRepository { get; } = playtimeRepo;
+    public PlaytimeHistoryRepository PlaytimeHistoryRepository { get; } = historyRepo;
+    public SettingsRepository SettingsRepository { get; } = settingsRepo;
 }

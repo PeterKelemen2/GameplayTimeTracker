@@ -11,7 +11,7 @@ public class PlaytimeHistoryRepository(AppDbContext db) : Repository<PlaytimeHis
     public PlaytimeHistory GetAppliedHistoryItem(int gameId, DateTime date, TimeSpan duration)
     {
         var historyItem =
-            _db.PlaytimeHistories.FirstOrDefault(x => x.GameId == gameId && x.Date.Date == date.Date);
+            Db.PlaytimeHistories.FirstOrDefault(x => x.GameId == gameId && x.Date.Date == date.Date);
 
         if (historyItem == null)
         {
@@ -62,14 +62,14 @@ public class PlaytimeHistoryRepository(AppDbContext db) : Repository<PlaytimeHis
         {
             if (historyItem.Id == 0)
             {
-                _db.PlaytimeHistories.Add(historyItem);
+                Db.PlaytimeHistories.Add(historyItem);
             }
             else
             {
-                _db.PlaytimeHistories.Update(historyItem);
+                Db.PlaytimeHistories.Update(historyItem);
             }
         }
 
-        _db.SaveChanges();
+        Db.SaveChanges();
     }
 }

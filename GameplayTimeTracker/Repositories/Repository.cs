@@ -6,41 +6,37 @@ using GameplayTimeTracker.Data;
 
 namespace GameplayTimeTracker.Repositories;
 
-public class Repository<T> where T : class
+public class Repository<T>(AppDbContext db)
+    where T : class
 {
-    protected readonly AppDbContext _db;
-
-    public Repository(AppDbContext db)
-    {
-        _db = db;
-    }
+    protected readonly AppDbContext Db = db;
 
     public void Add(T entity)
     {
-        _db.Set<T>().Add(entity);
+        Db.Set<T>().Add(entity);
         Console.WriteLine($"{typeof(T)} added successfully!");
-        _db.SaveChanges();
+        Db.SaveChanges();
     }
 
     public void Update(T entity)
     {
-        _db.Set<T>().Update(entity);
-        _db.SaveChanges();
+        Db.Set<T>().Update(entity);
+        Db.SaveChanges();
     }
 
     public void Delete(T entity)
     {
-        _db.Set<T>().Remove(entity);
-        _db.SaveChanges();
+        Db.Set<T>().Remove(entity);
+        Db.SaveChanges();
     }
 
     public T? Get(Expression<Func<T, bool>> predicate)
     {
-        return _db.Set<T>().FirstOrDefault(predicate);
+        return Db.Set<T>().FirstOrDefault(predicate);
     }
 
     public List<T> GetAll()
     {
-        return _db.Set<T>().ToList();
+        return Db.Set<T>().ToList();
     }
 }

@@ -13,6 +13,6 @@ public class PlaytimeHistory : BaseDataModel
     {
         TimeSpan span = TimeSpan.FromSeconds(TotalSeconds);
         return
-            $"PT History [Game: {GameId}] | On {Date.Date} | {(int)span.TotalHours:D2}h {span.Minutes:D2}m {span.Seconds:D2}s";
+            $"Playtime History [Game: {GameId}] | On {Date.Date} | {(int)span.TotalHours:D2}h {span.Minutes:D2}m {span.Seconds:D2}s";
     }
 }
