@@ -25,8 +25,6 @@ public class PlaytimeRepository(AppDbContext db) : Repository<Playtime>(db)
             return;
         }
 
-        GlobalServices.Repositories.PlaytimeHistoryRepository.AddToPlaytimeHistoryByPlaytime(playtime);
-
         Db.Playtimes.Add(playtime);
         Db.SaveChanges();
     }
