@@ -10,7 +10,6 @@ public class AppDbContext : DbContext
 {
     public DbSet<Game> Games { get; set; }
     public DbSet<Playtime> Playtimes { get; set; }
-    public DbSet<PlaytimeHistory> PlaytimeHistories { get; set; }
     public DbSet<Settings> Settings { get; set; }
     public DbSet<Theme> Themes { get; set; }
     public DbSet<RemoteMachine> RemoteMachines { get; set; }
