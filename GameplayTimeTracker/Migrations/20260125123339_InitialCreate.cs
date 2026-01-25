@@ -28,23 +28,6 @@ namespace GameplayTimeTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlaytimeHistories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    GameId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TotalSeconds = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlaytimeHistories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RemoteMachines",
                 columns: table => new
                 {
@@ -177,9 +160,6 @@ namespace GameplayTimeTracker.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "PlaytimeHistories");
-
             migrationBuilder.DropTable(
                 name: "Playtimes");
 

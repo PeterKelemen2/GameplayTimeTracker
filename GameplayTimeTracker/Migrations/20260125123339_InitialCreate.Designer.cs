@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameplayTimeTracker.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260125115629_InitialCreate")]
+    [Migration("20260125123339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -71,32 +71,6 @@ namespace GameplayTimeTracker.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Playtimes");
-                });
-
-            modelBuilder.Entity("GameplayTimeTracker.Models.PlaytimeHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TotalSeconds")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PlaytimeHistories");
                 });
 
             modelBuilder.Entity("GameplayTimeTracker.Models.RemoteMachine", b =>
