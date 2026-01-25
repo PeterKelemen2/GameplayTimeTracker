@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using Cairo;
-using GameplayTimeTracker.Helpers;
+﻿using System.Windows;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Services;
 using Window = System.Windows.Window;
@@ -35,13 +32,15 @@ public partial class MainWindow : Window
         //     Console.WriteLine(game);
         // }
 
-        Playtime playtime = new Playtime
-        {
-            GameId = 1,
-            StartDate = new DateTime(2025, 11, 23, 23, 30, 0),
-            EndDate = new DateTime(2025, 11, 25, 01, 30, 0),
-        };
+        // Playtime playtime = new Playtime
+        // {
+        //     GameId = 1,
+        //     StartDate = new DateTime(2025, 11, 23, 23, 30, 0),
+        //     EndDate = new DateTime(2025, 11, 25, 01, 30, 0),
+        // };
+        //
+        // GlobalServices.Repositories.PlaytimeRepository.AddPlaytime(playtime);
 
-        GlobalServices.Repositories.PlaytimeRepository.AddPlaytime(playtime);
+        GlobalServices.Repositories.PlaytimeHistoryRepository.DeletePlaytimeHistoryByGameId(1);
     }
 }

@@ -8,6 +8,36 @@ namespace GameplayTimeTracker.Repositories;
 
 public class PlaytimeHistoryRepository(AppDbContext db) : Repository<PlaytimeHistory>(db)
 {
+    public PlaytimeHistory? GetPlaytimeHistoryById(int id)
+    {
+        return Db.PlaytimeHistories.FirstOrDefault(x => x.Id == id);
+    }
+
+    public List<PlaytimeHistory> GetPlaytimeHistoryByGameId(int gameId)
+    {
+        return Db.PlaytimeHistories.Where(x => x.GameId == gameId).ToList();
+    }
+
+    public void DeletePlaytimeHistoryById(int id)
+    {
+        var entity = GetPlaytimeHistoryById(id);
+        if (entity != null)
+        {
+            Db.PlaytimeHistories.Remove(entity);
+            Db.SaveChanges();
+        }
+    }
+
+    public void DeletePlaytimeHistoryByGameId(int gameId)
+    {
+        var gamesHistory = GetPlaytimeHistoryByGameId(gameId);
+        if (gamesHistory.Count > 0)
+        {
+            Db.PlaytimeHistories.RemoveRange(gamesHistory);
+            Db.SaveChanges();
+        }
+    }
+
     public PlaytimeHistory GetAppliedHistoryItem(int gameId, DateTime date, TimeSpan duration)
     {
         var historyItem =
