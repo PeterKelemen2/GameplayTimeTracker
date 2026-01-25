@@ -29,7 +29,7 @@ public class AppDbContext : DbContext
     {
         // One Game has many Playtimes
         modelBuilder.Entity<Playtime>()
-            .HasOne< Game >(p => p.Game)   // Playtime.Game navigation property
+            .HasOne<Game>(p => p.Game) // Playtime.Game navigation property
             .WithMany()
             .HasForeignKey(p => p.GameId)
             .OnDelete(DeleteBehavior.Cascade);
@@ -46,20 +46,20 @@ public class AppDbContext : DbContext
             .HasForeignKey(sp => sp.RemoteMachineId)
             .OnDelete(DeleteBehavior.Restrict);
     }
-    
-    
+
+
     public override int SaveChanges()
     {
         UpdateTimestamps();
         return base.SaveChanges();
     }
-    
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateTimestamps();
         return base.SaveChangesAsync(cancellationToken);
     }
-    
+
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries<BaseDataModel>();
