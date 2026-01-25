@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
-using GameplayTimeTracker.Models;
 using GameplayTimeTracker.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +15,7 @@ public class SingleProcessTracker
     private readonly GameViewModel _game;
     private readonly HashSet<int> _runningProcesses = new();
     private ManagementEventWatcher? _watcher;
-    
+
     public SingleProcessTracker(GameViewModel game)
     {
         _game = game;
@@ -62,7 +61,8 @@ public class SingleProcessTracker
             var process = Process.GetProcessById(processId);
 
             var path = process.MainModule?.FileName;
-            if (path != null && Path.GetFullPath(path).Equals(Path.GetFullPath(_game.ExePath), StringComparison.OrdinalIgnoreCase))
+            if (path != null && Path.GetFullPath(path)
+                    .Equals(Path.GetFullPath(_game.ExePath), StringComparison.OrdinalIgnoreCase))
                 AttachProcess(process);
         }
         catch
@@ -94,17 +94,17 @@ public class SingleProcessTracker
     private void StartSession(DateTime startTime)
     {
         _game.IsTracked = true;
-        _game.StartTime = startTime;
+        _game.LastPlaytime.StartDate = startTime;
         _logger.LogInformation($"Session started: {_game.DisplayName} - ({startTime})");
     }
 
     private void EndSession(DateTime endTime)
     {
         _game.IsTracked = false;
-        _game.EndTime = endTime;
+        _game.LastPlaytime.EndDate = endTime;
 
-        var duration = PlaytimeCalcService.GetDurationFromDatesToString(_game.StartTime, _game.EndTime);
-        _logger.LogInformation($"Session ended: {_game.DisplayName} - ({endTime}) - Duration: {duration}");
+        _logger.LogInformation(
+            $"Session ended: {_game.DisplayName} - ({endTime}) - Duration: {_game.LastPlaytimeDur}");
     }
 
     public void Stop()

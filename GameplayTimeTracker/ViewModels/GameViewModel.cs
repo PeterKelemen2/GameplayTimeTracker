@@ -12,9 +12,13 @@ public class GameViewModel : INotifyPropertyChanged
     public int Id => _game.Id;
     public string DisplayName => _game.DisplayName;
     public string ExePath => _game.ExePath;
+
     public bool IsTracked { get; set; }
-    public DateTime StartTime  { get; set; }
-    public DateTime EndTime  { get; set; }
+
+    public Playtime LastPlaytime { get; set; }
+    
+    public TimeSpan LastPlaytimeDur { get; set; }
+    public TimeSpan TotalPlaytimeDur { get; set; }
 
     private TimeSpan _playTime;
 
@@ -32,7 +36,7 @@ public class GameViewModel : INotifyPropertyChanged
         }
     }
 
-    public string PlayTimeText => $"{(int)PlayTime.TotalHours:D2}h {PlayTime.Minutes:D2}m {PlayTime.Seconds}s";
+    public string PlayTimeText => $"{(int)PlayTime.TotalHours:D2}h {PlayTime.Minutes:D2}m {PlayTime.Seconds:D2}s";
 
     public GameViewModel(Game game)
     {
