@@ -7,7 +7,7 @@ public static class PlaytimeCalcService
 {
     public static DurationDto NormalizeTime(TimeSpan duration)
     {
-        int[] arr = [duration.Hours, duration.Minutes, duration.Seconds];
+        int[] arr = [(int)duration.TotalHours, duration.Minutes, duration.Seconds];
 
         for (int i = arr.Length - 1; i >= 1; i--)
         {
@@ -23,10 +23,16 @@ public static class PlaytimeCalcService
 
     public static DurationDto GetDurationFromDates(DateTime start, DateTime end)
     {
-        var duration = end - start;
+        var duration = NormalizeTime(end - start);
         var hours = duration.Hours;
         var minutes = duration.Minutes;
         var seconds = duration.Seconds;
         return new DurationDto(hours, minutes, seconds);
+    }
+
+    public static String GetDurationFromDatesToString(DateTime start, DateTime end)
+    {
+        var dur = GetDurationFromDates(start, end);
+        return $"{dur.Hours}h {dur.Minutes}m {dur.Seconds}s";
     }
 }
