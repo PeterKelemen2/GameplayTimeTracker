@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GameplayTimeTracker.Views.GameItems"
              xmlns:converters="clr-namespace:GameplayTimeTracker.Converters"
+             xmlns:viewModels="clr-namespace:GameplayTimeTracker.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="180" d:DesignWidth="700">
+             d:DesignHeight="180" d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance Type=viewModels:GameViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <converters:TimeSpanPrettyConverter x:Key="TimeSpanPrettyConverter" />
     </UserControl.Resources>
-    
+
     <Border Padding="10"
             Margin="6"
             CornerRadius="6"
@@ -30,14 +32,16 @@
 
                 <TextBlock Text="{Binding ExePath}"
                            FontSize="11"
-                           Foreground="Gray" />
+                           Foreground="Gray"
+                           d:Text="This is an exe path" />
             </StackPanel>
 
-            <TextBlock Grid.Column="1"
-                       Text="{Binding LastPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}}"
-                       VerticalAlignment="Center"
-                       FontFamily="Consolas"
-                       FontSize="14" />
+            <StackPanel Grid.Column="1">
+                <TextBlock
+                    Text="{Binding TotalPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
+                <TextBlock
+                    Text="{Binding LastPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

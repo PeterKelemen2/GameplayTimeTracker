@@ -16,10 +16,33 @@ public class GameViewModel : INotifyPropertyChanged
     private readonly Game _game;
     private DispatcherTimer _timer;
     private readonly object _lockObject = new object();
+    
     public int Id => _game.Id;
     public string DisplayName => _game.DisplayName;
     public string ExePath => _game.ExePath;
 
+    public GameViewModel(Game game)
+    {
+        _game = game;
+        _logger = AppLogger.CreateLogger<GameViewModel>();
+    }
+    
+#if DEBUG
+    public GameViewModel()
+    {
+        _game = new Game();
+        _game.DisplayName = "Sample Game";
+        _game.ExePath = @"C:\Games\SampleGame.exe";
+        LastPlaytimeDur = TimeSpan.FromMinutes(5);
+        TotalPlaytimeDur = TimeSpan.FromHours(12);
+        LastPlaytime = new Playtime
+        {
+            StartDate = DateTime.Now.AddMinutes(-5),
+            EndDate = DateTime.Now
+        };
+    }
+#endif
+    
     private bool _isTracked;
     public bool IsTracked
     {
@@ -98,11 +121,7 @@ public class GameViewModel : INotifyPropertyChanged
         }
     }
 
-    public GameViewModel(Game game)
-    {
-        _game = game;
-        _logger = AppLogger.CreateLogger<GameViewModel>();
-    }
+    
 
     private void StartTimer()
     {
