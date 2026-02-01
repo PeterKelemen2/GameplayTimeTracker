@@ -6,24 +6,14 @@ public class Settings : BaseDataModel
 {
     public int ThemeId { get; set; } = 0;
     public int RemoteMachineId { get; set; } = 0;
-    
-    [Display(Name = "Profile Name")] public string ProfileName { get; set; } = "";
-
-    [Display(Name = "Start With The System")] public bool StartWithSystem { get; set; } = true;
-
-    [Display(Name = "Start Minimized")] public bool StartMinimized { get; set; } = false;
-
-    [Display(Name = "SteamGridDB API Key")] public string SGDBApiKey { get; set; } = "";
-
-    [Display(Name = "Prefer SteamGridDB Images")] public bool PreferSGDBImages { get; set; } = false;
-
-    [Display(Name = "Quick Add")] public bool QuickAdd { get; set; } = false;
-
-    [Display(Name = "Backup On Exit")] public bool BackupOnExit { get; set; } = false;
-
-    [Display(Name = "Display Type")] public DisplayType DpType { get; set; } = DisplayType.Horizontal;
-
-    [Display(Name = "Saving Frequency")] public int SavingFreq { get; set; } = 5;
-
-    [Display(Name = "Remote Saving Enabled")] public bool RemoteSavingEnabled { get; set; } = false;
+    public string ProfileName { get; set; } = "";
+    public bool StartWithSystem { get; set; } = true;
+    public bool StartMinimized { get; set; } = false;
+    public string SGDBApiKey { get; set; } = "";
+    public bool PreferSGDBImages { get; set; } = false;
+    public bool QuickAdd { get; set; } = false;
+    public bool BackupOnExit { get; set; } = false;
+    public DisplayType DpType { get; set; } = DisplayType.Horizontal;
+    public int SavingFreq { get; set; } = 5;
+    public bool RemoteSavingEnabled { get; set; } = false;
 }
