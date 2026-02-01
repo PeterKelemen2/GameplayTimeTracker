@@ -12,7 +12,6 @@
         Height="800"
         Width="870"
         MinWidth="870"
-        WindowState="Minimized"
         Icon="pack://application:,,,/Assets/GameplayTimeTracker.ico">
 
     <Window.Resources>
@@ -30,6 +29,7 @@
 
         <!-- TOP: Scrollable content -->
         <ListBox Grid.Row="0"
+                 HorizontalAlignment="Center"
                  ItemsSource="{Binding Games}"
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"/>

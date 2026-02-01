@@ -94,7 +94,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\" />
       <Folder Include="Migrations\" />
       <Folder Include="Views\Menus\" />
     </ItemGroup>

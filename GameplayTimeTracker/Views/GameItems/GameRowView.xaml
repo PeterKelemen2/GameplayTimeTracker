@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:GameplayTimeTracker.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="830"
-             Width="700" Height="150"
+             Width="830" Height="150"
              d:DataContext="{d:DesignInstance Type=viewModels:GameViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <converters:TimeSpanPrettyConverter x:Key="TimeSpanPrettyConverter" />
@@ -63,7 +63,7 @@
                 </Grid>
 
                 <Grid Grid.Column="2" 
-                      Width="70" 
+                      Width="90" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       Margin="0,0,30,0">
@@ -75,16 +75,20 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/> <!-- gap -->
+                        <ColumnDefinition Width="5"/> <!-- gap -->
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Top row buttons -->
-                    <Button Grid.Row="0" Grid.Column="0" Content="E" Height="30" Width="30"/>
-                    <Button Grid.Row="0" Grid.Column="2" Content="X" Height="30" Width="30"/>
+                    <Button Grid.Row="0" Grid.Column="0" Content="E" Height="40" Width="40" 
+                            Style="{StaticResource NeutralButtonStyle}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="X" Height="40" Width="40" 
+                            Style="{StaticResource NegativeButtonStyle}"/>
 
                     <!-- Bottom row button spanning the top 2 buttons including the gap -->
-                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Launch" Height="30" Margin="0,10,0,0"/>
+                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Launch" Height="40" 
+                            Margin="0,5,0,0"
+                            Style="{StaticResource PositiveButtonStyle}"/>
                 </Grid>
             </Grid>
         </Grid>
