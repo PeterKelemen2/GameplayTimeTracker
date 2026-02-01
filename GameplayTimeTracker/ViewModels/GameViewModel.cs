@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Threading;
 using GameplayTimeTracker.Extensions;
 using GameplayTimeTracker.Models;
@@ -14,6 +15,7 @@ public class GameViewModel : INotifyPropertyChanged
     private readonly ILogger<GameViewModel> _logger;
     private readonly Game _game;
     private DispatcherTimer _timer;
+    private readonly object _lockObject = new object();
     public int Id => _game.Id;
     public string DisplayName => _game.DisplayName;
     public string ExePath => _game.ExePath;
@@ -21,7 +23,7 @@ public class GameViewModel : INotifyPropertyChanged
     private bool _isTracked;
     public bool IsTracked
     {
-        get;
+        get => _isTracked;
         set
         {
             if (_isTracked == value) return;
@@ -30,15 +32,30 @@ public class GameViewModel : INotifyPropertyChanged
 
             OnPropertyChanged();
 
-
-            if (_isTracked)
-                StartTimer();
-            else
-                StopTimer();
+            Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                OnPropertyChanged();
+                    
+                if (_isTracked)
+                    StartTimer();
+                else
+                    StopTimer();
+            });
         }
     }
 
-    public Playtime LastPlaytime { get; set; }
+    private Playtime _lastPlaytime;
+    public Playtime LastPlaytime 
+    { 
+        get => _lastPlaytime;
+        set
+        {
+            lock (_lockObject)
+            {
+                _lastPlaytime = value;
+            }
+        }
+    }
 
 
     private TimeSpan _lastPlaytimeDur;
@@ -47,10 +64,17 @@ public class GameViewModel : INotifyPropertyChanged
         get => _lastPlaytimeDur;
         set
         {
-            if (_lastPlaytimeDur == value) return;
-            _lastPlaytimeDur = value;
-            _logger.LogInformation($"{DisplayName} Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
-            OnPropertyChanged();
+            lock (_lockObject)
+            {
+                if (_lastPlaytimeDur == value) return;
+                _lastPlaytimeDur = value;
+                
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    _logger.LogInformation($"{DisplayName} Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
+                    OnPropertyChanged();
+                });
+            }
         }
     }
 
@@ -60,10 +84,17 @@ public class GameViewModel : INotifyPropertyChanged
         get => _totalPlaytimeDur;
         set
         {
-            if (_totalPlaytimeDur == value) return;
-            _totalPlaytimeDur = value;
-            _logger.LogInformation($"{DisplayName} Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
-            OnPropertyChanged();
+            lock (_lockObject)
+            {
+                if (_totalPlaytimeDur == value) return;
+                _totalPlaytimeDur = value;
+                
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    _logger.LogInformation($"{DisplayName} Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
+                    OnPropertyChanged();
+                });
+            }
         }
     }
 

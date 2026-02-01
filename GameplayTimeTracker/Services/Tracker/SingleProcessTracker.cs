@@ -14,6 +14,7 @@ public class SingleProcessTracker
     private readonly ILogger<SingleProcessTracker> _logger;
     private readonly GameViewModel _game;
     private readonly HashSet<int> _runningProcesses = new();
+    private readonly object _lockObject = new object();
     private ManagementEventWatcher? _watcher;
 
     public SingleProcessTracker(GameViewModel game)
@@ -31,7 +32,7 @@ public class SingleProcessTracker
         _watcher = new ManagementEventWatcher(new WqlEventQuery(query));
         _watcher.EventArrived += OnProcessStarted;
         _watcher.Start();
-        _logger.LogInformation("Single process tracker started.");
+        _logger.LogInformation($"[{_game.DisplayName}] Single process tracker started.");
     }
 
     private void TrackExistingProcesses()
@@ -88,21 +89,23 @@ public class SingleProcessTracker
         process.EnableRaisingEvents = true;
         process.Exited += (_, _) =>
         {
-            _runningProcesses.Remove(process.Id);
+            lock (_lockObject)
+            {
+                _runningProcesses.Remove(process.Id);
 
-            if (_runningProcesses.Count == 0)
-                EndSession(process.ExitTime);
+                if (_runningProcesses.Count == 0)
+                    EndSession(process.ExitTime);
+            }
         };
     }
 
-    // TODO: Fix concurrency issues
     private void StartSession(DateTime startTime)
     {
         if (_game.IsTracked) return;
         
         _game.IsTracked = true;
         _game.LastPlaytime.StartDate = startTime;
-        _logger.LogInformation($"Session started: {_game.DisplayName} - ({startTime})");
+        _logger.LogInformation($"[{_game.DisplayName}] Session started - ({startTime})");
     }
 
     private void EndSession(DateTime endTime)
@@ -113,7 +116,7 @@ public class SingleProcessTracker
         _game.LastPlaytime.EndDate = endTime;
 
         _logger.LogInformation(
-            $"Session ended: {_game.DisplayName} - ({endTime}) - Duration: {_game.LastPlaytimeDur}");
+            $"[{_game.DisplayName}] Session ended - ({endTime}) - Duration: {_game.LastPlaytimeDur}");
     }
 
     public void Stop()
