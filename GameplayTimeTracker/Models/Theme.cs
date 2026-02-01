@@ -16,11 +16,11 @@ public class Theme : BaseDataModel
     public string CFont { get; set; } = "#DAE4FF";
     public string CRunningIndicator { get; set; } = "#C3E88D";
     public string CButton { get; set; } = "#3BC9E3";
-    public string CButtonFont { get; set; } = "#DAE4FF";
+    public string CButtonFont { get; set; } = "#115d6b";
     public string CButtonPositive { get; set; } = "#90EE90";
-    public string CButtonPositiveFont { get; set; } = "#DAE4FF";
+    public string CButtonPositiveFont { get; set; } = "#369936";
     public string CButtonNegative { get; set; } = "#ED0C0C";
-    public string CButtonNegativeFont { get; set; } = "#DAE4FF";
+    public string CButtonNegativeFont { get; set; } = "#7a0606";
     public string CShadow { get; set; } = "#151515";
     public string CTransparency { get; set; } = "#00000000";
 }
