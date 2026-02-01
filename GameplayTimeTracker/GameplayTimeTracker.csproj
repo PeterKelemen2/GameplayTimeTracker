@@ -53,29 +53,11 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="Assets\cog.png" />
-      <Content Include="Assets\cog.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\add.png" />
-      <Content Include="Assets\add.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\edit.png" />
-      <Content Include="Assets\edit.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\folder.png" />
-      <Content Include="Assets\folder.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\remove.png" />
-      <Content Include="Assets\remove.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\save.png" />
-      <Content Include="Assets\save.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\DefaultHero.png" />
       <Content Include="Assets\DefaultHero.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -85,13 +67,7 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="Assets\arrow.png" />
-      <Content Include="Assets\arrow.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="Assets\loading.png" />
-      <Content Include="Assets\loading.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
