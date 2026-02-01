@@ -71,7 +71,7 @@ public class GameViewModel : INotifyPropertyChanged
                 
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    _logger.LogInformation($"{DisplayName} Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
+                    _logger.LogInformation($"[{DisplayName}] Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
                     OnPropertyChanged();
                 });
             }
@@ -91,7 +91,7 @@ public class GameViewModel : INotifyPropertyChanged
                 
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    _logger.LogInformation($"{DisplayName} Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
+                    _logger.LogInformation($"[{DisplayName}] Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
                     OnPropertyChanged();
                 });
             }
