@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using GameplayTimeTracker.Data;
+using GameplayTimeTracker.Mapping;
 using GameplayTimeTracker.Repositories;
 using GameplayTimeTracker.Services;
 using GameplayTimeTracker.Services.Tracker;
@@ -54,6 +55,10 @@ namespace GameplayTimeTracker
             services.AddSingleton<DatabaseService>();
 
             services.AddSingleton<GameTrackingManager>();
+            
+            // AutoMapper
+            var mapperConfig = AutoMapperConfig.Configuration;
+            services.AddSingleton(mapperConfig.CreateMapper());
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();
