@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Repositories;
+using GameplayTimeTracker.Services;
 using GameplayTimeTracker.Services.Tracker;
 using Microsoft.Extensions.Logging;
 
@@ -18,13 +19,12 @@ public class MainWindowViewModel
     public MainWindowViewModel(
         GameTrackingManager trackingManager,
         GameRepository gameRepository,
-        PlaytimeRepository playtimeRepository,
-        ILogger<MainWindowViewModel> logger)
+        PlaytimeRepository playtimeRepository)
     {
         _trackingManager = trackingManager;
         _gameRepository = gameRepository;
         _playtimeRepository = playtimeRepository;
-        _logger = logger;
+        _logger = AppLogger.LoggerFactory.CreateLogger<MainWindowViewModel>();
     }
 
     public void OnLoaded()

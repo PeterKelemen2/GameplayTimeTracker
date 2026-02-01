@@ -19,19 +19,16 @@ public class GameViewModel : INotifyPropertyChanged
     public string ExePath => _game.ExePath;
 
     private bool _isTracked;
-
     public bool IsTracked
     {
-        get => _isTracked;
+        get;
         set
         {
-            if (_isTracked != value)
-            {
-                _isTracked = value;
-            }
+            if (_isTracked == value) return;
+
+            _isTracked = value;
 
             OnPropertyChanged();
-            OnPropertyChanged(nameof(IsTracked));
 
 
             if (_isTracked)
@@ -45,32 +42,30 @@ public class GameViewModel : INotifyPropertyChanged
 
 
     private TimeSpan _lastPlaytimeDur;
-    private TimeSpan _totalPlaytimeDur;
-
     public TimeSpan LastPlaytimeDur
     {
         get => _lastPlaytimeDur;
         set
         {
             if (_lastPlaytimeDur == value) return;
-
             _lastPlaytimeDur = value;
-            _logger.LogInformation($"Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
+            _logger.LogInformation($"{DisplayName} Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
+            OnPropertyChanged();
         }
     }
 
+    private TimeSpan _totalPlaytimeDur;
     public TimeSpan TotalPlaytimeDur
     {
         get => _totalPlaytimeDur;
         set
         {
             if (_totalPlaytimeDur == value) return;
-
             _totalPlaytimeDur = value;
-            _logger.LogInformation($"Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
+            _logger.LogInformation($"{DisplayName} Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
+            OnPropertyChanged();
         }
     }
-
 
     public GameViewModel(Game game)
     {
@@ -102,13 +97,13 @@ public class GameViewModel : INotifyPropertyChanged
 
     private void Timer_Tick(object? sender, EventArgs e)
     {
-        if (!_isTracked)
+        if (!IsTracked)
         {
             StopTimer();
         }
 
-        LastPlaytimeDur = LastPlaytimeDur.Add(TimeSpan.FromSeconds(1));
-        TotalPlaytimeDur = TotalPlaytimeDur.Add(TimeSpan.FromSeconds(1));
+        LastPlaytimeDur += TimeSpan.FromSeconds(1);
+        TotalPlaytimeDur += TimeSpan.FromSeconds(1);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

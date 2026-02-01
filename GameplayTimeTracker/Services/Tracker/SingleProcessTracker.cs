@@ -50,6 +50,10 @@ public class SingleProcessTracker
             {
                 // ignore access denied
             }
+            catch (InvalidOperationException)
+            {
+                // Process exited between enumeration and access
+            }
         }
     }
 
@@ -91,8 +95,11 @@ public class SingleProcessTracker
         };
     }
 
+    // TODO: Fix concurrency issues
     private void StartSession(DateTime startTime)
     {
+        if (_game.IsTracked) return;
+        
         _game.IsTracked = true;
         _game.LastPlaytime.StartDate = startTime;
         _logger.LogInformation($"Session started: {_game.DisplayName} - ({startTime})");
@@ -100,6 +107,8 @@ public class SingleProcessTracker
 
     private void EndSession(DateTime endTime)
     {
+        if (!_game.IsTracked) return;
+
         _game.IsTracked = false;
         _game.LastPlaytime.EndDate = endTime;
 
