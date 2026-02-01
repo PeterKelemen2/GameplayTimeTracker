@@ -6,67 +6,68 @@
              xmlns:helpers="clr-namespace:GameplayTimeTracker.Helpers">
 
     <Application.Resources>
-    <button:HoverColorConverter x:Key="HoverColorConverter" />
-    <button:PressedColorConverter x:Key="PressedColorConverter" />
-    
-    <Style x:Key="BaseButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Padding" Value="10,5" />
-        <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="7"
-                            SnapsToDevicePixels="True">
-                        <ContentPresenter x:Name="contentPresenter"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background"
-                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={StaticResource HoverColorConverter}}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background"
-                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={StaticResource PressedColorConverter}}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#FFCCCCCC" />
-                            <Setter Property="Foreground" Value="#FF666666" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-    <!-- Positive (Green) -->
-    <Style x:Key="PositiveButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Background" Value="#28A745"/> <!-- green -->
-        <Setter Property="BorderBrush" Value="#1E7E34"/>
-    </Style>
+        <button:HoverColorConverter x:Key="HoverColorConverter" />
+        <button:PressedColorConverter x:Key="PressedColorConverter" />
 
-    <!-- Negative (Red) -->
-    <Style x:Key="NegativeButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Background" Value="#DC3545"/> <!-- red -->
-        <Setter Property="BorderBrush" Value="#B21F2D"/>
-    </Style>
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                SnapsToDevicePixels="True">
+                            <!-- ContentPresenter allows text, icon, or both -->
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={StaticResource HoverColorConverter}}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={StaticResource PressedColorConverter}}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#FFCCCCCC" />
+                                <Setter Property="Foreground" Value="#FF666666" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-    <!-- Neutral (Blue) -->
-    <Style x:Key="NeutralButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Background" Value="#007BFF"/> <!-- blue -->
-        <Setter Property="BorderBrush" Value="#0056B3"/>
-    </Style>
-</Application.Resources>
+        <!-- Positive (Green) -->
+        <Style x:Key="PositiveButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Background" Value="#28A745" /> <!-- green -->
+            <Setter Property="BorderBrush" Value="#1E7E34" />
+        </Style>
+
+        <!-- Negative (Red) -->
+        <Style x:Key="NegativeButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Background" Value="#DC3545" /> <!-- red -->
+            <Setter Property="BorderBrush" Value="#B21F2D" />
+        </Style>
+
+        <!-- Neutral (Blue) -->
+        <Style x:Key="NeutralButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Background" Value="#007BFF" /> <!-- blue -->
+            <Setter Property="BorderBrush" Value="#0056B3" />
+        </Style>
+    </Application.Resources>
 </Application>
