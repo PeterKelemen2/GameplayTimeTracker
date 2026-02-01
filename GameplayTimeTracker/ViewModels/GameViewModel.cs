@@ -2,12 +2,16 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using GameplayTimeTracker.Extensions;
 using GameplayTimeTracker.Models;
+using GameplayTimeTracker.Services;
+using Microsoft.Extensions.Logging;
 
 namespace GameplayTimeTracker.ViewModels;
 
 public class GameViewModel : INotifyPropertyChanged
 {
+    private readonly ILogger<GameViewModel> _logger;
     private readonly Game _game;
     private DispatcherTimer _timer;
     public int Id => _game.Id;
@@ -48,10 +52,10 @@ public class GameViewModel : INotifyPropertyChanged
         get => _lastPlaytimeDur;
         set
         {
-            if (_lastPlaytimeDur != value)
-            {
-                _lastPlaytimeDur = value;
-            }
+            if (_lastPlaytimeDur == value) return;
+
+            _lastPlaytimeDur = value;
+            _logger.LogInformation($"Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
         }
     }
 
@@ -60,35 +64,18 @@ public class GameViewModel : INotifyPropertyChanged
         get => _totalPlaytimeDur;
         set
         {
-            if (_totalPlaytimeDur != value)
-            {
-                _totalPlaytimeDur = value;
-            }
+            if (_totalPlaytimeDur == value) return;
+
+            _totalPlaytimeDur = value;
+            _logger.LogInformation($"Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
         }
     }
 
-
-    private TimeSpan _playTime;
-
-    public TimeSpan PlayTime
-    {
-        get => _playTime;
-        set
-        {
-            if (_playTime != value)
-            {
-                _playTime = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(PlayTimeText));
-            }
-        }
-    }
-
-    public string PlayTimeText => $"{(int)PlayTime.TotalHours:D2}h {PlayTime.Minutes:D2}m {PlayTime.Seconds:D2}s";
 
     public GameViewModel(Game game)
     {
         _game = game;
+        _logger = AppLogger.CreateLogger<GameViewModel>();
     }
 
     private void StartTimer()
@@ -119,6 +106,9 @@ public class GameViewModel : INotifyPropertyChanged
         {
             StopTimer();
         }
+
+        LastPlaytimeDur = LastPlaytimeDur.Add(TimeSpan.FromSeconds(1));
+        TotalPlaytimeDur = TotalPlaytimeDur.Add(TimeSpan.FromSeconds(1));
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
