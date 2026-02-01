@@ -16,7 +16,7 @@ public class GameViewModel : INotifyPropertyChanged
     private readonly Game _game;
     private DispatcherTimer _timer;
     private readonly object _lockObject = new object();
-    
+
     public int Id => _game.Id;
     public string DisplayName => _game.DisplayName;
     public string ExePath => _game.ExePath;
@@ -26,7 +26,7 @@ public class GameViewModel : INotifyPropertyChanged
         _game = game;
         _logger = AppLogger.CreateLogger<GameViewModel>();
     }
-    
+
 #if DEBUG
     public GameViewModel()
     {
@@ -42,8 +42,10 @@ public class GameViewModel : INotifyPropertyChanged
         };
     }
 #endif
-    
+
+    public string IsRunningLabel => "Running!";
     private bool _isTracked;
+
     public bool IsTracked
     {
         get => _isTracked;
@@ -58,7 +60,7 @@ public class GameViewModel : INotifyPropertyChanged
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 OnPropertyChanged();
-                    
+
                 if (_isTracked)
                     StartTimer();
                 else
@@ -68,8 +70,9 @@ public class GameViewModel : INotifyPropertyChanged
     }
 
     private Playtime _lastPlaytime;
-    public Playtime LastPlaytime 
-    { 
+
+    public Playtime LastPlaytime
+    {
         get => _lastPlaytime;
         set
         {
@@ -81,7 +84,9 @@ public class GameViewModel : INotifyPropertyChanged
     }
 
 
+    public string LastPlaytimeLabel => "Last Playtime";
     private TimeSpan _lastPlaytimeDur;
+
     public TimeSpan LastPlaytimeDur
     {
         get => _lastPlaytimeDur;
@@ -91,7 +96,7 @@ public class GameViewModel : INotifyPropertyChanged
             {
                 if (_lastPlaytimeDur == value) return;
                 _lastPlaytimeDur = value;
-                
+
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     _logger.LogInformation($"[{DisplayName}] Last PlaytimeDur: {_lastPlaytimeDur.GetPretty()}");
@@ -101,7 +106,9 @@ public class GameViewModel : INotifyPropertyChanged
         }
     }
 
+    public string TotalPlaytimeLabel => "Total Playtime";
     private TimeSpan _totalPlaytimeDur;
+
     public TimeSpan TotalPlaytimeDur
     {
         get => _totalPlaytimeDur;
@@ -111,7 +118,7 @@ public class GameViewModel : INotifyPropertyChanged
             {
                 if (_totalPlaytimeDur == value) return;
                 _totalPlaytimeDur = value;
-                
+
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     _logger.LogInformation($"[{DisplayName}] Total PlaytimeDur: {_totalPlaytimeDur.GetPretty()}");
@@ -121,7 +128,6 @@ public class GameViewModel : INotifyPropertyChanged
         }
     }
 
-    
 
     private void StartTimer()
     {

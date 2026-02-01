@@ -7,41 +7,86 @@
              xmlns:converters="clr-namespace:GameplayTimeTracker.Converters"
              xmlns:viewModels="clr-namespace:GameplayTimeTracker.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="180" d:DesignWidth="700"
+             d:DesignHeight="150" d:DesignWidth="830"
+             Width="700" Height="150"
              d:DataContext="{d:DesignInstance Type=viewModels:GameViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <converters:TimeSpanPrettyConverter x:Key="TimeSpanPrettyConverter" />
     </UserControl.Resources>
 
     <Border Padding="10"
-            Margin="6"
-            CornerRadius="6"
+            Margin="0"
+            CornerRadius="8"
             BorderBrush="#333"
             BorderThickness="1">
-
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding DisplayName}"
                            FontSize="16"
                            FontWeight="SemiBold" />
-
-                <TextBlock Text="{Binding ExePath}"
-                           FontSize="11"
-                           Foreground="Gray"
-                           d:Text="This is an exe path" />
+                <TextBlock Text="{Binding IsRunningLabel}"
+                           FontSize="12"
+                           Margin="10,4,0,0"
+                           FontWeight="SemiBold" />
             </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1">
-                <TextBlock
-                    Text="{Binding TotalPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
-                <TextBlock
-                    Text="{Binding LastPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
-            </StackPanel>
+                <Image Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       Margin="30,25,0,0"
+                       Height="86"
+                       Source="/Assets/DefaultIcon.png"
+                       Stretch="Uniform" />
+
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="140">
+                        <TextBlock Text="{Binding TotalPlaytimeLabel}" FontWeight="SemiBold" Margin="0,0,0,0" />
+                        <TextBlock
+                            Text="{Binding TotalPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
+                        <ProgressBar />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Width="140" Margin="20,0,0,0">
+                        <TextBlock Text="{Binding LastPlaytimeLabel}" FontWeight="SemiBold" Margin="0,0,0,0" />
+                        <TextBlock
+                            Text="{Binding LastPlaytimeDur, Converter={StaticResource TimeSpanPrettyConverter}, TargetNullValue='0h 00m 00s'}" />
+                        <ProgressBar />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="2" 
+                      Width="70" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      Margin="0,0,30,0">
+                    <!-- Define 2 rows -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/> <!-- gap -->
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Top row buttons -->
+                    <Button Grid.Row="0" Grid.Column="0" Content="E" Height="30" Width="30"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="X" Height="30" Width="30"/>
+
+                    <!-- Bottom row button spanning the top 2 buttons including the gap -->
+                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Launch" Height="30" Margin="0,10,0,0"/>
+                </Grid>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>
