@@ -28,6 +28,9 @@
                 <TextBlock Text="{Binding IsRunningLabel}"
                            FontSize="12"
                            Margin="10,4,0,0"
+                           Foreground="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CRunningIndicator, 
+                                RelativeSource={RelativeSource AncestorType=Window}, 
+                                Converter={StaticResource HexToBrushConverter}}"
                            FontWeight="SemiBold" />
             </StackPanel>
             <Grid>
@@ -63,41 +66,41 @@
                     </StackPanel>
                 </Grid>
 
-                <Grid Grid.Column="2" 
-                      Width="90" 
-                      VerticalAlignment="Center" 
-                      HorizontalAlignment="Right" 
+                <Grid Grid.Column="2"
+                      Width="90"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Right"
                       Margin="0,0,30,0">
                     <!-- Define 2 rows -->
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="5"/> <!-- gap -->
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5" /> <!-- gap -->
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Top row buttons -->
-                    <Button Grid.Row="0" Grid.Column="0" Height="40" Width="40" 
+                    <Button Grid.Row="0" Grid.Column="0" Height="40" Width="40"
                             Style="{StaticResource NeutralButtonStyle}">
                         <iconPacks:PackIconBootstrapIcons Kind="PencilSquare" />
                     </Button>
-                    
+
                     <Button Grid.Row="0" Grid.Column="2" Height="40" Width="40"
                             Style="{StaticResource NegativeButtonStyle}">
                         <iconPacks:PackIconBootstrapIcons Kind="Trash3" />
                     </Button>
 
                     <!-- Bottom row button spanning the top 2 buttons including the gap -->
-                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="40" 
+                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="40"
                             Margin="0,5,0,0"
                             Style="{StaticResource PositiveButtonStyle}">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <iconPacks:PackIconBootstrapIcons Kind="RocketTakeoff" Margin="0,0,6,0"/>
-                            <TextBlock Text="Launch"/>
+                            <iconPacks:PackIconBootstrapIcons Kind="RocketTakeoff" Margin="0,0,6,0" />
+                            <TextBlock Text="Launch" />
                         </StackPanel>
                     </Button>
                 </Grid>

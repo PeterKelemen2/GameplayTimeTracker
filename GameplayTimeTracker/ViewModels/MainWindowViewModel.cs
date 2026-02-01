@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using GameplayTimeTracker.Models;
 using GameplayTimeTracker.Repositories;
 using GameplayTimeTracker.Services;
@@ -39,6 +40,30 @@ public class MainWindowViewModel
 
         CurrentTheme = _settingsRepository.GetThemeViewModel();
     }
+
+#if DEBUG
+    public MainWindowViewModel()
+    {
+        CurrentTheme = new ThemeViewModel();
+
+        Games.Clear();
+        for (int i = 0; i < 5; i++)
+        {
+            Game game = new Game
+            {
+                DisplayName = $"Game {i + 1}",
+                ExePath = @"C:\Games\SampleGame.exe",
+            };
+            var vm = new GameViewModel(game)
+            {
+                LastPlaytimeDur = TimeSpan.FromMinutes(i * 13),
+                TotalPlaytimeDur = TimeSpan.FromHours(i * 23)
+            };
+
+            Games.Add(vm);
+        }
+    }
+#endif
 
     public void OnLoaded()
     {

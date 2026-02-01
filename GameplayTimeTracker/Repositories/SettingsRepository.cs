@@ -25,7 +25,9 @@ public class SettingsRepository : Repository<Settings>
 
     public ThemeViewModel GetThemeViewModel()
     {
-        var theme = GetTheme();
-        return _mapper.Map<ThemeViewModel>(theme);
+        return new ThemeViewModel();
+        
+        // var theme = GetTheme();
+        // return _mapper.Map<ThemeViewModel>(theme);
     }
 }

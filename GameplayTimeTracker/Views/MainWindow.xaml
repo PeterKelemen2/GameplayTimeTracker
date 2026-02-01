@@ -7,17 +7,20 @@
         xmlns:local="clr-namespace:GameplayTimeTracker"
         xmlns:gameItems="clr-namespace:GameplayTimeTracker.Views.GameItems"
         xmlns:vm="clr-namespace:GameplayTimeTracker.ViewModels"
+        xmlns:converters="clr-namespace:GameplayTimeTracker.Converters"
         mc:Ignorable="d"
         Title="Gameplay Time Tracker"
         Height="800"
         Width="870"
         MinWidth="870"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Icon="pack://application:,,,/Assets/GameplayTimeTracker.ico">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:GameViewModel}">
             <gameItems:GameRowView />
         </DataTemplate>
+        <converters:HexToBrushConverter x:Key="HexToBrushConverter"/>
     </Window.Resources>
     
     <Grid>
@@ -36,7 +39,7 @@
 
         <!-- BOTTOM: Fixed panel -->
         <Border Grid.Row="1"
-                Background="#1E1E1E"
+                Background="{Binding CurrentTheme.CBackground, Converter={StaticResource HexToBrushConverter}}"
                 Padding="10">
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Center">

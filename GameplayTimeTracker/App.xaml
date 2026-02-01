@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GameplayTimeTracker"
              xmlns:button="clr-namespace:GameplayTimeTracker.Converters.Button"
-             xmlns:helpers="clr-namespace:GameplayTimeTracker.Helpers">
+             xmlns:converters="clr-namespace:GameplayTimeTracker.Converters"
+             xmlns:viewModels="clr-namespace:GameplayTimeTracker.ViewModels">
 
     <Application.Resources>
         <button:HoverColorConverter x:Key="HoverColorConverter" />
         <button:PressedColorConverter x:Key="PressedColorConverter" />
+        <converters:HexToBrushConverter x:Key="HexToBrushConverter"/>
 
         <Style x:Key="BaseButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="White" />
@@ -54,20 +56,51 @@
 
         <!-- Positive (Green) -->
         <Style x:Key="PositiveButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="#28A745" /> <!-- green -->
-            <Setter Property="BorderBrush" Value="#1E7E34" />
+            <Setter Property="Background"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonPositive, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="BorderBrush"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonPositive, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="Foreground"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonPositiveFont, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
         </Style>
 
         <!-- Negative (Red) -->
         <Style x:Key="NegativeButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="#DC3545" /> <!-- red -->
-            <Setter Property="BorderBrush" Value="#B21F2D" />
+            <Setter Property="Background"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonNegative, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="BorderBrush"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonNegative, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="Foreground"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonNegativeFont, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
         </Style>
 
         <!-- Neutral (Blue) -->
         <Style x:Key="NeutralButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="#007BFF" /> <!-- blue -->
-            <Setter Property="BorderBrush" Value="#0056B3" />
+            <Setter Property="Background"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButton, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="BorderBrush"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButton, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
+            <Setter Property="Foreground"
+                    Value="{Binding DataContext.(viewModels:MainWindowViewModel.CurrentTheme).CButtonFont, 
+                            RelativeSource={RelativeSource AncestorType=Window}, 
+                            Converter={StaticResource HexToBrushConverter}}" />
         </Style>
+
     </Application.Resources>
 </Application>
